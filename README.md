@@ -1,4 +1,2 @@
-# Project X
-MatLightTracer
-
-Under development stage
+# ProjectOne
+Project on progress
