@@ -1,7 +1,7 @@
 function [ returnData1, returnData2, returnData3] = SequenceOfSurfaces( ...
         returnFlag,componentParameters,firstTilt,firstDecenter,firstTiltDecenterOrder,lastThickness,compTiltMode)
     %SequenceOfSurfaces COmponent composed of a general sequence of surfaces
-    disp('SQS called !!')
+
     %% Default input vaalues
     if nargin == 0
         disp('Error: The function SequenceOfSurfaces() needs atleat the return type.');
