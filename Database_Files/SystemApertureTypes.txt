@@ -1,0 +1,5 @@
+Enterance Pupil Diameter
+Object Space NA
+Object Space F#
+Image Space NA
+Image Space F#

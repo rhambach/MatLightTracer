@@ -1,0 +1,8 @@
+function [ mainFigHandle ] = sequenceOfSurfacesInputDialog( fontName,fontSize )
+    %SEQUENCEOFSURFACESINPUTDIALOG Displays a dialog window that lets the
+    %user to enter the sequence of surface. Saves the surface array selected 
+    % as appdata to root.
+    
+    
+end
+

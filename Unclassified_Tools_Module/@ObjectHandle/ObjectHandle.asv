@@ -1,0 +1,12 @@
+classdef ObjectHandle < handle
+   properties
+      Object=[];
+   end
+ 
+   methods
+      function objh=ObjectHandle(myObject)
+         objh.Object=myObject;
+      end
+   end
+end
+

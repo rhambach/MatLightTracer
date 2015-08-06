@@ -1,0 +1,4 @@
+Circular
+Rectangular
+Elliptical
+User Defined
