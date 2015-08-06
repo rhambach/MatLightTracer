@@ -1,10 +1,6 @@
 function varargout = untitled(varargin)
 % UNTITLED MATLAB code for untitled.fig
-% Newly added comment in untitled
-% Test line
-% Added from the server
-% Additional line from normgirm
-% Added from meskeremtikimt
+% And final check from normgirm
 
 %      UNTITLED, by itself, creates a new UNTITLED or raises the existing
 %      singleton*.
