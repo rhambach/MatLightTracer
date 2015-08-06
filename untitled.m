@@ -1,6 +1,7 @@
 function varargout = untitled(varargin)
 % UNTITLED MATLAB code for untitled.fig
 % Newly added comment in untitled
+% I have added this second comment to test the git
 %      UNTITLED, by itself, creates a new UNTITLED or raises the existing
 %      singleton*.
 %
