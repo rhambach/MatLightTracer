@@ -54,7 +54,7 @@ function [ chiefRay ] = getChiefRay( optSystem,fieldPointXYInSI,wavLenInM )
         objThick = 0;
     else
         IsObjectAtInfinity = 0;
-        objThick  = optSystem.getSurfaceArray(1).Thickness;
+        objThick  = firstSurface.Thickness;
     end
     
     

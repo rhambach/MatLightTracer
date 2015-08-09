@@ -12,7 +12,7 @@ function [ updatedSystem ] = convertToSurfaceBased( currentOpticalSystem )
         nComponent = getNumberOfComponents(updatedSystem);
         totalSurfaceArray = [];
         for tt = 1:nComponent
-            currentSurfaceArray = getSurfaceArray(componentArray(tt));
+            currentSurfaceArray = getComponentSurfaceArray(componentArray(tt));
             stopSurfaceInComponentIndex = componentArray(tt).StopSurfaceIndex;
             if stopSurfaceInComponentIndex
                 currentSurfaceArray(stopSurfaceInComponentIndex).Stop = 1;

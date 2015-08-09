@@ -1,28 +1,25 @@
 function [ xyzPoints,centerPoints] = drawSurfaceArray...
-        (surfaceArray,plotIn2D,nPoints1,nPoints2,...
-        axesHandle,drawEdge)
+        (surfaceArray,plotIn2D,nPoints1,nPoints2,axesHandle,drawEdge)
     % drawLens: Plots the 3 dimensional lay out of alens in 3d/2d Space
     % given its two surfaces
     % Inputs
     %   surfaceArray: Array of non dummy surface objects of the lens
     %   axesHandle: axes to plot the lens
-    %   radSpacing: radius sampling Spacing
     %   plotIn2D: Plot the YZ cross section in 2D layout
     %   drawEdge: boolean indicating to draw edge
     %   nPoints1,nPoints2: nRadialPoints,nAngularPoints or nPointsX,nPointsY
+    %   NB 1: A negative number can be passed as axes handle to supress
+    %   the graphical output.
     % Output
-    %   lensH:  height of the lens drawn
-    
-    % <<<<<<<<<<<<<<<<<<<<<<< Algorithm Section>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    %
-    
-    % <<<<<<<<<<<<<<<<<<<<<<<<< Example Usage>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    %
+    %   [xyzPoints] : 1 x nSurface cell array where each cell is a 
+    %                (nPoints1 x nPoints2 x 3) a 3D matrix of points for
+    %                each surface
+    %   centerPoints : (3 x nSurface) 2D matrix representing the center
+    %                   points of each surface
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
     %   Advisor: Prof. Herbert Gross
-    %   Part of the RAYTRACE_TOOLBOX V3.0 (OOP Version)
     %	Optical System Design and Simulation Research Group
     %   Institute of Applied Physics
     %   Friedrich-Schiller-University of Jena

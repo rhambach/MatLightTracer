@@ -3,6 +3,8 @@ function InitializeSurfaceEditorPanel( parentWindow )
     % Surface Editor Panel
     % Member of ParentWindow class
     aodHandles = parentWindow.ParentHandles;
+    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+    
     fontSize = aodHandles.FontSize;
     fontName = aodHandles.FontName;
     
@@ -55,7 +57,7 @@ function InitializeSurfaceEditorPanel( parentWindow )
         'Position',[0.21,0.94,0.2,0.05],...
         'String','Remove',...
         'Callback',{@btnRemoveSurface_Callback,parentWindow});
-
+    
     updatedSystem = aodHandles.OpticalSystem;
     updatedSystem.SurfaceArray = updateSurfaceCoordinateTransformationMatrices(aodHandles.OpticalSystem.SurfaceArray);
     
@@ -162,27 +164,30 @@ function btnInsertSurface_Callback(~,~,parentWindow)
     if ~checkTheCurrentSystemDefinitionType(parentWindow.ParentHandles)
         return
     end
-    global CURRENT_SELECTED_SURFACE
-    global CAN_ADD_SURFACE
-    if CAN_ADD_SURFACE
-        insertPosition = CURRENT_SELECTED_SURFACE;
+    aodHandles = parentWindow.ParentHandles;
+    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+    
+    selectedElementIndex = aodHandles.SelectedElementIndex;
+    canAddElement = aodHandles.CanAddElement;
+    
+    if canAddElement
+        insertPosition = selectedElementIndex;
         InsertNewSurface(parentWindow,'Standard','Standard',insertPosition);
         aodHandles = parentWindow.ParentHandles;
     end
-    updateQuickLayoutPanel(parentWindow,CURRENT_SELECTED_SURFACE);
 end
-
-
 
 function btnRemoveSurface_Callback(~,~,parentWindow)
     if ~checkTheCurrentSystemDefinitionType(parentWindow.ParentHandles)
         return
     end
-    global CAN_REMOVE_SURFACE
-    global CURRENT_SELECTED_SURFACE
-    
     aodHandles = parentWindow.ParentHandles;
-    if CAN_REMOVE_SURFACE
+    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+    
+    selectedElementIndex = aodHandles.SelectedElementIndex;
+    canRemoveElement = aodHandles.CanRemoveElement;
+    
+    if canRemoveElement
         % Confirm action
         % Construct a questdlg with three options
         choice = questdlg('Are you sure to delete the surface?', ...
@@ -192,7 +197,7 @@ function btnRemoveSurface_Callback(~,~,parentWindow)
         switch choice
             case 'Yes'
                 % Delete the surface
-                removePosition = CURRENT_SELECTED_SURFACE;
+                removePosition = selectedElementIndex;
                 RemoveSurface(parentWindow,removePosition);
                 aodHandles = parentWindow.ParentHandles;
             case 'No'
@@ -202,11 +207,12 @@ function btnRemoveSurface_Callback(~,~,parentWindow)
         % Mark the delete box again
     end
     parentWindow.ParentHandles = aodHandles;
-    updateQuickLayoutPanel(parentWindow,CURRENT_SELECTED_SURFACE);
 end
 
 function popStopSurfaceIndex_Callback(hObject, eventdata,parentWindow)
     aodHandles = parentWindow.ParentHandles;
+    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+    
     currentOpticalSystem = aodHandles.OpticalSystem;
     prevStopIndex = getStopSurfaceIndex(currentOpticalSystem );
     newStopIndex = get(hObject,'Value');
@@ -219,46 +225,44 @@ function popStopSurfaceIndex_Callback(hObject, eventdata,parentWindow)
     end
     parentWindow.ParentHandles = aodHandles;
     updateSurfaceOrComponentEditorPanel( parentWindow , newStopIndex);
+    updateQuickLayoutPanel(parentWindow,newStopIndex);
 end
 
 % Cell select and % CellEdit Callback
 % --- Executes when selected cell(s) is changed in aodHandles.tblSurfaceLis.
 function tblSurfaceList_CellSelectionCallback(~, eventdata,parentWindow)
-    global CURRENT_SELECTED_SURFACE
-    global CAN_ADD_SURFACE
-    global CAN_REMOVE_SURFACE
     aodHandles = parentWindow.ParentHandles;
-    
     selectedCell = eventdata.Indices;
     if isempty(selectedCell)
         return
     end
-    CURRENT_SELECTED_SURFACE = selectedCell(1);
+    selectedElementIndex = selectedCell(1);
+    aodHandles.SelectedElementIndex = selectedElementIndex;
     
     tblData = get(aodHandles.tblSurfaceList,'data');
     sizeTblData = size(tblData);
     
-    if CURRENT_SELECTED_SURFACE == 1 % object surf
-        CAN_ADD_SURFACE = 0;
-        CAN_REMOVE_SURFACE = 0;
+    if selectedElementIndex == 1 % object surf
+        aodHandles.CanRemoveElement = 0;
+        aodHandles.CanAddElement = 0;
         % make the 2nd column uneditable
         columnEditable1 = [false,false,true];
         set(aodHandles.tblSurfaceList,'ColumnEditable', columnEditable1);
-    elseif CURRENT_SELECTED_SURFACE == sizeTblData(1)% image surf
-        CAN_ADD_SURFACE = 1;
-        CAN_REMOVE_SURFACE = 0;
+    elseif selectedElementIndex == sizeTblData(1)% image surf
+        aodHandles.CanRemoveElement = 0;
+        aodHandles.CanAddElement = 1;
         % make the 2nd column uneditable
         columnEditable1 = [false,false,true];
         set(aodHandles.tblSurfaceList,'ColumnEditable', columnEditable1);
     elseif sizeTblData(1) == 3 % only 3 surfaces left
-        CAN_ADD_SURFACE = 1;
-        CAN_REMOVE_SURFACE = 0;
+        aodHandles.CanRemoveElement = 0;
+        aodHandles.CanAddElement = 1;
         % make the 2nd column editable
         columnEditable1 = [false,true,true];
         set(aodHandles.tblSurfaceList,'ColumnEditable', columnEditable1);
     else
-        CAN_ADD_SURFACE = 1;
-        CAN_REMOVE_SURFACE = 1;
+        aodHandles.CanRemoveElement = 1;
+        aodHandles.CanAddElement = 1;
         % make the 2nd column editable
         columnEditable1 = [false,true,true];
         set(aodHandles.tblSurfaceList,'ColumnEditable', columnEditable1);
@@ -266,8 +270,8 @@ function tblSurfaceList_CellSelectionCallback(~, eventdata,parentWindow)
     
     % Show the surface parameters in the surface detail window
     parentWindow.ParentHandles = aodHandles;
-    updateQuickLayoutPanel(parentWindow,CURRENT_SELECTED_SURFACE)
-    updateSurfaceOrComponentEditorPanel( parentWindow , CURRENT_SELECTED_SURFACE);
+    updateQuickLayoutPanel(parentWindow,selectedElementIndex);
+    updateSurfaceOrComponentEditorPanel( parentWindow , selectedElementIndex);
 end
 % --- Executes when entered data in editable cell(s) in aodHandles.tblSurfaceLis.
 function tblSurfaceList_CellEditCallback(~, eventdata,parentWindow)
@@ -280,8 +284,8 @@ function tblSurfaceList_CellEditCallback(~, eventdata,parentWindow)
     %	Error: error string when failed to convert EditData to appropriate value for Data
     % parentWindow: object with structure with aodHandles and user data (see GUIDATA)
     
-    global CURRENT_SELECTED_SURFACE
     aodHandles = parentWindow.ParentHandles;
+    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
     editedCellIndex = eventdata.Indices;
     if ~isempty(editedCellIndex)
         editedRow = editedCellIndex(1,1);
@@ -289,7 +293,10 @@ function tblSurfaceList_CellEditCallback(~, eventdata,parentWindow)
     else
         return;
     end
-    CURRENT_SELECTED_SURFACE = editedRow;
+    
+    selectedElementIndex = editedRow;
+    aodHandles.SelectedElementIndex = selectedElementIndex;
+    
     if editedCol== 2 % surface type changed
         if strcmpi(eventdata.PreviousData,'OBJECT')||strcmpi(eventdata.PreviousData,'IMAGE')
             % for object or image surf surf change the surf type back to OBJECT or
@@ -318,12 +325,10 @@ function tblSurfaceList_CellEditCallback(~, eventdata,parentWindow)
         aodHandles.OpticalSystem.SurfaceArray(editedRow).Comment = eventdata.NewData;
     end
     parentWindow.ParentHandles = aodHandles;
-    updateQuickLayoutPanel(parentWindow,CURRENT_SELECTED_SURFACE);
-    updateSurfaceOrComponentEditorPanel( parentWindow , CURRENT_SELECTED_SURFACE)
+    updateQuickLayoutPanel(parentWindow,selectedElementIndex);
+    updateSurfaceOrComponentEditorPanel( parentWindow , selectedElementIndex);
     
 end
-
-
 
 function tblSurfaceBasicParameters_CellSelectionCallback(~, eventdata,parentWindow)
     % hObject    handle to aodHandles.tblSurfaceList (see GCBO)
@@ -335,9 +340,10 @@ function tblSurfaceBasicParameters_CellSelectionCallback(~, eventdata,parentWind
     %	Error: error string when failed to convert EditData to appropriate value for Data
     % parentWindow: object with structure with aodHandles and user data (see GUIDATA)
     
-    global CURRENT_SELECTED_SURFACE
     aodHandles = parentWindow.ParentHandles;
-    selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE);
+    selectedElementIndex = aodHandles.SelectedElementIndex;
+    
+    selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex);
     selectedCellIndex = eventdata.Indices;
     if ~isempty(selectedCellIndex)
         selectedRow = selectedCellIndex(1,1);
@@ -395,10 +401,10 @@ function tblSurfaceBasicParameters_CellSelectionCallback(~, eventdata,parentWind
             return;
         end
     end
-    aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE) = selectedSurface;
+    aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex) = selectedSurface;
     parentWindow.ParentHandles = aodHandles;
-    updateSurfaceOrComponentEditorPanel( parentWindow , CURRENT_SELECTED_SURFACE)
-    
+    updateSurfaceOrComponentEditorPanel( parentWindow , selectedElementIndex)
+    updateQuickLayoutPanel(parentWindow,selectedElementIndex);
 end
 
 function tblSurfaceApertureParameters_CellSelectionCallback(~, eventdata,parentWindow)
@@ -410,10 +416,10 @@ function tblSurfaceApertureParameters_CellSelectionCallback(~, eventdata,parentW
     %	NewData: EditData or its converted form set on the Data property. Empty if Data was not changed
     %	Error: error string when failed to convert EditData to appropriate value for Data
     % parentWindow: object with structure with aodHandles and user data (see GUIDATA)
-    
-    global CURRENT_SELECTED_SURFACE
+
     aodHandles = parentWindow.ParentHandles;
-    selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE);
+    selectedElementIndex = aodHandles.SelectedElementIndex;
+    selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex);
     selectedCellIndex = eventdata.Indices;
     if ~isempty(selectedCellIndex)
         selectedRow = selectedCellIndex(1,1);
@@ -475,9 +481,10 @@ function tblSurfaceApertureParameters_CellSelectionCallback(~, eventdata,parentW
             return;
         end
     end
-    aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE) = selectedSurface;
+    aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex) = selectedSurface;
     parentWindow.ParentHandles = aodHandles;
-    updateSurfaceOrComponentEditorPanel( parentWindow , CURRENT_SELECTED_SURFACE)
+    updateSurfaceOrComponentEditorPanel( parentWindow , selectedElementIndex)
+    updateQuickLayoutPanel(parentWindow,selectedElementIndex);
 end
 
 function tblSurfaceTiltDecenterParameters_CellSelectionCallback(~, eventdata,parentWindow)
@@ -490,9 +497,10 @@ function tblSurfaceTiltDecenterParameters_CellSelectionCallback(~, eventdata,par
     %	Error: error string when failed to convert EditData to appropriate value for Data
     % parentWindow: object with structure with aodHandles and user data (see GUIDATA)
     
-    global CURRENT_SELECTED_SURFACE
     aodHandles = parentWindow.ParentHandles;
-    selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE);
+    selectedElementIndex = aodHandles.SelectedElementIndex;
+    
+    selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex);
     selectedCellIndex = eventdata.Indices;
     if ~isempty(selectedCellIndex)
         selectedRow = selectedCellIndex(1,1);
@@ -540,10 +548,10 @@ function tblSurfaceTiltDecenterParameters_CellSelectionCallback(~, eventdata,par
             return;
         end
     end
-    aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE) = selectedSurface;
+    aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex) = selectedSurface;
     parentWindow.ParentHandles = aodHandles;
-    updateSurfaceOrComponentEditorPanel( parentWindow , CURRENT_SELECTED_SURFACE)
-    
+    updateSurfaceOrComponentEditorPanel( parentWindow , selectedElementIndex)
+    updateQuickLayoutPanel(parentWindow,selectedElementIndex);
 end
 
 
@@ -557,11 +565,13 @@ function tblSurfaceBasicParameters_CellEditCallback(~, eventdata,parentWindow)
     %	Error: error string when failed to convert EditData to appropriate value for Data
     % parentWindow: object with structure with aodHandles and user data (see GUIDATA)
     
-    global CURRENT_SELECTED_SURFACE
     aodHandles = parentWindow.ParentHandles;
-    selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE);
-    if CURRENT_SELECTED_SURFACE > 1
-        previousSurface =  aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE-1);
+    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+    selectedElementIndex = aodHandles.SelectedElementIndex;
+    
+    selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex);
+    if selectedElementIndex > 1
+        previousSurface =  aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex-1);
     else
         previousSurface =  selectedSurface;
     end
@@ -629,10 +639,10 @@ function tblSurfaceBasicParameters_CellEditCallback(~, eventdata,parentWindow)
         end
     else
     end
-    aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE) = selectedSurface;
+    aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex) = selectedSurface;
     parentWindow.ParentHandles = aodHandles;
-    updateQuickLayoutPanel(parentWindow,CURRENT_SELECTED_SURFACE);
-    updateSurfaceOrComponentEditorPanel( parentWindow,CURRENT_SELECTED_SURFACE );
+    updateQuickLayoutPanel(parentWindow,selectedElementIndex);
+    updateSurfaceOrComponentEditorPanel( parentWindow,selectedElementIndex );
 end
 
 function tblSurfaceApertureParameters_CellEditCallback(~, eventdata,parentWindow)
@@ -645,9 +655,11 @@ function tblSurfaceApertureParameters_CellEditCallback(~, eventdata,parentWindow
     %	Error: error string when failed to convert EditData to appropriate value for Data
     % parentWindow: object with structure with aodHandles and user data (see GUIDATA)
     
-    global CURRENT_SELECTED_SURFACE
     aodHandles = parentWindow.ParentHandles;
-    selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE);
+    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+    selectedElementIndex = aodHandles.SelectedElementIndex;
+    
+    selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex);
     
     selectedCellIndex = eventdata.Indices;
     if isempty(selectedCellIndex) || isempty(eventdata.NewData)
@@ -729,11 +741,10 @@ function tblSurfaceApertureParameters_CellEditCallback(~, eventdata,parentWindow
     else
         
     end
-    %     displaySurfaceDetail(selectedSurface,aodHandles);
-    aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE) = selectedSurface;
+    aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex) = selectedSurface;
     parentWindow.ParentHandles = aodHandles;
-    updateSurfaceOrComponentEditorPanel( parentWindow , CURRENT_SELECTED_SURFACE)
-    
+    updateSurfaceOrComponentEditorPanel( parentWindow , selectedElementIndex);
+    updateQuickLayoutPanel(parentWindow,selectedElementIndex);
 end
 
 function tblSurfaceTiltDecenterParameters_CellEditCallback(~, eventdata,parentWindow)
@@ -747,9 +758,11 @@ function tblSurfaceTiltDecenterParameters_CellEditCallback(~, eventdata,parentWi
     % parentWindow: object with structure with aodHandles and user data (see GUIDATA)
     
     
-    global CURRENT_SELECTED_SURFACE
     aodHandles = parentWindow.ParentHandles;
-    selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE);
+    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+    selectedElementIndex = aodHandles.SelectedElementIndex;
+    
+    selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex);
     
     selectedCellIndex = eventdata.Indices;
     if isempty(selectedCellIndex) || isempty(eventdata.NewData)
@@ -806,16 +819,17 @@ function tblSurfaceTiltDecenterParameters_CellEditCallback(~, eventdata,parentWi
         end
     else
     end
-    aodHandles.OpticalSystem.SurfaceArray(CURRENT_SELECTED_SURFACE) = selectedSurface;
+    aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex) = selectedSurface;
     parentWindow.ParentHandles = aodHandles;
-    updateSurfaceOrComponentEditorPanel( parentWindow , CURRENT_SELECTED_SURFACE)
-    
+    updateSurfaceOrComponentEditorPanel( parentWindow , selectedElementIndex)
+    updateQuickLayoutPanel(parentWindow,selectedElementIndex);
 end
 
 
 function InsertNewSurface(parentWindow,surfaceTypeDisp,surfaceType,insertPosition)
     %update surface list table
     aodHandles = parentWindow.ParentHandles;
+    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
     nSurface = getNumberOfSurfaces(aodHandles.OpticalSystem);
     % Update the surface array
     for kk = nSurface:-1:insertPosition
@@ -829,10 +843,10 @@ function InsertNewSurface(parentWindow,surfaceTypeDisp,surfaceType,insertPositio
     % automatically
     parentWindow.ParentHandles = aodHandles;
     updateSurfaceOrComponentEditorPanel( parentWindow,insertPosition );
+    updateQuickLayoutPanel(parentWindow,insertPosition);
 end
 
-function RemoveSurface(parentWindow,removePosition)
-   global CAN_REMOVE_SURFACE
+function RemoveSurface(parentWindow,removePosition)    
     % check if it is stop surface
     if getStopSurfaceIndex(parentWindow.ParentHandles.OpticalSystem) == removePosition
         stopSurfaceRemoved = 1;
@@ -840,7 +854,7 @@ function RemoveSurface(parentWindow,removePosition)
         stopSurfaceRemoved = 0;
     end
     aodHandles = parentWindow.ParentHandles;
-    
+    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
     % Update the surface array
     aodHandles.OpticalSystem.SurfaceArray = aodHandles.OpticalSystem.SurfaceArray([1:removePosition-1,removePosition+1:end]);
     if stopSurfaceRemoved
@@ -853,11 +867,14 @@ function RemoveSurface(parentWindow,removePosition)
     % The next selected row will be the one in the removed position, so if
     % it is image plane then dont let further removal
     if aodHandles.OpticalSystem.SurfaceArray(removePosition).ImageSurface
-        CAN_REMOVE_SURFACE = 0;
+        canRemoveElement = 0;
+        aodHandles.CanRemoveElement = canRemoveElement;
     end
     parentWindow.ParentHandles = aodHandles;
     updateSurfaceOrComponentEditorPanel( parentWindow,removePosition );
+    updateQuickLayoutPanel(parentWindow,removePosition);
 end
+
 function ret = checkTheCurrentSystemDefinitionType(aodHandles)
     
     if get(aodHandles.popSystemDefinitionType,'Value') == 1

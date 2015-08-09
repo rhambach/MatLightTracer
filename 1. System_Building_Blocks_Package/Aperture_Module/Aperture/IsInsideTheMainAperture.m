@@ -38,7 +38,6 @@ function [ isInsideTheMainAperture ] = IsInsideTheMainAperture( surfAperture, xy
     
     xyVector_final = [initial_r.*cos(new_angleInRad), initial_r.*sin(new_angleInRad)];
     
-    %     xyVector_final = xyVector;
     % Now connect to the aperture defintion function and compute the
     % isInnsidefunction
     apertureDefinitionHandle = str2func(apertureType);

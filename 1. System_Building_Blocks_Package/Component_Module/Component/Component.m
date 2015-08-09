@@ -39,7 +39,7 @@ function newComponent = Component(compType,uniqueParameters,firstTilt,firstDecen
         firstDecenter = [0,0];
         firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
         compTiltMode = 'DAR';
-        lastThickness = 5;
+        lastThickness = 10;
     elseif nargin == 1
         % Connect the component definition function
         componentDefinitionHandle = str2func(compType);
@@ -51,13 +51,13 @@ function newComponent = Component(compType,uniqueParameters,firstTilt,firstDecen
         firstDecenter = [0,0];
         firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
         compTiltMode = 'DAR';
-        lastThickness = 5;
+        lastThickness = 10;
     elseif nargin == 2
         firstTilt = [0,0,0];
         firstDecenter = [0,0];
         firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
         compTiltMode = 'DAR';
-        lastThickness = 5;
+        lastThickness = 10;
     elseif nargin == 3
         firstDecenter = [0,0];
         firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
@@ -66,12 +66,12 @@ function newComponent = Component(compType,uniqueParameters,firstTilt,firstDecen
     elseif nargin == 4
         firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
         compTiltMode = 'DAR';
-        lastThickness = 5;
+        lastThickness = 10;
     elseif nargin == 5
         compTiltMode = 'DAR';
-        lastThickness = 5;
+        lastThickness = 10;
     elseif nargin == 6
-        lastThickness = 5;
+        lastThickness = 10;
     else
         
     end

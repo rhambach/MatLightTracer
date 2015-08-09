@@ -30,7 +30,6 @@ function draw = plotSystemLayout( optSystem,rayPathMatrix,...
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     
-
     gratingHeight = 0.2;
     nPoints = 55;
     drawEdge = 1;

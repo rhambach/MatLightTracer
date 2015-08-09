@@ -66,7 +66,7 @@ function [ returnData1, returnData2, returnData3  ] = FloatingCircularAperture..
             returnData1 = {'Diameter'};
             returnData2 = {{'numeric'}};
             defaultApertureParameter = struct();
-            defaultApertureParameter.Diameter = 2;
+            defaultApertureParameter.Diameter = 20;
             returnData3 = defaultApertureParameter;
         case 2 % Return the maximum radius in x and y axis
             maximumRadiusXY(1) = (apertureParameters.Diameter)/2;
@@ -78,7 +78,11 @@ function [ returnData1, returnData2, returnData3  ] = FloatingCircularAperture..
             radius = (apertureParameters.Diameter)/2;
             pointX = xyVector(:,1);
             pointY = xyVector(:,2);
-            umInsideTheMainAperture = (((pointX).^2 + (pointY).^2)/radius^2) < 1;
+            % If the floating aperture has zero diameter it means only a
+            % single point is inside the aperture. So take that in to
+            % account aswell
+            umInsideTheMainAperture = ((((pointX).^2 + (pointY).^2)/radius^2) <= 1)|...
+                ((((pointX).^2 + (pointY).^2)/radius^2) == 0);
             returnData1 = umInsideTheMainAperture;
             returnData2 = NaN;
             returnData3 = NaN;

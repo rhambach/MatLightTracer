@@ -7,8 +7,6 @@ function btnOkCallback(childWindow,parentWindow)
     % Specific actions which are unique for each child window type are
     % placed in switch case statemmtns.
     % Member of ChildWindow class
-    profile on
-    tic
     
     figure(childWindow.ChildHandles.FigureHandle);
     % Click graph tab programatically
@@ -768,8 +766,8 @@ function btnOkCallback(childWindow,parentWindow)
                     
                 case lower('system2DLayoutDiagram')
                     plotIn2D = 1;
-                    numberOfRays1 = str2double(get(handles.txtNumberOfRay1,'String'));
                     numberOfRays2 = str2double(get(handles.txtNumberOfRay2,'String'));
+                    numberOfRays1 = numberOfRays2;
                     wavLengthIndexList = (get(handles.popWavelengthIndex,'String'));
                     wavLengthIndexString = (wavLengthIndexList(get(handles.popWavelengthIndex,'Value'),:));
                     if strcmpi(wavLengthIndexString,'New Wavelength')
@@ -1303,8 +1301,5 @@ function btnOkCallback(childWindow,parentWindow)
         end
         polarizationParameters = parameterValue;
     end
-    disp('The whole process')
-    toc
-    profile viewer
 end
 

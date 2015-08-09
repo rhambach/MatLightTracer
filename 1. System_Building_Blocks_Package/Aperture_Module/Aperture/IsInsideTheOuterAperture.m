@@ -33,7 +33,6 @@ function [ isInsideTheOuterAperture ] = IsInsideTheOuterAperture( surfAperture, 
     
     my_eps = 0;
     
-%     xyVector_final = xyVector;
     % Now connect to the aperture defintion function and compute the
     % maximum Radius in x and y
     apertureDefinitionHandle = str2func(apertureType);

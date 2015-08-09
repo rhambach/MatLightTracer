@@ -33,20 +33,23 @@ function [ mariginalRay ] = getMariginalRay(optSystem,fieldPointXYInSI,wavLenInM
     
     nField = size(fieldPointXYInSI,2);
     nWav  = size(wavLenInM,2);
-    if abs(optSystem.getSurfaceArray(1).Thickness) > 10^10 % object at infinity
+    firstSurf = getSurfaceArray(optSystem,1);
+    if abs(firstSurf.Thickness) > 10^10 % object at infinity
+        objectIsAtInfinity = 1;
         objThick = 0;
     else
-        objThick  = optSystem.getSurfaceArray(1).Thickness;
+        objectIsAtInfinity = 0;
+        objThick  = firstSurf.Thickness;
     end
     
     pupilSamplingPoint = [pupilRadius*sin(angleFromYinRad);pupilRadius*cos(angleFromYinRad);pupilZLocation];
     
     switch lower(optSystem.FieldType)
         case lower('ObjectHeight')
-            fieldPointXYInLensUnit = fieldPointXYInSI/optSystem.getLensUnitFactor;
+            fieldPointXYInLensUnit = fieldPointXYInSI/getLensUnitFactor(optSystem);
             % Global reference is the 1st surface of the lens
             fieldPoint = [fieldPointXYInLensUnit; repmat(-objThick,[1,nField])];
-            if abs(optSystem.getSurfaceArray(1).Thickness) > 10^10
+            if abs(firstSurf.Thickness) > 10^10
                 % Invalid specification
                 disp('Error: Object Height can not be used for objects at infinity');
                 return;
@@ -75,7 +78,7 @@ function [ mariginalRay ] = getMariginalRay(optSystem,fieldPointXYInSI,wavLenInM
                 -radFieldToEnP.*cheifRayDirection(2,:);...
                 repmat(-objThick,[1,nField])];
             
-            if abs(optSystem.getSurfaceArray(1).Thickness) > 10^10
+            if objectIsAtInfinity
                 % collimated ray
                 initialDirection = cheifRayDirection;
                 % mariginal ray is just shifted ray of the cheif ray.
@@ -90,6 +93,6 @@ function [ mariginalRay ] = getMariginalRay(optSystem,fieldPointXYInSI,wavLenInM
             end
     end
     initialPositionInM = initialPosition*getLensUnitFactor(optSystem);
-    mariginalRay = ScalarRay(initialPositionInM,initialDirection,wavLenInM);
+    mariginalRay = ScalarRayBundle(initialPositionInM,initialDirection,wavLenInM);
 end
 

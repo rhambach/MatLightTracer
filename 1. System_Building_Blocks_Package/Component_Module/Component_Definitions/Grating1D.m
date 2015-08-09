@@ -19,25 +19,25 @@ function [ returnData1, returnData2, returnData3] = Grating1D( ...
                 firstTilt = [0,0,0];
                 firstDecenter = [0,0];
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 2
                 firstTilt = [0,0,0];
                 firstDecenter = [0,0];
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 3
                 firstDecenter = [0,0];
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 4
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 5
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 6
                 compTiltMode = 'NAX';
@@ -70,8 +70,8 @@ function [ returnData1, returnData2, returnData3] = Grating1D( ...
             defaultCompUniqueStruct.Glass = Glass('');
             defaultCompUniqueStruct.LineDensity = 100;
             defaultCompUniqueStruct.DiffractionOrder = 1;
-            defaultCompUniqueStruct.LengthX = 10;
-            defaultCompUniqueStruct.LengthY = 10;
+            defaultCompUniqueStruct.LengthX = 20;
+            defaultCompUniqueStruct.LengthY = 20;
             returnData3 = defaultCompUniqueStruct; % default value
         case 3 % 'Extra Data' table field names and initial values in Component Editor GUI
             returnData1 = {'Unused'};

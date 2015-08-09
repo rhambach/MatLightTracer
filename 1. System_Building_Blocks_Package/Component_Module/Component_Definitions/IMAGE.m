@@ -1,7 +1,7 @@
 function [ returnData1, returnData2, returnData3] = IMAGE( ...
         returnFlag,componentParameters,firstTilt,firstDecenter,firstTiltDecenterOrder,lastThickness,compTiltMode)
     %IMAGE COmponent for image surfaces
-    disp('IMAGE called !!')
+
     %% Default input vaalues
     if nargin == 0
         disp('Error: The function IMAGE() needs atleat the return type.');
@@ -19,25 +19,25 @@ function [ returnData1, returnData2, returnData3] = IMAGE( ...
                 firstTilt = [0,0,0];
                 firstDecenter = [0,0];
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 2
                 firstTilt = [0,0,0];
                 firstDecenter = [0,0];
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 3
                 firstDecenter = [0,0];
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 4
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 5
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 6
                 compTiltMode = 'NAX';

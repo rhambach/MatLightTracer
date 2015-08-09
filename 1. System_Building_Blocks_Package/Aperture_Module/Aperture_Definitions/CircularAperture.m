@@ -66,7 +66,7 @@ function [ returnData1, returnData2, returnData3  ] = CircularAperture...
             returnData1 = {'Diameter'};
             returnData2 = {{'numeric'}};
             defaultApertureParameter = struct();
-            defaultApertureParameter.Diameter = 2;
+            defaultApertureParameter.Diameter = 20;
             returnData3 = defaultApertureParameter;
         case 2 % Return the maximum radius in x and y axis
             maximumRadiusXY(1) = (apertureParameters.Diameter)/2;
@@ -78,7 +78,7 @@ function [ returnData1, returnData2, returnData3  ] = CircularAperture...
             radius = (apertureParameters.Diameter)/2;
             pointX = xyVector(:,1);
             pointY = xyVector(:,2);
-            umInsideTheMainAperture = (((pointX).^2 + (pointY).^2)/radius^2) < 1;
+            umInsideTheMainAperture = (((pointX).^2 + (pointY).^2)/radius^2) <= 1;
             returnData1 = umInsideTheMainAperture;
             returnData2 = NaN;
             returnData3 = NaN;

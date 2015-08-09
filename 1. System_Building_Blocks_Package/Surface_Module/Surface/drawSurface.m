@@ -8,7 +8,8 @@ function [xyzPoints] = drawSurface(surface,plotIn2D,nPoints1,nPoints2,...
     %   the graphical output.
     %   NB 2: nPoints1,nPoints2: nRadialPoints,nAngularPoints or nPointsX,nPointsY
     % Output
-    %   [xyzPoints]
+    %   [xyzPoints] : (nPoints1 x nPoints2 x 3) a 3D matrix of points for
+    %   the surface
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
@@ -119,15 +120,17 @@ function [xyzPoints] = drawSurface(surface,plotIn2D,nPoints1,nPoints2,...
     
     drawnApertureShape = surface.Aperture.OuterShape;
     if drawnApertureDiameterXY(1) == 0 || drawnApertureDiameterXY(2) == 0
+        zLocation = surface.SurfaceCoordinateTM(3,4);
         if plotIn2D
-            xyzPoints(1,1:nPoints1,1:3) = 0;
+            xyzPoints(1:nPoints1,1,1:2) = 0;
+            xyzPoints(1:nPoints1,1,3) = zLocation;
         else
-            xyzPoints(1:nPoints1,1:nPoints2,1:3) = 0;
+            xyzPoints(1:nPoints1,1:nPoints2,1:2) = 0;
+            xyzPoints(1:nPoints1,1:nPoints2,3) = zLocation;
         end
         % Dont draw the surface
         return;
     end
-    %     surfCoordinateTM = surface.SurfaceCoordinateTM;
     surfCoordinateTM = surface.SurfaceCoordinateTM();
     surfApert = surface.Aperture;
     apartRadiusXDrawn = 0.5*drawnApertureDiameterXY(1);

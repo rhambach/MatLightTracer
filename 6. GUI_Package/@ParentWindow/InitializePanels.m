@@ -96,6 +96,20 @@ function InitializePanels(parentWindow)
             'Position',[(k-1)/nTaskBar,0,1/nTaskBar,0.04]);
     end
     
+        set(aodHandles.popQuickLayoutType,...
+        'Callback',{@popQuickLayoutType_Callback,parentWindow});
+    set(aodHandles.popQuickLayoutDimension,...
+        'Callback',{@popQuickLayoutDimension_Callback,parentWindow});
+
+    
     parentWindow.ParentHandles = aodHandles;
+end
+function popQuickLayoutType_Callback(hObject, eventdata,parentWindow)
+    selectedSurfOrCompIndex = parentWindow.ParentHandles.SelectedElementIndex;
+    updateQuickLayoutPanel(parentWindow,selectedSurfOrCompIndex);
+end
+function popQuickLayoutDimension_Callback(hObject, eventdata,parentWindow)
+    selectedSurfOrCompIndex = parentWindow.ParentHandles.SelectedElementIndex;
+    updateQuickLayoutPanel(parentWindow,selectedSurfOrCompIndex);
 end
 

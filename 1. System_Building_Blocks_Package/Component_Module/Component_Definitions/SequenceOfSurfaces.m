@@ -19,25 +19,25 @@ function [ returnData1, returnData2, returnData3] = SequenceOfSurfaces( ...
                 firstTilt = [0,0,0];
                 firstDecenter = [0,0];
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 2
                 firstTilt = [0,0,0];
                 firstDecenter = [0,0];
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 3
                 firstDecenter = [0,0];
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 4
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 5
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 6
                 compTiltMode = 'NAX';
@@ -80,7 +80,7 @@ function [ returnData1, returnData2, returnData3] = SequenceOfSurfaces( ...
             surfaceArray(end).TiltMode = compTiltMode;
             
             
-            returnData1 = componentParameters.SurfaceArray; % surface array
+            returnData1 = surfaceArray; % surface array
             returnData2 = NaN;
             returnData3 = NaN;
     end

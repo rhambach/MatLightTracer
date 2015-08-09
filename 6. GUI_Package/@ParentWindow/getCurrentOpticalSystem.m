@@ -5,17 +5,33 @@ function [ updatedSystem,saved] = getCurrentOpticalSystem (parentWindow)
     
     aodHandles = parentWindow.ParentHandles;
     savedOpticalSystem = aodHandles.OpticalSystem;
-    updatedSystem = savedOpticalSystem;
-%     if IsSurfaceBased(savedOpticalSystem) && isempty(savedOpticalSystem.SurfaceArray)
-%         %         [ updatedSystem ] = updateSurfaceFromComponentArray( savedOpticalSystem );
-%         disp('Error: IsSurfaceBased(savedOpticalSystem) && isempty(savedOpticalSystem.SurfaceArray)');
-%     elseif IsComponentBased(savedOpticalSystem) && isempty(savedOpticalSystem.ComponentArray)
-%         %         [ updatedSystem ] = updateComponentFromSurfaceArray( savedOpticalSystem );
-%         disp('Error: IsComponentBased(savedOpticalSystem) && isempty(savedOpticalSystem.ComponentArray)');
-%     else
-%         updatedSystem.SurfaceArray = updateSurfaceCoordinateTransformationMatrices(savedOpticalSystem.SurfaceArray);   
-%     end
     
+    if isfield(savedOpticalSystem,'IsUpdatedSurfaceArray') && ...
+            savedOpticalSystem.IsUpdatedSurfaceArray
+        updatedSurfaceArray = savedOpticalSystem.SurfaceArray;
+    else
+        if IsComponentBased(savedOpticalSystem)
+            componentArray = savedOpticalSystem.ComponentArray;
+            nComponent = getNumberOfComponents(savedOpticalSystem);
+            totalSurfaceArray = [];
+            for tt = 1:nComponent
+                currentSurfaceArray = getComponentSurfaceArray(componentArray(tt));
+                stopSurfaceInComponentIndex = componentArray(tt).StopSurfaceIndex;
+                if stopSurfaceInComponentIndex
+                    currentSurfaceArray(stopSurfaceInComponentIndex).Stop = 1;
+                end
+                totalSurfaceArray = [totalSurfaceArray,currentSurfaceArray];
+            end
+            tempSurfaceArray = totalSurfaceArray;
+        else
+            tempSurfaceArray = savedOpticalSystem.SurfaceArray;
+        end
+        updatedSurfaceArray = updateSurfaceCoordinateTransformationMatrices(tempSurfaceArray);
+    end
+    savedOpticalSystem.SurfaceArray = updatedSurfaceArray;
+    % Set flaoting apertures
+    updatedSystem = setFloatingApertures( savedOpticalSystem );
+    savedOpticalSystem.IsUpdatedSurfaceArray = 1;
     aodHandles.OpticalSystem = updatedSystem;
     saved = 1;
     aodHandles.OpticalSystem.Saved = 1;

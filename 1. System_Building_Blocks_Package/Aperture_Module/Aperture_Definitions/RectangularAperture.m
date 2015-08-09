@@ -66,8 +66,8 @@ function [ returnData1, returnData2, returnData3  ] = RectangularAperture...
             returnData1 = {'DiameterX','DiameterY'};
             returnData2 = {{'numeric'},{'numeric'}};
             defaultApertureParameter = struct();
-            defaultApertureParameter.DiameterX = 2;
-            defaultApertureParameter.DiameterY = 2;
+            defaultApertureParameter.DiameterX = 20;
+            defaultApertureParameter.DiameterY = 20;
             defaultApertureParameter.AdditionalEdge = 0.1;
             returnData3 = defaultApertureParameter;
         case 2 % Return the maximum radius in x and y axis

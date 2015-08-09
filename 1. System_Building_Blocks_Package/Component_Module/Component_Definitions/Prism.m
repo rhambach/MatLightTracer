@@ -1,8 +1,7 @@
 function [ returnData1, returnData2, returnData3] = Prism( ...
         returnFlag,componentParameters,firstTilt,firstDecenter,firstTiltDecenterOrder,lastThickness,compTiltMode)
     %Prism Component defining a general prism
-    
-    disp('Prism called')
+
     %% Default input vaalues
     if nargin == 0
         disp('Error: The function Prism() needs atleat the return type.');
@@ -20,25 +19,25 @@ function [ returnData1, returnData2, returnData3] = Prism( ...
                 firstTilt = [0,0,0];
                 firstDecenter = [0,0];
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 2
                 firstTilt = [0,0,0];
                 firstDecenter = [0,0];
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 3
                 firstDecenter = [0,0];
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 4
                 firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 5
-                lastThickness = 5;
+                lastThickness = 10;
                 compTiltMode = 'NAX';
             elseif nargin == 6
                 compTiltMode = 'NAX';
@@ -71,8 +70,8 @@ function [ returnData1, returnData2, returnData3] = Prism( ...
             defaultCompUniqueStruct.Glass = Glass('BK7');
             defaultCompUniqueStruct.BaseAngle1 = 60;
             defaultCompUniqueStruct.BaseAngle2 = 60;
-            defaultCompUniqueStruct.FirstSurfaceLengthX = 10;
-            defaultCompUniqueStruct.FirstSurfaceLengthY = 10;
+            defaultCompUniqueStruct.FirstSurfaceLengthX = 20;
+            defaultCompUniqueStruct.FirstSurfaceLengthY = 20;
             returnData3 = defaultCompUniqueStruct; % default value
             
         case 3 % 'Extra Data' table field names and initial values in Component Editor GUI

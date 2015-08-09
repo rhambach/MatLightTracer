@@ -158,7 +158,7 @@ function newGlass = Glass(glassName,glassCatalogueFileList,glassType,glassParame
                 end
             else
                 newGlass = savedGlass;
-                disp([glassName,' is extracted from available glass catalogue.']);
+%                 disp([glassName,' is extracted from available glass catalogue.']);
                 return;
             end
         end

@@ -66,8 +66,8 @@ function [ returnData1, returnData2, returnData3  ] = CircularObstruction...
             returnData1 = {'SmallDiameter','LargeDiameter'};
             returnData2 = {{'numeric'},{'numeric'}};
             defaultApertureParameter = struct();
-            defaultApertureParameter.SmallDiameter = 2;
-            defaultApertureParameter.LargeDiameter = 4;
+            defaultApertureParameter.SmallDiameter = 10;
+            defaultApertureParameter.LargeDiameter = 20;
             returnData3 = defaultApertureParameter;
         case 2 % Return the maximum radius in x and y axis
             maximumRadiusXY(1) = (apertureParameters.LargeDiameter)/2;
