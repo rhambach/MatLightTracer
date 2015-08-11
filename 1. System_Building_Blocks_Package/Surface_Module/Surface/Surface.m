@@ -31,9 +31,14 @@ function NewSurface = Surface(surfType)
         % Make single surface component by default
         surfType = 'Standard';
     end
-    NewSurface.ObjectSurface = 0;
-    NewSurface.ImageSurface = 0;
-    NewSurface.Stop = 0;
+%     NewSurface.ObjectSurface = 0;
+%     NewSurface.ImageSurface = 0;
+%     NewSurface.Stop = 0;
+
+    NewSurface.IsObject = 0;
+    NewSurface.IsImage = 0;
+    NewSurface.IsStop = 0;
+    
     NewSurface.Comment = '';
     NewSurface.Type = surfType;
     NewSurface.Thickness = 10;
@@ -55,7 +60,11 @@ function NewSurface = Surface(surfType)
     NewSurface.GlassBefore  = Glass();
     
     NewSurface.SurfaceColor = '';
-    NewSurface.Hidden = 0;
-    NewSurface.Ignored = 0;
+    
+%     NewSurface.Hidden = 0;
+%     NewSurface.Ignored = 0;
+    
+    NewSurface.IsHidden = 0;
+    NewSurface.IsIgnored = 0;
     NewSurface.ClassName = 'Surface';
 end

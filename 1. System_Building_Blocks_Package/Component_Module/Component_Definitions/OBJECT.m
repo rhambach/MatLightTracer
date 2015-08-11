@@ -72,7 +72,7 @@ function [ returnData1, returnData2, returnData3] = OBJECT( ...
             returnData3 = {[0]};
         case 4 % return the surface array of the compont
             surfaceArray = Surface;
-            surfaceArray(1).ObjectSurface = 1;
+            surfaceArray(1).IsObject = 1;
             surfaceArray(1).Tilt = firstTilt;
             surfaceArray(1).Decenter = firstDecenter;
             surfaceArray(1).TiltDecenterOrder = firstTiltDecenterOrder;

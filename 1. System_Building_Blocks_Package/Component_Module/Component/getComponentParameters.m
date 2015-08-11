@@ -47,39 +47,6 @@ function [ paramNames,paramTypes,paramValues,paramValuesDisp] = ...
                     else
                         paramValuesDisp{1+kk,1}  = 'INVALID';
                     end
-                    
-                    %                     switch lower(class(paramValues{1+kk,1}))
-                    %                         case lower('logical')
-                    %                             if paramValues{1+kk,1}
-                    %                                 paramValuesDisp{1+kk,1}  = '1';
-                    %                             else
-                    %                                 paramValuesDisp{1+kk,1} = '0';
-                    %                             end
-                    % %                         case lower({'Glass','Coating'})
-                    % %                             paramValuesDisp{1+kk,1}  = componentParameters.(uniqueParamNames{kk}).Name;
-                    % %                         case lower('Surface')
-                    % %                             paramValuesDisp{1+kk,1}  = 'SQS';
-                    %                           case lower('Struct')
-                    %                               currentParamStruct = paramValues{1+kk,1};
-                    %                               if isGlass(currentParamStruct) || isCoating(currentParamStruct)
-                    %                               elseif isSurface()
-                    %                               else
-                    %                               end
-                    %                               if isfield(currentParamStruct,'ClassName')
-                    %                                   switch lower(currentParamStruct.ClassName)
-                    %                                       case lower({'Glass','Coating'})
-                    %                                           paramValuesDisp{1+kk,1}  = componentParameters.(uniqueParamNames{kk}).Name;
-                    %                                       case lower('Surface')
-                    %                                           paramValuesDisp{1+kk,1}  = 'SQS';
-                    %                                       otherwise
-                    %                                           paramValuesDisp{1+kk,1}  = 'STRUCT';
-                    %                                   end
-                    %                               else
-                    %                               end
-                    %                               paramValuesDisp{1+kk,1}  = componentParameters.(uniqueParamNames{kk}).Name;   % Can represent SequenceOfSurfaces, and other structures
-                    %                         otherwise
-                    %                             paramValuesDisp{1+kk,1}  = paramValues{1+kk,1};
-                    %                     end
                 end
             case 'TiltDecenter'
                 curentTiltDecenterOrder = currentComponent.FirstTiltDecenterOrder;

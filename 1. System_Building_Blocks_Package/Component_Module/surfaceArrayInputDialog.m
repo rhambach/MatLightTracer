@@ -6,7 +6,7 @@ function [ surfaceArrayEnteryFig ] = surfaceArrayInputDialog(initialSurfaceArray
     % Default Input
     if nargin == 0
         initialSurfaceArray = Surface();
-        initialSurfaceArray.Stop = 1;
+        initialSurfaceArray.IsStop = 1;
         isSurfaceArrayComponent = 0;
         glassCatalogueListFullNames = getAllObjectCatalogues('Glass');
         coatingCatalogueListFullNames = getAllObjectCatalogues('Coating');
@@ -37,8 +37,12 @@ function [ surfaceArrayEnteryFig ] = surfaceArrayInputDialog(initialSurfaceArray
     % Creation of all uicontrols
     % --- FIGURE -------------------------------------
     figureHandle = ObjectHandle(struct()); % Handle object enables modification of the parameters by callbacks
-    figureHandle.Object.FigureHandle = figure( ...
-        'Tag', 'FigureHandle', ...
+    figureHandle.Object.SelectedSurfaceIndex = 1;
+    figureHandle.Object.CanAddSurface = 1;
+    figureHandle.Object.CanRemoveSurface = 0;
+    
+    figureHandle.Object.MainFigureHandle = figure( ...
+        'Tag', 'MainFigureHandle', ...
         'Units','Normalized',...
         'Position', [0.3,0.3,0.45,0.5], ...
         'Name', 'Surface Array Entry', ... %'WindowStyle','Modal',...
@@ -46,7 +50,7 @@ function [ surfaceArrayEnteryFig ] = surfaceArrayInputDialog(initialSurfaceArray
         'NumberTitle', 'off', ...%        'WindowStyle','Modal',...
         'Color', get(0,'DefaultUicontrolBackgroundColor'),...
         'CloseRequestFcn',{@figureCloseRequestFunction,figureHandle});
-    surfaceArrayEnteryFig = figureHandle.Object.FigureHandle;
+    surfaceArrayEnteryFig = figureHandle.Object.MainFigureHandle;
     
     figureHandle.Object.btnOk = uicontrol( ...
         'FontSize',fontSize,'FontName', 'FixedWidth',...
@@ -61,7 +65,7 @@ function [ surfaceArrayEnteryFig ] = surfaceArrayInputDialog(initialSurfaceArray
         'String','Cancel');
     
     figureHandle.Object.panelParameter = uipanel( ...
-        'Parent', figureHandle.Object.FigureHandle, ...
+        'Parent', figureHandle.Object.MainFigureHandle, ...
         'Tag', 'parameter', ...
         'Units','Normalized',...
         'Position', [0,0,1,0.98], ...
@@ -114,7 +118,8 @@ function [ surfaceArrayEnteryFig ] = surfaceArrayInputDialog(initialSurfaceArray
     % open the currentSurface array in the tables
     figureHandle.Object.TemporarySurfaceArray = initialSurfaceArray;
     figureHandle.Object.IsSurfaceArrayComponent = isSurfaceArrayComponent;
-    updateSurfaceEditor(figureHandle,1);
+    figureHandle.Object.SelectedSurfaceIndex = 1;
+    updateSurfaceEditor(figureHandle);
     
     % Command buttons for adding and removing surfaces
     figureHandle.Object.btnInsertSurfaceToSurfaceArray = uicontrol( ...
@@ -142,7 +147,7 @@ function [ surfaceArrayEnteryFig ] = surfaceArrayInputDialog(initialSurfaceArray
         'String','Make Stop',...
         'Callback',{@btnStopSurfaceOfSurfaceArray_Callback,figureHandle});
     
-    set(figureHandle.Object.FigureHandle,'Position', [0.1, 0.3, 0.8, 0.4]);
+    set(figureHandle.Object.MainFigureHandle,'Position', [0.1, 0.3, 0.8, 0.4]);
     set(figureHandle.Object.btnOk,'Parent', figureHandle.Object.panelParameter, ...
         'Units', 'Normalized', ...
         'Position', [0.01 0.02 0.075 0.08]);
@@ -154,17 +159,18 @@ function [ surfaceArrayEnteryFig ] = surfaceArrayInputDialog(initialSurfaceArray
         'Callback', {@btnOk_Callback,figureHandle});
     set(figureHandle.Object.btnCancel,...
         'Callback', {@btnCancel_Callback,figureHandle});
-    set(figureHandle.Object.FigureHandle,'Visible','on');
+    set(figureHandle.Object.MainFigureHandle,'Visible','on');
     
     function figureCloseRequestFunction(~,~,figureHandle)
-        delete(figureHandle.Object.FigureHandle);
+        delete(figureHandle.Object.MainFigureHandle);
     end
 end
 
-function updateSurfaceEditor(figureHandle,selectedSurface)
+function updateSurfaceEditor(figureHandle)
     % Fill the surface parameters to the GUI
     guiHandleStruct = figureHandle.Object;
     currentSurfaceArray = guiHandleStruct.TemporarySurfaceArray;
+    selectedSurface = guiHandleStruct.SelectedSurfaceIndex;
     isSurfaceArrayComponent = guiHandleStruct.IsSurfaceArrayComponent;
     nSurface = length(currentSurfaceArray);
     % initializ
@@ -175,14 +181,13 @@ function updateSurfaceEditor(figureHandle,selectedSurface)
     
     for kk = 1:1:nSurface
         %standard data
-        if currentSurfaceArray(kk).Stop && ~stopAlreadyFound
+        if currentSurfaceArray(kk).IsStop && ~stopAlreadyFound
             savedBasicData{kk,1} = 'STOP';
             stopAlreadyFound = 1;
         else
             savedBasicData{kk,1} = '';
         end
-        
-        
+
         savedBasicData{kk,2} = char(currentSurfaceArray(kk).Comment);
         savedBasicData{kk,3} = char(currentSurfaceArray(kk).Type);
         savedBasicData{kk,4} = '';
@@ -190,7 +195,7 @@ function updateSurfaceEditor(figureHandle,selectedSurface)
         savedBasicData{kk,6} = '';
         
         switch char(currentSurfaceArray(kk).Glass.Name)
-            case 'None'
+            case {'None',''}
                 glassDisplayName = '';
             case 'FixedIndexGlass'
                 glassDisplayName = ...
@@ -207,18 +212,17 @@ function updateSurfaceEditor(figureHandle,selectedSurface)
         savedBasicData{kk,10} = '';
         
         % Other surface type specific standard data
-        [fieldNames,fieldFormat,myUniqueParamStruct] = currentSurfaceArray(kk).getUniqueParameters;
+        [fieldNames,fieldFormat,myUniqueParamStruct] = getSurfaceUniqueParameters(currentSurfaceArray(kk));
+        
         try
             for ff = 1:length(fieldNames)
                 savedBasicData{kk,10 + ff} = (currentSurfaceArray(kk).UniqueParameters.(fieldNames{ff}));
             end
         catch
             for ff = 1:10
-                savedBasicData{kk,10 + ff} = initialData{ff};
+                savedBasicData{kk,10 + ff} = myUniqueParamStruct{ff};
             end
         end
-        
-        
         
         % aperture data
         if ~isSurfaceArrayComponent || kk == 1
@@ -234,7 +238,7 @@ function updateSurfaceEditor(figureHandle,selectedSurface)
             savedApertureData{kk,9} = currentAperture.AdditionalEdge;
             
             % Other surface type specific standard data
-            [fieldNames,fieldFormat,myUniqueParamStruct] = currentAperture.getUniqueParameters;
+            [fieldNames,fieldFormat,myUniqueParamStruct] = getApertureUniqueParameters(currentAperture);
             for ff = 1:length(fieldNames)
                 savedApertureData{kk,9 + ff} = (myUniqueParamStruct.(fieldNames{ff}));
             end
@@ -270,10 +274,8 @@ function updateSurfaceEditor(figureHandle,selectedSurface)
     end
     set(guiHandleStruct.tblSurfaceArrayBasicData, 'Data', savedBasicData);
     % update column properties  basic data table
-    surfDefinition = currentSurfaceArray(selectedSurface).Type;
-    surfaceDefinitionHandle = str2func(surfDefinition);
-    returnFlag = 'SSPB';
-    [fieldNames,fieldFormat,initialData] = surfaceDefinitionHandle(returnFlag);
+    [fieldNames,fieldFormat,myUniqueParamStruct] = getSurfaceUniqueParameters(currentSurfaceArray(selectedSurface));
+    
     nColumns = size(fieldNames,2);
     columnNames = fieldNames;
     columnWidth = num2cell(100*ones(1,nColumns));
@@ -320,7 +322,6 @@ function updateSurfaceEditor(figureHandle,selectedSurface)
     set(guiHandleStruct.tblSurfaceArrayTiltDecenterData, 'Data', savedTiltDecenterData);
     
     % update column properties  tilt decenter data table
-    %     surfDefinition = currentSurfaceArray(selectedSurface).Type;
     columnName5 =   ...
         {'  Surface  ', 'Surface Type', '    Order    ', '', ...
         'Decenter X', '', 'Decenter Y', '', 'Tilt X', '',...
@@ -330,7 +331,7 @@ function updateSurfaceEditor(figureHandle,selectedSurface)
     columnEditable5 =  ...
         [false false true false true false true false true false ...
         true false true false true false];
-    tiltModes = Surface.SupportedTiltModes();
+    tiltModes = getSupportedTiltModes();
     set(figureHandle.Object.tblSurfaceArrayTiltDecenterData , 'ColumnFormat', {'char', 'char', 'char','char', 'numeric',...
         'char','numeric', 'char', 'numeric', 'char', 'numeric', 'char', 'numeric', 'char', ...
         tiltModes,'char'});
@@ -357,20 +358,21 @@ function tblSurfaceArrayBasicData_CellEditCallback(~, eventdata,figureHandle,gla
     guiHandleStruct = figureHandle.Object;
     editedRow = eventdata.Indices(1);
     editedColumn = eventdata.Indices(2);
-    global SELECTED_SURFACE_INDEX
-    SELECTED_SURFACE_INDEX = editedRow;
-    selectedSurface = guiHandleStruct.TemporarySurfaceArray(SELECTED_SURFACE_INDEX);
+    selectedSurfaceIndex = editedRow;
+    guiHandleStruct.SelectedSurfaceIndex = selectedSurfaceIndex;
+
+    selectedSurface = guiHandleStruct.TemporarySurfaceArray(selectedSurfaceIndex);
     if editedColumn == 3 && ~(strcmpi(eventdata.NewData,''))
         %if surface type is changed update all tables in the editor
         %         editedSurfaceIndex = eventdata.Indices(1);
         newSurfaceType = eventdata.NewData;
-        prevStopSurfaceIndex = find([guiHandleStruct.TemporarySurfaceArray.Stop]);
+        prevStopSurfaceIndex = find([guiHandleStruct.TemporarySurfaceArray.IsStop]);
         if isempty(prevStopSurfaceIndex)
             prevStopSurfaceIndex = 1;
         end
         selectedSurface = Surface(newSurfaceType);
-        if prevStopSurfaceIndex == SELECTED_SURFACE_INDEX
-            selectedSurface.Stop = 1;
+        if prevStopSurfaceIndex == selectedSurfaceIndex
+            selectedSurface.IsStop = 1;
         end
     elseif editedColumn == 5 % if thickness is changed
         newParam = str2num(eventdata.EditData);
@@ -428,9 +430,10 @@ function tblSurfaceArrayBasicData_CellEditCallback(~, eventdata,figureHandle,gla
         
         
     end
-    guiHandleStruct.TemporarySurfaceArray(SELECTED_SURFACE_INDEX) = selectedSurface;
+    guiHandleStruct.TemporarySurfaceArray(selectedSurfaceIndex) = selectedSurface;
+    guiHandleStruct.SelectedSurfaceIndex = editedRow;
     figureHandle.Object = guiHandleStruct ;
-    updateSurfaceEditor(figureHandle,editedRow)
+    updateSurfaceEditor(figureHandle)
 end
 % --- Executes when entered data in editable cell(s) in aodHandles.tblSurfaceArrayApertureData.
 function tblSurfaceArrayApertureData_CellEditCallback(~,eventdata,figureHandle)
@@ -440,9 +443,10 @@ function tblSurfaceArrayApertureData_CellEditCallback(~,eventdata,figureHandle)
     guiHandleStruct = figureHandle.Object ;
     editedColumn = eventdata.Indices(2);
     editedRow = eventdata.Indices(1);
-    global SELECTED_SURFACE_INDEX
-    SELECTED_SURFACE_INDEX = editedRow;
-    selectedSurface = guiHandleStruct.TemporarySurfaceArray(SELECTED_SURFACE_INDEX);
+    selectedSurfaceIndex = editedRow;
+    guiHandleStruct.SelectedSurfaceIndex = selectedSurfaceIndex;
+
+    selectedSurface = guiHandleStruct.TemporarySurfaceArray(selectedSurfaceIndex);
     
     if editedColumn == 3 % aperture type
         apertureType = (eventdata.EditData);
@@ -525,9 +529,10 @@ function tblSurfaceArrayApertureData_CellEditCallback(~,eventdata,figureHandle)
         end
         
     end
-    guiHandleStruct.TemporarySurfaceArray(SELECTED_SURFACE_INDEX) = selectedSurface;
+    guiHandleStruct.TemporarySurfaceArray(selectedSurfaceIndex) = selectedSurface;
+    guiHandleStruct.SelectedSurfaceIndex = editedRow;
     figureHandle.Object = guiHandleStruct ;
-    updateSurfaceEditor(figureHandle,editedRow)
+    updateSurfaceEditor(figureHandle)
 end
 % --- Executes when entered data in editable cell(s) in aodHandles.tblSurfaceArrayTiltDecenterData.
 function tblSurfaceArrayTiltDecenterData_CellEditCallback(~, eventdata,figureHandle)
@@ -537,9 +542,9 @@ function tblSurfaceArrayTiltDecenterData_CellEditCallback(~, eventdata,figureHan
     guiHandleStruct = figureHandle.Object ;
     editedColumn = eventdata.Indices(2);
     editedRow = eventdata.Indices(1);
-    global SELECTED_SURFACE_INDEX
-    SELECTED_SURFACE_INDEX = editedRow;
-    
+    selectedSurfaceIndex = editedRow;
+    guiHandleStruct.SelectedSurfaceIndex = selectedSurfaceIndex;
+
     if editedColumn == 3  % 3rd row / tiltanddecenter data
         if isempty(eventdata.NewData) || ...
                 ~isValidGeneralInput(eventdata.NewData,'TiltDecenterOrder')
@@ -554,7 +559,7 @@ function tblSurfaceArrayTiltDecenterData_CellEditCallback(~, eventdata,figureHan
             if length(orderString) ~= 12
                 orderString = upper(eventdata.PreviousData);
             end
-            guiHandleStruct.TemporarySurfaceArray(SELECTED_SURFACE_INDEX).TiltDecenterOrder = ...
+            guiHandleStruct.TemporarySurfaceArray(selectedSurfaceIndex).TiltDecenterOrder = ...
                 {orderString(1:2),orderString(3:4),...
                 orderString(5:6),orderString(7:8),orderString(9:10),orderString(11:12)};
         end
@@ -563,40 +568,41 @@ function tblSurfaceArrayTiltDecenterData_CellEditCallback(~, eventdata,figureHan
         if isempty(newParam)
             newParam = 0;
         end
-        guiHandleStruct.TemporarySurfaceArray(SELECTED_SURFACE_INDEX).Decenter(1) = newParam;
+        guiHandleStruct.TemporarySurfaceArray(selectedSurfaceIndex).Decenter(1) = newParam;
     elseif editedColumn == 7 % dec y
         newParam = str2num(eventdata.EditData);
         if isempty(newParam)
             newParam = 0;
         end
-        guiHandleStruct.TemporarySurfaceArray(SELECTED_SURFACE_INDEX).Decenter(2) = newParam;
+        guiHandleStruct.TemporarySurfaceArray(selectedSurfaceIndex).Decenter(2) = newParam;
     elseif editedColumn == 9 % tilt x
         newParam = str2num(eventdata.EditData);
         if isempty(newParam)
             newParam = 0;
         end
-        guiHandleStruct.TemporarySurfaceArray(SELECTED_SURFACE_INDEX).Tilt(1) = newParam;
+        guiHandleStruct.TemporarySurfaceArray(selectedSurfaceIndex).Tilt(1) = newParam;
     elseif editedColumn == 11 % tilt y
         newParam = str2num(eventdata.EditData);
         if isempty(newParam)
             newParam = 0;
         end
-        guiHandleStruct.TemporarySurfaceArray(SELECTED_SURFACE_INDEX).Tilt(2) = newParam;
+        guiHandleStruct.TemporarySurfaceArray(selectedSurfaceIndex).Tilt(2) = newParam;
     elseif editedColumn == 13 % tilt z
         newParam = str2num(eventdata.EditData);
         if isempty(newParam)
             newParam = 0;
         end
-        guiHandleStruct.TemporarySurfaceArray(SELECTED_SURFACE_INDEX).Tilt(3) = newParam;
+        guiHandleStruct.TemporarySurfaceArray(selectedSurfaceIndex).Tilt(3) = newParam;
     elseif editedColumn == 15 % tilt mode
         newParam = (eventdata.EditData);
         if isempty(newParam)
             newParam = 'DAR';
         end
-        guiHandleStruct.TemporarySurfaceArray(SELECTED_SURFACE_INDEX).TiltMode = newParam;
+        guiHandleStruct.TemporarySurfaceArray(selectedSurfaceIndex).TiltMode = newParam;
     end
+    guiHandleStruct.SelectedSurfaceIndex = editedRow;
     figureHandle.Object = guiHandleStruct ;
-    updateSurfaceEditor(figureHandle,editedRow)
+    updateSurfaceEditor(figureHandle)
 end
 % --- Executes when selected cell(s) is changed in aodHandles.tblSurfaceArrayBasicData.
 function tblSurfaceArrayBasicData_CellSelectionCallback(~, eventdata,figureHandle)
@@ -606,13 +612,9 @@ function tblSurfaceArrayBasicData_CellSelectionCallback(~, eventdata,figureHandl
     guiHandleStruct = figureHandle.Object ;
     selectedRow = eventdata.Indices(1);
     selectedColumn = eventdata.Indices(2);
-    
-    global SELECTED_SURFACE_INDEX
-    SELECTED_SURFACE_INDEX = selectedRow;
-    
-    global CAN_ADD_SURF_TO_SURFACE_ARRAY
-    global CAN_REMOVE_SURFACE_FROM_SURFACE_ARRAY
-    
+    selectedSurfaceIndex = selectedRow;
+    guiHandleStruct.SelectedSurfaceIndex = selectedSurfaceIndex;
+
     tblSurfaceArrayData = get(guiHandleStruct.tblSurfaceArrayBasicData,'data');
     sizetblSurfaceArrayData = size(tblSurfaceArrayData);
     
@@ -620,154 +622,161 @@ function tblSurfaceArrayBasicData_CellSelectionCallback(~, eventdata,figureHandl
             ~strcmpi(tblSurfaceArrayData{1,1},'OBJECT')&& ...
             ~strcmpi(tblSurfaceArrayData{1,1},'IMAGE') % only when the first column selected
         if sizetblSurfaceArrayData(1) == 1
-            CAN_ADD_SURF_TO_SURFACE_ARRAY = 1;
-            CAN_REMOVE_SURFACE_FROM_SURFACE_ARRAY = 0;
+            guiHandleStruct.CanAddSurface = 1;
+            guiHandleStruct.CanRemoveSurface = 0;
         else
-            CAN_ADD_SURF_TO_SURFACE_ARRAY = 1;
-            CAN_REMOVE_SURFACE_FROM_SURFACE_ARRAY = 1;
+            guiHandleStruct.CanAddSurface = 1;
+            guiHandleStruct.CanRemoveSurface = 1;
         end
     end
+    guiHandleStruct.SelectedSurfaceIndex = selectedRow;
     figureHandle.Object = guiHandleStruct ;
-    updateSurfaceEditor(figureHandle,selectedRow)
-    %     parentWindow.AODParentHandles = aodHandles;
+    updateSurfaceEditor(figureHandle)
 end
 % --- Executes when selected cell(s) is changed in aodHandles.tblSurfaceArrayApertureData.
 function tblSurfaceArrayApertureData_CellSelectionCallback(~, eventdata,figureHandle)
+    
     if isempty(eventdata.Indices)
         return;
     end
+    guiHandleStruct = figureHandle.Object;
     selectedRow = eventdata.Indices(1);
     selectedColumn = eventdata.Indices(2);
-    global SELECTED_SURFACE_INDEX
-    SELECTED_SURFACE_INDEX = selectedRow;
-    
-    updateSurfaceEditor(figureHandle,selectedRow)
+
+    selectedSurfaceIndex = selectedRow;
+    guiHandleStruct.SelectedSurfaceIndex = selectedSurfaceIndex;
+    figureHandle.Object = guiHandleStruct ;
+    updateSurfaceEditor(figureHandle)
 end
 % --- Executes when selected cell(s) is changed in aodHandles.tblSurfaceArrayTiltDecenterData.
 function tblSurfaceArrayTiltDecenterData_CellSelectionCallback(~, eventdata,figureHandle)
+    
     if isempty(eventdata.Indices)
         return;
     end
-    
+    guiHandleStruct = figureHandle.Object;
     selectedRow = eventdata.Indices(1);
     selectedColumn = eventdata.Indices(2);
-    
-    global SELECTED_SURFACE_INDEX
-    SELECTED_SURFACE_INDEX = selectedRow;
-    
-    updateSurfaceEditor(figureHandle,selectedRow)
+
+    selectedSurfaceIndex = selectedRow;
+    guiHandleStruct.SelectedSurfaceIndex = selectedSurfaceIndex;
+    figureHandle.Object = guiHandleStruct ;
+    updateSurfaceEditor(figureHandle)
 end
 
 
 %% Button Callbacks
 function btnInsertSurfaceToSurfaceArray_Callback(~,~,figureHandle)
-    global SELECTED_SURFACE_INDEX
-    if isempty(SELECTED_SURFACE_INDEX)
+    guiHandleStruct = figureHandle.Object;
+    selectedSurfaceIndex = guiHandleStruct.SelectedSurfaceIndex;
+    canAddSurface = guiHandleStruct.CanAddSurface;
+    if isempty(selectedSurfaceIndex)
         return
     end
-    insertPosition = SELECTED_SURFACE_INDEX;
-    InsertNewSurfaceToSurfaceArray(figureHandle,insertPosition);
     
+    if canAddSurface
+        insertPosition = selectedSurfaceIndex;
+        InsertNewSurfaceToSurfaceArray(figureHandle,insertPosition);
+    end
 end
 function btnRemoveSurfaceFromSurfaceArray_Callback(~,~,figureHandle)
-    global SELECTED_SURFACE_INDEX
-    if isempty(SELECTED_SURFACE_INDEX)
+    guiHandleStruct = figureHandle.Object;
+    selectedSurfaceIndex = guiHandleStruct.SelectedSurfaceIndex;
+    canRemoveSurface = guiHandleStruct.CanRemoveSurface;
+    
+    if isempty(selectedSurfaceIndex)
         return
     end
-    removePosition = SELECTED_SURFACE_INDEX;
-    RemoveSurfaceFromSurfaceArray(figureHandle,removePosition);
+    if canRemoveSurface
+        removePosition = selectedSurfaceIndex;
+        RemoveSurfaceFromSurfaceArray(figureHandle,removePosition);
+    end
 end
 function btnStopSurfaceOfSurfaceArray_Callback(~,~,figureHandle)
-    global SELECTED_SURFACE_INDEX
-    if isempty(SELECTED_SURFACE_INDEX)
+    guiHandleStruct = figureHandle.Object;
+    selectedSurfaceIndex = guiHandleStruct.SelectedSurfaceIndex;
+    if isempty(selectedSurfaceIndex)
         return
     end
-    stopSurfaceIndex = SELECTED_SURFACE_INDEX;
-    prevStopSurfaceIndex = find([figureHandle.Object.TemporarySurfaceArray.Stop]);
+    stopSurfaceIndex = selectedSurfaceIndex;
+    
+    prevStopSurfaceIndex = find([figureHandle.Object.TemporarySurfaceArray.IsStop]);
     if ~isempty(prevStopSurfaceIndex)
-            figureHandle.Object.TemporarySurfaceArray(prevStopSurfaceIndex).Stop = 0;
+        guiHandleStruct.TemporarySurfaceArray(prevStopSurfaceIndex).IsStop = 0;
     end
-    figureHandle.Object.TemporarySurfaceArray(stopSurfaceIndex).Stop = 1;
-    updateSurfaceEditor(figureHandle,SELECTED_SURFACE_INDEX);
-    %     stopSurfaceIndex = SELECTED_SURFACE_INDEX;
-    %     MakeThisStopSurfaceOfSurfaceArray (figureHandle,stopSurfaceIndex)
+    guiHandleStruct.SelectedSurfaceIndex = selectedSurfaceIndex;
+    guiHandleStruct.TemporarySurfaceArray(stopSurfaceIndex).IsStop = 1;
+    figureHandle.Object = guiHandleStruct;
+    updateSurfaceEditor(figureHandle);
 end
 
 function btnOk_Callback(~,~,figureHandle)
-    figHandle = figureHandle.Object.FigureHandle;
+    figHandle = figureHandle.Object.MainFigureHandle;
     surfaceArray = figureHandle.Object.TemporarySurfaceArray;
-    
-%     [surfaceArray,nSurface] = SaveSurfaceArray(figureHandle,glassCatalogueListFullNames,coatingCatalogueListFullNames);
     setappdata(0,'SurfaceArray',surfaceArray);
     delete(figHandle);
 end
 function btnCancel_Callback(~,~,figureHandle)
-    figHandle = figureHandle.Object.FigureHandle;
+    figHandle = figureHandle.Object.MainFigureHandle;
     delete(figHandle);
 end
 
 %% Local Function
 function RemoveSurfaceFromSurfaceArray(figureHandle,removePosition)
-    global CAN_REMOVE_SURFACE_FROM_SURFACE_ARRAY
-    if CAN_REMOVE_SURFACE_FROM_SURFACE_ARRAY
-        guiHandleStruct = figureHandle.Object;
-        nSurfaces = length(guiHandleStruct.TemporarySurfaceArray);
-        prevStopSurfaceIndex = find([guiHandleStruct.TemporarySurfaceArray.Stop]);
-            if isempty(prevStopSurfaceIndex)
-            prevStopSurfaceIndex = 1;
+    
+    guiHandleStruct = figureHandle.Object;
+    prevStopSurfaceIndex = find([guiHandleStruct.TemporarySurfaceArray.IsStop]);
+    nSurface = length(guiHandleStruct.TemporarySurfaceArray);
+    if prevStopSurfaceIndex == removePosition
+        stopSurfaceRemoved = 1;
+    else
+        stopSurfaceRemoved = 0;
     end
-        %         if  removePosition > prevStopSurfaceIndex
-        %             % Do nothing
-        %             newStopIndex = prevStopSurfaceIndex;
-        %             selectedIndex = removePosition;
-        %         else
-        if prevStopSurfaceIndex == removePosition && removePosition == nSurfaces
-            % Stop surface which is also the last surface is being removed so
-            % shift the stop one step up
-            newStopIndex = prevStopSurfaceIndex-1;
-            selectedIndex = removePosition-1;
+    
+    if nSurface == removePosition
+        nextSelectedSurface = removePosition-1;
+    else
+        nextSelectedSurface = removePosition;
+    end
+    guiHandleStruct.SelectedSurfaceIndex = nextSelectedSurface;
+    
+    % Update the surface array
+    guiHandleStruct.TemporarySurfaceArray = guiHandleStruct.TemporarySurfaceArray([1:removePosition-1,removePosition+1:end]);
+    
+    if length(guiHandleStruct.TemporarySurfaceArray) == 1
+        guiHandleStruct.CanRemoveSurface = 0;
+        guiHandleStruct.CanAddSurface = 0;
+    end
+    
+    if stopSurfaceRemoved
+        if guiHandleStruct.TemporarySurfaceArray(nextSelectedSurface).IsImage
+            guiHandleStruct.TemporarySurfaceArray(nextSelectedSurface-1).IsStop = 1;
         else
-            newStopIndex = prevStopSurfaceIndex;
-            selectedIndex = removePosition;
+            guiHandleStruct.TemporarySurfaceArray(nextSelectedSurface).IsStop = 1;
         end
-        %         else
-        %             % shift the stop one step up
-        %             newStopIndex = prevStopSurfaceIndex-1;
-        %             selectedIndex = removePosition;
-        %         end
-        % Update the surface array
-        guiHandleStruct.TemporarySurfaceArray = guiHandleStruct.TemporarySurfaceArray([1:removePosition-1,removePosition+1:end]);
-        guiHandleStruct.TemporarySurfaceArray(newStopIndex).Stop = 1;
-        %
-        %     if CAN_REMOVE_SURFACE_FROM_SURFACE_ARRAY
-        %         %update standard data table
-        %         tblData1 = get(guiHandleStruct.tblSurfaceArrayBasicData,'data');
-        %         sizeTblData1 = size(tblData1);
-        %         parta1 = tblData1(1:removePosition-1,:);
-        %         partb1 = tblData1(removePosition+1:sizeTblData1 ,:);
-        %         newTable1 = [parta1; partb1];
-        %         sysTable1 = guiHandleStruct.tblSurfaceArrayBasicData;
-        %         set(sysTable1, 'Data', newTable1);
-        %     end
-        figureHandle.Object = guiHandleStruct;
-        updateSurfaceEditor(figureHandle,selectedIndex);
     end
+    % The next selected row will be the one in the removed position, so if
+    % it is image plane then dont let further removal
+    if guiHandleStruct.TemporarySurfaceArray(nextSelectedSurface).IsImage
+        canRemoveSurface = 0;
+        guiHandleStruct.CanRemoveSurface = canRemoveSurface;
+    end
+    figureHandle.Object = guiHandleStruct;
+    updateSurfaceEditor(figureHandle);
 end
 function InsertNewSurfaceToSurfaceArray(figureHandle,insertPosition)
     guiHandleStruct = figureHandle.Object;
-    %     global SELECTED_SURFACE_INDEX
-    global CAN_ADD_SURF_TO_SURFACE_ARRAY
-    if CAN_ADD_SURF_TO_SURFACE_ARRAY
-        %update surface list table
-        nSurface = length(guiHandleStruct.TemporarySurfaceArray);
-        % Update the surface array
-        for kk = nSurface:-1:insertPosition
-            guiHandleStruct.TemporarySurfaceArray(kk+1) = guiHandleStruct.TemporarySurfaceArray(kk);
-        end
-        guiHandleStruct.TemporarySurfaceArray(insertPosition) = Surface();
-        figureHandle.Object = guiHandleStruct;
-        updateSurfaceEditor(figureHandle,insertPosition);
+    
+    %update surface list table
+    nSurface = length(guiHandleStruct.TemporarySurfaceArray);
+    % Update the surface array
+    for kk = nSurface:-1:insertPosition
+        guiHandleStruct.TemporarySurfaceArray(kk+1) = guiHandleStruct.TemporarySurfaceArray(kk);
     end
+    guiHandleStruct.TemporarySurfaceArray(insertPosition) = Surface();
+    guiHandleStruct.SelectedSurfaceIndex = insertPosition;
+    figureHandle.Object = guiHandleStruct;
+    updateSurfaceEditor(figureHandle);
     figureHandle.Object = guiHandleStruct;
 end
 

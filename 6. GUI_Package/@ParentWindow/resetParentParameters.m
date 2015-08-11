@@ -4,8 +4,6 @@ function resetParentParameters( parentWindow )
     set(parentWindow.ParentHandles.FigureHandle,'Name','Untitled');
     parentWindow.ParentHandles.ChildWindows = ChildWindow.empty; 
     parentWindow.ParentHandles.NextChildIndex = 1; 
-    parentWindow.ParentHandles.Saved = 0;
-    parentWindow.ParentHandles.PathName = '';
-    parentWindow.ParentHandles.FileName = '';
+    parentWindow.ParentHandles.SelectedElementIndex = 1;
 end
 

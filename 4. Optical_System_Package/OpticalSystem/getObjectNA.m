@@ -2,7 +2,7 @@ function [NAO,entPupilLocation] = getObjectNA(optSystem,wavLen)
     % getObjectNA: returns object space NA of the optical system
     
     if nargin < 2
-        wavLen = optSystem.getPrimaryWavelength;
+        wavLen = getPrimaryWavelength(optSystem);
     end
     systemApertureType = optSystem.SystemApertureType;
     systemApertureValue = optSystem.SystemApertureValue;

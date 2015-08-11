@@ -35,9 +35,10 @@ function [refCoeff_S,refCoeff_P,averRefCoeff, wavlengthVectorInUm] = ...
     else
     end        
     wavlengthVectorInUm =  minWavelengthInUm:wavelengthStepInUm:maxWavelengthInUm;
+    referenceWavLenInUm = primWavLenInUm;
     [ampRs,ampRp,powRs,powRp] = ...
             getReflectionCoefficients(coating,wavlengthVectorInUm,...
-            incAngleInDeg*pi/180,indexBefore,indexAfter);
+            incAngleInDeg*pi/180,indexBefore,indexAfter,referenceWavLenInUm);
     
     % decide which of three fresnels coefficients to plot
     % Case 1: amplitude coefficients not additive but may be complex.
@@ -63,7 +64,7 @@ function [refCoeff_S,refCoeff_P,averRefCoeff, wavlengthVectorInUm] = ...
     
     if nargin >= 9
     % Display tabular data on the tableHandle
-    newTable1 = [wavlengthVectorInUm',refCoeff_S',refCoeff_P',averRefCoeff'];
+    newTable1 = [wavlengthVectorInUm',refCoeff_S,refCoeff_P,averRefCoeff];
     newTable1 = mat2cell(newTable1,[ones(1,size(newTable1,1))],[ones(1,size(newTable1,2))]);
     columnName1 = {'Wavelength (um)','S Reflectance','P Reflectance','Average Reflectance'};
     columnWidth1 = {'auto','auto','auto','auto'};

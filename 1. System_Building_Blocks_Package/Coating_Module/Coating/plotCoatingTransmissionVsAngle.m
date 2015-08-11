@@ -35,9 +35,10 @@ function [transCoeff_S,transCoeff_P,averTransCoeff, angleVectorInDeg] = ...
     end
     
     localIncidenceAngle = minAngleInDeg:angleStepInDeg:maxAngleInDeg;
+    referenceWavLenInUm = primWavLenInUm;
     [ampTs,ampTp,powTs,powTp] = ...
         getTransmissionCoefficients(coating,wavLenInUm,...
-        localIncidenceAngle*pi/180,indexBefore,indexAfter);
+        localIncidenceAngle*pi/180,indexBefore,indexAfter,referenceWavLenInUm);
     
     % decide which of three fresnels coefficients to plot
     % Case 1: amplitude coefficients not additive but may be complex.
@@ -64,7 +65,7 @@ function [transCoeff_S,transCoeff_P,averTransCoeff, angleVectorInDeg] = ...
     title(axesHandle,[coating.Name,': Transmission Vs Incidence Angle'],'FontSize',12)
     if nargin >= 9
         % Display tabular data on the tableHandle
-        newTable1 = [angleVectorInDeg',transCoeff_S',transCoeff_P',averTransCoeff'];
+        newTable1 = [angleVectorInDeg',transCoeff_S,transCoeff_P,averTransCoeff];
         newTable1 = mat2cell(newTable1,[ones(1,size(newTable1,1))],[ones(1,size(newTable1,2))]);
         columnName1 = {'Angle (deg)','S Transmittance','P Transmittance','Average Transmittance'};
         columnWidth1 = {'auto','auto','auto','auto'};

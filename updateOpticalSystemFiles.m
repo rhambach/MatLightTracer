@@ -221,44 +221,88 @@ function updateOpticalSystemFiles()
                     %     end
                     % end
                     
-                    %% Change OpticalSystem, Surface, Aperture, Glass and Coating from object to struct
-                    % from numeric to String
-                try
-                        SavedOpticalSystem.ClassName = 'OpticalSystem';
-                        SavedOpticalSystem2 = struct(SavedOpticalSystem);
-                        if IsComponentBased(SavedOpticalSystem)
-                            nComp = getNumberOfComponents(SavedOpticalSystem);
-                            for cc = 1:nComp
-                                SavedOpticalSystem.ComponentArray(cc).ClassName = 'Component';
-                                SavedOpticalSystem2.ComponentArray(cc) = struct(SavedOpticalSystem.ComponentArray(cc));
-                            end
-                        else
-                            SavedOpticalSystem2.ComponentArray = struct(Component);
-                        end
-                        if IsSurfaceBased(SavedOpticalSystem)
-                            nSurf = getNumberOfSurfaces(SavedOpticalSystem);
-                            newSurfStructArray(nSurf) = struct(Surface);
-                            for kk = 1:nSurf
-                                SavedOpticalSystem.SurfaceArray(kk).ClassName = 'Surface';
-                                newSurfStructArray(kk) = struct(SavedOpticalSystem.SurfaceArray(kk));
-                               SavedOpticalSystem.SurfaceArray(kk).Aperture.ClassName = 'Aperture';
-                               newSurfStructArray(kk).Aperture = struct(SavedOpticalSystem.SurfaceArray(kk).Aperture);
-                               SavedOpticalSystem.SurfaceArray(kk).Glass.ClassName = 'Glass';
-                               newSurfStructArray(kk).Glass = struct(SavedOpticalSystem.SurfaceArray(kk).Glass);
-                               SavedOpticalSystem.SurfaceArray(kk).Coating.ClassName = 'Coating';
-                               newSurfStructArray(kk).Coating = struct(SavedOpticalSystem.SurfaceArray(kk).Coating);
-                            end
-                            SavedOpticalSystem2.SurfaceArray = newSurfStructArray;
-                        else
-                            SavedOpticalSystem2.SurfaceArray = struct(Surface);
-                        end
-                        saveToMATFileNew( SavedOpticalSystem2,pathNameNew,fileName);
+%                     %% Change OpticalSystem, Surface, Aperture, Glass and Coating from object to struct
+%                     % from numeric to String
+%                     try
+%                         SavedOpticalSystem.ClassName = 'OpticalSystem';
+%                         SavedOpticalSystem2 = struct(SavedOpticalSystem);
+%                         if IsComponentBased(SavedOpticalSystem)
+%                             nComp = getNumberOfComponents(SavedOpticalSystem);
+%                             for cc = 1:nComp
+%                                 SavedOpticalSystem.ComponentArray(cc).ClassName = 'Component';
+%                                 SavedOpticalSystem2.ComponentArray(cc) = struct(SavedOpticalSystem.ComponentArray(cc));
+%                             end
+%                         else
+%                             SavedOpticalSystem2.ComponentArray = struct(Component);
+%                         end
+%                         if IsSurfaceBased(SavedOpticalSystem)
+%                             nSurf = getNumberOfSurfaces(SavedOpticalSystem);
+%                             newSurfStructArray(nSurf) = struct(Surface);
+%                             for kk = 1:nSurf
+%                                 SavedOpticalSystem.SurfaceArray(kk).ClassName = 'Surface';
+%                                 newSurfStructArray(kk) = struct(SavedOpticalSystem.SurfaceArray(kk));
+%                                 SavedOpticalSystem.SurfaceArray(kk).Aperture.ClassName = 'Aperture';
+%                                 newSurfStructArray(kk).Aperture = struct(SavedOpticalSystem.SurfaceArray(kk).Aperture);
+%                                 SavedOpticalSystem.SurfaceArray(kk).Glass.ClassName = 'Glass';
+%                                 newSurfStructArray(kk).Glass = struct(SavedOpticalSystem.SurfaceArray(kk).Glass);
+%                                 SavedOpticalSystem.SurfaceArray(kk).Coating.ClassName = 'Coating';
+%                                 newSurfStructArray(kk).Coating = struct(SavedOpticalSystem.SurfaceArray(kk).Coating);
+%                             end
+%                             SavedOpticalSystem2.SurfaceArray = newSurfStructArray;
+%                         else
+%                             SavedOpticalSystem2.SurfaceArray = struct(Surface);
+%                         end
+%                         saveToMATFileNew( SavedOpticalSystem2,pathNameNew,fileName);
+%                         disp('Success: Optical system updated.');
+%                     catch
+%                     end
+
+%% Change ImageAfocal, ObjectAfocal,ObjectTelecenteric,ImageTelecenteric and Saved to 
+% IsImageAfocal, IsObjectAfocal,IsObjectTelecenteric,IsImageTelecenteric, IsSaved
+% For each surface change ObjectSurface, ImageSurface and Stop , Hidden, Ignored to IsObject,
+% IsImage, IsStop, IsHidden, IsIgnored
+
+if isfield(SavedOpticalSystem,'ImageAfocal')
+    SavedOpticalSystem.IsImageAfocal = SavedOpticalSystem.ImageAfocal;
+end
+if isfield(SavedOpticalSystem,'ObjectAfocal')
+    SavedOpticalSystem.IsObjectAfocal = SavedOpticalSystem.ObjectAfocal;
+end
+if isfield(SavedOpticalSystem,'ObjectTelecenteric')
+    SavedOpticalSystem.IsObjectTelecenteric = SavedOpticalSystem.ObjectTelecenteric;
+end
+if isfield(SavedOpticalSystem,'ImageTelecenteric')
+    SavedOpticalSystem.IsImageTelecenteric = SavedOpticalSystem.ImageTelecenteric;
+end
+if isfield(SavedOpticalSystem,'Saved')
+    SavedOpticalSystem.IsSaved = SavedOpticalSystem.Saved;
+end
+
+if IsSurfaceBased(SavedOpticalSystem)
+    nSurf = length(SavedOpticalSystem.SurfaceArray);
+    for kk = 1:nSurf
+        if isfield(SavedOpticalSystem.SurfaceArray(kk),'ObjectSurface')
+            SavedOpticalSystem.SurfaceArray(kk).IsObject = SavedOpticalSystem.SurfaceArray(kk).ObjectSurface;
+        end
+        if isfield(SavedOpticalSystem.SurfaceArray(kk),'ImageSurface')
+            SavedOpticalSystem.SurfaceArray(kk).IsImage = SavedOpticalSystem.SurfaceArray(kk).ImageSurface;
+        end 
+        if isfield(SavedOpticalSystem.SurfaceArray(kk),'Stop')
+            SavedOpticalSystem.SurfaceArray(kk).IsStop = SavedOpticalSystem.SurfaceArray(kk).Stop;
+        end
+        if isfield(SavedOpticalSystem.SurfaceArray(kk),'Hidden')
+            SavedOpticalSystem.SurfaceArray(kk).IsHidden = SavedOpticalSystem.SurfaceArray(kk).Hidden;
+        end
+        if isfield(SavedOpticalSystem.SurfaceArray(kk),'Ignored')
+            SavedOpticalSystem.SurfaceArray(kk).IsIgnored = SavedOpticalSystem.SurfaceArray(kk).Ignored;
+        end
+    end
+end
+                        saveToMATFileNew( SavedOpticalSystem,pathNameNew,fileName);
                         disp('Success: Optical system updated.');
-                catch
+                else
+                    
                 end
-                    else
-      
-                    end   
             else
                 
             end
@@ -309,7 +353,7 @@ function [ valid, fileInfoStruct, dispMsg,relatedCatalogueFullFileNames] = isVal
                     return
                 else
                     if (strcmpi(fileInfo.Type,'OpticalSystem')&&...
-                            strcmpi(class(objectArray),'OpticalSystem'))
+                            isOpticalSystem(objectArray))
                         valid = 1;
                         fileInfoStruct = fileInfo;
                         dispMsg = 'Success: Object Catalogue File is Valid.';

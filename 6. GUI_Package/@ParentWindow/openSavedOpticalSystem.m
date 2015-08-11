@@ -5,7 +5,7 @@ function opened = openSavedOpticalSystem(parentWindow,savedOpticalSystem,pathNam
     
     aodHandles = parentWindow.ParentHandles;
     
-    aodHandles.Saved = savedOpticalSystem.Saved;
+    aodHandles.IsSaved = savedOpticalSystem.IsSaved;
     aodHandles.PathName = pathName;
     aodHandles.FileName = fileName;
     

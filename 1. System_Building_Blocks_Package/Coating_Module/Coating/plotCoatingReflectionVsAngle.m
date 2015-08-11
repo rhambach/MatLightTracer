@@ -34,9 +34,10 @@ function [refCoeff_S,refCoeff_P,averRefCoeff, angleVectorInDeg] = ...
     end
     
     localIncidenceAngle = minAngleInDeg:angleStepInDeg:maxAngleInDeg;
+    referenceWavLenInUm = primWavLenInUm;
     [ampRs,ampRp,powRs,powRp] = ...
         getReflectionCoefficients(coating,wavLenInUm,...
-        localIncidenceAngle*pi/180,indexBefore,indexAfter);
+        localIncidenceAngle*pi/180,indexBefore,indexAfter,referenceWavLenInUm);
     
     % decide which of three fresnels coefficients to plot
     % Case 1: amplitude coefficients not additive but may be complex.
@@ -65,7 +66,7 @@ function [refCoeff_S,refCoeff_P,averRefCoeff, angleVectorInDeg] = ...
     title(axesHandle,[coating.Name,': Reflection Vs Incidence Angle'],'FontSize',12)
     if nargin >= 9
         % Display tabular data on the tableHandle
-        newTable1 = [angleVectorInDeg',refCoeff_S',refCoeff_P',averRefCoeff'];
+        newTable1 = [angleVectorInDeg',refCoeff_S,refCoeff_P,averRefCoeff];
         newTable1 = mat2cell(newTable1,[ones(1,size(newTable1,1))],[ones(1,size(newTable1,2))]);
         columnName1 = {'Angle (deg)','S Reflectance','P Reflectance','Average Reflectance'};
         columnWidth1 = {'auto','auto','auto','auto'};

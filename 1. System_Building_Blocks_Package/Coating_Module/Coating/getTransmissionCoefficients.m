@@ -56,9 +56,9 @@ function [ampTs,ampTp,powTs,powTp,jonesTransMatrix] = getTransmissionCoefficient
         coatingDefinitionHandle(returnFlag,coatingParameters,wavLen,referenceWavLen,...
         incAngleInDeg,indexBefore,indexAfter);
     
-    ampTs = ampTransJonesMatrix(1,1,:);
-    ampTp = ampTransJonesMatrix(2,2,:);
-    powTs = powTransJonesMatrix(1,1,:);
-    powTp = powTransJonesMatrix(2,2,:);
+    ampTs = squeeze(ampTransJonesMatrix(1,1,:));
+    ampTp = squeeze(ampTransJonesMatrix(2,2,:));
+    powTs = squeeze(powTransJonesMatrix(1,1,:));
+    powTp = squeeze(powTransJonesMatrix(2,2,:));
     jonesTransMatrix = ampTransJonesMatrix;
 end

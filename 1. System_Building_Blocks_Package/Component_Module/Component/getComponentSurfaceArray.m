@@ -31,11 +31,11 @@ function mySurfaceArray = getComponentSurfaceArray(currentComponent)
     [ surfArray ] = componentDefinitionHandle(returnFlag,currentComponent.UniqueParameters,firstTilt,firstDecenter,firstTiltDecenterOrder,lastThickness,lastTiltMode);
     % Make the stop surface
     for kk = 1:length(surfArray)
-        surfArray(kk).Stop = 0;
+        surfArray(kk).IsStop = 0;
     end
     stopSurfaceInComponentIndex = currentComponent.StopSurfaceIndex;
     if stopSurfaceInComponentIndex
-        surfArray(stopSurfaceInComponentIndex).Stop = 1;
+        surfArray(stopSurfaceInComponentIndex).IsStop = 1;
     end
     mySurfaceArray = surfArray;
 end

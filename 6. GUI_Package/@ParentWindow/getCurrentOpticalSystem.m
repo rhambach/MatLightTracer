@@ -18,7 +18,7 @@ function [ updatedSystem,saved] = getCurrentOpticalSystem (parentWindow)
                 currentSurfaceArray = getComponentSurfaceArray(componentArray(tt));
                 stopSurfaceInComponentIndex = componentArray(tt).StopSurfaceIndex;
                 if stopSurfaceInComponentIndex
-                    currentSurfaceArray(stopSurfaceInComponentIndex).Stop = 1;
+                    currentSurfaceArray(stopSurfaceInComponentIndex).IsStop = 1;
                 end
                 totalSurfaceArray = [totalSurfaceArray,currentSurfaceArray];
             end

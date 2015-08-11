@@ -8,9 +8,9 @@ function [NewOpticalSystem] =  OpticalSystem(fullFilePath)
         tempSurfaceArray(2) = Surface();
         tempSurfaceArray(3) = Surface();
         
-        tempSurfaceArray(1).ObjectSurface = 1;
-        tempSurfaceArray(2).Stop = 1;
-        tempSurfaceArray(3).ImageSurface = 1;
+        tempSurfaceArray(1).IsObject = 1;
+        tempSurfaceArray(2).IsStop = 1;
+        tempSurfaceArray(3).IsImage = 1;
         
         NewOpticalSystem.SurfaceArray = tempSurfaceArray;
         
@@ -33,7 +33,7 @@ function [NewOpticalSystem] =  OpticalSystem(fullFilePath)
         NewOpticalSystem.IsObjectAfocal = 0;
         NewOpticalSystem.IsImageAfocal = 0;
         NewOpticalSystem.IsObjectTelecenteric = 0;
-        NewOpticalSystem.IsObjectTelecenteric = 0;
+        NewOpticalSystem.IsImageTelecenteric = 0;
         
         NewOpticalSystem.IsUpdatedSurfaceArray = 0;
         
@@ -47,7 +47,7 @@ function [NewOpticalSystem] =  OpticalSystem(fullFilePath)
         NewOpticalSystem.SystemMode = 'SEQ';
         NewOpticalSystem.GlassCataloguesList = getAllObjectCatalogues('Glass');
         NewOpticalSystem.SoftwareVersion = '';
-        NewOpticalSystem.Saved = 0;
+        NewOpticalSystem.IsSaved = 0;
         NewOpticalSystem.PathName = '';
         NewOpticalSystem.FileName = '';
     else

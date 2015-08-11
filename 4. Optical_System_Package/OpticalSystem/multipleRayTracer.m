@@ -71,7 +71,7 @@ function [multipleRayTracerResult,pupilMeshGrid,outsidePupilIndices ] = ...
     elseif nargin == 7
         [NonDummySurfaceIndices,updatedSurfaceArray,endSurface] = getNonDummySurfaceIndices(optSystem); 
     else
-        [NonDummySurfaceIndices,updatedSurfaceArray,endSurface] = getNonDummySurfaceIndices(optSystem); 
+        [NonDummySurfaceIndices,updatedSurfaceArray] = getNonDummySurfaceIndices(optSystem); 
     end
     
     tic

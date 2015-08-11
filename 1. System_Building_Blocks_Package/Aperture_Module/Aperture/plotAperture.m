@@ -4,6 +4,25 @@ function [  h ] = plotAperture( surfAperture,nPoints1,nPoints2,xyCenterPoint,axe
     % The actual aperture region: White, The outer aperture region: gray
     % and the edge region : dark
     
+    if nargin < 5
+        figure;
+        axesHandle = axes;
+    end
+    if nargin < 4
+        xyCenterPoint = [0,0];
+    end
+    if nargin < 3
+        nPoints2 = 200;
+    end
+    if nargin < 2
+        nPoints1 = 200;
+    end
+    if nargin < 1
+        disp('Error: The function plotAperture needs atleast one input argument');
+        h = NaN;
+        return;
+    end
+    
     [outerApertShape,maximumRadiusXY] =  getOuterAperture( surfAperture );
     % Radius of the largest circle circumscribing the aperture
         maxR = sqrt((maximumRadiusXY(1))^2+(maximumRadiusXY(2))^2);
@@ -44,18 +63,18 @@ function [  h ] = plotAperture( surfAperture,nPoints1,nPoints2,xyCenterPoint,axe
     
     % Remove the all NaN rows and columns
     insideDrawn = reshape(isInsideTheOuterApertureWithEdge,[nRow,nCol]);
-    xMesh(:,~any(insideDrawn,1)) = [];
-    yMesh(:,~any(insideDrawn,1)) = [];
-    colorData(:,~any(insideDrawn,1)) = [];
+    xMesh(:,~any(insideDrawn,2)) = [];
+    yMesh(:,~any(insideDrawn,2)) = [];
+    colorData(:,~any(insideDrawn,2)) = [];
     
-    xMesh(~any(insideDrawn,2),:) = [];
-    yMesh(~any(insideDrawn,2),:) = [];
-    colorData(~any(insideDrawn,2),:) = [];
+    xMesh(~any(insideDrawn,1),:) = [];
+    yMesh(~any(insideDrawn,1),:) = [];
+    colorData(~any(insideDrawn,1),:) = [];
     
     % Replace the zeros in colorData wihth NaN so that they will be drwn
     % white
     colorData(colorData==0) = NaN;
-    h = pcolor(xMesh,yMesh,colorData);
+    h = pcolor(axesHandle,xMesh + xyCenterPoint(1),yMesh + xyCenterPoint(2),colorData);
     set(h, 'EdgeColor', 'none');
 end
 

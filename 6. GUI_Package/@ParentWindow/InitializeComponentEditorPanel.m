@@ -715,34 +715,3 @@ function RemoveComponent(parentWindow,removePosition)
     updateQuickLayoutPanel(parentWindow,removePosition);
 end
 
-% function actionConfirmed = IsSurfaceBasedSystemDefinition(parentWindow)
-%     if (isnumeric(parentWindow.ParentHandles.OpticalSystem.SystemDefinitionType) &&...
-%             parentWindow.ParentHandles.OpticalSystem.SystemDefinitionType == 1)||...
-%             strcmpi(parentWindow.ParentHandles.OpticalSystem.SystemDefinitionType,'SurfaceBased')
-%         actionConfirmed = 1;
-%     else
-%         choice = questdlg(['Your system is not defined using Surface',...
-%             ' Based method. Editing in the surface editor',...
-%             ' window automatically converts your system to Surface',...
-%             ' Based definition. Do you want to continue editing?'], ...
-%             'Change System Definition Type', ...
-%             'Yes','No','No');
-%         % Handle response
-%         switch choice
-%             case 'Yes'
-%                 % first sync the surface array with component array
-%                 oldOpticalSystem = parentWindow.ParentHandles.OpticalSystem;
-%                 [ updatedSystem ] = synchronizeSurfaceAndComponentArray( oldOpticalSystem );
-%                 updatedSystem.SystemDefinitionType = 'SurfaceBased';
-%                 parentWindow.ParentHandles.OpticalSystem = updatedSystem;
-%                 
-%                 updateSurfaceOrComponentEditorPanel( parentWindow );
-%                 actionConfirmed = 1;
-%             case 'No'
-%                 actionConfirmed = 0;
-%                 return;
-%         end
-%     end
-% end
-
-

@@ -34,12 +34,13 @@ function [diattenuationTrans,diattenuationRef,angleVector] = plotCoatingDiattenu
     end
         
     localIncidenceAngleInDeg = minAngleInDeg:angleStepInDeg:maxAngleInDeg;
+    referenceWavLenInUm = primWavLenInUm;
     [ampRs,ampRp,powRs,powRp] = ...
             getReflectionCoefficients(coating,wavLenInUm,...
-            localIncidenceAngleInDeg*pi/180,indexBefore,indexAfter); 
+            localIncidenceAngleInDeg*pi/180,indexBefore,indexAfter,referenceWavLenInUm); 
     [ampTs,ampTp,powTs,powTp] = ...
             getTransmissionCoefficients(coating,wavLenInUm,...
-            localIncidenceAngleInDeg*pi/180,indexBefore,indexAfter); 
+            localIncidenceAngleInDeg*pi/180,indexBefore,indexAfter,referenceWavLenInUm); 
 
     % Reshape the vector to 1x1xN dimensional matrix and merge to get Jones
     % matrix of 2x2xN size

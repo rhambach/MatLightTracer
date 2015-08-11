@@ -8,7 +8,7 @@ function [optimalValue,optimalMeritFunction,optimizedObject,outputStruct] = ...
         myEdgeFactor = 0.2;
         
         % Fixed parameters
-        nGauss = 10; % shall be odd
+        nGauss = 20; % shall be odd
         
         nSampling = 500;
         nx = nSampling;
@@ -51,7 +51,7 @@ function [optimalValue,optimalMeritFunction,optimizedObject,outputStruct] = ...
     tolx = 10^-3;
     tolfun = 10^-3;
     outputFuncHandle = @(x)x; % just nothing
-    maxIter = 300;
+    maxIter = 1000;
     optimizationOption = struct();
     optimizationOption.TolX = tolx;
     optimizationOption.TolFun = tolfun;
@@ -67,7 +67,7 @@ function [optimalValue,optimalMeritFunction,optimizedObject,outputStruct] = ...
     meritFunctionParameters.SignalEdgeFactor = signalEdgeFactor;
     
     % Get the initial center and width using a constant width to spacing ratio
-    waistRadiusToSpacing = 1.0;
+    waistRadiusToSpacing = 1.5;
     % Assume the rectangle edge is on the waist of the last gausslets
     initialGaussWaistRadius = (waistRadiusToSpacing*signalWidth)/(nGauss-1 + 2*waistRadiusToSpacing);
     initialGaussCenter = linspace(-signalWidth/2 + initialGaussWaistRadius,signalWidth/2 - initialGaussWaistRadius,nGauss);

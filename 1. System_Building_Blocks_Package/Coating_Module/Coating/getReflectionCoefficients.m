@@ -52,9 +52,9 @@ function [ampRs,ampRp,powRs,powRp,jonesRefMatrix] = getReflectionCoefficients...
         coatingDefinitionHandle(returnFlag,coatingParameters,wavLen,referenceWavLen,...
         incAngleInDeg,substrateGlass,claddingGlass);
     
-    ampRs = ampRefJonesMatrix(1,1,:);
-    ampRp = ampRefJonesMatrix(2,2,:);
-    powRs = powRefJonesMatrix(1,1,:);
-    powRp = powRefJonesMatrix(2,2,:);
+    ampRs = squeeze(ampRefJonesMatrix(1,1,:));
+    ampRp = squeeze(ampRefJonesMatrix(2,2,:));
+    powRs = squeeze(powRefJonesMatrix(1,1,:));
+    powRp = squeeze(powRefJonesMatrix(2,2,:));
     jonesRefMatrix = ampRefJonesMatrix;
 end

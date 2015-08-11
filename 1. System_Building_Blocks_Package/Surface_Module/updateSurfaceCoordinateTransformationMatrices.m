@@ -6,7 +6,7 @@ function updatedSurfaceArray = updateSurfaceCoordinateTransformationMatrices(sur
     % the second surface but otherwise the first surface is used as
     % global reference.
     
-    if surfaceArray(1).ObjectSurface
+    if surfaceArray(1).IsObject
         % Object surface
         objThickness = abs(surfaceArray(1).Thickness);
         if objThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for graphing

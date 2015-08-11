@@ -220,8 +220,8 @@ function popStopSurfaceIndex_Callback(hObject, eventdata,parentWindow)
         newStopIndex = prevStopIndex;
     end
     if newStopIndex ~= prevStopIndex
-        aodHandles.OpticalSystem.SurfaceArray(prevStopIndex).Stop = 0;
-        aodHandles.OpticalSystem.SurfaceArray(newStopIndex).Stop = 1;
+        aodHandles.OpticalSystem.SurfaceArray(prevStopIndex).IsStop = 0;
+        aodHandles.OpticalSystem.SurfaceArray(newStopIndex).IsStop = 1;
     end
     parentWindow.ParentHandles = aodHandles;
     updateSurfaceOrComponentEditorPanel( parentWindow , newStopIndex);
@@ -315,8 +315,8 @@ function tblSurfaceList_CellEditCallback(~, eventdata,parentWindow)
             selectedSurfaceType = eventdata.NewData;
             newSurface = Surface(selectedSurfaceType);
             % Add the new surfonet to the temporary surfaceArray
-            if aodHandles.OpticalSystem.SurfaceArray(editedRow).Stop
-                newSurface.Stop = 1;
+            if aodHandles.OpticalSystem.SurfaceArray(editedRow).IsStop
+                newSurface.IsStop = 1;
             end
             aodHandles.OpticalSystem.SurfaceArray(editedRow) = newSurface;
         end
@@ -858,15 +858,15 @@ function RemoveSurface(parentWindow,removePosition)
     % Update the surface array
     aodHandles.OpticalSystem.SurfaceArray = aodHandles.OpticalSystem.SurfaceArray([1:removePosition-1,removePosition+1:end]);
     if stopSurfaceRemoved
-        if aodHandles.OpticalSystem.SurfaceArray(removePosition).ImageSurface
-            aodHandles.OpticalSystem.SurfaceArray(removePosition-1).Stop = 1;
+        if aodHandles.OpticalSystem.SurfaceArray(removePosition).IsImage
+            aodHandles.OpticalSystem.SurfaceArray(removePosition-1).IsStop = 1;
         else
-            aodHandles.OpticalSystem.SurfaceArray(removePosition).Stop = 1;
+            aodHandles.OpticalSystem.SurfaceArray(removePosition).IsStop = 1;
         end
     end
     % The next selected row will be the one in the removed position, so if
     % it is image plane then dont let further removal
-    if aodHandles.OpticalSystem.SurfaceArray(removePosition).ImageSurface
+    if aodHandles.OpticalSystem.SurfaceArray(removePosition).IsImage
         canRemoveElement = 0;
         aodHandles.CanRemoveElement = canRemoveElement;
     end

@@ -70,19 +70,20 @@ function plotFootprintDiagram(optSystem,surfIndex,wavLen,...
     % Spatial Distribution of spot diagram in a given surface
     % Use different color for diffrent wavelengths and different symbal for
     % different field points.
-%     entrancePupilRadius = (getEntrancePupilDiameter(optSystem))/2;
+    %     entrancePupilRadius = (getEntrancePupilDiameter(optSystem))/2;
     nSurfaceResultRecorded = size(polarizedRayTracerResult,1);
-    nRay = size(polarizedRayTracerResult,2);
-    nField = size(polarizedRayTracerResult,3);
-    nWav = size(polarizedRayTracerResult,4);
+    nRay = polarizedRayTracerResult.TotalNumberOfPupilPoints;
+    nField = polarizedRayTracerResult.TotalNumberOfFieldPoints;
+    nWav = polarizedRayTracerResult.TotalNumberOfWavelengths;
     SurfaceCoordinateTM = currentSurface.SurfaceCoordinateTM;
     
     surfIndexWithOutDummy = surfIndex-dummySurfacesBeforeCurrentSurface;
     
     for wavIndex = 1:nWav
         for fieldIndex = 1:nField
-            globalIntersectionPoints = ...
-                [polarizedRayTracerResult(nSurfaceResultRecorded,:,fieldIndex,wavIndex).RayIntersectionPoint];
+            [ globalIntersectionPoints ] = squeeze(...
+                getAllSurfaceRayIntersectionPoint( polarizedRayTracerResult(2),...
+                0,fieldIndex,wavIndex));
             % convert from global to local coordinate of the surface
             localIntersectionPoints = globalToLocalPosition...
                 (globalIntersectionPoints, SurfaceCoordinateTM);

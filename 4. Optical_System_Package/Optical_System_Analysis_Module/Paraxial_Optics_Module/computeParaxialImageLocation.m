@@ -20,12 +20,12 @@ function [ lastThickness] = computeParaxialImageLocation(optSystem)
 	% Oct 14,2013   Worku, Norman G.     Original Version       Version 3.0
 
 	% <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-      if abs(optSystem.SurfaceArray(1).Thickness)>10^10 || optSystem.ObjectAfocal
+      if abs(optSystem.SurfaceArray(1).Thickness)>10^10 || optSystem.IsObjectAfocal
           obj = 'I';
        else
            obj = 'F';
        end
-       if optSystem.ImageAfocal
+       if optSystem.IsImageAfocal
            img = 'I';
        else
            img = 'F';

@@ -71,17 +71,17 @@ function       surfaceListTable = generateSurfaceListTable(surfArray);
     nSurface = length(surfArray);
     surfaceListTable = cell(nSurface,3);
     for kk = 1:nSurface
-        if surfArray(kk).ObjectSurface
+        if surfArray(kk).IsObject
             surfType = 'OBJECT';
             surfTypeDisp = surfType;
             surf = 'OBJ';
             comment = 'Object';
-        elseif surfArray(kk).ImageSurface
+        elseif surfArray(kk).IsImage
             surfType = 'IMAGE';
             surfTypeDisp = surfType;
             surf = 'IMG';
             comment = 'Image';
-        elseif surfArray(kk).Stop
+        elseif surfArray(kk).IsStop
             surfType = surfArray(kk).Type;
             surfTypeDisp = surfType;
             surf = 'STOP';
