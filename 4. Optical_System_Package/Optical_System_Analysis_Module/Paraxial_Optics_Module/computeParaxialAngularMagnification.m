@@ -46,4 +46,5 @@ function [ angMag] = computeParaxialAngularMagnification(optSystem)
     objSideIndex = getRefractiveIndex(nonDummySurfaceArray(finalSurfObjSide).Glass,wavlenInM);
     imgSideIndex = getRefractiveIndex(nonDummySurfaceArray(finalSurfImgSide).Glass,wavlenInM);
     angMag = (uimg*imgSideIndex)/(uobj*objSideIndex);
+end
     

@@ -46,7 +46,7 @@ function [ EFL ] = computeEffectiveFocalLength( optSystem )
         [ yf,uf ] = paraxialRayTracer( optSystem,y0,u0,initialSurf,finalSurf,wavlenInM);
         EFL = -y0/uf;
         % In image space
-        lastIndex = getRefractiveIndex(nonDummySurfaceArray(finalSurf-1).Glass,wavlenInM);
+        lastIndex = getRefractiveIndex(nonDummySurfaceArray(finalSurf).Glass,wavlenInM);
         EFL = EFL * lastIndex;
     elseif strcmpi(obj_img,'FI') || strcmpi(obj_img,'II')
         EFL = Inf;

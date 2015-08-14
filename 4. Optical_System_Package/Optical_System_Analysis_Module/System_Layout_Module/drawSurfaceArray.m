@@ -11,7 +11,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
     %   NB 1: A negative number can be passed as axes handle to supress
     %   the graphical output.
     % Output
-    %   [xyzPoints] : 1 x nSurface cell array where each cell is a 
+    %   [xyzPoints] : 1 x nSurface cell array where each cell is a
     %                (nPoints1 x nPoints2 x 3) a 3D matrix of points for
     %                each surface
     %   centerPoints : (3 x nSurface) 2D matrix representing the center
@@ -166,7 +166,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                 xyzPoints1 = drawSurface(surfaceArray(ss),plotIn2D,nPoints1,nPoints2,...
                     -1,surfColor,2*drawnApertureRadiusXY(ss,:));
                 %             xyzPoints(:,:,:,ss) = xyzPoints1;
-                xyzPoints{ss} = xyzPoints1;
+                xyzPoints{ss+mirrorCounter} = xyzPoints1;
                 surfacePointsComputedFlag(ss) = 1;
                 
                 % Compute the single surface plot points from the xyzPoints1
@@ -188,17 +188,14 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                     singleSurfaceBoarderZ{singleSurfaceCounter}  = [xyzPoints1(1,:,3),(xyzPoints1(:,end,3))',fliplr(xyzPoints1(end,:,3)),fliplr((xyzPoints1(:,1,3))')];
                 end
             end
-            
-            
-            
-            
             if IsMirror(ss)
-                mirrorCounter = mirrorCounter + 1;
                 %             xyzPoints1 = xyzPoints(:,:,:,ss);
-                xyzPoints1 = xyzPoints{ss};
+                xyzPoints1 = xyzPoints{ss+mirrorCounter};
+                mirrorCounter = mirrorCounter + 1;
                 % Compute the second surface points
                 secondSurface = surfaceArray(ss);
-                maxAperture = max(secondSurface.ApertureParameter(1:2));
+                maxAperture = getMaximumApertureRadius( secondSurface.Aperture );
+                
                 deltaZ = -((-1)^mirrorCounter)*0.05*maxAperture;
                 % Transform the deltaZ to global coordinate
                 globalShift = [0,0,deltaZ]*(secondSurface.SurfaceCoordinateTM(1:3,1:3));
@@ -206,37 +203,35 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                     secondSurface.SurfaceCoordinateTM(1:3,4)+globalShift';
                 xyzPoints2 = drawSurface(secondSurface,plotIn2D,nPoints1,nPoints2,...
                     -1,surfColor,2*drawnApertureRadiusXY(ss,:));
+                xyzPoints{ss+1+mirrorCounter} = xyzPoints2;
                 
                 % Draw the second surface of the mirror now % Not too optimum solution
                 % Compute the singlet boarder surface plot points from the
                 % xyzPoints1 and xyzPoints2
-                if strcmpi(secondSurface.getGridType,'Polar')
-                    mirrorBoarderX = [xyzPoints2(1,:,1);xyzPoints1(1,:,1)];
-                    mirrorBoarderY = [xyzPoints2(1,:,2);xyzPoints1(1,:,2)];
-                    mirrorBoarderZ = [xyzPoints2(1,:,3);xyzPoints1(1,:,3)];
+                if strcmpi(getGridType(secondSurface),'Polar')
+                    %                     mirrorBoarderX = [xyzPoints2(1,:,1);xyzPoints1(1,:,1)];
+                    %                     mirrorBoarderY = [xyzPoints2(1,:,2);xyzPoints1(1,:,2)];
+                    %                     mirrorBoarderZ = [xyzPoints2(1,:,3);xyzPoints1(1,:,3)];
+                    
+                    if plotIn2D
+                        % Only one angle so take all r for that angle
+                        mirrorBoarderX{mirrorCounter} = [xyzPoints2(:,end,1);flipud(xyzPoints1(:,end,1))];
+                        mirrorBoarderY{mirrorCounter} = [xyzPoints2(:,end,2);flipud(xyzPoints1(:,end,2))];
+                        mirrorBoarderZ{mirrorCounter} = [xyzPoints2(:,end,3);flipud(xyzPoints1(:,end,3))];
+                    else
+                        % Take all angle for maximum radius
+                        mirrorBoarderX{mirrorCounter} = [xyzPoints2(end,:,1);(xyzPoints1(end,:,1))];
+                        mirrorBoarderY{mirrorCounter} = [xyzPoints2(end,:,2);(xyzPoints1(end,:,2))];
+                        mirrorBoarderZ{mirrorCounter} = [xyzPoints2(end,:,3);(xyzPoints1(end,:,3))];
+                    end
+                    
                 else
-                    mirrorBoarderX = [xyzPoints2(1,:,1),(xyzPoints2(:,end,1))',fliplr(xyzPoints2(end,:,1)),fliplr((xyzPoints2(:,1,1))');...
+                    mirrorBoarderX{mirrorCounter} = [xyzPoints2(1,:,1),(xyzPoints2(:,end,1))',fliplr(xyzPoints2(end,:,1)),fliplr((xyzPoints2(:,1,1))');...
                         xyzPoints1(1,:,1),(xyzPoints1(:,end,1))',fliplr(xyzPoints1(end,:,1)),fliplr((xyzPoints1(:,1,1))')];
-                    mirrorBoarderY  = [xyzPoints2(1,:,2),(xyzPoints2(:,end,2))',fliplr(xyzPoints2(end,:,2)),fliplr((xyzPoints2(:,1,2))');...
+                    mirrorBoarderY{mirrorCounter}  = [xyzPoints2(1,:,2),(xyzPoints2(:,end,2))',fliplr(xyzPoints2(end,:,2)),fliplr((xyzPoints2(:,1,2))');...
                         xyzPoints1(1,:,2),(xyzPoints1(:,end,2))',fliplr(xyzPoints1(end,:,2)),fliplr((xyzPoints1(:,1,2))')];
-                    mirrorBoarderZ  = [xyzPoints2(1,:,3),(xyzPoints2(:,end,3))',fliplr(xyzPoints2(end,:,3)),fliplr((xyzPoints2(:,1,3))');...
+                    mirrorBoarderZ{mirrorCounter}  = [xyzPoints2(1,:,3),(xyzPoints2(:,end,3))',fliplr(xyzPoints2(end,:,3)),fliplr((xyzPoints2(:,1,3))');...
                         xyzPoints1(1,:,3),(xyzPoints1(:,end,3))',fliplr(xyzPoints1(end,:,3)),fliplr((xyzPoints1(:,1,3))')];
-                end
-                if plotIn2D
-                    surf(axesHandle,[mirrorBoarderZ(:,:)],[mirrorBoarderY(:,:)],[mirrorBoarderX(:,:)],...
-                        'facecolor',surfColor(ss,:),'edgecolor','none','FaceAlpha', 0.9);
-                    hold on;
-                else
-                    x2 = xyzPoints2(:,:,1);
-                    y2 = xyzPoints2(:,:,2);
-                    z2 = xyzPoints2(:,:,3);
-                    surf(axesHandle,x2,z2,y2,'facecolor',surfColor(ss,:),...
-                        'edgecolor','none','FaceAlpha', 0.5);
-                    hold on;
-                    % Plot the edges with slightly darker color
-                    surf(axesHandle,[mirrorBoarderX(:,:)],[mirrorBoarderZ(:,:)],[mirrorBoarderY(:,:)],...
-                        'facecolor',surfColor(ss,:)/1.2,'edgecolor','none','FaceAlpha', 0.5,'AmbientStrength', 0., 'SpecularStrength', 1);
-                    hold on;
                 end
             end
         else
@@ -262,7 +257,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                 % Compute the surface plot points and compute the singlet border
                 xyzPoints1 = drawSurface(surfaceArray(ss),plotIn2D,nPoints1,nPoints2,...
                     -1,surfColor(ss,:),2*drawnApertureRadiusXY(ss,:));
-                xyzPoints{ss} = xyzPoints1;
+                xyzPoints{ss+mirrorCounter} = xyzPoints1;
                 surfacePointsComputedFlag(ss) = 1;
             else
                 % Compute the surface plot points just for the computation of the singlet border
@@ -279,7 +274,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
             xyzPoints2 = drawSurface(surfaceArray(ss+1),plotIn2D,nPoints1,nPoints2,...
                 -1,surfColor(ss,:),2*drawnApertureRadiusXY(ss+1,:));
             surfacePointsComputedFlag(ss+1) = 1;
-            xyzPoints{ss+1} = xyzPoints2;
+            xyzPoints{ss+1+mirrorCounter} = xyzPoints2;
             
             % Compute the singlet boarder surface plot points from the
             % xyzPoints1 and xyzPoints2
@@ -311,6 +306,11 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
     
     % Plot all surfaces
     if plotIn2D
+        % Plot mirrors
+        for ss = 1:mirrorCounter
+            patch([mirrorBoarderZ{ss}],[mirrorBoarderY{ss}],[mirrorBoarderX{ss}],'Parent',axesHandle,'FaceColor',surfColor(ss,:));
+            hold(axesHandle,'on');
+        end
         % Plot singlets
         for ss = 1:singletCounter
             patch([singletBoarderZ{ss}],[singletBoarderY{ss}],[singletBoarderX{ss}],'Parent',axesHandle,'FaceColor',surfColor(ss,:));
@@ -323,24 +323,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
         end
         view(axesHandle,[0,-1,1]);
         axis equal
-    else
-        for ss =  1:nSurface
-            xyzPointsCurrent = xyzPoints{ss};
-            x = xyzPointsCurrent(:,:,1);
-            y = xyzPointsCurrent(:,:,2);
-            z = xyzPointsCurrent(:,:,3);
-            surf(axesHandle,x,z,y,z+35,'Facecolor','interp',...
-                'edgecolor','none','FaceAlpha', 0.6);
-            hold(axesHandle,'on');
-        end
-        % Plot the edges for matching singlets with slightly darker color
-        for ss = 1:singletCounter
-            surf(axesHandle,[singletBoarderX{ss}],[singletBoarderZ{ss}],[singletBoarderY{ss}],...
-                'facecolor',surfColor(ss,:)/1.5,'edgecolor','none','facelighting','phong','FaceAlpha', 0.5,'AmbientStrength', 0., 'SpecularStrength', 1);
-            hold(axesHandle,'on');
-        end
-    end
-    if plotIn2D
+        
         % draw optical axis
         hold on;
         xlabel(axesHandle,'Z-axis','fontweight','bold','Color','k');
@@ -351,7 +334,32 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
         grid(axesHandle,'on');
         box(axesHandle,'On')
         axis equal
+        
     else
+        for ss =  1:nSurface
+            xyzPointsCurrent = xyzPoints{ss};
+            x = xyzPointsCurrent(:,:,1);
+            y = xyzPointsCurrent(:,:,2);
+            z = xyzPointsCurrent(:,:,3);
+            surf(axesHandle,x,z,y,z+35,'Facecolor','interp',...
+                'edgecolor','none','FaceAlpha', 0.6);
+            hold(axesHandle,'on');
+        end
+        
+        % Plot the edges for matching singlets with slightly darker color
+        for ss = 1:singletCounter
+            surf(axesHandle,[singletBoarderX{ss}],[singletBoarderZ{ss}],[singletBoarderY{ss}],...
+                'facecolor',surfColor(ss,:)/1.5,'edgecolor','none','facelighting','phong','FaceAlpha', 0.5,'AmbientStrength', 0., 'SpecularStrength', 1);
+            hold(axesHandle,'on');
+        end
+        
+        % Plot the edges for mirrors with slightly darker color
+        for ss = 1:mirrorCounter
+            surf(axesHandle,[mirrorBoarderX{ss}],[mirrorBoarderZ{ss}],[mirrorBoarderY{ss}],...
+                'facecolor',surfColor(ss,:)/1.5,'edgecolor','none','facelighting','phong','FaceAlpha', 0.5,'AmbientStrength', 0., 'SpecularStrength', 1);
+            hold(axesHandle,'on');
+        end
+        
         % draw optical axis
         hold on;
         set(axesHandle, 'YDir','reverse');
@@ -363,7 +371,9 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
         set(axesHandle, 'XColor', 'k', 'YColor', 'k', 'ZColor', 'k');
         grid(axesHandle,'on');
         box(axesHandle,'On')
+        
     end
+    
     axis equal
     hold off;
     %     camlight

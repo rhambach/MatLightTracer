@@ -34,7 +34,8 @@ else
     glassCatalogueListFullNames = '';
 end
 
-SavedOpticalSystem = importZemaxFile (zmxFullFileName,...
+importedOpticalSystem = importZemaxFile (zmxFullFileName,...
     coatingCatalogueListFullNames,glassCatalogueListFullNames);
-opened = openSavedOpticalSystem(parentWindow,SavedOpticalSystem);
+
+opened = openSavedOpticalSystem(parentWindow,importedOpticalSystem);
 end

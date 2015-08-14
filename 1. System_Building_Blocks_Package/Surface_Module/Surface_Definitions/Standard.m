@@ -286,12 +286,12 @@ function surfaceNormal = computeStandardSurfaceNormal...
                 curv^2*(1+surfaceConic)*surfaceConic*intersectionPoint(3,:).^2));
             normal = [-curv*intersectionPoint(1,:); -curv*intersectionPoint(2,:);...
                 1-curv*(1+surfaceConic)*intersectionPoint(3,:)]./...
-                ones(3,1)*denom;%repmat(denom,[3,1]);
+                (ones(3,1)*denom);%repmat(denom,[3,1]);
             % to determine if the normal vector cosines are real
             S3 = 1-(1+surfaceConic)*curv^2*((intersectionPoint(1,:)).^2 + ...
                 (intersectionPoint(2,:)).^2);
             normal(:,S3<0) = NaN;
-            surfaceNormal = normal./ones(3,1)*sum(normal.^2,1);%repmat(sum(normal.^2,1),[3,1]);
+            surfaceNormal = normal./(ones(3,1)*sum(normal.^2,1));%repmat(sum(normal.^2,1),[3,1]);
     end
 end
 
@@ -397,8 +397,8 @@ function [geometricalPathLength,NoIntersectioPoint] = computeStandardSurfacePath
             additionalPath = F./(G+(sign(m)).*sqrt(G.^2-curv*F));
             NoIntersectioPoint = zeros([1,nRay]);
             
-            NoIntersectioPoint(~(isreal(additionalPath))) = 1;
-            additionalPath(~(isreal(additionalPath))) = NaN;
+            NoIntersectioPoint(imag(additionalPath) ~= 0) = 1;
+            additionalPath(imag(additionalPath) ~= 0) = NaN;
             
         case 'Conic Aspherical' % conic aspherical
             curv = 1/(surfaceRadius);
@@ -407,8 +407,8 @@ function [geometricalPathLength,NoIntersectioPoint] = computeStandardSurfacePath
             additionalPath = F./(G+(sign(m)).*sqrt(G.^2-curv.*F.*(1+surfaceConic.*(m.^2))));
             NoIntersectioPoint = zeros([1,nRay]);
             
-            NoIntersectioPoint(~(isreal(additionalPath))) = 1;
-            additionalPath(~(isreal(additionalPath))) = NaN;
+            NoIntersectioPoint(imag(additionalPath) ~= 0) = 1;
+            additionalPath(imag(additionalPath) ~= 0) = NaN;
     end
     geometricalPathLength = distanceToXY + additionalPath;
 end

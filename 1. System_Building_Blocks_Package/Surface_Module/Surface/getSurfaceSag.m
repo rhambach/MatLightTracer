@@ -34,9 +34,10 @@ function [ surfaceSagMain,surfaceSagAlternative ] = getSurfaceSag( surface,xyCoo
     realSag = real(mainSag);
     
     realSag1 = realSag(actualSurfacePointIndices);
-    extremeZ = realSag1(1);
-    realSag(~actualSurfacePointIndices) = extremeZ;
-    
+    if ~isempty(realSag1)
+        extremeZ = realSag1(1);
+        realSag(~actualSurfacePointIndices) = extremeZ;
+    end
     surfaceSagMain = realSag;
     surfaceSagAlternative = realSag;
 end

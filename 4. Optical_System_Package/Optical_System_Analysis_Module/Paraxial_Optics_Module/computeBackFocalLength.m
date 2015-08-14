@@ -42,7 +42,7 @@ function [ BFL ] = computeBackFocalLength( optSystem)
         BFL = -yf/(uf);
         % In image space
         nonDummySurfaceArray = getNonDummySurfaceArray(optSystem);
-        lastIndex = getRefractiveIndex(nonDummySurfaceArray(finalSurf-1).Glass,wavlenInM);
+        lastIndex = getRefractiveIndex(nonDummySurfaceArray(finalSurf).Glass,wavlenInM);
         BFL = BFL * lastIndex;
     elseif strcmpi(obj_img,'FI') || strcmpi(obj_img,'II')
         BFL = Inf;

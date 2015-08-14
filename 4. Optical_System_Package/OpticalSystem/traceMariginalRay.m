@@ -1,4 +1,6 @@
-function [ mariginalRayTraceResult,mariginalRay ] = traceMariginalRay( optSystem,fieldPointXYInSI,wavLenInM,angleFromYinRad,rayTraceOptionStruct )
+function [ mariginalRayTraceResult,mariginalRay ] = traceMariginalRay( ...
+        optSystem,fieldPointXYInSI,wavLenInM,angleFromYinRad,...
+        rayTraceOptionStruct, nPupilRays )
     %TRACEMARIGINALRAY Computes the mariginal ray and traces it theough the
     % given system
     % fieldPointXYInSI,wavLenInM are measured in SI unit (meter and degree for angles)
@@ -17,6 +19,7 @@ function [ mariginalRayTraceResult,mariginalRay ] = traceMariginalRay( optSystem
         rayTraceOptionStruct = RayTraceOptionStruct();
         rayTraceOptionStruct.ConsiderSurfAperture = 1;
         rayTraceOptionStruct.RecordIntermediateResult = 1;
+        nPupilRays = 1;
     elseif nargin == 2
         % Use the  primary wavelength as default
         wavLenInM = getPrimaryWavelength(optSystem);
@@ -24,19 +27,24 @@ function [ mariginalRayTraceResult,mariginalRay ] = traceMariginalRay( optSystem
         rayTraceOptionStruct = RayTraceOptionStruct();
         rayTraceOptionStruct.ConsiderSurfAperture = 1;
         rayTraceOptionStruct.RecordIntermediateResult = 1;
+        nPupilRays = 1;
     elseif nargin == 3
         angleFromYinRad = 0;
         rayTraceOptionStruct = RayTraceOptionStruct();
         rayTraceOptionStruct.ConsiderSurfAperture = 1;
         rayTraceOptionStruct.RecordIntermediateResult = 1;
+        nPupilRays = 1;
     elseif nargin == 4
         rayTraceOptionStruct = RayTraceOptionStruct();
         rayTraceOptionStruct.ConsiderSurfAperture = 1;
         rayTraceOptionStruct.RecordIntermediateResult = 1;
+        nPupilRays = 1;
     elseif nargin == 5
+        nPupilRays = 1;
+    elseif nargin == 6
         
     end
-    mariginalRay = getMariginalRay(optSystem,fieldPointXYInSI,wavLenInM,angleFromYinRad);
+    mariginalRay = getMariginalRay(optSystem,fieldPointXYInSI,wavLenInM,angleFromYinRad,nPupilRays);
     mariginalRayTraceResult = rayTracer(optSystem,mariginalRay,rayTraceOptionStruct);
     
 end

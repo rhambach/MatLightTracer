@@ -199,7 +199,8 @@ function [ returnDataStruct] = Kostenbauder(returnFlag,surfaceParameters,inputDa
             
             geometricalPathLength = distanceToXY;
             NoIntersectioPoint = zeros([1,nRay]);
-            NoIntersectioPoint(~(isreal(distanceToXY))) = 1;
+            NoIntersectioPoint(imag(distanceToXY) ~= 0) = 1;
+            geometricalPathLength(imag(distanceToXY) ~= 0) = NaN;
             noIntersectionPointFlag = NoIntersectioPoint;
             
             % Ref: http://www2.ph.ed.ac.uk/~wjh/teaching/mo/slides/lens/lens.pdf

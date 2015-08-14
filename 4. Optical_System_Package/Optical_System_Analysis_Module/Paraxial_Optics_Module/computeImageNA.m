@@ -29,5 +29,6 @@ function imgNA = computeImageNA...
 	% <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     exitPupToParaxialImage = -exitPupilLocation - imageThick +...
         paraxialImageDistance;
-    U0 = 0.5*exitPupilDiameter/(exitPupToParaxialImage);
-    imgNA = abs(imageRefractiveIndex*U0);
+    U0 = atan(0.5*exitPupilDiameter/(exitPupToParaxialImage));
+    imgNA = abs(imageRefractiveIndex*sin(U0));
+end

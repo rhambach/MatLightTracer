@@ -60,8 +60,8 @@ function [ chiefRay ] = getChiefRay( optSystem,fieldPointXYInSI,wavLenInM )
     
     pupilSamplingPoint = [0;0;pupilZLocation];
     
-    switch lower(optSystem.FieldType)
-        case lower('ObjectHeight')
+    switch (optSystem.FieldType)
+        case 1 %('ObjectHeight')
             fieldPointXYInLensUnit = fieldPointXYInSI/getLensUnitFactor(optSystem);
             % Global reference is the 1st surface of the lens
             fieldPoint = [fieldPointXYInLensUnit; repmat(-objThick,[1,nField])];
@@ -75,7 +75,7 @@ function [ chiefRay ] = getChiefRay( optSystem,fieldPointXYInSI,wavLenInM )
                 initialDirection = initialDirection./repmat(sqrt(sum(initialDirection.^2)),[3,1]);
                 initialPosition = fieldPoint;
             end
-        case lower('Angle')
+        case 2 %('Angle')
             % The angle given indicates the direction of the chief ray
             fieldPoint = fieldPointXYInSI;
             

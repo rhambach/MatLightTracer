@@ -80,7 +80,7 @@ function [ returnData1, returnData2, returnData3  ] = EllipticalAperture...
             semiDiamY = (apertureParameters.DiameterY)/2;
             pointX = xyVector(:,1);
             pointY = xyVector(:,2);
-            umInsideTheMainAperture = (((pointX).^2)/semiDiamX^2) + (((pointY).^2)/semiDiamY^2) < 1;
+            umInsideTheMainAperture = (((pointX).^2)/semiDiamX^2) + (((pointY).^2)/semiDiamY^2) <= 1;
             returnData1 = umInsideTheMainAperture;
             returnData2 = NaN;
             returnData3 = NaN;

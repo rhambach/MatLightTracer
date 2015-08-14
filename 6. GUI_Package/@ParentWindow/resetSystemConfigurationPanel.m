@@ -10,8 +10,9 @@ function parentWindow = resetSystemConfigurationPanel(parentWindow)
     set(aodHandles.txtLensNote,'String', 'Note 1');
     set(aodHandles.popLensUnit,'Value',1);
     set(aodHandles.popWavelengthUnit,'Value',2);
+    
     % field table
-    set(aodHandles.radioObjectHeight,'Value',1);
+    set(aodHandles.popFieldType,'Value',1);
     set(aodHandles.txtTotalFieldPointsSelected, 'String', '1');
     columnName1 =   {'',' X Field ',' Y Field ',' Weight '};
     ColumnFormat1 = {'logical','numeric','numeric','numeric'};

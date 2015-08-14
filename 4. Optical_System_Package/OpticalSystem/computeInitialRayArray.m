@@ -1,5 +1,4 @@
-function [ initialRayArray, pupilSamplingPoints,pupilMeshGrid,...
-        outsidePupilIndices  ] = ...
+function [ initialRayArray, pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices  ] = ...
         computeInitialRayArray( optSystem, wavLenInWavUnit,...
         fieldPointXYInLensUnit, nRay1,nRay2,pupilSamplingType)
     %computeInitialRayBundleParameters Computes the initial ray positions,
@@ -33,8 +32,8 @@ function [ initialRayArray, pupilSamplingPoints,pupilMeshGrid,...
     % position of Cheif ray - for field angle input
     % Compute initial ray bundle directions or positions (for afocal) for
     % each field points. The result will be 3 X (nRay*nField) matrices
-    switch lower(fieldType)
-        case lower('ObjectHeight')
+    switch (fieldType)
+        case 1 %('ObjectHeight')
             if objectIsAtInfinity
                 % Invalid specification
                 disp('Error: Object Height can not be used for objects at infinity');
@@ -47,7 +46,7 @@ function [ initialRayArray, pupilSamplingPoints,pupilMeshGrid,...
                     num2cell(fieldPoint,[1]),'UniformOutput',false);
                 initialRayBundlePositions = cell2mat(allFieldPositions);
             end
-        case lower('Angle')
+        case 2 %('Angle')
             % The angle given indicates the direction of the cheif ray
             % the field point is angle in degree
             % Feild points are given by angles

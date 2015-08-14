@@ -1,5 +1,5 @@
 function entPupilDiameter = computeEntrancePupilDiameter...
-        (systemApertureType,systemApertureValue,entPupilLocation, objectRefractiveIndex,objThick)
+        (optSystem,entPupilLocation, objectRefractiveIndex,objThick)
     % computeObjectNA: compute the paraxial object space NA
     % Inputs
     %   systemApertureType: 'ENPD' given enterenace pupil, OBNA given object NA,
@@ -28,23 +28,37 @@ function entPupilDiameter = computeEntrancePupilDiameter...
     % Oct 14,2013   Worku, Norman G.     Original Version       Version 3.0
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    
-    systApertureList = {'ENPD','OBNA','OBFN','IMNA','IMFN'};
-    if isnumeric(systemApertureType)
-        systemApertureType = systApertureList{systemApertureType};
-    end
-    switch upper(systemApertureType)
-        case 'ENPD' % given 'Enterance Pupil Diameter entPupilLocation, objectRefractiveIndex,objThick
+    systemApertureType = optSystem.SystemApertureType;
+    systemApertureValue = optSystem.SystemApertureValue;
+    switch (systemApertureType)
+        case 1 %'ENPD' % given 'Enterance Pupil Diameter entPupilLocation, objectRefractiveIndex,objThick
             entPupilDiameter  = systemApertureValue;
-        case 'OBNA' % given 'Object Space NA'
+        case 2 %'OBNA' % given 'Object Space NA'
             U0 = asin(systemApertureValue/objectRefractiveIndex);
             entPupilDiameter = abs(2*tan(U0)* (entPupilLocation + objThick));
-        case 'OBFN' % given 'Object Space F#'
+        case 3 %'FLST' % Float by stop size
+            % Trace a paraxial ray from object to stop and then determine the scaling
+            % factor of initial angle so that the ray height at stop is equal to stop
+            % surface aperture radius.
+            yobj = 0;
+            uobj = 0.01;
+            initialSurf = 1;
+            stopSurf = getStopSurfaceIndex(optSystem);
+            wavlenInM = getPrimaryWavelength(optSystem);
+            [ ystop,ustop ] = paraxialRayTracer( optSystem,yobj,uobj,initialSurf,stopSurf,wavlenInM);
             
-        case 'IMNA' % given 'Image Space NA'
+            stopApertureRadius = getMaximumApertureRadius(optSystem.SurfaceArray(stopSurf).Aperture);
+            scaleFactor = stopApertureRadius/ystop;
             
-        case 'IMFN' % given 'Image Space F#'
+            U0 = scaleFactor*uobj;
+%             entPupilDiameter = abs(2*tan(U0)* (entPupilLocation + objThick));
+            entPupilDiameter = abs(2*(U0)* (entPupilLocation + objThick));
+        case 4 %'OBFN' % given 'Object Space F#'
             
+        case 5 %'IMNA' % given 'Image Space NA'
+            
+        case 6 %'IMFN' % given 'Image Space F#'
+  
         otherwise
             
     end

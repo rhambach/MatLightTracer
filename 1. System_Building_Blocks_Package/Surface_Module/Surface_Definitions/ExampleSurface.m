@@ -162,7 +162,8 @@ function [ returnDataStruct] = ExampleSurface(returnFlag,surfaceParameters,input
             additionalPathLength = 0;
             
             NoIntersectioPoint = zeros([1,nRay]);
-            NoIntersectioPoint(~(isreal(distanceToXY))) = 1;
+            NoIntersectioPoint(imag(distanceToXY) ~= 0) = 1;
+            geometricalPathLength(imag(distanceToXY) ~= 0) = NaN;
             noIntersectionPointFlag = NoIntersectioPoint;
             
             %% Intersection point calculation

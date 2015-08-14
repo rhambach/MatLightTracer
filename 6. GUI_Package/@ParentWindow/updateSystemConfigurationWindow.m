@@ -28,45 +28,14 @@ function updateSystemConfigurationWindow( parentWindow )
     %general data
     set(aodHandles.txtLensName,'String',currentOpticalSystem.LensName);
     set(aodHandles.txtLensNote,'String',currentOpticalSystem.LensNote);
-    
-    if isnumeric(currentOpticalSystem.LensUnit)
-        lensUnitIndex = currentOpticalSystem.LensUnit;
-    else
-        
-        switch lower(currentOpticalSystem.LensUnit)
-            case 'mm'
-                lensUnitIndex = 1;
-            case 'cm'
-                lensUnitIndex = 2;
-            case 'mt'
-                lensUnitIndex = 3;
-        end
-    end
+
+    lensUnitIndex = currentOpticalSystem.LensUnit;
     set(aodHandles.popLensUnit,'Value',lensUnitIndex);
-    if isnumeric(currentOpticalSystem.WavelengthUnit)
-        wavelengthUnitIndex = currentOpticalSystem.WavelengthUnit;
-    else
-        switch lower(currentOpticalSystem.WavelengthUnit)
-            case 'nm'
-                wavelengthUnitIndex = 1;
-            case 'um'
-                wavelengthUnitIndex = 2;
-            case 'mm'
-                wavelengthUnitIndex = 3;
-        end
-    end
-    set(aodHandles.popWavelengthUnit,'Value',wavelengthUnitIndex);
     
-    if isnumeric(currentOpticalSystem.SystemDefinitionType)
-        systemDefinitionTypeIndex = currentOpticalSystem.SystemDefinitionType;
-    else
-        switch lower(currentOpticalSystem.SystemDefinitionType)
-            case 'surfacebased'
-                systemDefinitionTypeIndex = 1;
-            case 'componentbased'
-                systemDefinitionTypeIndex = 2;
-        end
-    end
+    wavelengthUnitIndex = currentOpticalSystem.WavelengthUnit;
+    set(aodHandles.popWavelengthUnit,'Value',wavelengthUnitIndex);
+
+    systemDefinitionTypeIndex = currentOpticalSystem.SystemDefinitionType;
     set(aodHandles.popSystemDefinitionType,'Value',systemDefinitionTypeIndex);
     
     %wavelength data
@@ -91,26 +60,18 @@ function updateSystemConfigurationWindow( parentWindow )
     
     % field data
     set(aodHandles.txtTotalFieldPointsSelected,'String',getNumberOfFieldPoints(currentOpticalSystem));
-    set(aodHandles.radioAngle,'Value',strcmpi(char(currentOpticalSystem.FieldType),'Angle'));
-    set(aodHandles.radioObjectHeight,'Value',strcmpi(char(currentOpticalSystem.FieldType),'ObjectHeight'));
-    set(aodHandles.radioImageHeight,'Value',strcmpi(char(currentOpticalSystem.FieldType),'ImageHeight'));
+    set(aodHandles.popFieldType,'Value',currentOpticalSystem.FieldType);
+    
     %
-    if isempty(currentOpticalSystem.FieldNormalization)
-        currentOpticalSystem.FieldNormalization = 'Rectangular';
-        fieldNormalizationIndex = 1;
-    else
-        fieldNormalizationIndex = find(ismember(get(aodHandles.popFieldNormalization,'String'),...
-            currentOpticalSystem.FieldNormalization));
-    end
-    if ~isempty(fieldNormalizationIndex)
-        set(aodHandles.popFieldNormalization,'Value',fieldNormalizationIndex);
-    else
-        disp(['Error: Apodization type ',...
-            currentOpticalSystem.popFieldNormalization,' is not defined.']);
+    fieldNormalizationIndex = currentOpticalSystem.FieldNormalization;
+    
+    if fieldNormalizationIndex > 2
+                disp(['Error: Unsupported Field Normalization ',...
+            only 2 field normalization types are supported currently.']);
         return;
     end
-    
-    
+    set(aodHandles.popFieldNormalization,'Value',fieldNormalizationIndex);
+  
     newTable2 = currentOpticalSystem.FieldPointMatrix;
     % add a column for 'selected' and last row which is not selected (if
     % not already there in the WavelengthMatrix)
@@ -152,29 +113,15 @@ function updateSystemConfigurationWindow( parentWindow )
         end
     end
     
-    
-    if isprop(currentOpticalSystem,'ApodizationType')
-        % Pupil Apodization data
-        if isempty(currentOpticalSystem.ApodizationType)
-            currentOpticalSystem.ApodizationType = 'None';
-            apodTypeIndex = 1;
-        else
-            apodTypeIndex = find(ismember(get(aodHandles.popApodizationType,'String'),...
-                currentOpticalSystem.ApodizationType));
-        end
-        if ~isempty(apodTypeIndex)
-            set(aodHandles.popApodizationType,'Value',apodTypeIndex);
-        else
-            disp(['Error: Apodization type ',...
-                currentOpticalSystem.ApodizationType,' is not defined.']);
-            return;
-        end
-        switch lower(currentOpticalSystem.ApodizationType)
-            case lower('None')
+    % Pupil Apodization data
+    apodTypeIndex = currentOpticalSystem.ApodizationType;
+    set(aodHandles.popApodizationType,'Value',apodTypeIndex);
+            switch apodTypeIndex
+            case 1 % ('None')
                 set(aodHandles.panelSuperGaussParameters,'Visible','off');
                 set(get(aodHandles.panelSuperGaussParameters,'Children'),'Visible','off');
                 set(aodHandles.popApodizationType,'Value',1);
-            case lower('Super Gaussian')
+            case 2 %('Super Gaussian')
                 set(aodHandles.panelSuperGaussParameters,'Visible','on');
                 set(get(aodHandles.panelSuperGaussParameters,'Children'),'Visible','on');
                 set(aodHandles.popApodizationType,'Value',2);
@@ -184,9 +131,7 @@ function updateSystemConfigurationWindow( parentWindow )
                     num2str(apodParam.MaximumIntensity));
                 set(aodHandles.txtApodOrder,'String',num2str(apodParam.Order));
                 set(aodHandles.txtApodBeamRadius,'String',num2str(apodParam.BeamRadius));
-        end
-    end
-    
+            end
     aodHandles.OpticalSystem = currentOpticalSystem;
     parentWindow.ParentHandles = aodHandles;
 end

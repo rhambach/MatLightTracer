@@ -297,7 +297,7 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayMatrix,rayTrace
         
         [ GeometricalPathLength,additionalPath,localRayIntersectionPoint, ...
             localSurfaceNormal,localExitRayPosition,localExitRayDirection,...
-            TIR,NoIntersectionPoint]   = traceRealRaysToThisSurface(...
+            TIR,NoIntersectionPoint]  = traceRealRaysToThisSurface(...
             NonDummySurfaceArray(surfaceIndex),rayInitialPosition,rayDirection,...
             indexBefore,indexAfter,wavlenInM,primaryWavlenInM,reflection);
         
@@ -356,7 +356,7 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayMatrix,rayTrace
         end
         
         CurrentRayPosition = localExitRayPosition;
-        
+        CurrentRayDirection = localExitRayDirection;
         % If the current coordinate is mirrored coordinate
         % => Mirrored Z axis => the normal vector shall be in -ve direction
         if mirroredCoordinate

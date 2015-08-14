@@ -363,6 +363,7 @@ function tblSurfaceBasicParameters_CellSelectionCallback(~, eventdata,parentWind
     myName = paramNames{1};
     if  iscell(myType) && length(myType)>1
         % type is choice of popmenu
+        aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
         nChoice = length(myType);
         choice = menu(myName,myType(1:nChoice));
         if choice == 0
@@ -379,6 +380,7 @@ function tblSurfaceBasicParameters_CellSelectionCallback(~, eventdata,parentWind
     else
         if strcmpi('logical',myType)
             % type is choice of popmenu true or false
+            aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
             trueFalse = {'1','0'};
             choice = menu(myName,'False','True');
             if choice == 0
@@ -437,6 +439,7 @@ function tblSurfaceApertureParameters_CellSelectionCallback(~, eventdata,parentW
     myName = paramNames{1};
     if  iscell(myType)&& length(myType)>1
         % type is choice of popmenu
+        aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
         nChoice = length(myType);
         choice = menu(myName,myType(1:nChoice));
         if choice == 0
@@ -456,6 +459,7 @@ function tblSurfaceApertureParameters_CellSelectionCallback(~, eventdata,parentW
     else
         if strcmpi('logical',myType)
             % type is choice of popmenu true or false
+            aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
             trueFalse = {'0','1'};
             choice = menu(myName,'False','True');
             if choice == 0
@@ -518,6 +522,7 @@ function tblSurfaceTiltDecenterParameters_CellSelectionCallback(~, eventdata,par
     myName = paramNames{1};
     if  iscell(myType)&& length(myType)>1
         % type is choice of popmenu
+        aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
         nChoice = length(myType);
         choice = menu(myName,myType(1:nChoice));
         if choice == 0
@@ -530,6 +535,7 @@ function tblSurfaceTiltDecenterParameters_CellSelectionCallback(~, eventdata,par
     else
         if strcmpi('logical',myType)
             % type is choice of popmenu true or false
+            aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
             trueFalse = {'0','1'};
             choice = menu(myName,'False','True');
             if choice == 0

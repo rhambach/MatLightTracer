@@ -15,7 +15,7 @@ function InitializeSystemConfigurationPanel(parentWindow)
     aodHandles.sysGeneralDataTab = ...
         uitab(aodHandles.systConfigurationTabGroup, 'title','General');
     aodHandles.sysApertureDataTab = ...
-        uitab(aodHandles.systConfigurationTabGroup, 'title','Aperture');    
+        uitab(aodHandles.systConfigurationTabGroup, 'title','Aperture');
     aodHandles.sysFieldPointsDataTab = ...
         uitab(aodHandles.systConfigurationTabGroup, 'title','Field Points');
     aodHandles.sysWavelengthsDataTab = ...
@@ -120,7 +120,7 @@ function InitializeSystemConfigurationPanel(parentWindow)
         'Units', 'normalized', ...
         'Position', [0.35 0.8 0.5 0.08], ...
         'BackgroundColor', [1 1 1], ...
-        'String', {'Enterance Pupil Diameter','Object Space NA'});
+        'String', getSupportedSystemApertureTypes());
     
     aodHandles.text11 = uicontrol( ...
         'Parent', aodHandles.panelSystemAperture, ...
@@ -225,7 +225,7 @@ function InitializeSystemConfigurationPanel(parentWindow)
         'Units', 'normalized', ...
         'Position', [0.35 0.34 0.5 0.17], ...
         'BackgroundColor', [1 1 1], ...
-        'String', {'millimeter(mm)','centimeter(cm)','meter(m)'},...
+        'String', getSupportedLensUnits(),...
         'Value',1);
     
     aodHandles.popWavelengthUnit = uicontrol( ...
@@ -236,7 +236,7 @@ function InitializeSystemConfigurationPanel(parentWindow)
         'Units', 'normalized', ...
         'Position', [0.35 0.19 0.5 0.17], ...
         'BackgroundColor', [1 1 1], ...
-        'String', {'nanometer(nm)','micrometer(um)'},...
+        'String', getSupportedWavelengthUnits(),...
         'Value',2);
     aodHandles.popSystemDefinitionType = uicontrol( ...
         'Parent', aodHandles.panelGeneral, ...
@@ -246,7 +246,7 @@ function InitializeSystemConfigurationPanel(parentWindow)
         'Units', 'normalized', ...
         'Position', [0.35 0.05 0.5 0.17], ...
         'BackgroundColor', [1 1 1], ...
-        'String', {'SurfaceBased','ComponentBased'},...
+        'String', getSupportedSystemDefinitionTypes(),...
         'Value',1);
     %--------------------------------------------------------------------
     % Field Points Panel
@@ -259,34 +259,54 @@ function InitializeSystemConfigurationPanel(parentWindow)
         'Position', [0 0.86 0.85 0.13], ...
         'Title', '');
     
-    aodHandles.radioObjectHeight = uicontrol( ...
+    %-------------------------------------------------------------------
+    aodHandles.lblFieldType = uicontrol( ...
         'Parent', aodHandles.panelFeildType, ...
-        'Tag', 'radioObjectHeight', ...
-        'UserData', zeros(1,0), ...
-        'Style', 'radiobutton', ...
+        'Tag', 'lblFieldType', ...
+        'Style', 'text', ...
+        'HorizontalAlignment','Left',...
         'FontSize',fontSize,'FontName', fontName,...
         'Units', 'normalized', ...
-        'Position', [0 0 0.3 0.96], ...
-        'String', 'Object Height');
+        'Position', [0.05 0.74 0.4 0.1], ...
+        'String', 'Field Type');
+    aodHandles.popFieldType = uicontrol( ...
+        'Parent', aodHandles.panelFeildType, ...
+        'Tag', 'popFieldType', ...
+        'FontSize',fontSize,'FontName', fontName,...
+        'Style', 'popupmenu', ...
+        'Units', 'normalized', ...
+        'Position', [0.55 0.76 0.4 0.09], ...
+        'BackgroundColor', [1 1 1], ...
+        'String', getSupportedFieldTypes());
     
-    aodHandles.radioImageHeight = uicontrol( ...
-        'Parent', aodHandles.panelFeildType, ...
-        'Tag', 'radioImageHeight', ...
-        'UserData', zeros(1,0), ...
-        'Style', 'radiobutton', ...
-        'FontSize',fontSize,'FontName', fontName,...
-        'Units', 'normalized', ...
-        'Position', [0.3 0 0.3 0.96], ...
-        'String', 'Image Height');
-    
-    aodHandles.radioAngle = uicontrol( ...
-        'Parent', aodHandles.panelFeildType, ...
-        'Tag', 'radioAngle', ...
-        'Style', 'radiobutton', ...
-        'FontSize',fontSize,'FontName', fontName,...
-        'Units', 'normalized', ...
-        'Position', [0.6 0 0.35 0.96], ...
-        'String', 'Angle in Degree');
+    %     aodHandles.radioObjectHeight = uicontrol( ...
+    %         'Parent', aodHandles.panelFeildType, ...
+    %         'Tag', 'radioObjectHeight', ...
+    %         'UserData', zeros(1,0), ...
+    %         'Style', 'radiobutton', ...
+    %         'FontSize',fontSize,'FontName', fontName,...
+    %         'Units', 'normalized', ...
+    %         'Position', [0 0 0.3 0.96], ...
+    %         'String', 'Object Height');
+    %
+    %     aodHandles.radioImageHeight = uicontrol( ...
+    %         'Parent', aodHandles.panelFeildType, ...
+    %         'Tag', 'radioImageHeight', ...
+    %         'UserData', zeros(1,0), ...
+    %         'Style', 'radiobutton', ...
+    %         'FontSize',fontSize,'FontName', fontName,...
+    %         'Units', 'normalized', ...
+    %         'Position', [0.3 0 0.3 0.96], ...
+    %         'String', 'Image Height');
+    %
+    %     aodHandles.radioAngle = uicontrol( ...
+    %         'Parent', aodHandles.panelFeildType, ...
+    %         'Tag', 'radioAngle', ...
+    %         'Style', 'radiobutton', ...
+    %         'FontSize',fontSize,'FontName', fontName,...
+    %         'Units', 'normalized', ...
+    %         'Position', [0.6 0 0.35 0.96], ...
+    %         'String', 'Angle in Degree');
     
     aodHandles.txtTotalFieldPointsSelected = uicontrol( ...
         'Parent', aodHandles.panelFieldPoints, ...
@@ -315,7 +335,7 @@ function InitializeSystemConfigurationPanel(parentWindow)
         'Units', 'normalized', ...
         'Position', [0.55 0.76 0.4 0.09], ...
         'BackgroundColor', [1 1 1], ...
-        'String', {'Rectangular','Radial'});
+        'String', getSupportedFieldNormalization());
     %--------------------------------------------------------------------
     
     % Feild Value Entry
@@ -472,7 +492,7 @@ function InitializeSystemConfigurationPanel(parentWindow)
         'Units', 'normalized', ...
         'Position', [0.5 0.8 0.3 0.1], ...
         'BackgroundColor', [1 1 1], ...
-        'String', {'None','Super Gaussian'});
+        'String', getSupportedApodizationTypes());
     
     aodHandles.panelSuperGaussParameters = uipanel(...
         'Parent',aodHandles.panelPupilApodization,...
@@ -559,19 +579,18 @@ end
 function btnConfigurationOk_Callback(~,~,parentWindow)
     SaveConfigurationData(parentWindow);
     close(parentWindow.ParentHandles.SystemConfigurationFigureHandle);
-end        
+end
 function btnConfigurationCancel_Callback(~,~,parentWindow)
-   close(parentWindow.ParentHandles.SystemConfigurationFigureHandle);
-end 
+    close(parentWindow.ParentHandles.SystemConfigurationFigureHandle);
+end
 % --- Executes when popApodizationType is changed in aodHandles.popApodizationType.
 function popApodizationType_Callback(hObject, eventdata,aodHandles)
-    apodizationTypeList = cellstr (get(hObject,'String'));
-    apodizationTypeString = (apodizationTypeList{get(hObject,'Value')});
-    switch lower(apodizationTypeString)
-        case lower('None')
+    apodizationTypeIndex = get(hObject,'Value');
+    switch apodizationTypeIndex
+        case 1 %('None')
             set(aodHandles.panelSuperGaussParameters,'Visible','off');
             set(get(aodHandles.panelSuperGaussParameters,'Children'),'Visible','off');
-        case lower('Super Gaussian')
+        case 2 %('Super Gaussian')
             set(aodHandles.panelSuperGaussParameters,'Visible','on');
             set(get(aodHandles.panelSuperGaussParameters,'Children'),'Visible','on');
     end
@@ -721,95 +740,83 @@ function SaveConfigurationData(parentWindow)
     aodHandles = parentWindow.ParentHandles;
     %System Configuration
     %aperture
-    tempSystemApertureType=get(aodHandles.popApertureType,'Value');
-    tempSystemApertureValue=str2double(get(aodHandles.txtApertureValue,'String'));
-
+    tempSystemApertureTypeIndex = get(aodHandles.popApertureType,'Value');
+    tempSystemApertureValue = str2double(get(aodHandles.txtApertureValue,'String'));
+    
     %general
-    tempLensName=get(aodHandles.txtLensName,'String');
-    tempLensNote=get(aodHandles.txtLensNote,'String');
-    tempLensUnit=get(aodHandles.popLensUnit,'Value');
-    tempWavelengthUnit=get(aodHandles.popWavelengthUnit,'Value');
+    tempLensName = get(aodHandles.txtLensName,'String');
+    tempLensNote = get(aodHandles.txtLensNote,'String');
+    tempLensUnit = get(aodHandles.popLensUnit,'Value');
+    tempWavelengthUnit = get(aodHandles.popWavelengthUnit,'Value');
     tempSystemDefType = get(aodHandles.popSystemDefinitionType,'Value');
     
     %wavelength
     tempPrimaryWavelengthIndex = get(aodHandles.popPrimaryWavlenIndex,'Value');
     tempPredefinedWavlens      = get(aodHandles.popPredefinedWavlens,'Value');
-
+    
     tblData = get(aodHandles.tblWavelengths,'data');
     tempWavelengthMatrix = reshape([tblData{:,:}],length([tblData{:,:}])/3,3);
     % Remove the 1st col (Selected Chekbox) and last row (just empty row)
     if tempWavelengthMatrix(end,1)== 0 % checks condn
-       tempWavelengthMatrix = tempWavelengthMatrix(1:end-1,2:end);
-    end
-
-    %fields
-    tempAngle = get(aodHandles.radioAngle,'Value');
-    tempObjectHeight = get(aodHandles.radioObjectHeight,'Value');
-    tempImageHeight = get(aodHandles.radioImageHeight,'Value');
-    if tempAngle
-        tempFieldType = 'Angle';
-    elseif tempObjectHeight
-        tempFieldType = 'ObjectHeight';
-    elseif tempImageHeight
-        % Currently Imageheight is not supported so take as object heigth. 
-       tempFieldType = 'ObjectHeight'; 
+        tempWavelengthMatrix = tempWavelengthMatrix(1:end-1,2:end);
     end
     
-    tempFieldNormalizationList = cellstr (get(aodHandles.popFieldNormalization,'String'));
-    tempFieldNormalization = (tempFieldNormalizationList{get(aodHandles.popFieldNormalization,'Value')});
+    %fields
+    tempFieldTypeIndex = get(aodHandles.popFieldType,'Value');
+    tempFieldNormalizationTypeIndex = get(aodHandles.popFieldNormalization,'Value');
     
     tblData2 = get(aodHandles.tblFieldPoints,'data');
     tempFieldPointMatrix = reshape([tblData2{:,:}],length([tblData2{:,:}])/4,4);
     % Remove the 1st col (Selected Chekbox) and last row (just empty row)
     if tempFieldPointMatrix(end,1)==0 % checks condn
-       tempFieldPointMatrix = tempFieldPointMatrix(1:end-1,2:end);
+        tempFieldPointMatrix = tempFieldPointMatrix(1:end-1,2:end);
     end
-
- % Coating Catalogue
- tableData1 = get(aodHandles.tblCoatingCatalogues,'data');
- if ~isempty(tableData1)
-     % Take only the selected ones
-     selectedRows1 = find(cell2mat(tableData1(:,1)));
-     if ~isempty(selectedRows1)
-         tempCoatingCataloguesList = tableData1(selectedRows1,3);
-     else
-         tempCoatingCataloguesList = [];
-     end
- else
-     tempCoatingCataloguesList = [];
- end
- 
- % Glass Catalogue
- tableData2 = get(aodHandles.tblGlassCatalogues,'data');
- if ~isempty(tableData2)
-     % Take only the selected ones
-     selectedRows2 = find(cell2mat(tableData2(:,1)));
-     if ~isempty(selectedRows2)
-         tempGlassCataloguesList = tableData2(selectedRows2,3);
-     else
-         tempGlassCataloguesList = [];
-     end
- else
-     tempGlassCataloguesList = [];
- end
- 
- % Pupil Apodization
- tempApodizationTypeList = cellstr (get(aodHandles.popApodizationType,'String'));
- tempApodizationType = (tempApodizationTypeList{get(aodHandles.popApodizationType,'Value')});
- tempApodizationParameters = struct();
- switch lower(tempApodizationType)
-     case lower('None')
-         tempApodizationParameters = '';
-     case lower('Super Gaussian')
-         tempApodizationParameters.MaximumIntensity = str2double(get(aodHandles.txtApodMaximumIntensity,'String'));
-         tempApodizationParameters.Order = str2double(get(aodHandles.txtApodOrder,'String'));
-         tempApodizationParameters.BeamRadius = str2double(get(aodHandles.txtApodBeamRadius,'String'));
- end
- 
-     %% Now write all the configuration data to the optical system object
-    modifiedOpticalSystem = aodHandles.OpticalSystem;    
+    
+    % Coating Catalogue
+    tableData1 = get(aodHandles.tblCoatingCatalogues,'data');
+    if ~isempty(tableData1)
+        % Take only the selected ones
+        selectedRows1 = find(cell2mat(tableData1(:,1)));
+        if ~isempty(selectedRows1)
+            tempCoatingCataloguesList = tableData1(selectedRows1,3);
+        else
+            tempCoatingCataloguesList = [];
+        end
+    else
+        tempCoatingCataloguesList = [];
+    end
+    
+    % Glass Catalogue
+    tableData2 = get(aodHandles.tblGlassCatalogues,'data');
+    if ~isempty(tableData2)
+        % Take only the selected ones
+        selectedRows2 = find(cell2mat(tableData2(:,1)));
+        if ~isempty(selectedRows2)
+            tempGlassCataloguesList = tableData2(selectedRows2,3);
+        else
+            tempGlassCataloguesList = [];
+        end
+    else
+        tempGlassCataloguesList = [];
+    end
+    
+    % Pupil Apodization
+    tempApodizationTypeIndex = get(aodHandles.popApodizationType,'Value');
+    
+    tempApodizationParameters = struct();
+    switch tempApodizationTypeIndex
+        case 1 %('None')
+            tempApodizationParameters = '';
+        case 2 %('Super Gaussian')
+            tempApodizationParameters.MaximumIntensity = str2double(get(aodHandles.txtApodMaximumIntensity,'String'));
+            tempApodizationParameters.Order = str2double(get(aodHandles.txtApodOrder,'String'));
+            tempApodizationParameters.BeamRadius = str2double(get(aodHandles.txtApodBeamRadius,'String'));
+    end
+    
+    %% Now write all the configuration data to the optical system object
+    modifiedOpticalSystem = aodHandles.OpticalSystem;
     %set aperture
-    modifiedOpticalSystem.SystemApertureType = tempSystemApertureType;
+    modifiedOpticalSystem.SystemApertureType = tempSystemApertureTypeIndex;
     modifiedOpticalSystem.SystemApertureValue = tempSystemApertureValue;
     %set general
     modifiedOpticalSystem.LensName = tempLensName;
@@ -817,33 +824,33 @@ function SaveConfigurationData(parentWindow)
     modifiedOpticalSystem.WavelengthUnit = tempWavelengthUnit;
     modifiedOpticalSystem.LensUnit = tempLensUnit;
     
-    if IsComponentBased(modifiedOpticalSystem) && tempSystemDefType == 1 
+    if IsComponentBased(modifiedOpticalSystem) && tempSystemDefType == 1
         % Convert from component to Surface based
         [ modifiedOpticalSystem ] = convertToSurfaceBased( modifiedOpticalSystem );
-    elseif IsSurfaceBased(modifiedOpticalSystem) && tempSystemDefType == 2 
+    elseif IsSurfaceBased(modifiedOpticalSystem) && tempSystemDefType == 2
         % Convert from Surface to component based
         [ modifiedOpticalSystem ] = convertToComponentBased( modifiedOpticalSystem );
     end
-   
+    
     modifiedOpticalSystem.ObjectAfocal = 0;
     modifiedOpticalSystem.ImageAfocal = 0;
     modifiedOpticalSystem.ObjectTelecenteric = 0;
     modifiedOpticalSystem.ObjectTelecenteric = 0;
-
+    
     %set wavelength
     modifiedOpticalSystem.WavelengthMatrix = tempWavelengthMatrix;
     modifiedOpticalSystem.PrimaryWavelengthIndex = tempPrimaryWavelengthIndex;
     %set field
-    modifiedOpticalSystem.FieldType = tempFieldType;
+    modifiedOpticalSystem.FieldType = tempFieldTypeIndex;
     modifiedOpticalSystem.FieldPointMatrix = tempFieldPointMatrix;
     modifiedOpticalSystem.CoatingCataloguesList = tempCoatingCataloguesList;
     modifiedOpticalSystem.GlassCataloguesList = tempGlassCataloguesList;
     
-    modifiedOpticalSystem.ApodizationType = tempApodizationType;
+    modifiedOpticalSystem.ApodizationType = tempApodizationTypeIndex;
     modifiedOpticalSystem.ApodizationParameters = tempApodizationParameters;
-   
-    modifiedOpticalSystem.FieldNormalization = tempFieldNormalization;
-
+    
+    modifiedOpticalSystem.FieldNormalization = tempFieldNormalizationTypeIndex;
+    
     aodHandles.OpticalSystem = modifiedOpticalSystem;
     parentWindow.ParentHandles = aodHandles;
     updateSurfaceOrComponentEditorPanel( parentWindow );

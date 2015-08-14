@@ -14,7 +14,6 @@ function [ validSystem,message ] = validateOpticalSystem(parentWindow)
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
     %   Advisor: Prof. Herbert Gross
-    %   Part of the RAYTRACE_TOOLBOX V3.0 (OOP Version)
     %	Optical System Design and Simulation Research Group
     %   Institute of Applied Physics
     %   Friedrich-Schiller-University of Jena
@@ -25,97 +24,147 @@ function [ validSystem,message ] = validateOpticalSystem(parentWindow)
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     aodHandles = parentWindow.ParentHandles;
-    message = ('Valid system.');
+    mm = 0;
     valid = 1;
-    tempStandardData = get(aodHandles.tblStandardData,'data');
-    objThickness = str2num(tempStandardData{1,7});
     
-    tempAngle = get(aodHandles.radioAngle,'Value');
-    tempObjectHeight = get(aodHandles.radioObjectHeight,'Value');
-    tempImageHeight = get(aodHandles.radioImageHeight,'Value');
+    % Condition 1 & 2: If object is at infinity, object NA is not defined and
+    % object height can not be used for field
+    objThickness = aodHandles.OpticalSystem.SurfaceArray(1).Thickness;
+    tempFieldType = aodHandles.OpticalSystem.FieldType;
+    tempSystemApertureType = aodHandles.OpticalSystem.SystemApertureType;
+    tempSystemApertureValue = aodHandles.OpticalSystem.SystemApertureValue;
     
-    tempSystemApertureType = get(aodHandles.popApertureType,'Value');
-    tempSystemApertureValue = str2num(get(aodHandles.txtApertureValue,'String'));
-    
-    % check for validity of input
-    % if object is at infinity, object NA is not defined and object height can
-    % not be used for field
     if abs(objThickness) > 10^10
-        if tempObjectHeight
-            message = ('For objects at infinity, object height can not be used as field lease correct.');
-            valid = 0;
-        elseif tempSystemApertureType==2
-            message = ('For objects at infinity, object space NA can not be used as system aperture. Please correct.');
-            valid = 0;
-        else
-            
+        if tempFieldType == 1 %'ObjectHeight'
+            mm = mm + 1;
+            message{mm} = (['For objects at infinity, object height can not be',...
+                ' used as field please correct. By default the object will',...
+                ' be placed at finite distance']);
+            aodHandles.OpticalSystem.SurfaceArray(1).Thickness = 10;
+            valid(mm) = 0;
+        end
+        if tempSystemApertureType == 2% 'OBNA'
+            mm = mm + 1;
+            message{mm} = (['For objects at infinity, object space NA can not',...
+                ' be used as system aperture. Please correct.By default the',...
+                ' object will be placed at finite distance']);
+            aodHandles.OpticalSystem.SurfaceArray(1).Thickness = 10;
+            valid(mm) = 0;
         end
     else
         
     end
     
-    % check for existance of stop surface
-    tempStandardData = get(aodHandles.tblStandardData,'data');
-    sizeTblData = size(tempStandardData);
-    nSurface = sizeTblData(1);
-    stopIndex = 0;
-    for k = 1:1:nSurface
-        %standard data
-        surface = tempStandardData(k,1);
-        if isequaln(char(surface),'STOP')
-            stopIndex = k;
-        else
-            
-        end
-    end
-    if ~stopIndex
+    % Condition 3: There should always be a stop surface
+    [stopIndex, specified] = getStopSurfaceIndex(aodHandles.OpticalSystem);
+    if ~specified
         % No stop defined
-        message = ('No stop is defined for your system.');
-        valid = 0;
+        mm = mm + 1;
+        message{mm} = (['No stop is defined for your system. By default the ',...
+            'first surface next to object will be assigned as stop.']);
+        if IsSurfaceBased(aodHandles.OpticalSystem)
+            aodHandles.OpticalSystem.SurfaceArray(2).IsStop = 1;
+        else
+            aodHandles.OpticalSystem.ComponentArray(2).StopSurfaceIndex = 1;
+        end
+        valid(mm) = 0;
     end
     
     
-    % Check for existance and validity of catalogue files. Remove all
+    % Condition 4: Is the system aperture is defined as float by stop then
+    % the stop surface aperture can not be flaoting. Rather it should be
+    % circular (fixed)
+    tempSystemApertureType = aodHandles.OpticalSystem.SystemApertureType;
+    [stopIndex, specified] = getStopSurfaceIndex(aodHandles.OpticalSystem);
+    if tempSystemApertureType == 3 && ...
+            strcmpi(aodHandles.OpticalSystem.SurfaceArray(stopIndex).Aperture.Type,...
+            'FloatingCircularAperture')
+        mm = mm + 1;
+        message{mm} = (['When the system aperture is defined as float by stop, ',...
+            'the stop surface aperture can not be flaoting. So the stop',...
+            ' surface aperture is changed to Circular aperture']);
+        oldAperture = aodHandles.OpticalSystem.SurfaceArray(stopIndex).Aperture;
+        diam = oldAperture.UniqueParameters.Diameter;
+        apertDecenter = oldAperture.Decenter;
+        apertRotInDeg = oldAperture.Rotation;
+        drawAbsolute = oldAperture.DrawAbsolute;
+        outerShape = oldAperture.OuterShape;
+        additionalEdge = oldAperture.AdditionalEdge;
+        
+        newCircularAperture = Aperture('CircularAperture');
+        newCircularAperture.UniqueParameters.SmallDiameter = 0;
+        newCircularAperture.UniqueParameters.LargeDiameter = diam;
+        newCircularAperture.Decenter = apertDecenter;
+        newCircularAperture.Rotation = apertRotInDeg;
+        newCircularAperture.DrawAbsolute = drawAbsolute;
+        newCircularAperture.OuterShape = outerShape;
+        newCircularAperture.AdditionalEdge = additionalEdge;
+        
+        aodHandles.OpticalSystem.SurfaceArray(stopIndex).Aperture = newCircularAperture;
+        valid(mm) = 0;
+    end
+    
+    % Condition 5 - 8: Check for existance and validity of catalogue files. Remove all
     % invalid catalogues from the catalogue list table
     
     % Coating Catalogue
-    tableDataCoatingCat = get(aodHandles.tblCoatingCatalogues,'data');
-    if ~isempty(tableDataCoatingCat)
-        validCoatingCat = [];
-        for cc = 1:size(tableDataCoatingCat,1)
-            coatingCatName = tableDataCoatingCat{cc,3};
-            if isValidObjectCatalogue('coating', coatingCatName)
-                validCoatingCat = [validCoatingCat,cc];
+    coatingCatalogueList = aodHandles.OpticalSystem.CoatingCataloguesList;
+    if ~isempty(coatingCatalogueList)
+        invalidCoatingCat = [];
+        for cc = 1:size(coatingCatalogueList,1)
+            coatingCatFullName = coatingCatalogueList{cc};
+            if ~isValidObjectCatalogue('coating', coatingCatFullName)
+                invalidCoatingCat = [invalidCoatingCat,cc];
             end
         end
-        validTableDataCoatingCat = tableDataCoatingCat(validCoatingCat,:);
-        set(aodHandles.tblCoatingCatalogues,'data',validTableDataCoatingCat);
-        totalCoatingCatalogueSelected = sum([validTableDataCoatingCat{:,1}]);
-        set(aodHandles.txtTotalCoatingCataloguesSelected, 'String',...
-            totalCoatingCatalogueSelected);
+        if isempty(invalidCoatingCat)
+            
+        else
+            mm = mm + 1;
+            message{mm} = 'Error: Some Invalid Coating catalogue found. So they are just removed.';
+            valid(mm) = 0;
+            
+            coatingCatalogueList{invalidCoatingCat} = [];
+            aodHandles.OpticalSystem.CoatingCataloguesList = coatingCatalogueList;
+        end
     else
-        message = 'Error: No Coating catalogue found. Valid optical system needs at least one Coating catalogue. So create a new Coating catalogue first.';
-        valid = 0;
+        mm = mm + 1;
+        message{mm} = 'Error: No Coating catalogue found. Valid optical system needs at least one Coating catalogue. So create a new Coating catalogue first.';
+        valid(mm) = 0;
     end
+    
     % Glass Catalogue
-    tableDataGlassCat = get(aodHandles.tblGlassCatalogues,'data');
-    if ~isempty(tableDataGlassCat)
-        validGlassCat = [];
-        for gg = 1:size(tableDataGlassCat,1)
-            glassCatName = tableDataGlassCat{gg,3};
-            if isValidObjectCatalogue('glass', glassCatName)
-                validGlassCat = [validGlassCat,gg];
+    glassCatalogueList = aodHandles.OpticalSystem.GlassCataloguesList;
+    if ~isempty(glassCatalogueList)
+        invalidGlassCat = [];
+        for gg = 1:size(glassCatalogueList,1)
+            glassCatFullName = glassCatalogueList{gg};
+            if ~isValidObjectCatalogue('glass', glassCatFullName)
+                invalidGlassCat = [invalidGlassCat,gg];
             end
         end
-        validTableDataGlassCat = tableDataGlassCat(validGlassCat,:);
-        set(aodHandles.tblGlassCatalogues,'data',validTableDataGlassCat);
-        totalGlassCatalogueSelected = sum([validTableDataGlassCat{:,1}]);
-        set(aodHandles.txtTotalGlassCataloguesSelected, 'String',...
-            totalGlassCatalogueSelected);        
+        if isempty(invalidCoatingCat)
+            
+        else
+            mm = mm + 1;
+            message{mm} = 'Error: Some Invalid Glass catalogue found. So they are just removed.';
+            valid(mm) = 0;
+            
+            glassCatalogueList{invalidGlassCat} = [];
+            aodHandles.OpticalSystem.GlassCataloguesList = glassCatalogueList;
+        end
     else
-         message = 'Error: No Glass catalogue found. Valid optical system needs at least one Glass catalogue. Create a new Glass catalogue first.';
-         valid = 0;
+        mm = mm + 1;
+        message{mm} = 'Error: No Glass catalogue found. Valid optical system needs at least one Glass catalogue. Create a new Glass catalogue first.';
+        valid(mm) = 0;
     end
-    validSystem = valid;
+    
+    parentWindow.ParentHandles = aodHandles;
+    if sum(valid) < mm
+        validSystem = 0;
+    else
+        validSystem = 1;
+        message = 'Success Valid System!!';
+    end
 end
 

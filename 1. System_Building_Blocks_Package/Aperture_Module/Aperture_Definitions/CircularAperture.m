@@ -63,25 +63,30 @@ function [ returnData1, returnData2, returnData3  ] = CircularAperture...
     %%
     switch returnFlag(1)
         case 1 % Return the field names and initial values of apertureParameters
-            returnData1 = {'Diameter'};
-            returnData2 = {{'numeric'}};
+            returnData1 = {'SmallDiameter','LargeDiameter'};
+            returnData2 = {{'numeric'},{'numeric'}};
             defaultApertureParameter = struct();
-            defaultApertureParameter.Diameter = 20;
+            defaultApertureParameter.SmallDiameter = 10;
+            defaultApertureParameter.LargeDiameter = 20;
             returnData3 = defaultApertureParameter;
         case 2 % Return the maximum radius in x and y axis
-            maximumRadiusXY(1) = (apertureParameters.Diameter)/2;
+            maximumRadiusXY(1) = (apertureParameters.LargeDiameter)/2;
             maximumRadiusXY(2) = maximumRadiusXY(1);
             returnData1 = maximumRadiusXY;
             returnData2 = NaN;
             returnData3 = NaN;
-        case 3 % Return the if the given points in xyVector are inside or outside the main aperture.
-            radius = (apertureParameters.Diameter)/2;
+        case 3 % Return the if the given points in xyVector are inside or outside the aperture.
+            smallRadius = (apertureParameters.SmallDiameter)/2;
+            largeRadius = (apertureParameters.LargeDiameter)/2;
             pointX = xyVector(:,1);
             pointY = xyVector(:,2);
-            umInsideTheMainAperture = (((pointX).^2 + (pointY).^2)/radius^2) <= 1;
+            % When small rad = 0 and xy = (0,0) then the result will be NaN
+            % so this shall be considered in espetial case (3rd condition)
+            umInsideTheMainAperture = (((((pointX).^2 + (pointY).^2)/largeRadius^2) <= 1) &...
+                ((((pointX).^2 + (pointY).^2)/smallRadius^2) >= 1))|(isnan(((pointX).^2 + (pointY).^2)/smallRadius^2));
             returnData1 = umInsideTheMainAperture;
             returnData2 = NaN;
-            returnData3 = NaN;
+            returnData3 = NaN;    
     end
     
 end

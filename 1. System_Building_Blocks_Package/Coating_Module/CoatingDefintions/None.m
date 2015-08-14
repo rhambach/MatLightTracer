@@ -1,6 +1,6 @@
-function [ returnData1, returnData2, returnData3,returnData4 ] = NullCoating( returnFlag,coatingParameters,...
+function [ returnData1, returnData2, returnData3,returnData4 ] = None( returnFlag,coatingParameters,...
         wavLen,referenceWavLen,incAngle,indexBefore,indexAfter)
-    %NullCoating A user defined function for NullCoating coating. 
+    %None A user defined function for NullCoating coating. 
     % The function returns differnt parameters when requested by the main program.
     % It follows the common format used for defining user defined coating.
     % Inputs:

@@ -17,17 +17,17 @@ function [NewOpticalSystem] =  OpticalSystem(fullFilePath)
         % Component array will be NaN for surface based defintion
         NewOpticalSystem.ComponentArray = Component();
         
-        NewOpticalSystem.SystemApertureType = 'ENPD';
+        NewOpticalSystem.SystemApertureType = 1; % ENPD
         NewOpticalSystem.SystemApertureValue = 5;
         NewOpticalSystem.ComputeFastSemidiameter = 1;
         
         NewOpticalSystem.LensName = 'Lens 01';
         NewOpticalSystem.LensNote = 'No comment';
-        NewOpticalSystem.WavelengthUnit = 'um';
-        NewOpticalSystem.LensUnit = 'mm';
+        NewOpticalSystem.WavelengthUnit = 2; %'um';
+        NewOpticalSystem.LensUnit = 1; % mm
         NewOpticalSystem.WavelengthMatrix = [0.55 1];
         NewOpticalSystem.PrimaryWavelengthIndex = 1;
-        NewOpticalSystem.FieldType = 'ObjectHeight';   % object height
+        NewOpticalSystem.FieldType = 1; %'ObjectHeight';
         NewOpticalSystem.FieldPointMatrix = [0 0 1];
         
         NewOpticalSystem.IsObjectAfocal = 0;
@@ -39,11 +39,11 @@ function [NewOpticalSystem] =  OpticalSystem(fullFilePath)
         
         NewOpticalSystem.CoatingCataloguesList =  getAllObjectCatalogues('Coating');
         
-        NewOpticalSystem.ApodizationType = 'None';
+        NewOpticalSystem.ApodizationType = 1; %'None';
         NewOpticalSystem.ApodizationParameters = '';
         
-        NewOpticalSystem.FieldNormalization = 'Rectangular';
-        NewOpticalSystem.SystemDefinitionType = 'SurfaceBased';
+        NewOpticalSystem.FieldNormalization = 1; %'Rectangular';
+        NewOpticalSystem.SystemDefinitionType = 1; %'SurfaceBased';
         NewOpticalSystem.SystemMode = 'SEQ';
         NewOpticalSystem.GlassCataloguesList = getAllObjectCatalogues('Glass');
         NewOpticalSystem.SoftwareVersion = '';

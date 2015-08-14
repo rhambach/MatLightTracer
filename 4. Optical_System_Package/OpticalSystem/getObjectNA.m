@@ -4,8 +4,7 @@ function [NAO,entPupilLocation] = getObjectNA(optSystem,wavLen)
     if nargin < 2
         wavLen = getPrimaryWavelength(optSystem);
     end
-    systemApertureType = optSystem.SystemApertureType;
-    systemApertureValue = optSystem.SystemApertureValue;
+
     entPupilLocation = getEntrancePupilLocation(optSystem);
     objSurf = getSurfaceArray(optSystem,1);
     objectRefractiveIndex = getRefractiveIndex(objSurf.Glass,wavLen);
@@ -16,6 +15,6 @@ function [NAO,entPupilLocation] = getObjectNA(optSystem,wavLen)
     end
     
     NAO = computeObjectNA...
-        (systemApertureType,systemApertureValue,entPupilLocation,...
+        (optSystem,entPupilLocation,...
         objectRefractiveIndex,objThick);
 end

@@ -3,12 +3,29 @@ function [ updatedSystem,saved] = getCurrentOpticalSystem (parentWindow)
     % Main Window
     % Member of ParentWindow class
     
+
+    % Check validity of the optical system inputs
+    [ validSystem,message ] = validateOpticalSystem(parentWindow);
+    
+    if ~validSystem
+        msg1 = (['Warning: The optical system was invalid and the following ',...
+            'changes have been made to make it Valid. So plaese confirm the changes. ']);
+        for mm = 1:length(message)
+            msg1 = [msg1  ([num2str(mm) , ' : ',message{mm}])];
+        end
+        
+        msgHandle = msgbox(msg1,'Invalid system: Confirm changes','Warn');
+    end
+    
     aodHandles = parentWindow.ParentHandles;
     savedOpticalSystem = aodHandles.OpticalSystem;
     
+    % Update surface array and coordinate trasnformation matrices for each
+    % surface
     if isfield(savedOpticalSystem,'IsUpdatedSurfaceArray') && ...
             savedOpticalSystem.IsUpdatedSurfaceArray
-        updatedSurfaceArray = savedOpticalSystem.SurfaceArray;
+        updatedSystem = savedOpticalSystem;
+        %         updatedSurfaceArray = savedOpticalSystem.SurfaceArray;
     else
         if IsComponentBased(savedOpticalSystem)
             componentArray = savedOpticalSystem.ComponentArray;
@@ -27,11 +44,12 @@ function [ updatedSystem,saved] = getCurrentOpticalSystem (parentWindow)
             tempSurfaceArray = savedOpticalSystem.SurfaceArray;
         end
         updatedSurfaceArray = updateSurfaceCoordinateTransformationMatrices(tempSurfaceArray);
+        
+        savedOpticalSystem.SurfaceArray = updatedSurfaceArray;
+        % Set flaoting apertures
+        updatedSystem = setFloatingApertures( savedOpticalSystem );
+        updatedSystem.IsUpdatedSurfaceArray = 1;
     end
-    savedOpticalSystem.SurfaceArray = updatedSurfaceArray;
-    % Set flaoting apertures
-    updatedSystem = setFloatingApertures( savedOpticalSystem );
-    savedOpticalSystem.IsUpdatedSurfaceArray = 1;
     aodHandles.OpticalSystem = updatedSystem;
     saved = 1;
     aodHandles.OpticalSystem.Saved = 1;

@@ -80,8 +80,8 @@ function [ returnData1, returnData2, returnData3  ] = CircularObstruction...
             largeRadius = (apertureParameters.LargeDiameter)/2;
             pointX = xyVector(:,1);
             pointY = xyVector(:,2);
-            umInsideTheMainAperture = ((((pointX).^2 + (pointY).^2)/largeRadius^2) < 1) &...
-                ((((pointX).^2 + (pointY).^2)/smallRadius^2) > 1);
+            umInsideTheMainAperture = ((((pointX).^2 + (pointY).^2)/largeRadius^2) >= 1) &...
+                ((((pointX).^2 + (pointY).^2)/smallRadius^2) <= 1);
             returnData1 = umInsideTheMainAperture;
             returnData2 = NaN;
             returnData3 = NaN;
