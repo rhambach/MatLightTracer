@@ -36,10 +36,17 @@ function allRetardance = computeProperRetardance( PorJ,QorR )
 
     % Check for the size of the input matrix to determine whether 2x2 Jones matrix
     % or 3x3 Polarization ray tracing matrix
-    matDim = size(PorJ);
-    retardance = zeros(1,matDim(3));
-    for k = 1:matDim(3)
-        if matDim(1) == 2 % PorJ is a 2X2 jones matrix
+    firstDim = size(PorJ,1);
+    secondDim = size(PorJ,2);
+    if ndims(PorJ) > 2
+        thirdDim = size(PorJ,3);
+    else
+        thirdDim = 1;
+    end
+    
+    retardance = zeros(1,thirdDim);
+    for k = 1:thirdDim
+        if firstDim == 2 % PorJ is a 2X2 jones matrix
             J = PorJ(:,:,k);
             R = QorR(k);
             if ~(isnan(J(1,1)) || isnan(J(2,2)))

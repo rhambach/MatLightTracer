@@ -1,9 +1,11 @@
-function [stopIndex, specified] = getStopComponentIndex(optSystem)
+function [stopIndex, specified,stopSurfaceIndex] = getStopComponentIndex(optSystem)
     % getStopIndex: gives the stop index surface set by user
     stopIndex = 0;
     specified = 0;
     for kk=1:1:getNumberOfComponents(optSystem)
-        if optSystem.ComponentArray(kk).StopSurfaceIndex
+        currentStopSurfaceIndex = optSystem.ComponentArray(kk).StopSurfaceIndex;
+        if currentStopSurfaceIndex
+            stopSurfaceIndex = currentStopSurfaceIndex;
             stopIndex = kk;
             specified = 1;
             return;

@@ -38,11 +38,15 @@ function [fieldNames,fieldFormat,uniqueParamStruct] = getApertureUniqueParameter
     % Connect the surface definition function
     apertureDefinitionHandle = str2func(apertureType);
     returnFlag = 1;
-    [fieldNames,fieldFormat,defaultUniqueParamStruct] = apertureDefinitionHandle(returnFlag);
+    [returnDataStruct] = apertureDefinitionHandle(returnFlag);
+    fieldNames = returnDataStruct.UniqueParametersStructFieldNames;
+    fieldFormat = returnDataStruct.UniqueParametersStructFieldFormats;
+    defaultUniqueParamStruct = returnDataStruct.DefaultUniqueParametersStruct;
+    
     if returnDefault
         uniqueParamStruct = defaultUniqueParamStruct;
     else
         uniqueParamStruct = currentAperture.UniqueParameters;
-    end  
+    end
 end
 

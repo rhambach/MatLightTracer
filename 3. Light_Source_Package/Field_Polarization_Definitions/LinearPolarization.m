@@ -1,47 +1,89 @@
-function [ returnData1, returnData2, returnData3] = LinearPolarization(...
-        returnFlag,polarizationParameters,samplingPoints,samplingDistance)
-    % LINEARPOLARIZATION
+function [ returnDataStruct] = LinearPolarization(returnFlag,polarizationParameters,inputDataStruct)
+    % LinearPolarization A user defined function for linear polarization
+    % The function returns differnt parameters when requested by the main program.
+    % It follows the common format used for defining user defined polarization profiles.
+    % powerSpectrumParameters = values of {'Angle'}
+    % inputDataStruct : Struct of all additional inputs (not included in the surface parameters)
+    % required for computing the return. (Vary depending on the returnFlag)
+    % returnFlag : An integer indicating what is requested. Depending on it the
+    % returnDataStruct will have different fields
+    % 1: Return the field names and initial values of polarizationParameters
+    % which could be used in the Source definition GUI
+    %   inputDataStruct:
+    %       empty
+    %   Output Struct:
+    %       returnDataStruct.UniqueParametersStructFieldNames
+    %       returnDataStruct.UniqueParametersStructFieldDisplayNames
+    %       returnDataStruct.UniqueParametersStructFieldFormats
+    %       returnDataStruct.DefaultUniqueParametersStruct
+    % 2: Return the Jones vector for the given polarization parameter
+    %   inputDataStruct:
+    %       inputDataStruct.xMesh
+    %       inputDataStruct.yMesh
+    %   returnDataStruct:
+    %       returnDataStruct.JonesVector
+    %       returnDataStruct.PolarizationDistributionType
+    %       returnDataStruct.CoordinateSystem
     
-    %% Default input vaalues
-    if nargin == 1
+    % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    %   Written By: Worku, Norman Girma
+    %   Advisor: Prof. Herbert Gross
+    %	Optical System Design and Simulation Research Group
+    %   Institute of Applied Physics
+    %   Friedrich-Schiller-University of Jena
+    
+    % <<<<<<<<<<<<<<<<<<< Change History Section >>>>>>>>>>>>>>>>>>>>>>>>>>
+    % Date----------Modified By ---------Modification Detail--------Remark
+    % Jun 19,2015   Worku, Norman G.     Original Version
+    % Sep 09,2015   Worku, Norman G.     Edited to common user defined format
+    
+    %% Default input values
+    if nargin < 1
+        disp(['Error: The function LinearPolarization() needs atleast one argument',...
+            'the return type.']);
+        returnDataStruct = NaN;
+        return;
+    end
+    if nargin < 2
         if returnFlag == 1
-            % Just continue
+            % OK
+        elseif returnFlag == 2
+            % get the default parameters
+            retF = 1;
+            returnData = LinearPolarization(retF);
+            polarizationParameters = returnData.DefaultUniqueParametersStruct;
+            
+            inputDataStruct = struct();
         else
-            disp(['Error: The function LinearPolarization() needs two arguments',...
-                'return type and polarizationParameters.']);
-            returnData1 = NaN;
-            returnData2 = NaN;
-            returnData3 = NaN;
+            disp(['Error: The function LinearPolarization() needs all three ',...
+                'arguments the compute the required return.']);
+            returnDataStruct = NaN;
             return;
         end
-    elseif nargin < 2
-        disp(['Error: The function LinearPolarization() needs two arguments',...
-            'return type and polarizationParameters.']);
-        returnData1 = NaN;
-        returnData2 = NaN;
-        returnData3 = NaN;
-        return;
-    elseif nargin < 4
-        samplingPoints = NaN;
-        samplingDistance = NaN;
     end
-    
-    %%
+
     switch returnFlag(1)
         case 1 % Return the field names and initial values of polarizationParameters
             returnData1 = {'Angle'};
-            returnData2 = {{'numeric'}};
+            returnData1_Disp = {'Orientation Angle (deg)'};
+            returnData2 = {'numeric'};
             polarizationParametersStruct = struct();
             polarizationParametersStruct.Angle = 0;
             returnData3 = polarizationParametersStruct;
             
+            returnDataStruct.UniqueParametersStructFieldNames = returnData1;
+            returnDataStruct.UniqueParametersStructFieldDisplayNames = returnData1_Disp;
+            returnDataStruct.UniqueParametersStructFieldFormats = returnData2;
+            returnDataStruct.DefaultUniqueParametersStruct = returnData3;
         case 2 % Return the Jones vector for the given polarization parameter
             polDistributionType = 'Global';
-            angleInRad = (polarizationParameters{1})*pi/180;
+            coordinate = 'SP';
+            
+            angleInRad = (polarizationParameters.Angle)*pi/180;
             jonesVector = [cos(angleInRad);sin(angleInRad)];
             
-            returnData1 = jonesVector;
-            returnData2 = polDistributionType;
-            returnData3 = 'SP';
+            returnDataStruct.JonesVector = jonesVector;
+            returnDataStruct.PolarizationDistributionType = polDistributionType;
+            returnDataStruct.CoordinateSystem = coordinate;
     end
 end

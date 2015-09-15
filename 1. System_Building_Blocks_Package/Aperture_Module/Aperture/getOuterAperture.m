@@ -26,9 +26,9 @@ function [outerApertShape,outerApertureRadiusXY] = ...
     apertureDefinitionHandle = str2func(apertureType);
     returnFlag = 2;
     apertureParameters = surfAperture.UniqueParameters;
-    [ maximumRadiusXY] = ...
-        apertureDefinitionHandle(returnFlag,apertureParameters);
-    
+    [ returnDataStruct] = apertureDefinitionHandle(returnFlag,apertureParameters);
+     maximumRadiusXY = returnDataStruct.MaximumRadiusXY;
+      
     % If both outer and inner apertures are similar then the maximumRadiusXY
     % can be taken as the the outerApertureRadiusXY otherwise it will be
     % computed using the hypothenous of the two radii

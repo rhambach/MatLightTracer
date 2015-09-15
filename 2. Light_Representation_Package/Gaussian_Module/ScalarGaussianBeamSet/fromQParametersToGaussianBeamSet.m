@@ -1,13 +1,16 @@
-function [ gaussianBeamSet ] = fromQParametersToGaussianBeamSet( qxArray,qyArray,centralRayArray,localXDirectionMatrix,localYDirectionMatrix )
+function [ gaussianBeamSet ] = fromQParametersToGaussianBeamSet( ...
+        qxArray,qyArray,centralRayPosition,centralRayDirection,...
+        centralRayWavelength,localXDirection,localYDirection )
 %FROMQPARAMETERSTOGAUSSIANBEAM Compute the gaussian beam from its complex q
 % parameters        
 % The code is also vectorized. The gaussian beam array could be computed
 % from multiple inputs.
-% qxArray,qyArray,centralRayArray: Size 1xN for N gaussian beams
-% localXDirectionMatrix,localYDirectionMatrix: Size 3xN for N gaussian beams
+% qxArray,qyArray: Size 1xN for N gaussian beams
+% centralRayPosition,centralRayDirection,centralRayWavelength,
+% localXDirection,localYDirection: Size 3xN for N gaussian beams
 
 % all  inputs are supposed to be of the same size
-wavLen = [centralRayArray.Wavelength];
+wavLen = centralRayWavelength;
 distanceFromWaistInX = -real(qxArray);
 distanceFromWaistInY = -real(qyArray);
 if distanceFromWaistInX ~= distanceFromWaistInY
@@ -24,17 +27,9 @@ distanceFromWaist = distanceFromWaistInY;
 waistRadiusInX = sqrt(-wavLen./(pi*imag(1./qxArray)));
 waistRadiusInY = sqrt(-wavLen./(pi*imag(1./qyArray)));
 peakAmplitude = 1;
-gaussianBeamSet = ScalarGaussianBeamSet(centralRayArray,waistRadiusInX,waistRadiusInY,...
-    distanceFromWaist,peakAmplitude,localXDirectionMatrix,localYDirectionMatrix);
+gaussianBeamSet = ScalarGaussianBeamSet(centralRayPosition,centralRayDirection,...
+    centralRayWavelength,waistRadiusInX,waistRadiusInY,distanceFromWaist,...
+    peakAmplitude,localXDirection,localYDirection);
 gaussianBeamSet(invalidWaistPositionIndices) = NaN;
-
-% gaussianBeamArray.CentralRay = centralRayArray;
-% gaussianBeamArray.LocalXDirection = localXDirectionMatrix;
-% gaussianBeamArray.LocalYDirection = localYDirectionMatrix;
-% gaussianBeamArray.WaistRadiusInX = waistRadiusInX;
-% gaussianBeamArray.WaistRadiusInY = waistRadiusInY;
-% gaussianBeamArray.DistanceFromWaist = distanceFromWaist;
-% gaussianBeam.DistanceFromWaistInY = distanceFromWaistInY;
-
 end
 

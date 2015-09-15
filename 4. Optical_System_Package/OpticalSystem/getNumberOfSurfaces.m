@@ -3,6 +3,5 @@ function [ nSurface, surfaceArray ] = getNumberOfSurfaces( optSystem )
     %is also returned as second argument.
     surfaceArray = getSurfaceArray(optSystem);
     nSurface = length(surfaceArray);
-    
 end
 

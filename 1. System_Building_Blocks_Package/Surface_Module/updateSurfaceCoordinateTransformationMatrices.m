@@ -39,15 +39,14 @@ function updatedSurfaceArray = updateSurfaceCoordinateTransformationMatrices(sur
         previousSurface = updatedSurfaceArray(ss-1);
         % Update the surface coordinates and positions
         % compute position from decenter and thickness
-        
+
         prevRefCoordinateTM = previousSurface.ReferenceCoordinateTM;
-        prevSurfCoordinateTM = previousSurface.SurfaceCoordinateTM;
         prevThickness = previousSurface.Thickness;
         if prevThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for object distance
             prevThickness = 0;
         end
-        [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,prevRefCoordinateTM,...
-            prevSurfCoordinateTM,prevThickness);
+        [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(...
+            currentSurface,prevRefCoordinateTM,prevThickness);
         % set surface property
         currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
         currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;

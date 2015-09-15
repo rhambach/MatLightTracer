@@ -1,4 +1,5 @@
-function [ newObjectCatalogueFullName ] = createNewObjectCatalogue(objectType, objectCatalogueFullName,ask_replace,initialObjectArray )
+function [ newObjectCatalogueFullName ] = createNewObjectCatalogue(objectType, ...
+        objectCatalogueFullName,ask_replace,initialObjectArray )
     % CREATENEWCOATINGCATALOGUE Create anew  object catalogue and intialize
     % empty array of the corresponding object.Object catalogues are defined
     % as matlab workspace variables 'ObjectArray','FileInfoStruct' saved in
@@ -37,7 +38,12 @@ function [ newObjectCatalogueFullName ] = createNewObjectCatalogue(objectType, o
     end
     
     if nargin < 4
-        initialObjectArray = struct('Type',{},'Name',{},'Parameters',{},'ClassName',{});
+        switch lower(objectType)
+            case 'coating'
+                initialObjectArray = createEmptyCoating();
+            case 'glass'
+                initialObjectArray = createEmptyGlass();
+        end
     end
     if strcmpi(objectCatalogueFullName,'default')
         objectCatalogueFullName = [pwd,'\Catalogue_Files','\New_',objectType,'.mat'];
@@ -57,29 +63,33 @@ function [ newObjectCatalogueFullName ] = createNewObjectCatalogue(objectType, o
         alternativeName = fullfile(pathstr,[name,'1',ext]);
         if Ask
             button = questdlg(strcat('There already exists an Object catalogue named ', ...
-                name, '. Do you want to create the catalogue with new name: ',name, '1 ?'),'New Catalogue Name','Yes Save','No Replace','Yes Save');
+                name, '. Do you want to create the catalogue with new name: ',name, '1 ?'),...
+                'New Catalogue Name','Yes Save','No Replace','Yes Save');
             switch button
                 case 'Yes Save'
                     newObjectCatalogueFullName = alternativeName;
-                    newObjectCatalogueFullName = createNewObjectCatalogue(objectType, newObjectCatalogueFullName,ask_replace,initialObjectArray );
+                    newObjectCatalogueFullName = createNewObjectCatalogue(objectType,...
+                        newObjectCatalogueFullName,ask_replace,initialObjectArray );
                 case 'No Replace'
                     % delete the exsisting and create anew one
                     delete(objectCatalogueFullName);
-                    newObjectCatalogueFullName = createNewObjectCatalogue(objectType, objectCatalogueFullName,ask_replace,initialObjectArray );
+                    newObjectCatalogueFullName = createNewObjectCatalogue(...
+                        objectType, objectCatalogueFullName,ask_replace,initialObjectArray );
             end
         else
             % delete the exsisting and create anew one
             delete(objectCatalogueFullName);
-            newObjectCatalogueFullName = createNewObjectCatalogue(objectType, objectCatalogueFullName ,ask_replace,initialObjectArray);
+            newObjectCatalogueFullName = createNewObjectCatalogue(...
+                objectType, objectCatalogueFullName ,ask_replace,initialObjectArray);
         end
     else
+        
         FileInfoStruct =  struct();
+        ObjectArray = initialObjectArray;
         switch lower(objectType)
             case 'coating'
-                ObjectArray = createEmptyCoating();
                 FileInfoStruct.Type = 'Coating';
             case 'glass'
-                ObjectArray = createEmptyGlass();
                 FileInfoStruct.Type = 'Glass';
         end
         FileInfoStruct.Date = fix(clock); % Clock = [YYYY MM DD HH MM SS]

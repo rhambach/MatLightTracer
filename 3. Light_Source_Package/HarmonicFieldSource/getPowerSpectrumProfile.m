@@ -6,10 +6,12 @@ function [ intensityVect, wavelengthVect, referenceWavelengthIndex ] = getPowerS
     % get the spectral profile from the corresponding
     % spectral profile function
     % Connect the spectral profile definition function 
-    spectralProfileDefinitionHandle = str2func(spectralProfileType);
+    spectralProfileDefinitionHandle = str2func(getSupportedSpectralProfiles(spectralProfileType)); 
     returnFlag = 2; %
-    [ intensityVect, wavelengthVect  ] = spectralProfileDefinitionHandle(...
-        returnFlag,spectralProfileParameter);    
+    [returnDataStruct] = spectralProfileDefinitionHandle(returnFlag,spectralProfileParameter);    
+    intensityVect = returnDataStruct.IntensityVector ;
+    wavelengthVect = returnDataStruct.WavelengthVector;
+       
     referenceWavelengthIndex = floor(length(wavelengthVect)/2);
 end
 

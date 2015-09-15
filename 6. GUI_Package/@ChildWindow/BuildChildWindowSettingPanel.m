@@ -357,7 +357,7 @@ function BuildChildWindowSettingPanel...
         'Visible','off',...
         'String', 'Polarization Profile');
     
-    polarizationProfileList = GetSupportedPolarizationProfiles;
+    polarizationProfileList = getSupportedPolarizationProfiles;
     popPolarizationProfile = uicontrol( ...
         'Parent', panelPolarizationParametersTop, ...
         'Tag', 'popSpatialProfile', ...
@@ -1224,7 +1224,7 @@ function BuildChildWindowSettingPanel...
                     childHandle.sliderPolarizationParameters = sliderPolarizationParameters;
                     childHandle.lblPolarizationProfile = lblPolarizationProfile;
                     childHandle.popPolarizationProfile = popPolarizationProfile;
-                    polarizationProfileList = GetSupportedPolarizationProfiles;
+                    polarizationProfileList = getSupportedPolarizationProfiles;
                     firstPolarizationProfileType = polarizationProfileList{1};
                     childHandle = displayPolarizationProfileParameters(childHandle,firstPolarizationProfileType);
                 case lower('wavefrontAtExitPupil')
@@ -1376,7 +1376,7 @@ function BuildChildWindowSettingPanel...
                     childHandle.sliderPolarizationParameters = sliderPolarizationParameters;
                     childHandle.lblPolarizationProfile = lblPolarizationProfile;
                     childHandle.popPolarizationProfile = popPolarizationProfile;
-                    polarizationProfileList = GetSupportedPolarizationProfiles;
+                    polarizationProfileList = getSupportedPolarizationProfiles;
                     firstPolarizationProfileType = polarizationProfileList{1};
                     childHandle = displayPolarizationProfileParameters(childHandle,firstPolarizationProfileType);
                     

@@ -22,6 +22,9 @@ function [ dispName, imgFileName, compDescription ] = getComponentAboutInfo( cur
     % Connect the component definition function
     componentDefinitionHandle = str2func(componentDefinitionFileName);
     returnFlag = 1; % About the component
-    [ dispName, imgFileName, compDescription] = componentDefinitionHandle(returnFlag);
+    [ returnDataStruct] = componentDefinitionHandle(returnFlag);
+    dispName = returnDataStruct.Name;
+    imgFileName = returnDataStruct.ImageFullFileName;
+    compDescription = returnDataStruct.Description;
 end
 

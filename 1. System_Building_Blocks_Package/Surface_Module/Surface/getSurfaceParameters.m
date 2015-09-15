@@ -26,23 +26,14 @@ function [ paramNames,paramTypes,paramValues,paramValuesDisp] = ...
                 paramTypes{3,1} = 'Coating';
                 paramValues{3,1} = currentSurface.Coating;
                 paramValuesDisp{3,1} = currentSurface.Coating.Name;
-                
-                
+
                 % Add additional surface type specific basic parameters
-%                 surfaceDefinitionFileName = currentSurface.Type;
-%                 % Connect the surface definition function
-% %                 surfaceDefinitionHandle = str2func(surfaceDefinitionFileName);
-% %                 returnFlag = 'SSPB'; % Other Basic parameters of the surface
-                [ uniqueParamNames, uniqueParamTypes, uniqueParametersStruct] = ...
+                [ uniqueParamNames, uniqueParamFormats, uniqueParametersStruct] = ...
                     getSurfaceUniqueParameters( currentSurface);
-                
-%                 surfaceDefinitionHandle(returnFlag);
-%                 surfaceParameters = currentSurface.UniqueParameters;
-                
                 nUniqueParams = length(uniqueParamNames);
                 for kk = 1:nUniqueParams
                     paramNames{3+kk,1} = uniqueParamNames{kk};
-                    paramTypes{3+kk,1} = uniqueParamTypes{kk};
+                    paramTypes{3+kk,1} = uniqueParamFormats{kk};
                     paramValues{3+kk,1} = uniqueParametersStruct.(uniqueParamNames{kk});
                     
                     switch lower(class(paramValues{3+kk,1}))
@@ -72,7 +63,7 @@ function [ paramNames,paramTypes,paramValues,paramValuesDisp] = ...
                 paramTypes{3,1} = 'numeric';
                 paramValues{3,1} = currentSurface.Tilt(2);
                 paramValuesDisp{3,1} = currentSurface.Tilt(2);
-
+                
                 paramNames{4,1} = 'TiltZ';
                 paramTypes{4,1} = 'numeric';
                 paramValues{4,1} = currentSurface.Tilt(3);
@@ -147,17 +138,14 @@ function [ paramNames,paramTypes,paramValues,paramValuesDisp] = ...
                 paramValuesDisp{7,1} = additionalEdge;
                 
                 % Add additional aperture type specific parameters
-                apertureDefinitionFileName = currentAperture.Type;
-                % Connect the surface definition function
-                apertureDefinitionHandle = str2func(apertureDefinitionFileName);
-                returnFlag = 1; % Other parameters of the aperture
-                [ uniqueParamNames, uniqueParamTypes, defualtParameterStruct] = apertureDefinitionHandle(returnFlag);
+                [uniqueParamNames, uniqueParamFormats,uniqueParameterStruct] = getApertureUniqueParameters( currentAperture );
+                
                 apertureUniqueParameters = currentAperture.UniqueParameters;
                 
                 nUniqueParams = length(uniqueParamNames);
                 for kk = 1:nUniqueParams
                     paramNames{7+kk,1} = uniqueParamNames{kk};
-                    paramTypes{7+kk,1} = uniqueParamTypes{kk};
+                    paramTypes{7+kk,1} = uniqueParamFormats{kk};
                     paramValues{7+kk,1} = apertureUniqueParameters.(uniqueParamNames{kk});
                     
                     switch lower(class(paramValues{7+kk,1}))
@@ -192,21 +180,13 @@ function [ paramNames,paramTypes,paramValues,paramValuesDisp] = ...
                         paramValues{1,1} = currentSurface.Coating;
                         paramValuesDisp{1,1} = currentSurface.Coating.Name;
                     otherwise
-                       % Add additional surface type specific basic parameters
-                       
-%                         surfaceDefinitionFileName = currentSurface.Type;
-%                         % Connect the surface definition function
-%                         surfaceDefinitionHandle = str2func(surfaceDefinitionFileName);
-%                         returnFlag = 'SSPB'; % Other Basic parameters of the surface
-%                         [ uniqueParamNames, uniqueParamTypes, defualtParameterStruct] = surfaceDefinitionHandle(returnFlag);
-%                         uniqueParametersStruct = currentSurface.UniqueParameters;
+                        % Add additional surface type specific basic parameters
+                        [ uniqueParamNames, uniqueParamFormats, uniqueParametersStruct] = ...
+                            getSurfaceUniqueParameters( currentSurface);
                         
-                                        [ uniqueParamNames, uniqueParamTypes, uniqueParametersStruct] = ...
-                    getSurfaceUniqueParameters( currentSurface);
-                
                         uniqueParamIndex = rowNumber-3;
                         paramNames{1,1} = uniqueParamNames{uniqueParamIndex};
-                        paramTypes{1,1} = uniqueParamTypes{uniqueParamIndex};
+                        paramTypes{1,1} = uniqueParamFormats{uniqueParamIndex};
                         paramValues{1,1} = uniqueParametersStruct.(uniqueParamNames{uniqueParamIndex});
                         switch lower(class(paramValues{1,1}))
                             case lower('logical')
@@ -312,16 +292,12 @@ function [ paramNames,paramTypes,paramValues,paramValuesDisp] = ...
                         paramValuesDisp{1,1} = additionalEdge;
                     otherwise
                         % Add additional aperture type specific parameters
-                        apertureDefinitionFileName = currentAperture.Type;
-                        % Connect the surface definition function
-                        apertureDefinitionHandle = str2func(apertureDefinitionFileName);
-                        returnFlag = 1; % Other parameters of the aperture
-                        [ uniqueParamNames, uniqueParamTypes, defualtParameterStruct] = apertureDefinitionHandle(returnFlag);
+                        [uniqueParamNames, uniqueParamFormats,uniqueParameterStruct] = getApertureUniqueParameters( currentAperture );
                         apertureUniqueParameters = currentAperture.UniqueParameters;
                         
                         uniqueParamIndex = rowNumber-7;
                         paramNames{1,1} = uniqueParamNames{uniqueParamIndex};
-                        paramTypes{1,1} = uniqueParamTypes{uniqueParamIndex};
+                        paramTypes{1,1} = uniqueParamFormats{uniqueParamIndex};
                         paramValues{1,1} = apertureUniqueParameters.(uniqueParamNames{uniqueParamIndex});
                         switch lower(class(paramValues{1,1}))
                             case lower('logical')

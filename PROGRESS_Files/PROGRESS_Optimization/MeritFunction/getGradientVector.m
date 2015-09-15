@@ -23,7 +23,9 @@ function [gradientVector] = getGradientVector( currentMeritFunction )
         gradientVector = NaN;
         return;
     end
-    currentValueVector = getOptimizableVector(currentMeritFunction);
+    
+    optimizableObject = currentMeritFunction.OptimizableObject;
+    currentValueVector = getOptimizableVector(optimizableObject);
     
     nVariables = length(currentValueVector);
     h = 0.01; % for numerical derivative computation
@@ -34,11 +36,16 @@ function [gradientVector] = getGradientVector( currentMeritFunction )
         hVector1(kk) = -h;
         hVector2(kk) = h;
         % Use double sided numerical derivative
-        meritFunction1 = setOptimizableVector(currentMeritFunction,currentValueVector + hVector1);
-        meritFunction2 = setOptimizableVector(currentMeritFunction,currentValueVector + hVector2);
+        optimizableObject1 = setOptimizableVector(optimizableObject,currentValueVector + hVector1);
+        optimizableObject2 = setOptimizableVector(optimizableObject,currentValueVector + hVector2);
         
-        meritFunctionValue1 = getMeritFunctionValue(meritFunction1);
-        meritFunctionValue2 = getMeritFunctionValue(meritFunction2);
+        currentMeritFunction1 = currentMeritFunction;
+        currentMeritFunction1.OptimizableObject = optimizableObject1;
+        currentMeritFunction2 = currentMeritFunction;
+        currentMeritFunction2.OptimizableObject = optimizableObject2;
+        
+        meritFunctionValue1 = getMeritFunctionValue(currentMeritFunction1);
+        meritFunctionValue2 = getMeritFunctionValue(currentMeritFunction2);
         
         gradientVector(kk) = ((meritFunctionValue2-meritFunctionValue1)/(2*h));
     end

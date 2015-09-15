@@ -8,15 +8,15 @@ function [ plotted ] = showFreeSpacePropagation( gaussianBeam,startZ,endZ,...
         plotted = NaN;
         return;
     elseif nargin == 1
-        startZ = -3*gaussianBeam.getRayleighRange;
-        endZ = 3*gaussianBeam.getRayleighRange;
+        startZ = -3*getRayleighRange(gaussianBeam);
+        endZ = 3*getRayleighRange(gaussianBeam);
         plotType = 1;
         nRadialPoints = 50;
         nAngularPoints = 64;
         figure;
         axesHandle = axes;
     elseif nargin == 2
-        endZ = 3*gaussianBeam.getRayleighRange;
+        endZ = 3*getRayleighRange(gaussianBeam);
         plotType = 1;
         nRadialPoints = 50;
         nAngularPoints = 64;
@@ -43,12 +43,13 @@ function [ plotted ] = showFreeSpacePropagation( gaussianBeam,startZ,endZ,...
     end
     
     distanceFromWaistInX = linspace(startZ,endZ,200);
+    distanceFromWaistInY = distanceFromWaistInX;
     
     E0 = gaussianBeam.PeakAmplitude;
     w0x = gaussianBeam.WaistRadiusInX;
     w0y = gaussianBeam.WaistRadiusInY;
-    wavLen = gaussianBeam.CentralRay.Wavelength;
-    [ wx,wy ] = gaussianBeam.getSpotRadius;
+    wavLen = gaussianBeam.CentralRayWavelength;
+    [ wx,wy ] = getSpotRadius(gaussianBeam);
     gaussianBeam.DistanceFromWaistInX = distanceFromWaistInX(1);
     gaussianBeam.DistanceFromWaistInY = distanceFromWaistInY(1);
     % gaussianBeam.DistanceFromWaistInY = distanceFromWaist(1);
@@ -120,9 +121,9 @@ function [ plotted ] = showFreeSpacePropagation( gaussianBeam,startZ,endZ,...
         %     gaussianBeam.DistanceFromWaist = distanceFromWaist(zz);
         zx = gaussianBeam.DistanceFromWaistInX;
         zy = gaussianBeam.DistanceFromWaistInY;
-        [ wx,wy ] = gaussianBeam.getSpotRadius;
-        [ Rx,Ry ] = gaussianBeam.getRadiusOfCurvature;
-        [ guoyPhaseX,guoyPhaseY ] = gaussianBeam.getGuoyPhaseShift;
+        [ wx,wy ] = getSpotRadius(gaussianBeam);
+        [ Rx,Ry ] = getGaussianBeamRadiusOfCurvature(gaussianBeam);
+        [ guoyPhaseX,guoyPhaseY ] = getGuoyPhaseShift(gaussianBeam);
         
         maxR = max([wx,wy]);
         r = (linspace(-maxR,maxR,nRadialPoints))';

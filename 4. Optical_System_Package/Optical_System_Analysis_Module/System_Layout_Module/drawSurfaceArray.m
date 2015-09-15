@@ -38,57 +38,36 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
         nPoints1Default = 75;
         nPoints2Default = 75;
     end
+    
     if nargin < 1
         disp('Error: The function drawLens requires aleast surfaceArray object.');
         xyzPoints = NaN;
         return;
-    elseif nargin == 1
-        plotIn2D = 0;
-        nPoints1 = nPoints1Default;
-        nPoints2 = nPoints2Default;
-        figure;
-        axesHandle = axes;
-        drawEdge = 1;
-    elseif nargin == 2
-        nPoints1 = nPoints1Default;
-        nPoints2 = nPoints2Default;
-        figure;
-        axesHandle = axes;
-        drawEdge = 1;
-    elseif nargin == 3
-        if strcmpi(nPoints1,'default')
-            nPoints1 = nPoints1Default;
-        end
-        nPoints2 = nPoints2Default;
-        figure;
-        axesHandle = axes;
-        drawEdge = 1;
-    elseif nargin == 4
-        if strcmpi(nPoints1,'default')
-            nPoints1 = nPoints1Default;
-        end
-        if strcmpi(nPoints2,'default')
-            nPoints2 = nPoints2Default;
-        end
-        figure;
-        axesHandle = axes;
-        drawEdge = 1;
-    elseif nargin == 5
-        if strcmpi(nPoints1,'default')
-            nPoints1 = nPoints1Default;
-        end
-        if strcmpi(nPoints2,'default')
-            nPoints2 = nPoints2Default;
-        end
-        drawEdge = 1;
-    else
-        if strcmpi(nPoints1,'default')
-            nPoints1 = nPoints1Default;
-        end
-        if strcmpi(nPoints2,'default')
-            nPoints2 = nPoints2Default;
-        end
     end
+    if nargin < 2
+        plotIn2D = 0;
+    end
+    if nargin < 3
+        nPoints1 = nPoints1Default;
+    end
+    if nargin < 4
+        nPoints2 = nPoints2Default;
+    end
+    if nargin < 5
+        figure;
+        axesHandle = axes;
+    end
+    if nargin < 6
+        drawEdge = 1;
+    end
+    if strcmpi(nPoints1,'default')
+        nPoints1 = nPoints1Default;
+    end
+    if strcmpi(nPoints2,'default')
+        nPoints2 = nPoints2Default;
+    end
+    
+    %%
     nSurface = size(surfaceArray,2);
     surfEdge = zeros(nSurface,1);
     if drawEdge
@@ -203,7 +182,39 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                     secondSurface.SurfaceCoordinateTM(1:3,4)+globalShift';
                 xyzPoints2 = drawSurface(secondSurface,plotIn2D,nPoints1,nPoints2,...
                     -1,surfColor,2*drawnApertureRadiusXY(ss,:));
-                xyzPoints{ss+1+mirrorCounter} = xyzPoints2;
+                %                 xyzPoints{ss+1+mirrorCounter} = xyzPoints2;
+                
+                % If o the dimensions of xyzPoints1 and xyzPoints2 are differnnt,
+                % then so that should be corrected. Simply reduce the size of
+                % the larger one to the smaller one (this just reduces the
+                % sampling points, nothing more).
+                nSampleX1 = size(xyzPoints1,1);
+                nSampleY1 = size(xyzPoints1,2);
+                nSampleX2 = size(xyzPoints2,1);
+                nSampleY2 = size(xyzPoints2,2);
+                
+                xyzPoints1_New = xyzPoints1;
+                xyzPoints2_New = xyzPoints2;
+                if nSampleX1 < nSampleX2
+                    xyzPoints2_New([2:ceil((nSampleX2-2)/(nSampleX2-nSampleX1)):nSampleX2-1],:,:) = [];
+                elseif nSampleX1 > nSampleX2
+                    xyzPoints1_New([2:ceil((nSampleX1-2)/(nSampleX1-nSampleX2)):nSampleX1-1],:,:) = [];
+                else
+                    
+                end
+                
+                if nSampleY1 < nSampleY2
+                    xyzPoints2_New(:,[2:ceil((nSampleY2-2)/(nSampleY2-nSampleY1)):nSampleY2-1],:) = [];
+                elseif nSampleY1 > nSampleY2
+                    xyzPoints1_New(:,[2:ceil((nSampleY1-2)/(nSampleY1-nSampleY2)):nSampleY1-1],:) = [];
+                else
+                    
+                end
+                xyzPoints1 = xyzPoints1_New;
+                xyzPoints2 = xyzPoints2_New;
+                
+                
+                xyzPoints{ss+mirrorCounter} = xyzPoints2;
                 
                 % Draw the second surface of the mirror now % Not too optimum solution
                 % Compute the singlet boarder surface plot points from the
@@ -273,6 +284,40 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
             
             xyzPoints2 = drawSurface(surfaceArray(ss+1),plotIn2D,nPoints1,nPoints2,...
                 -1,surfColor(ss,:),2*drawnApertureRadiusXY(ss+1,:));
+            
+            
+            % If one of the two surfaces is tilted or has large outer
+            % aperture size than the other, then the dimensions of
+            % xyzPoints1 and xyzPoints2 could be differnnt so that should
+            % be corrected. Simply reduce the size of the larger one to the
+            % smaller one (this just reduces the sampling points, nothing
+            % more).
+            nSampleX1 = size(xyzPoints1,1);
+            nSampleY1 = size(xyzPoints1,2);
+            nSampleX2 = size(xyzPoints2,1);
+            nSampleY2 = size(xyzPoints2,2);
+            
+            xyzPoints1_New = xyzPoints1;
+            xyzPoints2_New = xyzPoints2;
+            if nSampleX1 < nSampleX2
+                xyzPoints2_New([2:ceil((nSampleX2-2)/(nSampleX2-nSampleX1)):nSampleX2-1],:,:) = [];
+            elseif nSampleX1 > nSampleX2
+                xyzPoints1_New([2:ceil((nSampleX1-2)/(nSampleX1-nSampleX2)):nSampleX1-1],:,:) = [];
+            else
+                
+            end
+            
+            if nSampleY1 < nSampleY2
+                xyzPoints2_New(:,[2:ceil((nSampleY2-2)/(nSampleY2-nSampleY1)):nSampleY2-1],:) = [];
+            elseif nSampleY1 > nSampleY2
+                xyzPoints1_New(:,[2:ceil((nSampleY1-2)/(nSampleY1-nSampleY2)):nSampleY1-1],:) = [];
+            else
+                
+            end
+            xyzPoints1 = xyzPoints1_New;
+            xyzPoints2 = xyzPoints2_New;
+            
+            
             surfacePointsComputedFlag(ss+1) = 1;
             xyzPoints{ss+1+mirrorCounter} = xyzPoints2;
             
@@ -291,15 +336,28 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                     singletBoarderZ{singletCounter} = [xyzPoints2(end,:,3);(xyzPoints1(end,:,3))];
                 end
             else
-                singletBoarderX{singletCounter} = ...
-                    [xyzPoints2(1,:,1),(xyzPoints2(:,end,1))',fliplr(xyzPoints2(end,:,1)),fliplr((xyzPoints2(:,1,1))');...
-                    xyzPoints1(1,:,1),(xyzPoints1(:,end,1))',fliplr(xyzPoints1(end,:,1)),fliplr((xyzPoints1(:,1,1))')];
-                singletBoarderY{singletCounter}  = ...
-                    [xyzPoints2(1,:,2),(xyzPoints2(:,end,2))',fliplr(xyzPoints2(end,:,2)),fliplr((xyzPoints2(:,1,2))');...
-                    xyzPoints1(1,:,2),(xyzPoints1(:,end,2))',fliplr(xyzPoints1(end,:,2)),fliplr((xyzPoints1(:,1,2))')];
-                singletBoarderZ{singletCounter}  = ...
-                    [xyzPoints2(1,:,3),(xyzPoints2(:,end,3))',fliplr(xyzPoints2(end,:,3)),fliplr((xyzPoints2(:,1,3))');...
-                    xyzPoints1(1,:,3),(xyzPoints1(:,end,3))',fliplr(xyzPoints1(end,:,3)),fliplr((xyzPoints1(:,1,3))')];
+                if plotIn2D
+                    % In yz plane so take all y
+                    singletBoarderX{singletCounter} = ...
+                        [xyzPoints2(1,:,1),fliplr(xyzPoints2(end,:,1)),...
+                        xyzPoints1(1,:,1),fliplr(xyzPoints1(end,:,1))]';
+                    singletBoarderY{singletCounter}  = ...
+                        [xyzPoints2(1,:,2),fliplr(xyzPoints2(end,:,2)),...
+                        xyzPoints1(1,:,2),fliplr(xyzPoints1(end,:,2))]';
+                    singletBoarderZ{singletCounter}  = ...
+                        [xyzPoints2(1,:,3),fliplr(xyzPoints2(end,:,3)),...
+                        xyzPoints1(1,:,3),fliplr(xyzPoints1(end,:,3))]';
+                else
+                    singletBoarderX{singletCounter} = ...
+                        [xyzPoints2(1,:,1),(xyzPoints2(:,end,1))',fliplr(xyzPoints2(end,:,1)),fliplr((xyzPoints2(:,1,1))');...
+                        xyzPoints1(1,:,1),(xyzPoints1(:,end,1))',fliplr(xyzPoints1(end,:,1)),fliplr((xyzPoints1(:,1,1))')];
+                    singletBoarderY{singletCounter}  = ...
+                        [xyzPoints2(1,:,2),(xyzPoints2(:,end,2))',fliplr(xyzPoints2(end,:,2)),fliplr((xyzPoints2(:,1,2))');...
+                        xyzPoints1(1,:,2),(xyzPoints1(:,end,2))',fliplr(xyzPoints1(end,:,2)),fliplr((xyzPoints1(:,1,2))')];
+                    singletBoarderZ{singletCounter}  = ...
+                        [xyzPoints2(1,:,3),(xyzPoints2(:,end,3))',fliplr(xyzPoints2(end,:,3)),fliplr((xyzPoints2(:,1,3))');...
+                        xyzPoints1(1,:,3),(xyzPoints1(:,end,3))',fliplr(xyzPoints1(end,:,3)),fliplr((xyzPoints1(:,1,3))')];
+                end
             end
         end
     end
@@ -323,7 +381,6 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
         end
         view(axesHandle,[0,-1,1]);
         axis equal
-        
         % draw optical axis
         hold on;
         xlabel(axesHandle,'Z-axis','fontweight','bold','Color','k');
@@ -334,7 +391,6 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
         grid(axesHandle,'on');
         box(axesHandle,'On')
         axis equal
-        
     else
         for ss =  1:nSurface
             xyzPointsCurrent = xyzPoints{ss};
@@ -345,21 +401,18 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                 'edgecolor','none','FaceAlpha', 0.6);
             hold(axesHandle,'on');
         end
-        
         % Plot the edges for matching singlets with slightly darker color
         for ss = 1:singletCounter
             surf(axesHandle,[singletBoarderX{ss}],[singletBoarderZ{ss}],[singletBoarderY{ss}],...
                 'facecolor',surfColor(ss,:)/1.5,'edgecolor','none','facelighting','phong','FaceAlpha', 0.5,'AmbientStrength', 0., 'SpecularStrength', 1);
             hold(axesHandle,'on');
         end
-        
         % Plot the edges for mirrors with slightly darker color
         for ss = 1:mirrorCounter
             surf(axesHandle,[mirrorBoarderX{ss}],[mirrorBoarderZ{ss}],[mirrorBoarderY{ss}],...
                 'facecolor',surfColor(ss,:)/1.5,'edgecolor','none','facelighting','phong','FaceAlpha', 0.5,'AmbientStrength', 0., 'SpecularStrength', 1);
             hold(axesHandle,'on');
         end
-        
         % draw optical axis
         hold on;
         set(axesHandle, 'YDir','reverse');
@@ -371,9 +424,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
         set(axesHandle, 'XColor', 'k', 'YColor', 'k', 'ZColor', 'k');
         grid(axesHandle,'on');
         box(axesHandle,'On')
-        
     end
-    
     axis equal
     hold off;
     %     camlight

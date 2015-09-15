@@ -28,6 +28,7 @@ function [ scalarFieldXYOut, x2, y2 ] = fraunhoferDiffraction( scalarFieldXYIn,.
      [x2, y2] = meshgrid((-Nx/2 : Nx/2-1)*gridSpacingXYObservation(1),...
          (-Ny/2 : Ny/2-1)*gridSpacingXYObservation(2));
      zoomFactorXY =  (wavLen*propDist)./(gridSpacingXYSource.*gridSpacingXYObservation.*[Nx,Ny]);
+     zoomFactorXY = [1,1];
      scalarFieldXYOut = exp(1i*k/(2*propDist)*(x2.^2+y2.^2)) ...
      / (1i*wavLen*propDist) .* computeCZFFT(scalarFieldXYIn, gridSpacingXYSource,dimension,zoomFactorXY);
 end

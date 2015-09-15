@@ -43,7 +43,9 @@ function [ isInsideTheMainAperture ] = IsInsideTheMainAperture( surfAperture, xy
     apertureDefinitionHandle = str2func(apertureType);
     returnFlag = 3; % isInsideTheMainAperture
     apertureParameters = surfAperture.UniqueParameters;
-    [ isInsideTheMainAperture] = ...
-        apertureDefinitionHandle(returnFlag,apertureParameters,xyVector_final);
+    inputDataStruct.xyVector = xyVector_final;
+    
+    [ returnDataStruct] = apertureDefinitionHandle(returnFlag,apertureParameters,inputDataStruct);
+    isInsideTheMainAperture = returnDataStruct.IsInsideTheMainAperture;
 end
 

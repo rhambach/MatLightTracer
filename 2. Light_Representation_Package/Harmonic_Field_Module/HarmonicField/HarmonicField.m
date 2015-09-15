@@ -1,4 +1,4 @@
-function newHarmonicField = HarmonicField(Ex,Ey,sampDistX,sampDistY,wavelen,center,direction)
+function newHarmonicField = HarmonicField(Ex,Ey,sampDistX,sampDistY,wavelen,center,direction,domain)
     if nargin == 0
         N = 65;
         Ex = zeros(N,N);
@@ -10,6 +10,7 @@ function newHarmonicField = HarmonicField(Ex,Ey,sampDistX,sampDistY,wavelen,cent
         wavelen = 0.55*10^-6;
         center = [0,0]';
         direction = [0,0,1]';
+        domain = 1;
     elseif nargin > 0 && nargin < 5
         disp('Error: You need to enter all input parameters (Ex,Ey,sampDistX,sampDistY,wavelen) or nothing.');
         newHarmonicField = HarmonicField;
@@ -19,6 +20,8 @@ function newHarmonicField = HarmonicField(Ex,Ey,sampDistX,sampDistY,wavelen,cent
         direction = [0,0,1]';
     elseif nargin == 6
         direction = [0,0,1]';
+    elseif nargin == 7
+        domain = 1;  % spatial domain  
     else
         if (size(Ex,1)~= size(Ey,1))||(size(Ex,2)~= size(Ey,2))
             disp('Error: Sizes of Ex and Ey must be the same');
@@ -56,6 +59,7 @@ function newHarmonicField = HarmonicField(Ex,Ey,sampDistX,sampDistY,wavelen,cent
     newHarmonicField.Wavelength = wavelen;
     newHarmonicField.Center = center;
     newHarmonicField.Direction = direction;
+    newHarmonicField.Domain = domain; % 1 for Spatial domain, and 2 for spatial frequency 
     newHarmonicField.ClassName = 'HarmonicField';
 end
 % yet to be defined

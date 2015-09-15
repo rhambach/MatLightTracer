@@ -1,4 +1,4 @@
-function myNonDummySurfaceArray = getComponentNonDummySurfaceArray(currentComponent)
+function myNonDummySurfaceArray = getComponentNonDummySurfaceArray(currentComponent,referenceCoordinateTM,previousThickness)
     % getComponentNonDummySurfaceArray: Compute surface parameters of the currentComponent
     % and return the non dummy array.
     % Input:
@@ -18,8 +18,21 @@ function myNonDummySurfaceArray = getComponentNonDummySurfaceArray(currentCompon
     % Jun 17,2015   Worku, Norman G.     Original version
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    mySurfaceArray = getComponentSurfaceArray(currentComponent);
-    nSurface = size(mySurfaceArray);
+    
+    if nargin < 1
+        disp('Error: The function getComponentNonDummySurfaceArray requires atleaast one input argument,currentComponent. ');
+        mySurfaceArray = NaN;
+        return;
+    end
+    if nargin < 2
+        referenceCoordinateTM = eye(4);
+    end
+    if nargin < 3
+        previousThickness = 0;
+    end
+    
+    mySurfaceArray = getComponentSurfaceArray(currentComponent,referenceCoordinateTM,previousThickness);
+    nSurface = length(mySurfaceArray);
     nonDummySurfaceIndices = [];
     for kk = 1:nSurface
         if ~strcmpi(mySurfaceArray(kk).Type,'Dummy')

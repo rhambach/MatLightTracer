@@ -37,8 +37,7 @@ function  updateQuickLayoutPanel(parentWindow,selectedSurfOrCompIndex)
             nPoints1 = 'default';
             nPoints2 = 'default';
             drawEdge = 1;
-            systemDefType = updatedSystem.SystemDefinitionType;
-            if strcmpi(systemDefType,'SurfaceBased')
+            if IsSurfaceBased(updatedSystem) 
                 surfaceArray = updatedSystem.SurfaceArray(selectedSurfOrCompIndex);
                 if strcmpi(surfaceArray.Type,'Dummy')
                     surfaceArray = [];

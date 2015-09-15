@@ -2,18 +2,21 @@ function [ outHarmonicFieldSet ] = getHarmonicFieldSet( harmonicFieldSource )
     %GETHARMONICFIELDSET Summary of this function goes here
     %   Detailed explanation goes here
     
-    samplingPoints = harmonicFieldSource.SamplingPoints;
-    samplingDistance = harmonicFieldSource.SamplingDistance;
+    [ sampDistX,sampDistY ] = getSamplingDistance( harmonicFieldSource);
+%     [ Nx,Ny ] = getNumberOfSamplingPoints( harmonicFieldSource);
+%     
+%     samplingPoints = harmonicFieldSource.SamplingPoints;
+%     samplingDistance = harmonicFieldSource.SamplingDistance;
     
     [ intensityVect, wavelengthVect, referenceWavelengthIndex ] = ...
         getPowerSpectrumProfile( harmonicFieldSource );
     [ U_xyTot,xlinTot,ylinTot] = getSpatialProfile( harmonicFieldSource );
     [ matrixOfJonesVector ] = getPolarizationProfile( harmonicFieldSource );
-    sampDistX = samplingDistance(1);
-    sampDistY = samplingDistance(2);
+%     sampDistX = samplingDistance(1);
+%     sampDistY = samplingDistance(2);
     
     center = harmonicFieldSource.LateralPosition;
-    direction = harmonicFieldSource.Direction;
+    direction = getPrincipalDirection(harmonicFieldSource);
     % Construct array of harmonic fields
     nWav = length(wavelengthVect);
     arrayOfHarmonicFields(nWav) = HarmonicField;

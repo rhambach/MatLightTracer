@@ -1,4 +1,5 @@
-function [ newMeritFunction ] = MeritFunction( meritFunctionName )
+function [ newMeritFunction ] = MeritFunction( meritFunctionName,...
+        optimizationOperand,optimizableObject )
     % MeritFunction Struct:
     %
     %   Defines merit functions used in the toolbox. All merit functions 
@@ -13,19 +14,19 @@ function [ newMeritFunction ] = MeritFunction( meritFunctionName )
     %   Returns zemax merit function for return real y axis value.
     %
     
-    if nargin == 0
-        meritFunctionName = 'DefaultMeritFunction';
+    if nargin < 3
+        disp('Error: The function MeritFunction needs atleast 3 input argument. ');
+        newMeritFunction = NaN;
+        return;
     end
+    
     newMeritFunction.Name = meritFunctionName;
-    newMeritFunction.Target = 0;
-    newMeritFunction.Weight = 0;
-    
-    
+    newMeritFunction.OptimizationOperand = optimizationOperand;
+    newMeritFunction.OptimizableObject = optimizableObject;
+
     [fieldNames,fieldFormat,defaultUniqueParamStruct] = ...
         getMeritFunctionUniqueParameters(meritFunctionName);
     newMeritFunction.UniqueParameters = defaultUniqueParamStruct;
-    
-    newMeritFunction.OptimizableObject = getOptimizableObject(meritFunctionName); % object whose parameter is being optimized
-    
+
     newMeritFunction.ClassName = 'MeritFunction';
 end

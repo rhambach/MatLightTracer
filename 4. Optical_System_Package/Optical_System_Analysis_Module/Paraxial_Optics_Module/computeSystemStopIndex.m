@@ -30,19 +30,49 @@ function [ stopIndex,stopClearAperture] = computeSystemStopIndex(optSystem,given
     % if the stop surface is fixed by the user
     if givenStopIndex
         stopIndex = givenStopIndex;
-        stopClearAperture = optSystem.NonDummySurfaceArray(stopIndex).getClearAperture;
+        stopClearAperture = getClearAperture(optSystem.getNonDummySurfaceArray(stopIndex));
     else
-        if abs(optSystem.SurfaceArray(1).Thickness)>10^10 || optSystem.ObjectAfocal
+        % If stop index not given by user then compute it
+        nSurf = getNumberOfSurfaces(optSystem);
+        refIndex = zeros(1,nSurf);
+        thick = zeros(1,nSurf);
+        curv = zeros(1,nSurf);
+        clearAperture = zeros(1,nSurf);
+        
+        for kk=1:1:nSurf
+            currentSurf = getSurfaceArray(optSystem,kk);
+            refIndex(kk) = getRefractiveIndex(currentSurf.Glass,optSystem.PrimaryWavelengthIndex);
+            thick(kk) = currentSurf.Thickness;
+            try
+                curv(kk) = 1/(currentSurf.OtherStandardData.Radius);
+            catch
+                % If the surface doesn't have Radius data then consider as
+                % plane
+                curv(kk) = 0;
+            end
+            
+            % clearAperture(kk) = optSystem.getSurfaceArray(kk).getClearAperture;
+            [ minApertureRadius ] = getMinimumApertureRadius( currentSurf.Aperture );
+            clearAperture(kk) = minApertureRadius;
+        end
+        
+        % For -ve thickness refindex should also be negative
+        refIndex = refIndex.*sign(thick);
+        % Replace zero index with 1 to avoid division by zero
+        refIndex(refIndex==0) = 1;
+        
+        if abs(thick(1))>10^10
+            thick(1)=10^10;
             obj = 'I';
         else
             obj = 'F';
         end
-        if optSystem.ImageAfocal
+        if optSystem.IsImageAfocal
             img = 'I';
         else
             img = 'F';
         end
-        obj_img = [obj, img];
+        obj_img = [obj,img];
         
         if strcmpi(obj_img,'IF') || strcmpi(obj_img,'II')
             % for object side afocal systems (object from infinity)
@@ -54,25 +84,20 @@ function [ stopIndex,stopClearAperture] = computeSystemStopIndex(optSystem,given
             utm = 0.01;
         end
         
-        nsurf = optSystem.NumberOfNonDummySurfaces; % number of surfaces including object and image
-        
-        clearAperture = zeros(1,nsurf);
-        CAy  = zeros(1,nsurf);
-        clearAperture(1) =  optSystem.NonDummySurfaceArray(1).getClearAperture;
         % compute clear aperture to height ratio for each surface
         CAy(1) = abs((clearAperture(1))/(ytm));
-        for kk=1:1:nsurf-1
-            clearAperture(kk+1) = optSystem.NonDummySurfaceArray(kk+1).getClearAperture;
+        for kk=1:1:nSurf-1
             initialSurf = kk;
             finalSurf = kk+1;
-            wavlenInM = optSystem.getPrimaryWavelength;
+            wavlenInM = getPrimaryWavelength(optSystem);
             [ ytm,utm ] = paraxialRayTracer( optSystem,ytm,utm,initialSurf,finalSurf,wavlenInM);
             % 		  [ytm,utm]=yniTrace(ytm,utm,kk,kk+1, refIndex,thick,curv);
             CAy(kk+1) = abs((clearAperture(kk+1))/(ytm));
         end
+        
         % the surface with minimum value of clear aperture to height ratio is the stop
         [C,I] = min(CAy);
         stopIndex = I;
-        stopClearAperture = optSystem.NonDummySurfaceArray(stopIndex).getClearAperture;
+        stopClearAperture = clearAperture(stopIndex);
     end
 end

@@ -3,11 +3,11 @@ function [ isScalarGaussianBeam ] = isScalarGaussianBeamSet( currentScalarGaussi
     %   Detailed explanation goes here
     isScalarGaussianBeam = 0;
     if isstruct(currentScalarGaussianBeam)
-        if isfield(currentScalarGaussianBeam,'ClassName') && strcmpi(currentScalarGaussianBeam.ClassName,'ScalarGaussianBeam')
+        if isfield(currentScalarGaussianBeam,'ClassName') && strcmpi(currentScalarGaussianBeam.ClassName,'ScalarGaussianBeamSet')
            isScalarGaussianBeam = 1; 
         end
     else
-        if strcmpi(class(currentScalarGaussianBeam),'ScalarGaussianBeam')
+        if strcmpi(class(currentScalarGaussianBeam),'ScalarGaussianBeamSet')
             isScalarGaussianBeam = 1; 
         end
     end

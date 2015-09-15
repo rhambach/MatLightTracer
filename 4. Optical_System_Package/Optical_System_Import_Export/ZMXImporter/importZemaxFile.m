@@ -110,9 +110,10 @@ function opticalSystemObject = importZemaxFile (zmxFullFileName,...
                 end
             case 'FLOA'
                 % FLOA val	: Float by stop size. val is just ignored
-                if dispWarnings
-                    disp(['Float by stop size ','Unsupported command : ',currentLine]);
-                end
+                mySystem.SystemApertureType = 3; %Float by stop size
+                %                 if dispWarnings
+                %                     disp(['Float by stop size ','Unsupported command : ',currentLine]);
+                %                 end
             case 'FNUM'
                 % FNUM  val I	I = 0:Image Space F/# Value I = 1:Paraxial Working F/#
                 if dispWarnings
@@ -141,7 +142,7 @@ function opticalSystemObject = importZemaxFile (zmxFullFileName,...
                 elseif ftype == 1
                     mySystem.FieldType = 1; %'ObjectHeight';
                 else
-                   disp(['Error: Unsupported Field Type. Only Angle and ObjectHeight field value are supported!! So edit the field type.']);
+                    disp(['Error: Unsupported Field Type. Only Angle and ObjectHeight field value are supported!! So edit the field type.']);
                 end
                 
                 nfieldpts = str2num(char(currentLineArray(4,:)));
@@ -195,16 +196,17 @@ function opticalSystemObject = importZemaxFile (zmxFullFileName,...
                     end
                     if ~catFound
                         % Construct a questdlg with three options
-                        choice = questdlg(['The glass catalogue ',catName,' is not found. Do you want to continue ignoring the catalogue?'], ...
+                        choice = questdlg(['The glass catalogue ',catName,' is not found. Do you want to import it now?'], ...
                             'Missing Glass Catalogue', ...
                             'Yes','Cancel','Yes');
                         % Handle response
                         switch choice
                             case 'Yes'
-                                disp(['Glass Catalogue ','Warning: Missing glass catalogue. The glass catalogue :',catName,' is just ignored.']);
+                                [ ~, catalogueFullFileName ] = importAGFGlassCatalogue();
+                                coatingCatalogueListFullNames = [coatingCatalogueListFullNames;{catalogueFullFileName}];
                             case 'Cancel'
-                                disp(['Glass Catalogue ','Error: Missing glass catalogue. Please import the glass catalogue :',catName,' And retry.'])
-                                return;
+                                disp(['Glass Catalogue ','Warning: Missing glass catalogue. The glass catalogue :',catName,' is just ignored.']);
+                                %                                 return;
                         end
                     end
                 end
@@ -378,7 +380,7 @@ function opticalSystemObject = importZemaxFile (zmxFullFileName,...
                 elseif strcmpi(LENSUNIT,'CM')
                     lensUnit = 2;
                 elseif strcmpi(LENSUNIT,'IN')
-                    lensUnit = 4; 
+                    lensUnit = 4;
                 elseif strcmpi(LENSUNIT,'METER')
                     lensUnit = 3;
                 else
@@ -636,207 +638,251 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                 end
             case 'CLAP'
                 % CLAP min max surfPickup	:Circular Aperture min and max radius. Index of Pickup surface otherwise 0.
-                minRadius = str2num(char(currentLineArray(2,:)));
-                maxRadius = str2num(char(currentLineArray(3,:)));
-                surfPickup = str2num(char(currentLineArray(4,:)));
-                
-                if strcmpi(zemaxSurfaceType,'TILTSURF')
-                    % For tilt surface the semidiameter and aperture values
-                    % given in zemax are not the actual values rather they
-                    % are projections on x and y plane. So shall be converted
-                    % to actual values.
-                    tiltX = surfaceObjectArray(surfaceCounter).TiltParameter(1);
-                    tiltY = surfaceObjectArray(surfaceCounter).TiltParameter(2);
-                    apertureFactorX = abs(1/cos(tiltY*pi/180));
-                    apertureFactorY = abs(1/cos(tiltX*pi/180));
-                else
-                    apertureFactorX = 1;
-                    apertureFactorY = 1;
-                end
-                
-                minimumRadius = minRadius*apertureFactorX;
-                maximumRadius = maxRadius*apertureFactorY;
-                
-                surfaceObjectArray(surfaceCounter).Aperture = Aperture('EllipticalAperture');
-                surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.SmallDiameter = 2*minimumRadius;
-                surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.LargeDiameter = 2*maximumRadius;
-                surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
-                if dispWarnings
-                    if surfPickup
-                        disp(['Surf ',num2str(surfaceCounter),' Warning: Surface '...
-                            'aperture pickup is not supported.' ]);
+                if ~surfaceApertureIsSet
+                    
+                    minRadius = str2num(char(currentLineArray(2,:)));
+                    maxRadius = str2num(char(currentLineArray(3,:)));
+                    surfPickup = str2num(char(currentLineArray(4,:)));
+                    
+                    if strcmpi(zemaxSurfaceType,'TILTSURF')
+                        % For tilt surface the semidiameter and aperture values
+                        % given in zemax are not the actual values rather they
+                        % are projections on x and y plane. So shall be converted
+                        % to actual values.
+                        tiltX = surfaceObjectArray(surfaceCounter).Tilt(1);
+                        tiltY = surfaceObjectArray(surfaceCounter).Tilt(2);
+                        apertureFactorX = abs(1/cos(tiltY*pi/180));
+                        apertureFactorY = abs(1/cos(tiltX*pi/180));
+                    else
+                        apertureFactorX = 1;
+                        apertureFactorY = 1;
+                    end
+                    
+                    minimumRadius = minRadius*apertureFactorX;
+                    maximumRadius = maxRadius*apertureFactorY;
+                    
+                    surfaceObjectArray(surfaceCounter).Aperture = Aperture('EllipticalAperture');
+                    surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.SmallDiameter = 2*minimumRadius;
+                    surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.LargeDiameter = 2*maximumRadius;
+                    surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
+                    if surfaceApertureIsFixedSize
+                         surfaceObjectArray(surfaceCounter).Aperture.DrawAbsolute = 1;
+                    end
+                    if dispWarnings
+                        if surfPickup
+                            disp(['Surf ',num2str(surfaceCounter),' Warning: Surface '...
+                                'aperture pickup is not supported.' ]);
+                        end
                     end
                 end
-                
             case 'ELAP'
                 % ELAP xHalfWid yHalfWid surfPickup	: Elliptical aperture x and y half width. Index of Pickup surface otherwise 0.
-                xHalfWid = str2num(char(currentLineArray(2,:)));
-                yHalfWid = str2num(char(currentLineArray(3,:)));
-                surfPickup = str2num(char(currentLineArray(4,:)));
-                
-                if strcmpi(zemaxSurfaceType,'TILTSURF')
-                    % For tilt surface the semidiameter and aperture values
-                    % given in zemax are not the actual values rather they
-                    % are projections on x and y plane. So shall be converted
-                    % to actual values.
-                    tiltX = surfaceObjectArray(surfaceCounter).TiltParameter(1);
-                    tiltY = surfaceObjectArray(surfaceCounter).TiltParameter(2);
-                    apertureFactorX = abs(1/cos(tiltY*pi/180));
-                    apertureFactorY = abs(1/cos(tiltX*pi/180));
-                else
-                    apertureFactorX = 1;
-                    apertureFactorY = 1;
-                end
-                
-                halfWidthX = xHalfWid*apertureFactorX;
-                halfWidthY = yHalfWid*apertureFactorY;
-                
-                surfaceObjectArray(surfaceCounter).Aperture = Aperture('EllipticalAperture');
-                surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.DiameterX = 2*halfWidthX;
-                surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.DiameterY = 2*halfWidthY;
-                surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
-                
-                if dispWarnings
-                    if surfPickup
-                        disp(['Surf ',num2str(surfaceCounter),' Warning: Surface '...
-                            'aperture pickup is not supported.' ]);
+                if ~surfaceApertureIsSet
+                    xHalfWid = str2num(char(currentLineArray(2,:)));
+                    yHalfWid = str2num(char(currentLineArray(3,:)));
+                    surfPickup = str2num(char(currentLineArray(4,:)));
+                    
+                    if strcmpi(zemaxSurfaceType,'TILTSURF')
+                        % For tilt surface the semidiameter and aperture values
+                        % given in zemax are not the actual values rather they
+                        % are projections on x and y plane. So shall be converted
+                        % to actual values.
+                        tiltX = surfaceObjectArray(surfaceCounter).Tilt(1);
+                        tiltY = surfaceObjectArray(surfaceCounter).Tilt(2);
+                        apertureFactorX = abs(1/cos(tiltY*pi/180));
+                        apertureFactorY = abs(1/cos(tiltX*pi/180));
+                    else
+                        apertureFactorX = 1;
+                        apertureFactorY = 1;
+                    end
+                    
+                    halfWidthX = xHalfWid*apertureFactorX;
+                    halfWidthY = yHalfWid*apertureFactorY;
+                    
+                    surfaceObjectArray(surfaceCounter).Aperture = Aperture('EllipticalAperture');
+                    surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.DiameterX = 2*halfWidthX;
+                    surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.DiameterY = 2*halfWidthY;
+                    surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
+                    if surfaceApertureIsFixedSize
+                         surfaceObjectArray(surfaceCounter).Aperture.DrawAbsolute = 1;
+                    end
+                    if dispWarnings
+                        if surfPickup
+                            disp(['Surf ',num2str(surfaceCounter),' Warning: Surface '...
+                                'aperture pickup is not supported.' ]);
+                        end
                     end
                 end
             case 'ELOB'
                 % ELOB xHalfWid yHalfWid surfPickup	: Elliptical aperture x and y half width. Index of Pickup surface otherwise 0.
-                
-                disp(['Surf ',num2str(surfaceCounter),'Error: Obscuration '...
-                    'aperture is not supported.' ]);
+                if ~surfaceApertureIsSet
+                    disp(['Surf ',num2str(surfaceCounter),'Error: Obscuration '...
+                        'aperture is not supported.' ]);
+                end
             case 'FLAP'
                 % FLAP 0 semiDiam surfPickup	: Floating Aperture
                 % semiDiam: Semi-diameter
                 % surfPickup: Index of Pickup surface otherwise 0.
-                semiDiam = str2num(char(currentLineArray(3,:)));
-                surfPickup = str2num(char(currentLineArray(4,:)));
-                if strcmpi(zemaxSurfaceType,'TILTSURF')
-                    % For tilt surface the semidiameter and aperture values
-                    % given in zemax are not the actual values rather they
-                    % are projections on x and y plane. So shall be converted
-                    % to actual values.
-                    tiltX = surfaceObjectArray(surfaceCounter).TiltParameter(1);
-                    tiltY = surfaceObjectArray(surfaceCounter).TiltParameter(2);
-                    apertureFactorX = abs(1/cos(tiltY*pi/180));
-                    apertureFactorY = abs(1/cos(tiltX*pi/180));
-                else
-                    apertureFactorX = 1;
-                    apertureFactorY = 1;
-                end
-                
-                semiDiamX = semiDiam*apertureFactorX;
-                semiDiamY = semiDiam*apertureFactorY;
-                
-                % Currently floating aperture could only be circular so
-                % take the max of both % Use the max value as radius
-                maxSemiDiam = max([semiDiamX,semiDiamY]);
-                surfaceObjectArray(surfaceCounter).Aperture = Aperture('FloatingCircularAperture');
-                surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.Diameter = 2*maxSemiDiam;
-                surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
-                if dispWarnings
-                    if surfPickup
-                        disp(['Surf ',num2str(surfaceCounter),' Warning: Surface '...
-                            'aperture pickup is not supported.' ]);
+                if ~surfaceApertureIsSet
+                    semiDiam = str2num(char(currentLineArray(3,:)));
+                    surfPickup = str2num(char(currentLineArray(4,:)));
+                    if strcmpi(zemaxSurfaceType,'TILTSURF')
+                        % For tilt surface the semidiameter and aperture values
+                        % given in zemax are not the actual values rather they
+                        % are projections on x and y plane. So shall be converted
+                        % to actual values.
+                        tiltX = surfaceObjectArray(surfaceCounter).Tilt(1);
+                        tiltY = surfaceObjectArray(surfaceCounter).Tilt(2);
+                        apertureFactorX = abs(1/cos(tiltY*pi/180));
+                        apertureFactorY = abs(1/cos(tiltX*pi/180));
+                    else
+                        apertureFactorX = 1;
+                        apertureFactorY = 1;
+                    end
+                    
+                    semiDiamX = semiDiam*apertureFactorX;
+                    semiDiamY = semiDiam*apertureFactorY;
+                    
+                    % Currently floating aperture could only be circular so
+                    % take the max of both % Use the max value as radius
+                    maxSemiDiam = max([semiDiamX,semiDiamY]);
+                    surfaceObjectArray(surfaceCounter).Aperture = Aperture('FloatingCircularAperture');
+                    % To make sure that the system is imported correctly all
+                    % flaoting circular apertures shall be replaced with fixed
+                    % circular apertures.
+                    %surfaceObjectArray(surfaceCounter).Aperture = Aperture('CircularAperture');
+                    
+                    surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.Diameter = 2*maxSemiDiam;
+                    surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
+                    if surfaceApertureIsFixedSize
+                         surfaceObjectArray(surfaceCounter).Aperture.DrawAbsolute = 1;
+                    end
+                    
+                    if dispWarnings
+                        if surfPickup
+                            disp(['Surf ',num2str(surfaceCounter),' Warning: Surface '...
+                                'aperture pickup is not supported.' ]);
+                        end
                     end
                 end
             case 'OBDC'
                 % OBDC xdec ydec	Aperture and Obscuration decenter in x and y direction.
-                xdec = str2num(char(currentLineArray(2,:)));
-                ydec = str2num(char(currentLineArray(3,:)));
-                aperParam = surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters;
-                aperParam(3) = xdec;
-                aperParam(4) = ydec;
-                surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters = aperParam;
-            case 'OBSC'
-                % OBSC min max surfPickup	Circular Obscuration min and max radius. Index of Pickup surface otherwise 0.
-                minRadius = str2num(char(currentLineArray(2,:)));
-                maxRadius = str2num(char(currentLineArray(3,:)));
-                surfPickup = str2num(char(currentLineArray(4,:)));
-                
-                if strcmpi(zemaxSurfaceType,'TILTSURF')
-                    % For tilt surface the semidiameter and aperture values
-                    % given in zemax are not the actual values rather they
-                    % are projections on x and y plane. So shall be converted
-                    % to actual values.
-                    tiltX = surfaceObjectArray(surfaceCounter).TiltParameter(1);
-                    tiltY = surfaceObjectArray(surfaceCounter).TiltParameter(2);
-                    apertureFactorX = abs(1/cos(tiltY*pi/180));
-                    apertureFactorY = abs(1/cos(tiltX*pi/180));
-                else
-                    apertureFactorX = 1;
-                    apertureFactorY = 1;
-                end
-                
-                minimumRadius = minRadius*apertureFactorX;
-                maximumRadius = maxRadius*apertureFactorY;
-                
-                surfaceObjectArray(surfaceCounter).Aperture = Aperture('CircularObstruction');
-                surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.SmallDiameter = 2*minimumRadius;
-                surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.LargeDiameter = 2*maximumRadius;
-                surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
-                if dispWarnings
-                    if surfPickup
-                        disp(['Surf ',num2str(surfaceCounter),' Warning: Surface '...
-                            'aperture pickup is not supported.' ]);
+                if ~surfaceApertureIsSet
+                    xdec = str2num(char(currentLineArray(2,:)));
+                    ydec = str2num(char(currentLineArray(3,:)));
+                    aperParam = surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters;
+                    aperParam(3) = xdec;
+                    aperParam(4) = ydec;
+                    surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters = aperParam;
+                    if surfaceApertureIsFixedSize
+                         surfaceObjectArray(surfaceCounter).Aperture.DrawAbsolute = 1;
                     end
                 end
-                
+            case 'OBSC'
+                % OBSC min max surfPickup	Circular Obscuration min and max radius. Index of Pickup surface otherwise 0.
+                if ~surfaceApertureIsSet
+                    minRadius = str2num(char(currentLineArray(2,:)));
+                    maxRadius = str2num(char(currentLineArray(3,:)));
+                    surfPickup = str2num(char(currentLineArray(4,:)));
+                    
+                    if strcmpi(zemaxSurfaceType,'TILTSURF')
+                        % For tilt surface the semidiameter and aperture values
+                        % given in zemax are not the actual values rather they
+                        % are projections on x and y plane. So shall be converted
+                        % to actual values.
+                        tiltX = surfaceObjectArray(surfaceCounter).Tilt(1);
+                        tiltY = surfaceObjectArray(surfaceCounter).Tilt(2);
+                        apertureFactorX = abs(1/cos(tiltY*pi/180));
+                        apertureFactorY = abs(1/cos(tiltX*pi/180));
+                    else
+                        apertureFactorX = 1;
+                        apertureFactorY = 1;
+                    end
+                    
+                    minimumRadius = minRadius*apertureFactorX;
+                    maximumRadius = maxRadius*apertureFactorY;
+                    
+                    surfaceObjectArray(surfaceCounter).Aperture = Aperture('CircularObstruction');
+                    surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.SmallDiameter = 2*minimumRadius;
+                    surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.LargeDiameter = 2*maximumRadius;
+                    surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
+                    if surfaceApertureIsFixedSize
+                         surfaceObjectArray(surfaceCounter).Aperture.DrawAbsolute = 1;
+                    end
+                    if dispWarnings
+                        if surfPickup
+                            disp(['Surf ',num2str(surfaceCounter),' Warning: Surface '...
+                                'aperture pickup is not supported.' ]);
+                        end
+                    end
+                end
             case 'SPID'
                 % SPID widArms numbArms surfPickup	Spider width of Arm and number of arms. Index of Pickup surface otherwise 0.
-                disp(['Surf ',num2str(surfaceCounter),'Error: Spider '...
-                    'aperture is not supported.' ]);
+                if ~surfaceApertureIsSet
+                    disp(['Surf ',num2str(surfaceCounter),'Error: Spider '...
+                        'aperture is not supported.' ]);
+                end
             case 'SQAP'
                 % SQAP xHalfWid yHalfWid surfPickup	Rectangular aperture x and y half width. Index of Pickup surface otherwise 0.
-                xHalfWid = str2num(char(currentLineArray(2,:)));
-                yHalfWid = str2num(char(currentLineArray(3,:)));
-                surfPickup = str2num(char(currentLineArray(4,:)));
-                
-                if strcmpi(zemaxSurfaceType,'TILTSURF')
-                    % For tilt surface the semidiameter and aperture values
-                    % given in zemax are not the actual values rather they
-                    % are projections on x and y plane. So shall be converted
-                    % to actual values.
-                    tiltX = surfaceObjectArray(surfaceCounter).TiltParameter(1);
-                    tiltY = surfaceObjectArray(surfaceCounter).TiltParameter(2);
-                    apertureFactorX = abs(1/cos(tiltY*pi/180));
-                    apertureFactorY = abs(1/cos(tiltX*pi/180));
-                else
-                    apertureFactorX = 1;
-                    apertureFactorY = 1;
-                end
-                halfWidthX = xHalfWid*apertureFactorX;
-                halfWidthY = yHalfWid*apertureFactorY;
-                
-                surfaceObjectArray(surfaceCounter).Aperture = Aperture('RectangularAperture');
-                surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.DiameterX = 2*halfWidthX;
-                surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.DiameterY = 2*halfWidthY;
-                surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
-                if dispWarnings
-                    if surfPickup
-                        disp(['Surf ',num2str(surfaceCounter),' Warning: Surface '...
-                            'aperture pickup is not supported.' ]);
+                if ~surfaceApertureIsSet
+                    xHalfWid = str2num(char(currentLineArray(2,:)));
+                    yHalfWid = str2num(char(currentLineArray(3,:)));
+                    surfPickup = str2num(char(currentLineArray(4,:)));
+                    
+                    if strcmpi(zemaxSurfaceType,'TILTSURF')
+                        % For tilt surface the semidiameter and aperture values
+                        % given in zemax are not the actual values rather they
+                        % are projections on x and y plane. So shall be converted
+                        % to actual values.
+                        tiltX = surfaceObjectArray(surfaceCounter).Tilt(1);
+                        tiltY = surfaceObjectArray(surfaceCounter).Tilt(2);
+                        apertureFactorX = abs(1/cos(tiltY*pi/180));
+                        apertureFactorY = abs(1/cos(tiltX*pi/180));
+                    else
+                        apertureFactorX = 1;
+                        apertureFactorY = 1;
+                    end
+                    halfWidthX = xHalfWid*apertureFactorX;
+                    halfWidthY = yHalfWid*apertureFactorY;
+                    
+                    surfaceObjectArray(surfaceCounter).Aperture = Aperture('RectangularAperture');
+                    surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.DiameterX = 2*halfWidthX;
+                    surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.DiameterY = 2*halfWidthY;
+                    surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
+                    if surfaceApertureIsFixedSize
+                         surfaceObjectArray(surfaceCounter).Aperture.DrawAbsolute = 1;
+                    end
+                    if dispWarnings
+                        if surfPickup
+                            disp(['Surf ',num2str(surfaceCounter),' Warning: Surface '...
+                                'aperture pickup is not supported.' ]);
+                        end
                     end
                 end
             case 'SQOB'
                 % SQOB xHalfWid yHalfWid surfPickup	Rectangular Obscuration x and y half width. Index of Pickup surface otherwise 0.
-                disp(['Surf ',num2str(surfaceCounter),'Error: Obscuration '...
-                    'aperture is not supported.' ]);
+                if ~surfaceApertureIsSet
+                    disp(['Surf ',num2str(surfaceCounter),'Error: Obscuration '...
+                        'aperture is not supported.' ]);
+                end
             case 'UDAD'
                 % UDAD I x y z	User defined aperture data. The first line is always <UDAD 0 “name.uda” UDAsclae>, then for I = 1,2,… the x and y data points corresponding to the user defined aperture are presented.
-                disp(['Surf ',num2str(surfaceCounter),'Error: User defined '...
-                    'aperture is not supported.' ]);
+                if ~surfaceApertureIsSet
+                    disp(['Surf ',num2str(surfaceCounter),'Error: User defined '...
+                        'aperture is not supported.' ]);
+                end
             case 'USAP'
                 % USAP min max surfPickup	User aperture. Index of Pickup surface otherwise 0.
-                disp(['Surf ',num2str(surfaceCounter),'Error: User defined '...
-                    'aperture is not supported.' ]);
+                if ~surfaceApertureIsSet
+                    disp(['Surf ',num2str(surfaceCounter),'Error: User defined '...
+                        'aperture is not supported.' ]);
+                end
             case 'USOB'
                 % USOB min max surfPickup	User Obscuration.
-                disp(['Surf ',num2str(surfaceCounter),'Error: Obscuration '...
-                    'aperture is not supported.' ]);
-                
+                if ~surfaceApertureIsSet
+                    disp(['Surf ',num2str(surfaceCounter),'Error: Obscuration '...
+                        'aperture is not supported.' ]);
+                end
             case 'COAT'
                 % COAT name :	The name of coating (if any)
                 if dispWarnings
@@ -929,6 +975,8 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
             case 'SURF'
                 % SURF index	Surface index starting from 0 @ object surface.
                 surfaceCounter = surfaceCounter + 1;
+                surfaceApertureIsSet = 0;
+                surfaceApertureIsFixedSize = 0;
                 surfaceObjectArray(surfaceCounter) = Surface();
                 disp(' ');
                 
@@ -938,6 +986,7 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                 % COORDBRK.
                 % STANDARD, TILTSURF, DGRATING => Standard
                 % COORDBRK => Dummy
+                % PARAXIAL => IdealLens
                 
                 zemaxSurfaceType = char(currentLineArray(2,:));
                 if strcmpi(zemaxSurfaceType,'STANDARD')||...
@@ -947,6 +996,8 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                 elseif strcmpi(zemaxSurfaceType,'COORDBRK')
                     surfaceObjectArray(surfaceCounter).Type = 'Dummy';
                     nonDummySurface(surfaceCounter) = 0;
+                elseif strcmpi(zemaxSurfaceType,'PARAXIAL')
+                    surfaceObjectArray(surfaceCounter).Type = 'IdealLens';    
                 else
                     disp(['Surf ',num2str(surfaceCounter),' Error: Surface '...
                         'type: ',zemaxSurfaceType,' is not supported. It is cosidered as STANDARD' ]);
@@ -954,7 +1005,7 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                 end
                 % Initialize all surface specific data
                 % Other surface type specific standard data
-                [fieldNames,fieldFormat,uniqueParameterStruct] = getSurfaceUniqueParameters(surfaceObjectArray(surfaceCounter));
+                [~,~,uniqueParameterStruct] = getSurfaceUniqueParameters(surfaceObjectArray(surfaceCounter).Type);
                 surfaceObjectArray(surfaceCounter).UniqueParameters = uniqueParameterStruct;
                 
             case 'GLAS'
@@ -1051,37 +1102,53 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                 %
                 semidiam = str2num(char(currentLineArray(2,:)));
                 solveType = str2num(char(currentLineArray(3,:)));
+                if solveType == 1
+                    % If fixed semidiameter, then make the draw absolute
+                    % value of the aperture True
+                    surfaceApertureIsFixedSize = 1;
+                    if  mySystem.SystemApertureType == 3 && surfaceObjectArray(surfaceCounter).IsStop
+                        % If fixed semidiameter, system aperture float by stop size and current surface is stop
+                        surfaceObjectArray(surfaceCounter).Aperture.Type = 'CircularAperture';
+                        surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.SmallDiameter = 0;
+                        surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.LargeDiameter = 2*semidiam;
+                        surfaceApertureIsSet = 1;
+                    end
+                end
                 if dispWarnings
                     if solveType
                         disp(['Surf ',num2str(surfaceCounter),' Warning: Semidiameter '...
                             ' solve/pickup is not supported.' ]);
                     end
                 end
+                
                 % Set the aperture values if it is floating or None
-                if strcmpi(surfaceObjectArray(surfaceCounter).Aperture.Type,'Floating')||...
+                if strcmpi(surfaceObjectArray(surfaceCounter).Aperture.Type,'FloatingCircularAperture')||...
                         strcmpi(surfaceObjectArray(surfaceCounter).Aperture.Type,'None')
                     aperParam = surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters;
+                    
                     if strcmpi(zemaxSurfaceType,'TILTSURF')
                         % For tilt surface the semidiameter and aperture values
                         % given in zemax are not the actual values rather they
                         % are projections on x and y plane. So shall be converted
                         % to actual values.
-                        tiltX = surfaceObjectArray(surfaceCounter).TiltParameter(1);
-                        tiltY = surfaceObjectArray(surfaceCounter).TiltParameter(2);
+                        tiltX = surfaceObjectArray(surfaceCounter).Tilt(1);
+                        tiltY = surfaceObjectArray(surfaceCounter).Tilt(2);
                         apertureFactorX = abs(1/cos(tiltY*pi/180));
                         apertureFactorY = abs(1/cos(tiltX*pi/180));
                     else
                         apertureFactorX = 1;
                         apertureFactorY = 1;
                     end
-                    aperParam(1) = semidiam*apertureFactorX;
-                    aperParam(2) = semidiam*apertureFactorY;
+                    aperParam.Diameter = 2*semidiam*apertureFactorX;
                     
-                    % Add the margins and Set clear aperture
-                    aperParam(1) = aperParam(1);
-                    aperParam(2) = aperParam(2);
-                    surfaceObjectArray(surfaceCounter).ClearAperture = 1;
-                    surfaceObjectArray(surfaceCounter).AdditionalEdge = mySystem.SurfaceMarginPercent/100;
+                    %                     aperParam(1) = semidiam*apertureFactorX;
+                    %                     aperParam(2) = semidiam*apertureFactorY;
+                    
+                    %                     % Add the margins and Set clear aperture
+                    %                     aperParam(1) = aperParam(1);
+                    %                     aperParam(2) = aperParam(2);
+                    %                     surfaceObjectArray(surfaceCounter).ClearAperture = 1;
+                    surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
                     
                     surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters = aperParam;
                 end
@@ -1116,36 +1183,36 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                 if  strcmpi(zemaxSurfaceType,'COORDBRK')
                     switch n
                         case 1
-                            decParam = surfaceObjectArray(surfaceCounter).DecenterParameter;
+                            decParam = surfaceObjectArray(surfaceCounter).Decenter;
                             decParam(1) = value;
-                            surfaceObjectArray(surfaceCounter).DecenterParameter = decParam;
+                            surfaceObjectArray(surfaceCounter).Decenter = decParam;
                         case 2
-                            decParam = surfaceObjectArray(surfaceCounter).DecenterParameter;
+                            decParam = surfaceObjectArray(surfaceCounter).Decenter;
                             decParam(2) = value;
-                            surfaceObjectArray(surfaceCounter).DecenterParameter = decParam;
+                            surfaceObjectArray(surfaceCounter).Decenter = decParam;
                         case 3
-                            tiltParam = surfaceObjectArray(surfaceCounter).TiltParameter;
+                            tiltParam = surfaceObjectArray(surfaceCounter).Tilt;
                             tiltParam(1) = value;
-                            surfaceObjectArray(surfaceCounter).TiltParameter = tiltParam;
+                            surfaceObjectArray(surfaceCounter).Tilt = tiltParam;
                         case 4
-                            tiltParam = surfaceObjectArray(surfaceCounter).TiltParameter;
+                            tiltParam = surfaceObjectArray(surfaceCounter).Tilt;
                             tiltParam(2) = value;
-                            surfaceObjectArray(surfaceCounter).TiltParameter = tiltParam;
+                            surfaceObjectArray(surfaceCounter).Tilt = tiltParam;
                         case 5
-                            tiltParam = surfaceObjectArray(surfaceCounter).TiltParameter;
+                            tiltParam = surfaceObjectArray(surfaceCounter).Tilt;
                             tiltParam(3) = value;
-                            surfaceObjectArray(surfaceCounter).TiltParameter = tiltParam;
+                            surfaceObjectArray(surfaceCounter).Tilt = tiltParam;
                         case 6
                             order = value;
                             if order == 0 % D->T
-                                surfaceObjectArray(surfaceCounter).TiltDecenterOrder = 'DxDyDzTxTyTz';
+                                surfaceObjectArray(surfaceCounter).TiltDecenterOrder = {'Dx','Dy','Dz','Tx','Ty','Tz'};
                             else % T->D
-                                surfaceObjectArray(surfaceCounter).TiltDecenterOrder = 'TxTyTzDxDyDz';
+                                surfaceObjectArray(surfaceCounter).TiltDecenterOrder = {'Tx','Ty','Tz','Dx','Dy','Dz'};
                             end
                             surfaceObjectArray(surfaceCounter).TiltMode = 'NAX';
                     end
                 elseif strcmpi(zemaxSurfaceType,'TILTSURF')
-                    tiltParam = surfaceObjectArray(surfaceCounter).TiltParameter;
+                    tiltParam = surfaceObjectArray(surfaceCounter).Tilt;
                     switch n
                         case 1
                             % An angle from x axis => Rotation about y axis
@@ -1154,9 +1221,9 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                             % An angle from y axis => Rotation about x axis
                             tiltParam(1) = atan(value)*180/pi;
                     end
-                    surfaceObjectArray(surfaceCounter).TiltParameter = tiltParam;
+                    surfaceObjectArray(surfaceCounter).Tilt = tiltParam;
                 elseif strcmpi(zemaxSurfaceType,'DGRATING')
-                    tiltParam = surfaceObjectArray(surfaceCounter).TiltParameter;
+                    tiltParam = surfaceObjectArray(surfaceCounter).Tilt;
                     switch n
                         case 1
                             % Lines per um
@@ -1165,7 +1232,7 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                             % DiffractionOrder
                             surfaceObjectArray(surfaceCounter).UniqueParameters.DiffractionOrder = value;
                     end
-                    surfaceObjectArray(surfaceCounter).TiltParameter = tiltParam;
+                    surfaceObjectArray(surfaceCounter).Tilt = tiltParam;
                 end
             case 'PPAR'
                 % Unknown keyword

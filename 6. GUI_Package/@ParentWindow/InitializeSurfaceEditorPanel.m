@@ -418,7 +418,7 @@ function tblSurfaceApertureParameters_CellSelectionCallback(~, eventdata,parentW
     %	NewData: EditData or its converted form set on the Data property. Empty if Data was not changed
     %	Error: error string when failed to convert EditData to appropriate value for Data
     % parentWindow: object with structure with aodHandles and user data (see GUIDATA)
-
+    
     aodHandles = parentWindow.ParentHandles;
     selectedElementIndex = aodHandles.SelectedElementIndex;
     selectedSurface =  aodHandles.OpticalSystem.SurfaceArray(selectedElementIndex);
@@ -614,6 +614,22 @@ function tblSurfaceBasicParameters_CellEditCallback(~, eventdata,parentWindow)
                 
                 if  (iscell(myType) && length(myType)>1)||(strcmpi('logical',myType))
                     % type is choice of popmenu and so already saved with popup menu
+                    % type is choice of popmenu
+                    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+                    nChoice = length(myType);
+                    choice = menu(myName,myType(1:nChoice));
+                    if choice == 0
+                        choice = 1;
+                    end
+                    newParam = myType{choice};
+                    newParamDisp = newParam;
+                    % Update the surface parameter and surface editor
+                    if editedRow <=3
+                        selectedSurface.(myName) = newParam;
+                    else
+                        selectedSurface.UniqueParameters.(myName) = newParam;
+                    end
+                    
                 else
                     if strcmpi('numeric',myType)
                         newParam = str2num(eventdata.EditData);
@@ -675,10 +691,27 @@ function tblSurfaceApertureParameters_CellEditCallback(~, eventdata,parentWindow
         editedCol = selectedCellIndex(1,2);
         
     end
+    [ paramNames,paramTypes,paramValues,paramValuesDisp] = ...
+        getSurfaceParameters(selectedSurface,'Aperture',editedRow);
+    
+    myType = paramTypes{1};
+    myName = paramNames{1};
+    
     if editedCol == 2 % surface  value edited
         switch editedRow
             case 1
                 % already saved by poup menu
+                % type is choice of popmenu
+                aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+                nChoice = length(myType);
+                choice = menu(myName,myType(1:nChoice));
+                if choice == 0
+                    choice = 1;
+                end
+                newParam = myType{choice};
+                newParamDisp = newParam;
+                % Update the surface parameter and surface editor
+                selectedSurface.Aperture = Aperture(newParam);
             case 2
                 newParam = str2num(eventdata.EditData);
                 if isempty(newParam)
@@ -700,7 +733,17 @@ function tblSurfaceApertureParameters_CellEditCallback(~, eventdata,parentWindow
             case 5
                 % already saved
             case 6
-                % already saved
+                % type is choice of popmenu
+                aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+                nChoice = length(myType);
+                choice = menu(myName,myType(1:nChoice));
+                if choice == 0
+                    choice = 1;
+                end
+                newParam = myType{choice};
+                newParamDisp = newParam;
+                % Update the surface parameter and surface editor
+                selectedSurface.Aperture.(myName) = newParam;
             case 7
                 newParam = str2num(eventdata.EditData);
                 if isempty(newParam)
@@ -716,6 +759,19 @@ function tblSurfaceApertureParameters_CellEditCallback(~, eventdata,parentWindow
                 
                 if  (iscell(myType) && length(myType)>1)||(strcmpi('logical',myType))
                     % type is choice of popmenu and so already saved with popup menu
+                    % type is choice of popmenu
+                    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+                    nChoice = length(myType);
+                    choice = menu(myName,myType(1:nChoice));
+                    if choice == 0
+                        choice = 1;
+                    end
+                    newParam = myType{choice};
+                    newParamDisp = newParam;
+                    % Update the surface parameter and surface editor
+                    selectedSurface.Aperture = Aperture(newParam);
+                    selectedSurface.Aperture.UniqueParameters.(myName) = newParam;
+                    
                 else
                     if strcmpi('numeric',myType)
                         newParam = str2num(eventdata.EditData);
@@ -852,7 +908,7 @@ function InsertNewSurface(parentWindow,surfaceTypeDisp,surfaceType,insertPositio
     updateQuickLayoutPanel(parentWindow,insertPosition);
 end
 
-function RemoveSurface(parentWindow,removePosition)    
+function RemoveSurface(parentWindow,removePosition)
     % check if it is stop surface
     if getStopSurfaceIndex(parentWindow.ParentHandles.OpticalSystem) == removePosition
         stopSurfaceRemoved = 1;

@@ -28,10 +28,11 @@ function [meritFunctionValue] = getMeritFunctionValue( currentMeritFunction )
     meritFunctionHandle = str2func(meritFunctionName);
     returnFlag = 2;
     
-    meritFunctionParameters = currentMeritFunction.UniqueParameters;
+    uniqueParameters = currentMeritFunction.UniqueParameters;
     inputDataStruct = struct();
     inputDataStruct.OptimizableObject = currentMeritFunction.OptimizableObject;
-    [returnDataStruct] = meritFunctionHandle(returnFlag,meritFunctionParameters,inputDataStruct);
+    inputDataStruct.OptimizationOperand = currentMeritFunction.OptimizationOperand;
+    [returnDataStruct] = meritFunctionHandle(returnFlag,uniqueParameters,inputDataStruct);
     meritFunctionValue = returnDataStruct.Value;
 end
 

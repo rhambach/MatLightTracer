@@ -27,17 +27,16 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
     if nargin < 1
         % Get all catalogues from current folder
         glassCatalogueListFullNames = getAllObjectCatalogues('glass');
+    end
+    if nargin < 2
         fontSize = 9.5;
-        fontName = 'FixedWidth';
-    elseif nargin == 1
-        fontSize = 9.5;
-        fontName = 'FixedWidth';
-    elseif nargin == 2
+    end
+    if nargin < 3
         fontName = 'FixedWidth';
     end
     
-    
     if isempty(glassCatalogueListFullNames)
+        figureHandle = NaN;
         disp('Error: No glass catalogue is found in the current folder.');
         return;
     else
@@ -48,7 +47,7 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             ('glass','all',glassCatalogueListFullNames{1});
         firstCatalogueGlassgNames =  {firstCatalogueGlassArray.Name};
     end
-
+    
     
     % Creation of all uicontrols
     % --- FIGURE -------------------------------------
@@ -71,7 +70,7 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
         'Units', 'Normalized', ...
         'Position', [0.48,0.10,0.52,0.9]);
     
-    figureHandle.Object.ParametersTab = ...
+    figureHandle.Object.UniqueParametersTab = ...
         uitab(figureHandle.Object.glassParametersTabGroup, 'title','Glass Parameters');
     figureHandle.Object.InternalTransmittanceTab = ...
         uitab(figureHandle.Object.glassParametersTabGroup, 'title','Internal Transmittance');
@@ -279,8 +278,6 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
         figureHandle.Object.InternalTransmittance(end,:) = [];
     end
     
-    
-    
     initalThermalData = {'D0',[0];
         'D1',[0];
         'D2',[0];
@@ -369,7 +366,7 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
         'Data',initalOtherData,...
         'CellEditCallback',{@tblOtherData_CellEditCallback,figureHandle});
     
-   %-----------------------------------------------------------------
+    %-----------------------------------------------------------------
     
     figureHandle.Object.cmdDeleteGlass = uicontrol( ...
         'Parent', figureHandle.Object.MainFigureHandle, ...
@@ -448,7 +445,7 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             type = selectedGlassObject.Type;
             name = selectedGlassObject.Name;
             comment = selectedGlassObject.Comment; %
-            parameters = selectedGlassObject.Parameters;
+            parameters = selectedGlassObject.UniqueParameters;
             internalTransmittance = selectedGlassObject.InternalTransmittance;
             thermalData = selectedGlassObject.ThermalData;
             wavelengthRange = selectedGlassObject.WavelengthRange;
@@ -459,7 +456,7 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             figureHandle.Object.GlassType = type;
             figureHandle.Object.GlassName = name;
             figureHandle.Object.GlassComment = comment; %
-            figureHandle.Object.GlassParameters = parameters; %
+            figureHandle.Object.UniqueParameters = parameters; %
             figureHandle.Object.GlassInternalTransmittance  = internalTransmittance;
             figureHandle.Object.GlassThermalData = thermalData;
             figureHandle.Object.GlassWavelengthRange  = wavelengthRange;
@@ -474,13 +471,12 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             set(figureHandle.Object.popGlassType,'Value',1);
             set(figureHandle.Object.tblGlassList,'Data',[]);
             % Clear the childrens of ParametersTab
-            delete(get(figureHandle.Object.ParametersTab,'Child'));
+            delete(get(figureHandle.Object.UniqueParametersTab,'Child'));
             makeUneditable(figureHandle);
             disp('Error: The selected glass catalogue is empty.');
             return;
         end
     end
-    
     
     function tblGlassList_CellSelectionCallback(hObject,eventdata,figureHandle)
         
@@ -505,7 +501,7 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             type = selectedGlassObject.Type;
             name = selectedGlassObject.Name;
             comment = selectedGlassObject.Comment; %
-            parameters = selectedGlassObject.Parameters;
+            parameters = selectedGlassObject.UniqueParameters;
             internalTransmittance = selectedGlassObject.InternalTransmittance;
             thermalData = selectedGlassObject.ThermalData;
             wavelengthRange = selectedGlassObject.WavelengthRange;
@@ -516,12 +512,13 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             figureHandle.Object.GlassType = type;
             figureHandle.Object.GlassName = name;
             figureHandle.Object.GlassComment = comment; %
-            figureHandle.Object.GlassParameters = parameters; %
+            figureHandle.Object.UniqueParameters = parameters; %
             figureHandle.Object.GlassInternalTransmittance  = internalTransmittance;
             figureHandle.Object.GlassThermalData = thermalData;
             figureHandle.Object.GlassWavelengthRange  = wavelengthRange;
             figureHandle.Object.GlassResistanceData  = resistanceData;
             figureHandle.Object.GlassOtherData = otherData;
+            figureHandle.Object.SelectedGlassIndex = selectedGlassIndex;
             
             displayCurrentParameters(figureHandle);
         end
@@ -541,14 +538,13 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
         glassTypeList = get(figureHandle.Object.popGlassType,'String');
         selectedGlassTypeIndex = find(strcmpi(glassType,glassTypeList));
         
-        
-        parameters = figureHandle.Object.GlassParameters; %
+        parameters = figureHandle.Object.UniqueParameters; %
         internalTransmittance = figureHandle.Object.GlassInternalTransmittance;
         thermalData = figureHandle.Object.GlassThermalData;
         wavelengthRange = figureHandle.Object.GlassWavelengthRange;
         resistanceData = figureHandle.Object.GlassResistanceData;
         otherData = figureHandle.Object.GlassOtherData;
-           
+        
         
         set(figureHandle.Object.popGlassType,'Value',selectedGlassTypeIndex);
         set(figureHandle.Object.txtGlassName,'String',glassName);
@@ -575,19 +571,19 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
         set(figureHandle.Object.tblOtherData, 'Data', tblData5);
         
         % For the glass parameters tab, connect to glass defintion file
-        glassDefinitionHandle = str2func(glassType);
-        returnFlag = 1; % glass parameters fields and default values
-        [ glassParameterFields,glassParameterFormats,defaultParameters] = ...
-            glassDefinitionHandle(returnFlag);
+        [glassParameterFieldNames,glassParameterFieldFormats,...
+            defaultGlassParameterStruct,glassParameterFieldDisplayNames] = ...
+            getGlassUniqueParameters( glassType);
+        
         fontSize = 11;
         fontName = 'FixedWidth';
         
-        nPar = length(glassParameterFields);
+        nPar = length(glassParameterFieldNames);
         
         % Clear the ParametersTab
-        delete(get(figureHandle.Object.ParametersTab,'Child'));
-        glassParameters = figureHandle.Object.GlassParameters;
-            
+        delete(get(figureHandle.Object.UniqueParametersTab,'Child'));
+        glassParameters = figureHandle.Object.UniqueParameters;
+        
         % Handle the zemaxFormula glass types in special case
         if strcmpi(glassType,'ZemaxFormula')
             formulaType = glassParameters.FormulaType;
@@ -615,7 +611,7 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             
             % -----------------------------------------------------------------
             figureHandle.Object.lblFormulaType = uicontrol( ...
-                'Parent', figureHandle.Object.ParametersTab, ...
+                'Parent', figureHandle.Object.UniqueParametersTab, ...
                 'Tag', 'lblZemaxFormulaType', ...
                 'Style', 'text', ...
                 'HorizontalAlignment','left',...
@@ -625,10 +621,10 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
                 'FontName',fontName,...
                 'String', 'Formula Type');
             
-            formulaTypeIndex = find(strcmpi(formulaType,zemaxFormulaList));
+            formulaTypeIndex = formulaType;
             
             figureHandle.Object.popDispersionFormulaType = uicontrol( ...
-                'Parent', figureHandle.Object.ParametersTab, ...
+                'Parent', figureHandle.Object.UniqueParametersTab, ...
                 'Tag', 'popDispersionFormulaType', ...
                 'Style', 'popupmenu', ...
                 'fontSize',fontSize,...
@@ -649,7 +645,7 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             currentCoefficientData(1:10,2) = num2cell(coeffData);
             
             figureHandle.Object.tblCoefficientData = uitable( ...
-                'Parent',figureHandle.Object.ParametersTab,...
+                'Parent',figureHandle.Object.UniqueParametersTab,...
                 'Tag', 'tblCoefficientData', ...
                 'Units','Normalized',...
                 'Position', [0.0,0.0,1.0,0.85], ...
@@ -663,129 +659,153 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
                 'CellEditCallback',{@tblCoefficientData_CellEditCallback,figureHandle});
             
         else
-            % Add a panel bottom which has larger size to accomaadet user defined
-            % glass parameters
-            figureHandle.Object.panelParametersBottom = uipanel( ...
-                'Parent', figureHandle.Object.ParametersTab, ...
-                'Tag', 'panelGlassListing', ...
+            %% New code
+            figureHandle.Object.tblGlassPatrameters = uitable( ...
+                'Parent', figureHandle.Object.UniqueParametersTab, ...
+                'Tag', 'tblGlassPatrameters', ...
+                'UserData', zeros(1,0), ...
                 'Units','Normalized',...
-                'Position', [0.0,-4.0,1.0,5.0], ...
-                'FontSize',fontSize,'FontName',fontName,...
-                'Visible','On');
+                'Position', [0.0,0.0,1.0,1.0], ...
+                'fontSize',fontSize,'FontName',fontName,...
+                'BackgroundColor', [1 1 1;0.961 0.961 0.961], ...
+                'ColumnEditable', [false,true], ...
+                'ColumnFormat', {'char','char'}, ...
+                'ColumnName', {'Parameter Name','Parameter Value'}, ...
+                'ColumnWidth', {300,100}, ...
+                'RowName', 'numbered');
+            set(figureHandle.Object.tblGlassPatrameters,...
+                'CellEditCallback',{@tblGlassPatrameters_CellEditCallback,figureHandle},...
+                'CellSelectionCallback',{@tblGlassPatrameters_CellSelectionCallback,figureHandle});
             
-            figureHandle.Object.sliderParameters = uicontrol('Style','Slider',...
-                'Parent', figureHandle.Object.ParametersTab,...
-                'Units','normalized','Position',[0.95 0.0 0.05 1.0],...
-                'Value',1);
-            set(figureHandle.Object.sliderParameters,...
-                'Callback',{@sliderParameters_Callback,figureHandle});
             
-            panelParametersBottomPosition = get(figureHandle.Object.panelParametersBottom,'Position');
-            verticalScaleFactor = panelParametersBottomPosition(4);
-            verticalOffset = panelParametersBottomPosition(4)-1;
-            
-            verticalFreeSpace = 0.025/verticalScaleFactor;% 2.5% of the the visial window height
-            controlHeight = 0.06/verticalScaleFactor;% 6% of the visial window height
-            topEdge = 0.1/verticalScaleFactor;% 10% of the the visial window height
-            
-            lastUicontrolBottom = panelParametersBottomPosition(4) - topEdge - 4; %panelParametersBottomPosition(4)
-            
-            horizontalFreeSpace = 0.05;% 5% of the visial window width
-            controlWidth = 0.4;% 40% of the visial window width then two controls per line
-            % control arrangement 5% + 40% + 5% + 40% + 5%
-            leftEdge = 0.05;%
-            
+            tempTableData = cell(nPar,2);
             for pp = 1:nPar
-                % Display the parameter name
-                figureHandle.Object.lblGlassParameter(pp,1) = uicontrol( ...
-                    'Parent', figureHandle.Object.panelParametersBottom, ...
-                    'Tag', 'lblParameter', ...
-                    'Style', 'text', ...
-                    'Units','normalized',...
-                    'Position', [leftEdge,lastUicontrolBottom-verticalFreeSpace,...
-                    controlWidth,controlHeight], ...
-                    'String',glassParameterFields{pp},...
-                    'HorizontalAlignment','right',...
-                    'Visible','On',...
-                    'fontSize',fontSize,'FontName',fontName);
-                
                 % Display the parameter value text boxes or popup menu
-                parFormat = glassParameterFormats{pp};
-                parName = glassParameterFields{pp};
+                parFormat = glassParameterFieldFormats{pp};
+                parName = glassParameterFieldNames{pp};
+                parDisplayName = glassParameterFieldDisplayNames{pp};
                 parValue = glassParameters.(parName);
-                if strcmpi(parFormat{1},'logical')
-                    nVals = length(parFormat);
-                    % The parameter format is logical
-                    for vv = 1:nVals
-                        figureHandle.Object.chkGlassParameter(pp,vv) = uicontrol( ...
-                            'Parent', figureHandle.Object.panelParametersBottom, ...
-                            'Tag', 'chkParameter', ...
-                            'Style', 'checkbox', ...
-                            'Units','normalized',...
-                            'Position', [leftEdge+horizontalFreeSpace+controlWidth,lastUicontrolBottom-verticalFreeSpace,...
-                            horizontalFreeSpace,controlHeight], ...
-                            'BackgroundColor', [1 1 1],...
-                            'HorizontalAlignment','left',...
-                            'Visible','On',...
-                            'fontSize',fontSize,'FontName',fontName,...
-                            'Callback',{@chkGlassParameter_Callback,pp,vv,figureHandle});
-                        lastUicontrolBottom = lastUicontrolBottom -verticalFreeSpace -controlHeight;
-                        
-                        currentValue = parValue(vv);
-                        set(figureHandle.Object.txtGlassParameter(pp,vv),'Value',currentValue);
-                    end
-                elseif strcmpi(parFormat{1},'numeric')||strcmpi(parFormat{1},'char')
-                    nVals = length(parFormat);
-                    
-                    % The parameter format numeric/char
-                    for vv = 1:nVals
-                        figureHandle.Object.txtGlassParameter(pp,vv) = uicontrol( ...
-                            'Parent', figureHandle.Object.panelParametersBottom, ...
-                            'Tag', 'txtParameter', ...
-                            'Style', 'edit', ...
-                            'Units','normalized',...
-                            'Position', [leftEdge+horizontalFreeSpace+controlWidth,lastUicontrolBottom-verticalFreeSpace,...
-                            controlWidth,controlHeight], ...
-                            'BackgroundColor', [1 1 1],...
-                            'HorizontalAlignment','left',...
-                            'Visible','On',...
-                            'fontSize',fontSize,'FontName',fontName,...
-                            'Callback',{@txtGlassParameter_Callback,pp,vv,figureHandle});
-                        lastUicontrolBottom = lastUicontrolBottom -verticalFreeSpace -controlHeight;
-                        
-                        currentValue = parValue(vv);
-                        set(figureHandle.Object.txtGlassParameter(pp,vv),'String',currentValue);
-                    end
+                
+                if iscell(parFormat)
+                    % Multiple choice values
+                    parValueDisplay = parFormat{parValue};
                 else
-                    vv = 1;
-                    % The parameter format is list of selection itiems
-                    figureHandle.Object.popGlassParameter(pp,vv) = uicontrol( ...
-                        'Parent', figureHandle.Object.panelParametersBottom, ...
-                        'Tag', 'popParameter', ...
-                        'Style', 'popupmenu', ...
-                        'Units','normalized',...
-                        'Position', [leftEdge+horizontalFreeSpace+controlWidth,lastUicontrolBottom-verticalFreeSpace,...
-                        controlWidth,controlHeight], ...
-                        'BackgroundColor', [1 1 1],...
-                        'HorizontalAlignment','left',...
-                        'Visible','On',...
-                        'fontSize',fontSize,'FontName',fontName,...
-                        'Callback',{@popGlassParameter_Callback,pp,vv,figureHandle});
-                    
-                    lastUicontrolBottom = lastUicontrolBottom -verticalFreeSpace -controlHeight;
-                    
-                    
-                    tempGlassParamList = get(figureHandle.Object.popGlassParameter(pp,vv) ,'String');
-                    currentChoiceIndex = find(ismember(parValue(vv),tempGlassParamList));
-                    currentValue = currentChoiceIndex;
-                    set(figureHandle.Object.popGlassParameter(pp,vv) ,'Value',currentValue);
+                    if strcmpi(parFormat,'logical')
+                        if parValue
+                            parValueDisplay = 'True';
+                        else
+                            parValueDisplay = 'False';
+                        end
+                    elseif strcmpi(parFormat,'numeric')
+                        parValueDisplay = num2str(parValue);
+                    elseif strcmpi(parFormat,'char')
+                        parValueDisplay = (parValue);
+                    elseif strcmpi(parFormat,'Glass')
+                        parValueDisplay = (parValue);
+                    else
+                        
+                    end
                 end
+                tempTableData{pp,1} = parDisplayName;
+                tempTableData{pp,2} = parValueDisplay;
             end
-            
-            
+            set(figureHandle.Object.tblGlassPatrameters,'Data',tempTableData);
         end
         makeUneditable(figureHandle);
     end
+    
+    
+    function tblGlassPatrameters_CellEditCallback(hObject,eventdata,figureHandle)
+        % hObject    handle to aodHandles.tblStandardData (see GCBO)
+        % eventdata  structure with the following fields (see UITABLE)
+        %	Indices: row and column indices of the cell(s) edited
+        %	PreviousData: previous data for the cell(s) edited
+        %	EditData: string(s) entered by the user
+        %	NewData: EditData or its converted form set on the Data property. Empty if Data was not changed
+        %	Error: error string when failed to convert EditData to appropriate value for Data
+        % figureHandle    structure with figureHandle and user data (see GUIDATA)
+        editedRow = eventdata.Indices(1);
+        editedColumn = eventdata.Indices(2);
+        glassType = figureHandle.Object.GlassType;
+        [glassParameterFields,glassParameterFormats,~] = getGlassUniqueParameters( glassType);
+        paramName = glassParameterFields{editedRow};
+        paramFormat = glassParameterFormats{editedRow};
+        editedParamValue = eventdata.NewData;
+        if iscell(paramFormat)
+            % Multiple choice values
+            [IsFoundVector,locationIndex] = ismember(editedParamValue,parFormat);
+            if locationIndex
+                editedParamValue = locationIndex;
+            else
+                
+            end
+        else
+            if strcmpi(paramFormat,'logical')
+                if strcmpi(editedParamValue,'True') || strcmpi(editedParamValue,'1')
+                    editedParamValue = 1;
+                elseif strcmpi(editedParamValue,'False')|| strcmpi(editedParamValue,'0')
+                    editedParamValue = 0;
+                else
+                    
+                end
+            elseif strcmpi(paramFormat,'numeric')
+                editedParamValue = str2double(editedParamValue);
+                if isempty(editedParamValue)
+                    disp('Error: Only numeric values are allowed for the field.');
+                    return;
+                end
+            elseif strcmpi(paramFormat,'char')
+                
+            elseif strcmpi(paramFormat,'Glass')
+                
+            else
+                
+            end
+        end
+        figureHandle.Object.UniqueParameters.(paramName) = editedParamValue;
+    end
+    
+    
+    function tblGlassPatrameters_CellSelectionCallback(hObject,eventdata,figureHandle)
+        % hObject    handle to aodHandles.tblStandardData (see GCBO)
+        % eventdata  structure with the following fields (see UITABLE)
+        %	Indices: row and column indices of the cell(s) edited
+        %	PreviousData: previous data for the cell(s) edited
+        %	EditData: string(s) entered by the user
+        %	NewData: EditData or its converted form set on the Data property. Empty if Data was not changed
+        %	Error: error string when failed to convert EditData to appropriate value for Data
+        % figureHandle    structure with figureHandle and user data (see GUIDATA)
+        selectedRow = eventdata.Indices(1);
+        selectedColumn = eventdata.Indices(2);
+        if selectedColumn == 2
+            glassType = figureHandle.Object.GlassType;
+            [glassParameterFields,glassParameterFormats,~] = getGlassUniqueParameters( glassType);
+            paramName = glassParameterFields{selectedRow};
+            paramFormat = glassParameterFormats{selectedRow};
+            if iscell(paramFormat)
+                % Multiple choice values
+                choice = menu(paramName,paramFormat);
+                if choice == 0
+                    choice = 1;
+                end
+                editedParamValue = choice;
+                figureHandle.Object.UniqueParameters.(paramName) = editedParamValue;
+            else
+                if strcmpi(paramFormat,'logical')
+                    
+                elseif strcmpi(paramFormat,'numeric')
+                    
+                elseif strcmpi(paramFormat,'char')
+                    
+                elseif strcmpi(paramFormat,'Glass')
+                    
+                else
+                    
+                end
+            end
+        end
+    end
+    
     function popDispersionFormulaType_Callback(hObject,eventdata,figureHandle)
         % hObject    handle to popDispersionFormulaType (see GCBO)
         % eventdata  structure with the following fields (see UITABLE)
@@ -796,9 +816,9 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
         %	Error: error string when failed to convert EditData to appropriate value for Data
         % figureHandle    structure with figureHandle and user data (see GUIDATA)
         
-        formulaTypeList =  get(figureHandle.Object.popDispersionFormulaType,'String');
-        selectedFormulaType = formulaTypeList{get(hObject,'Value')};
-        figureHandle.Object.GlassParameters.FormulaType = selectedFormulaType;    
+        %         formulaTypeList =  get(figureHandle.Object.popDispersionFormulaType,'String');
+        selectedFormulaType = get(hObject,'Value');
+        figureHandle.Object.UniqueParameters.FormulaType = selectedFormulaType;
         displayCurrentParameters(figureHandle);
         makeEditable(figureHandle);
     end
@@ -826,7 +846,7 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             tblData1 = get(figureHandle.Object.tblCoefficientData,'data');
             tblData1{editedRow,editedColumn} = newCoeff;
             set(figureHandle.Object.tblCoefficientData, 'Data', tblData1);
-            figureHandle.Object.GlassParameters.CoefficientData(editedRow) =  newCoeff;
+            figureHandle.Object.UniqueParameters.CoefficientData(editedRow) =  newCoeff;
         else
             
         end
@@ -854,10 +874,8 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
         tblData1 = get(figureHandle.Object.tblInternalTransmittance,'data');
         tblData1{editedRow,editedColumn} = newData;
         set(figureHandle.Object.tblInternalTransmittance, 'Data', tblData1);
-        figureHandle.Object.GlassParameters.InternalTransmittance(editedRow,editedColumn) =  newData;
+        figureHandle.Object.UniqueParameters.InternalTransmittance(editedRow,editedColumn) =  newData;
     end
-    
-    
     
     function tblThermalData_CellEditCallback(hObject,eventdata,figureHandle)
         % hObject    handle to tblThermalData (see GCBO)
@@ -882,7 +900,7 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             tblData1 = get(figureHandle.Object.tblThermalData,'data');
             tblData1{editedRow,editedColumn} = newThermalData;
             set(figureHandle.Object.tblThermalData, 'Data', tblData1);
-            figureHandle.Object.GlassParameters.ThermalData(editedRow) =  newThermalData;
+            figureHandle.Object.UniqueParameters.ThermalData(editedRow) =  newThermalData;
         else
             
         end
@@ -912,7 +930,7 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             tblData1 = get(figureHandle.Object.tblWavelengthRange,'data');
             tblData1{editedRow,editedColumn} = newWavelengthRange;
             set(figureHandle.Object.tblWavelengthRange, 'Data', tblData1);
-            figureHandle.Object.GlassParameters.WavelengthRange(editedRow) =  newWavelengthRange;
+            figureHandle.Object.UniqueParameters.WavelengthRange(editedRow) =  newWavelengthRange;
         else
             
         end
@@ -942,7 +960,7 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             tblData1 = get(figureHandle.Object.tblResistanceData,'data');
             tblData1{editedRow,editedColumn} = newResistanceData;
             set(figureHandle.Object.tblResistanceData, 'Data', tblData1);
-            figureHandle.Object.GlassParameters.ResistanceData(editedRow) =  newResistanceData;
+            figureHandle.Object.UniqueParameters.ResistanceData(editedRow) =  newResistanceData;
         else
             
         end
@@ -971,43 +989,11 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
             tblData1 = get(figureHandle.Object.tblOtherData,'data');
             tblData1{editedRow,editedColumn} = newOtherData;
             set(figureHandle.Object.tblOtherData, 'Data', tblData1);
-            figureHandle.Object.GlassParameters.OtherData(editedRow) =  newOtherData;
+            figureHandle.Object.UniqueParameters.OtherData(editedRow) =  newOtherData;
         else
             
         end
         
-    end
-    
-    function txtGlassParameter_Callback(~,~,paramIndex1,paramIndex2,figureHandle)
-        glassType = figureHandle.Object.GlassType;
-        % connect to glass defintion file and use defualt glass parameter
-        glassDefinitionHandle = str2func(glassType);
-        returnFlag = 1; % glass parameters fields and default values
-        [ glassParameterFields,glassParameterFormats,defaultGlassparameters] = ...
-            glassDefinitionHandle(returnFlag);
-        
-        paramName = glassParameterFields{paramIndex1};
-        paramType = glassParameterFormats{paramIndex1};
-        editedParamValue = get(figureHandle.Object.txtGlassParameter(paramIndex1,paramIndex2),'String');
-        if ischar(editedParamValue)
-            editedParamValue = {editedParamValue};
-        end
-        
-        if strcmpi(paramType{1},'numeric')
-            editedParamValue = str2double(editedParamValue);
-            if isempty(editedParamValue)
-                disp('Error: Only numeric values are allowed for the field.');
-                return;
-            end
-        elseif strcmpi(paramType{1},'char')
-            
-        else
-            
-        end
-        oldParameter = figureHandle.Object.GlassParameters.(paramName);
-        newParameter = oldParameter;
-        newParameter(paramIndex2) = editedParamValue;
-        figureHandle.Object.GlassParameters.(paramName) = newParameter;
     end
     
     function txtGlassComment_Callback(hObject,~,figureHandle)
@@ -1015,28 +1001,16 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
         figureHandle.Object.GlassComment = comment;
     end
     
-    function sliderParameters_Callback(src,~,figureHandle)
-        val = get(src,'Value');
-        panelParametersBottomPosition = get(figureHandle.Object.panelParametersBottom,'Position');
-        set(figureHandle.Object.panelParametersBottom,'units','normalized','Position',...
-            [panelParametersBottomPosition(1),-4+ panelParametersBottomPosition(4)*(1-val),...
-            panelParametersBottomPosition(3) panelParametersBottomPosition(4)]);
-    end
-    
-    
-    
     function popGlassType_Callback(hObject,~,figureHandle)
         
         glassTypeList =  get(figureHandle.Object.popGlassType,'String');
         selectedGlassType = glassTypeList{get(hObject,'Value')};
+
+        [~,~,defaultGlassparameters] = ...
+            getGlassUniqueParameters( selectedGlassType);
         
-        % connect to glass defintion file and use defualt glass parameter
-        glassDefinitionHandle = str2func(selectedGlassType);
-        returnFlag = 1; % glass parameters fields and default values
-        [ ~,~,defaultGlassparameters] = ...
-            glassDefinitionHandle(returnFlag);
         figureHandle.Object.GlassType = selectedGlassType;
-        figureHandle.Object.GlassParameters = defaultGlassparameters;
+        figureHandle.Object.UniqueParameters = defaultGlassparameters;
         
         displayCurrentParameters(figureHandle)
         makeEditable(figureHandle);
@@ -1052,8 +1026,8 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
         else
             glassName = glassNameCellArray{1};
         end
-        glassCatalogueFileList = 'All';
-                glassTypeIndex = listdlg('PromptString','Select the glass type :',...
+        glassCatalogueFileList = {'All'};
+        glassTypeIndex = listdlg('PromptString','Select the glass type :',...
             'SelectionMode','single',...
             'ListString',supportedGlassTypes);
         if isempty(glassTypeIndex)
@@ -1061,27 +1035,42 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
         else
             glassType = supportedGlassTypes{glassTypeIndex};
         end
-                
+        % Save the new glass and update the display
         newGlass = Glass(glassName,glassCatalogueFileList,glassType);
         
         figureHandle.Object.GlassName = glassName;
         figureHandle.Object.GlassType = glassType;
-        figureHandle.Object.GlassParameters = newGlass.Parameters;
+        figureHandle.Object.UniqueParameters = newGlass.UniqueParameters;
         
-        glassCatalogueFullName = figureHandle.Object.GlassCatalogueFullName;
-        addedPosition = addObjectToObjectCatalogue('Glass', newGlass,glassCatalogueFullName,'ask');
-        refreshGlassDataInputDialog(figureHandle,addedPosition);
+        glassSavedIndex = newGlass.SavedIndex;
+        if glassSavedIndex == 0
+            glassSavedIndex = 1;
+        end
+        refreshGlassDataInputDialog(figureHandle,glassSavedIndex);
         makeEditable(figureHandle);
     end
     %% ---------------------------------------------------------------------------
     function cmdDeleteGlass_Callback(hObject,evendata,figureHandle) %#ok<INUSD>
-        glassCatalogueIndex = get(figureHandle.Object.popGlassCatalogueName,'Value');
-        GlassCatalogueFullName = glassCatalogueListFullNames{glassCatalogueIndex};
-        objectType = 'glass';
+        % Confirm action
+        % Construct a questdlg with three options
         objectName = get(figureHandle.Object.txtGlassName,'String');
-        objectCatalogueFullName = GlassCatalogueFullName;
-        removeObjectFromObjectCatalogue(objectType, objectName,objectCatalogueFullName )
-        refreshGlassDataInputDialog(figureHandle,1);
+        choice = questdlg(['Are you sure to delete the glass : ',objectName,' ?'], ...
+            'Confirm Deletion', ...
+            'Yes','No','Yes');
+        % Handle response
+        switch choice
+            case 'Yes'
+                % Delete the glass
+                glassCatalogueIndex = get(figureHandle.Object.popGlassCatalogueName,'Value');
+                GlassCatalogueFullName = glassCatalogueListFullNames{glassCatalogueIndex};
+                objectType = 'glass';
+                objectName = get(figureHandle.Object.txtGlassName,'String');
+                objectCatalogueFullName = GlassCatalogueFullName;
+                removeObjectFromObjectCatalogue(objectType, objectName,objectCatalogueFullName )
+                refreshGlassDataInputDialog(figureHandle,1);
+            case 'No'
+                % Do  nothing
+        end
     end
     
     function cmdEditSaveGlass_Callback(~,~,figureHandle) %#ok<INUSD>
@@ -1106,18 +1095,29 @@ function mainFigHandle = glassDataInputDialog(glassCatalogueListFullNames,fontNa
     function currentGlass = getCurrentGlass(figureHandle)
         name = figureHandle.Object.GlassName;
         comment = figureHandle.Object.GlassComment;
-        catalogueFileList = figureHandle.Object.GlassCatalogueFullName;
+        catalogueFileList = {figureHandle.Object.GlassCatalogueFullName};
         type = figureHandle.Object.GlassType;
         
-        parameters = figureHandle.Object.GlassParameters; %
+        parameters = figureHandle.Object.UniqueParameters; %
         internalTransmittance = figureHandle.Object.GlassInternalTransmittance;
         thermalData = figureHandle.Object.GlassThermalData;
         wavelengthRange = figureHandle.Object.GlassWavelengthRange;
         resistanceData = figureHandle.Object.GlassResistanceData;
         otherData = figureHandle.Object.GlassOtherData;
+        savedIndex = figureHandle.Object.SelectedGlassIndex;
         
-        currentGlass = Glass(name,catalogueFileList,type,parameters,internalTransmittance,...
-            thermalData,wavelengthRange,resistanceData,otherData,comment);
+        currentGlass = Glass();
+        currentGlass.Name = name;
+        currentGlass.Type = type;
+        currentGlass.UniqueParameters = parameters;
+        currentGlass.InternalTransmittance = internalTransmittance;
+        currentGlass.ResistanceData = resistanceData;
+        currentGlass.ThermalData = thermalData;
+        currentGlass.OtherData = otherData;
+        currentGlass.WavelengthRange  = wavelengthRange;
+        currentGlass.Comment = comment; %
+        currentGlass.ClassName = 'Glass';
+        currentGlass.SavedIndex = savedIndex;
     end
     
     %% ---------------------------------------------------------------------------

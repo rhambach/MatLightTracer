@@ -175,26 +175,36 @@ if ierr > 0 ; disp(['Error : ',num2str(ierr)]);end
 %  Plot-Darstellung  
 %
 if iplo > 0
-%
-   if iplo > 1
-   figure;
-   set( gcf, 'Units' , 'Normalized');
-   set( gcf, 'Position', [ 0.58 , 0.52 , 0.4 , 0.4 ] );
-   plot(xs,int(npy/2+1,:),'r-'); grid on ;
-   set(gca,'XLim',[ -abs(xs(2)) abs(xs(npx)) ])
-   hold on; 
-   plot(ys,int(:,npx/2+1),'b-'); 
-   title('x','color','r')
-   set( gca, 'FontSize' , 12, 'fontweight','bold' );
-   set(gcf,'Color',[1,1,1])
-   end
-   %
-   figure
+%% Old code for 1D cross section plotting
+% % 1D cross section
+%    if iplo > 1
+%    figure;
+%    set( gcf, 'Units' , 'Normalized');
+%    set( gcf, 'Position', [ 0.58 , 0.52 , 0.4 , 0.4 ] );
+%    plot(xs,int(npy/2+1,:),'r-'); grid on ;
+%    set(gca,'XLim',[ -abs(xs(2)) abs(xs(npx)) ])
+%    hold on; 
+%    plot(ys,int(:,npx/2+1),'b-'); 
+%    title('x','color','r')
+%    set( gca, 'FontSize' , 12, 'fontweight','bold' );
+%    set(gcf,'Color',[1,1,1])
+%    end
+%% End of Old code
+   figure;  
+%% Old code
+%    ah = axes;
+%    ph = pcolor(xsm,ysm,int);
+%% End of Old code
+
+%% EnhancedColorPlot
+   [ph,ah] = EnhancedColorPlot( {xsm,ysm,int} );
+%% End of EnhancedColorPlot
+
    set( gcf, 'Units' , 'Normalized');
    set( gcf, 'Position', [ 0.58 , 0.05 , 0.4 , 0.4 ] );
-   pcolor(xsm,ysm,int)
-   shading interp
-   daspect([1 1 0.8 ])
+
+   shading(ah, 'flat');
+   daspect(ah,[1 1 0.8 ])
    set(gcf,'Color',[1,1,1])
    set( gca, 'FontSize' , 12, 'fontweight','bold' );
 %
@@ -202,12 +212,21 @@ end
 %
 if iplcomp > 0
 figure
+%% Old code    
+% ah = axes;
+% ph = pcolor(xsm,ysm,(int-intideal));
+%% End of Old code
+
+%% EnhancedColorPlot
+[ph,ah] = EnhancedColorPlot( {xsm,ysm,(int-intideal)} );
+%% End of EnhancedColorPlot
+
 set( gcf, 'Units' , 'Normalized');
 set( gcf, 'Position', [ 0.058 , 0.052 , 0.4 , 0.4 ] );
-pcolor(xsm,ysm,(int-intideal))
-colorbar
-shading flat
-daspect([1 1 0.8 ])
+
+colorbar(ah);
+shading(ah, 'flat');
+daspect(ah,[1 1 0.8 ])
 set(gcf,'Color',[1,1,1])
 set( gca, 'FontSize' , 12, 'fontweight','bold' );
 end

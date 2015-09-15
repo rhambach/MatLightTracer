@@ -49,21 +49,28 @@ toc
 int = abs(efds).^2; 
 int = int./max(max(int)); 
 [xbm,ybm] = meshgrid(xs,ys);
-% 
-figure;
-set( gcf, 'Units' , 'Normalized');
-set( gcf, 'Position', [ 0.58 , 0.55 , 0.4 , 0.4 ] );
-plot(xs,int(:,npy/2+1),'r-'); hold on; 
-plot(ys,int(npx/2+1,:),'b-'); %hold on; 
-set( gca, 'FontSize' , 12, 'fontweight','bold' );
+% %% Old code
+% % 
+% figure;
+% set( gcf, 'Units' , 'Normalized');
+% set( gcf, 'Position', [ 0.58 , 0.55 , 0.4 , 0.4 ] );
+% plot(xs,int(:,npy/2+1),'r-'); hold on; 
+% plot(ys,int(npx/2+1,:),'b-'); %hold on; 
+% set( gca, 'FontSize' , 12, 'fontweight','bold' );
+% set(gcf,'Color',[1,1,1])
+% %
+% figure
+% set( gcf, 'Units' , 'Normalized');
+% set( gcf, 'Position', [ 0.58 , 0.05 , 0.4 , 0.4 ] );
+% pcolor(xbm,ybm,int')
+% %% end of old code
+
+%% EnhancedColorPlot
+ax = axes;
+[ph,ah] = EnhancedColorPlot( {ax,xbm,ybm,int'} );
+%% End of EnhancedColorPlot
+
+shading(gca,'interp');
+daspect(gca,[1 1 0.8 ])
 set(gcf,'Color',[1,1,1])
-%
-figure
-set( gcf, 'Units' , 'Normalized');
-set( gcf, 'Position', [ 0.58 , 0.05 , 0.4 , 0.4 ] );
-pcolor(xbm,ybm,int')
-shading interp
-daspect([1 1 0.8 ])
-set(gcf,'Color',[1,1,1])
 set( gca, 'FontSize' , 12, 'fontweight','bold' );
-%

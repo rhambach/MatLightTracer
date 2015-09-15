@@ -31,8 +31,8 @@ function [ updatedSystem ] = convertToComponentBased( currentOpticalSystem )
         disp('Warning: The system is already component based.');
     end
     %     updatedSystem.SurfaceArray = Surface.empty;
-    updatedSystem.SurfaceArray = Surface();
-    updatedSystem.SystemDefinitionType = 'ComponentBased';
+%     updatedSystem.SurfaceArray = Surface();
+    updatedSystem.SystemDefinitionType = 2; %'ComponentBased';
 end
 
 

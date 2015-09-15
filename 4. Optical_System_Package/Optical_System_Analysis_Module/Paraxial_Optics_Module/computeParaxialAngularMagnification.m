@@ -36,8 +36,9 @@ function [ angMag] = computeParaxialAngularMagnification(optSystem)
     [ NonDummySurfaceIndices,surfaceArray,nSurface ] = getNonDummySurfaceIndices( optSystem );
     nonDummySurfaceArray = surfaceArray(NonDummySurfaceIndices);
     
+    nNonDummySurface = length(nonDummySurfaceArray);
     finalSurfObjSide = 1;
-    finalSurfImgSide = nSurface - 1;
+    finalSurfImgSide = nNonDummySurface - 1;
     
     wavlenInM = getPrimaryWavelength(optSystem);
     [ yimg,uimg ] = paraxialRayTracer( optSystem,ystop,ustop,initialSurf,finalSurfImgSide,wavlenInM);

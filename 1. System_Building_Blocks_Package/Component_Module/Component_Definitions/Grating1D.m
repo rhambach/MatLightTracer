@@ -1,52 +1,64 @@
-function [ returnData1, returnData2, returnData3] = Grating1D( ...
-        returnFlag,componentParameters,firstTilt,firstDecenter,firstTiltDecenterOrder,lastThickness,compTiltMode)
-    %Grating1D Component defining a simple 1 dimensional grating
+function [ returnDataStruct] = Grating1D( ...
+        returnFlag,componentParameters,inputDataStruct)
+    %Grating1D : Component defining a simple 1 dimensional grating
+    % componentParameters = values of {'Glass','LineDensity','DiffractionOrder','LengthX','LengthY'}
+    % inputDataStruct : Struct of all additional inputs (not included in the component parameters)
+    % required for computing the return. (Vary depending on the returnFlag)
+    % returnFlag : An integer indicating what is requested. Depending on it the
+    % returnDataStruct will have different fields
+    % 1: About the component
+    %   inputDataStruct:
+    %       empty
+    %   Output Struct:
+    %       returnDataStruct.Name
+    %       returnDataStruct.ImageFullFileName
+    %       returnDataStruct.Description
+    % 2: Component specific 'UniqueParametersStruct' table field names and
+    %    initial values in Surface Editor GUI
+    %   inputDataStruct:
+    %       empty
+    %   Output Struct:
+    %       returnDataStruct.UniqueParametersStructFieldNames
+    %       returnDataStruct.UniqueParametersStructFieldDisplayNames
+    %       returnDataStruct.UniqueParametersStructFieldFormats
+    %       returnDataStruct.DefaultUniqueParametersStruct
+    % 3: Component 'Extra Data' parameters
+    %   inputDataStruct:
+    %       empty
+    %   Output Struct:
+    %       returnDataStruct.UniqueExtraDataFieldNames
+    %       returnDataStruct.DefaultUniqueExtraData
+    % 4: The surface array of the component
+    %   inputDataStruct:
+    %       inputDataStruct.FirstTilt
+    %       inputDataStruct.FirstDecenter
+    %       inputDataStruct.FirstTiltDecenterOrder
+    %       inputDataStruct.LastThickness
+    %       inputDataStruct.ComponentTiltMode
+    %   Output Struct:
+    %       returnDataStruct.SurfaceArray
     
-    %% Default input vaalues
-    if nargin == 0
+    %% Default input values
+    if nargin < 1
         disp('Error: The function Grating1D() needs atleat the return type.');
-        returnData1 = NaN;
-        returnData2 = NaN;
-        returnData3 = NaN;
+        returnDataStruct = NaN;
         return;
-    elseif nargin >= 1
-        if returnFlag == 4
-            if nargin == 1
-                % take the defualt componentparameters
-                returnFlag = 2;
-                [fieldNames,fieldTypes, defaultParameterStruct] = SequenceOfSurfaces(returnFlag);
-                componentParameters = defaultParameterStruct;
-                firstTilt = [0,0,0];
-                firstDecenter = [0,0];
-                firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 10;
-                compTiltMode = 'NAX';
-            elseif nargin == 2
-                firstTilt = [0,0,0];
-                firstDecenter = [0,0];
-                firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 10;
-                compTiltMode = 'NAX';
-            elseif nargin == 3
-                firstDecenter = [0,0];
-                firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 10;
-                compTiltMode = 'NAX';
-            elseif nargin == 4
-                firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 10;
-                compTiltMode = 'NAX';
-            elseif nargin == 5
-                lastThickness = 10;
-                compTiltMode = 'NAX';
-            elseif nargin == 6
-                compTiltMode = 'NAX';
-            else
-            end
-        else
-            % Continue
+    end
+    
+    if returnFlag == 4
+        if nargin < 2
+            % take the defualt componentparameters
+            returnFlag = 2;
+            [returnDataStruct] = Grating1D(returnFlag);
+            componentParameters = returnDataStruct.DefaultUniqueParametersStruct;
         end
-    else
+        if nargin < 3
+            inputDataStruct.FirstTilt = [0,0,0];
+            inputDataStruct.FirstDecenter = [0,0];
+            inputDataStruct.FirstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
+            inputDataStruct.LastThickness = 10;
+            inputDataStruct.ComponentTiltMode = 'NAX';
+        end
     end
     
     %%
@@ -63,29 +75,46 @@ function [ returnData1, returnData2, returnData3] = Grating1D( ...
                 ' in refractive mode. The grating is defined by the grating line',...
                 ' density (lines/um) and diffraction order.']};  % Text description
             
-        case 2 % 'BasicComponentDataFields' table field names and initial values in COmponent Editor GUI
-            returnData1 = {'Glass','LineDensity','DiffractionOrder','LengthX','LengthY'}; % parameter names
-            returnData2 = {{'Glass'},{'numeric'},{'numeric'},{'numeric'},{'numeric'}}; % parameter types ('Boolean','SQS','char','numeric',{'choise 1','choise 2'})
+            returnDataStruct.Name = returnData1;
+            returnDataStruct.ImageFullFileName = returnData2;
+            returnDataStruct.Description = returnData3;
+        case 2 % 'UniqueParameterStruct' table field names and initial values in COmponent Editor GUI
             defaultCompUniqueStruct = struct();
             defaultCompUniqueStruct.Glass = Glass('');
             defaultCompUniqueStruct.LineDensity = 100;
             defaultCompUniqueStruct.DiffractionOrder = 1;
             defaultCompUniqueStruct.LengthX = 20;
             defaultCompUniqueStruct.LengthY = 20;
-            returnData3 = defaultCompUniqueStruct; % default value
+            
+            
+            returnDataStruct.UniqueParametersStructFieldNames = {'Glass','LineDensity','DiffractionOrder','LengthX','LengthY'}; % parameter names
+            returnDataStruct.UniqueParametersStructFieldDisplayNames = {'Glass','LineDensity','DiffractionOrder','Width in X','Width in Y'}; % parameter names
+            returnDataStruct.UniqueParametersStructFieldFormats = {'Glass','numeric','numeric','numeric','numeric'}; % parameter types
+            returnDataStruct.DefaultUniqueParametersStruct= defaultCompUniqueStruct; % default value
+            
         case 3 % 'Extra Data' table field names and initial values in Component Editor GUI
-            returnData1 = {'Unused'};
-            returnData2 = {{'numeric'}};
-            returnData3 = {[0]};
+            returnDataStruct.UniqueExtraDataFieldNames = {'Unused'};
+            returnDataStruct.DefaultUniqueExtraData = {[0]};
         case 4 % return the surface array of the compont
-            returnData1 = computeGrating1DSurfaceArray(componentParameters,firstTilt,firstDecenter,firstTiltDecenterOrder,lastThickness,compTiltMode); % surface array
-            returnData2 = NaN;
-            returnData3 = NaN;
+            firstTilt = inputDataStruct.FirstTilt;
+            firstDecenter = inputDataStruct.FirstDecenter;
+            firstTiltDecenterOrder = inputDataStruct.FirstTiltDecenterOrder;
+            lastThickness = inputDataStruct.LastThickness;
+            compTiltMode = inputDataStruct.ComponentTiltMode;
+            referenceCoordinateTM = inputDataStruct.ReferenceCoordinateTM;
+            previousThickness = inputDataStruct.PreviousThickness;
+            surfaceArray = computeGrating1DSurfaceArray(componentParameters,...
+                firstTilt,firstDecenter,firstTiltDecenterOrder,lastThickness,...
+                compTiltMode,referenceCoordinateTM,previousThickness); % surface array
+            
+            returnDataStruct.SurfaceArray = surfaceArray; % surface array
     end
 end
 
 
-function surfArray = computeGrating1DSurfaceArray(componentParameters,firstTilt,firstDecenter,firstTiltDecenterOrder,lastThickness,compTiltMode)
+function surfArray = computeGrating1DSurfaceArray(componentParameters,...
+        firstTilt,firstDecenter,firstTiltDecenterOrder,lastThickness,...
+        compTiltMode,referenceCoordinateTM,previousThickness)
     tempSurfaceArray = Surface;
     tempSurfaceArray(1).Tilt = firstTilt;
     tempSurfaceArray(1).Decenter = firstDecenter;
@@ -93,17 +122,16 @@ function surfArray = computeGrating1DSurfaceArray(componentParameters,firstTilt,
     tempSurfaceArray(end).Thickness = lastThickness;
     tempSurfaceArray(end).TiltMode = compTiltMode;
     
-    %     tempSurfaceArray = Surface;
-    % Set surface1 properties
-    % tempSurfaceArray(1) = Surface;
-    % tempSurfaceArray(1).TiltDecenterOrder =  'DxDyDzTxTyTz';
-    % tempSurfaceArray(1).TiltParameter = [componentParameters.Tilt_Angle_X,...
-    %     componentParameters.Tilt_Angle_Y, componentParameters.Tilt_Angle_Z];
-    % tempSurfaceArray(1).DecenterParameter = ...
-    %     [componentParameters.Decenter_X, componentParameters.Decenter_Y];
-     tempSurfaceArray(1).TiltMode = compTiltMode;
+    tempSurfaceArray(1).TiltMode = compTiltMode;
     
-    
+    % Tilt and decenter
+    currentSurface = tempSurfaceArray(1);
+    [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(...
+        currentSurface,referenceCoordinateTM,previousThickness);
+    % set surface property
+    currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
+    currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
+    tempSurfaceArray(1) = currentSurface;
     
     type = 'RectangularAperture';
     apertDecenter = [0,0];
@@ -117,22 +145,7 @@ function surfArray = computeGrating1DSurfaceArray(componentParameters,firstTilt,
     
     tempSurfaceArray(1).Aperture = Aperture(type,apertDecenter,apertRotInDeg,...
         drawAbsolute,outerShape,additionalEdge,uniqueParameters);
-    
-    % tempSurfaceArray(1).ApertureType = ...
-    %     componentParameters.Aperture_Type;
-    % tempSurfaceArray(1).ApertureParameter = ...
-    %     [componentParameters.Aperture_X, componentParameters.Aperture_Y,0,0];
-    % tempSurfaceArray(1).AbsoluteAperture = ...
-    %     true;
-    % tempSurfaceArray(1).AdditionalEdge = ...
-    %     0;
-    
     tempSurfaceArray(1).Glass = componentParameters.Glass;
-    % % Check wether it is Stop or not
-    % if componentParameters.Stop_Surface
-    %     tempSurfaceArray(1).Stop = 1;
-    % end
-    
     tempSurfaceArray(1).Thickness = lastThickness;
     
     tempSurfaceArray(1).UniqueParameters.GratingLineDensity = ...

@@ -6,19 +6,42 @@ function newGlass = Glass(glassName,glassCatalogueFileList,glassType,glassParame
     %
     % Properties: 3 and Methods: 12
     %
-    % Example Calls:
+    % Example Calls: (2 modes of function calls)
+    %
+    %% Mode 1: Create or search for glass with out saving. For this mode
+    %  only the first two inputs are passed.
     %
     %   newGlass = Glass()
-    %   newGlass = Glass('MyGlassName')
+    %       Returns a default 'IdealNonDispersive' glass
+    %   newGlass = Glass(glassName)
+    %       Searches for and returns the glass  named 'glassName' from all
+    %       avaialble glass catalogues.
     %   newGlass = Glass('1.70')
+    %       Creates and returns an 'IdealNonDispersive' glass with refractive
+    %       index of 1.70.
     %   newGlass = Glass('1.50 54.00 0.00')
-    %   newGlass = Glass('MyGlassName','All','IdealNonDispersive')
+    %       Creates and returns an 'IdealDispersive' glass with refractive
+    %       index of 1.50,Abbe number 54.00 and relative partial dispersion
+    %       of 0.00.
+    %   newGlass = Glass(glassName,glassCatalogueFileList)
+    %       Searches for and returns the glass named 'MyGlassName' from the
+    %       given glass catalogues list.
     %
-    %   glassParamStruct.FormulaType = 'Sellmeir1';
-    %   glassParamStruct.CoefficientData = [1,2,3,4,5,2,3,4,2,1];
-    %   glassParamStruct.ReferenceWavelength = 0.55*10^-6;
-    %   newGlass = Glass('MyGlassName','All','ZemaxFormula',glassParamStruct)
-    %   ...
+    %% Mode 2: Create a new glass and then save. The function operates in
+    %  this mode when more than 2 inputs are passed to it.
+    %
+    %   newGlass = Glass(glassName,glassCatalogueFileList,glassType)
+    %       Creates a new glass with given name and given type with its default parameters.
+    %       The second argument is used to list of glass catalogue files to save the new
+    %       glass. If it is 'All', then all available catalogue files will be prompted
+    %       for user to select one.
+    %
+    %   newGlass = Glass(glassName,glassCatalogueFileList,glassType,glassParamStruct)
+    %       Creates a new glass with given name and given type with the given glassParamStruct.
+    %       The second argument is used to list of glass catalogue files to save the new
+    %       glass. If it is 'All', then all available catalogue files will be prompted
+    %       for user to select one.
+    %  ....
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
@@ -30,42 +53,17 @@ function newGlass = Glass(glassName,glassCatalogueFileList,glassType,glassParame
     % <<<<<<<<<<<<<<<<<<< Change History Section >>>>>>>>>>>>>>>>>>>>>>>>>>
     % Date----------Modified By ---------Modification Detail--------Remark
     % Oct 14,2013   Worku, Norman G.     Original Version       Version 3.0
-    % Jun 17,2015   Worku, Norman G.     Support the user defined coating
+    % Jun 17,2015   Worku, Norman G.     Support the user defined glass
     %                                    definitions
     
-    % Glass: A function used to constract a new Glass object
-    if  nargin == 0 || isempty(glassName)% Enable construction  with no inputs
-        glassName = '';
-        glassCatalogueFileList = {'All'};
-        glassType = 'IdealNonDispersive';
-        % Connect to glass definition function and get the default
-        % glassParameters
-        % Connect to glass Defintion function
-        glassDefinitionHandle = str2func(glassType);
-        returnFlag = 1; % refractive index
-        [ paramName,paramType,defaultParamStruct] = ...
-            glassDefinitionHandle(returnFlag);
-        
-        glassParameters = defaultParamStruct;
-        internalTransmittance  = zeros(1,3);
-        thermalData  = zeros(10,1);
-        wavelengthRange  = zeros(2,1);
-        resistanceData  = zeros(5,1);
-        otherData  = zeros(6,1);
-        glassComment  = 'No comment';
-        
-    elseif (nargin == 1||nargin == 2)
-        if strcmpi(glassName,'Mirror')
+    if nargin < 3 % Mode 1
+        if  nargin == 0 || isempty(glassName) || strcmpi(glassName,'None') ||...
+                strcmpi(glassName,'Air') || strcmpi(glassName,'Mirror')% Enable construction  with no inputs, 'none', 'air'
+            glassName = '';
             glassCatalogueFileList = {'All'};
             
             glassType = 'IdealNonDispersive';
-            % Connect to glass definition function and get the default
-            % glassParameters
-            % Connect to glass Defintion function
-            glassDefinitionHandle = str2func(glassType);
-            returnFlag = 1; % refractive index
-            [ paramName,paramType,defaultParamStruct] = ...
-                glassDefinitionHandle(returnFlag);
+            [~,~,defaultParamStruct] = getCoatingUniqueParameters( glassType );
             
             glassParameters = defaultParamStruct;
             internalTransmittance  = zeros(1,3);
@@ -74,24 +72,35 @@ function newGlass = Glass(glassName,glassCatalogueFileList,glassType,glassParame
             resistanceData  = zeros(5,1);
             otherData  = zeros(6,1);
             glassComment  = 'No comment';
+            
+            newGlass = struct();
+            newGlass.Name = glassName;
+            newGlass.Type = glassType;
+            newGlass.UniqueParameters = glassParameters;
+            newGlass.InternalTransmittance = internalTransmittance;
+            newGlass.ResistanceData = resistanceData;
+            newGlass.ThermalData = thermalData;
+            newGlass.OtherData = otherData;
+            newGlass.WavelengthRange  = wavelengthRange;
+            newGlass.Comment = glassComment; %
+            newGlass.ClassName = 'Glass';
+            return;
         else
-            if (nargin == 1||strcmpi(glassCatalogueFileList{1},'All'))
+            if nargin == 1 || (strcmpi(glassCatalogueFileList{1},'All'))
                 % get all glass catalogues
                 objectType = 'Glass';
                 glassCatalogueFileList = getAllObjectCatalogues(objectType);
             end
-            % Look for the glass in the availbale glass catalogues.
-            savedGlass = extractGlassFromAvailableCatalogues(upper(glassName),glassCatalogueFileList);
-            
-            
-            if isempty(savedGlass)
-                
-                % Check if glassName is just the refractive index
-                % as in the case of IdealDispersive and
-                % IdealNonDispersive glass types
-                fixedIndexData = str2num(glassName);
-                
-                if isempty(fixedIndexData)
+            % Check if glassName is just the refractive index
+            % as in the case of IdealDispersive and
+            % IdealNonDispersive glass types
+            fixedIndexData = str2num(glassName);
+            if isempty(fixedIndexData)
+                % Search for the given glass in glass
+                % catalogues
+                % Look for the glass in the availbale glass catalogues.
+                savedGlass = extractGlassFromAvailableCatalogues(upper(glassName),glassCatalogueFileList);
+                if isempty(savedGlass)
                     disp([glassName,' can not be found in any of the available glass catalogues.']);
                     button = questdlg('The glass is not found in the catalogues. Do you want to choose another?','Glass Not Found');
                     switch button
@@ -118,100 +127,100 @@ function newGlass = Glass(glassName,glassCatalogueFileList,glassType,glassParame
                     newGlass = selectedGlass;
                     return;
                 else
-                    nFixedIndexData = length(fixedIndexData);
-                    if nFixedIndexData == 1
-                        glassName = [num2str((fixedIndexData(1)),'%.4f ')];
-                        glassType = 'IdealNonDispersive';
-                        glassParameters = struct();
-                        glassParameters.RefractiveIndex = fixedIndexData(1);
-                        
-                        disp([glassName,' is IdealNonDispersive glass.']);
-                    elseif nFixedIndexData == 2
-                        glassName = [num2str((fixedIndexData(1)),'%.4f '),',',...
-                            num2str((fixedIndexData(2)),'%.4f '),',',...
-                            num2str((0),'%.4f ')];
-                        glassType = 'IdealDispersive';
-                        glassParameters = struct();
-                        glassParameters.RefractiveIndex = fixedIndexData(1);
-                        glassParameters.AbbeNumber = fixedIndexData(2);
-                        glassParameters.DeltaRelativePartialDispersion = 0;
-                        
-                        disp([glassName,' is IdealDispersive glass.']);
-                    else
-                        glassName = [num2str((fixedIndexData(1)),'%.4f '),',',...
-                            num2str((fixedIndexData(2)),'%.4f '),',',...
-                            num2str((fixedIndexData(3)),'%.4f ')];
-                        glassType = 'IdealDispersive';
-                        glassParameters = struct();
-                        glassParameters.RefractiveIndex = fixedIndexData(1);
-                        glassParameters.AbbeNumber = fixedIndexData(2);
-                        glassParameters.DeltaRelativePartialDispersion = fixedIndexData(3);
-                        
-                        disp([glassName,' is IdealDispersive glass.']);
-                    end
-                    internalTransmittance  = zeros(1,3);
-                    thermalData  = zeros(10,1);
-                    wavelengthRange  = zeros(2,1);
-                    resistanceData  = zeros(5,1);
-                    otherData  = zeros(6,1);
-                    glassComment  = 'No comment';
+                    newGlass = savedGlass;
+                    %                 disp([glassName,' is extracted from available glass catalogue.']);
+                    return;
                 end
             else
-                newGlass = savedGlass;
-%                 disp([glassName,' is extracted from available glass catalogue.']);
+                nFixedIndexData = length(fixedIndexData);
+                if nFixedIndexData == 1
+                    glassName = [num2str((fixedIndexData(1)),'%.4f ')];
+                    glassType = 'IdealNonDispersive';
+                    glassParameters = struct();
+                    glassParameters.RefractiveIndex = fixedIndexData(1);
+                    
+                    disp([glassName,' is IdealNonDispersive glass.']);
+                elseif nFixedIndexData == 2
+                    glassName = [num2str((fixedIndexData(1)),'%.4f '),',',...
+                        num2str((fixedIndexData(2)),'%.4f '),',',...
+                        num2str((0),'%.4f ')];
+                    glassType = 'IdealDispersive';
+                    glassParameters = struct();
+                    glassParameters.RefractiveIndex = fixedIndexData(1);
+                    glassParameters.AbbeNumber = fixedIndexData(2);
+                    glassParameters.DeltaRelativePartialDispersion = 0;
+                    
+                    disp([glassName,' is IdealDispersive glass.']);
+                else
+                    glassName = [num2str((fixedIndexData(1)),'%.4f '),',',...
+                        num2str((fixedIndexData(2)),'%.4f '),',',...
+                        num2str((fixedIndexData(3)),'%.4f ')];
+                    glassType = 'IdealDispersive';
+                    glassParameters = struct();
+                    glassParameters.RefractiveIndex = fixedIndexData(1);
+                    glassParameters.AbbeNumber = fixedIndexData(2);
+                    glassParameters.DeltaRelativePartialDispersion = fixedIndexData(3);
+                    
+                    disp([glassName,' is IdealDispersive glass.']);
+                end
+                internalTransmittance  = zeros(1,3);
+                thermalData  = zeros(10,1);
+                wavelengthRange  = zeros(2,1);
+                resistanceData  = zeros(5,1);
+                otherData  = zeros(6,1);
+                glassComment  = 'No comment';
+                
+                newGlass.Name = glassName;
+                newGlass.Type = glassType;
+                newGlass.UniqueParameters = glassParameters;
+                newGlass.InternalTransmittance = internalTransmittance;
+                newGlass.ResistanceData = resistanceData;
+                newGlass.ThermalData = thermalData;
+                newGlass.OtherData = otherData;
+                newGlass.WavelengthRange  = wavelengthRange;
+                newGlass.Comment = glassComment; %
+                newGlass.SavedIndex = 0;
+                newGlass.ClassName = 'Glass';
                 return;
             end
         end
-    elseif nargin == 3
-        % Connect to glass definition function and get the default
-        % glassParameters
-        % Connect to glass Defintion function
-        glassDefinitionHandle = str2func(glassType);
-        returnFlag = 1; % refractive index
-        [ paramName,paramType,defaultParamStruct] = ...
-            glassDefinitionHandle(returnFlag);
+    else % Mode 2
+        if (strcmpi(glassCatalogueFileList{1},'All'))
+            % get all glass catalogues
+            objectType = 'Glass';
+            glassCatalogueFileList = getAllObjectCatalogues(objectType);
+        end
+        % If the glassType and/or other inputs of the new glass is
+        % also given then add it to the given glass catalogue and return it.
+        if nargin < 4
+            [~,~,defaultParamStruct] = getCoatingUniqueParameters( glassType );
+            glassParameters = defaultParamStruct;
+        end
         
-        glassParameters = defaultParamStruct;
-        internalTransmittance  = zeros(1,3);
-        thermalData  = zeros(10,1);
-        wavelengthRange  = zeros(2,1);
-        resistanceData  = zeros(5,1);
-        otherData  = zeros(6,1);
-        glassComment  = 'No comment';
-    elseif nargin == 4
-        internalTransmittance  = zeros(1,3);
-        thermalData  = zeros(10,1);
-        wavelengthRange  = zeros(2,1);
-        resistanceData  = zeros(5,1);
-        otherData  = zeros(6,1);
-        glassComment  = 'No comment';
-    elseif nargin == 5
-        thermalData  = zeros(10,1);
-        wavelengthRange  = zeros(2,1);
-        resistanceData  = zeros(5,1);
-        otherData  = zeros(6,1);
-        glassComment  = 'No comment';
-    elseif nargin == 6
-        wavelengthRange  = zeros(2,1);
-        resistanceData  = zeros(5,1);
-        otherData  = zeros(6,1);
-        glassComment  = 'No comment';
-    elseif nargin == 7
-        resistanceData  = zeros(5,1);
-        otherData  = zeros(6,1);
-        glassComment  = 'No comment';
-    elseif nargin == 8
-        otherData  = zeros(6,1);
-        glassComment  = 'No comment';
-    elseif nargin == 9
-        glassComment  = 'No comment';
-    elseif nargin == 10
+        if nargin < 5
+            internalTransmittance  = zeros(1,3);
+        end
+        if nargin < 6
+            thermalData  = zeros(10,1);
+        end
+        if nargin < 7
+            wavelengthRange  = zeros(2,1);
+        end
+        if nargin < 8
+            resistanceData  = zeros(5,1);
+        end
+        if nargin < 9
+            otherData  = zeros(6,1);
+        end
+        if nargin < 10
+            glassComment  = 'No comment';
+        end
         
     end
     
     newGlass.Name = glassName;
     newGlass.Type = glassType;
-    newGlass.Parameters = glassParameters;
+    newGlass.UniqueParameters = glassParameters;
     newGlass.InternalTransmittance = internalTransmittance;
     newGlass.ResistanceData = resistanceData;
     newGlass.ThermalData = thermalData;
@@ -219,12 +228,43 @@ function newGlass = Glass(glassName,glassCatalogueFileList,glassType,glassParame
     newGlass.WavelengthRange  = wavelengthRange;
     newGlass.Comment = glassComment; %
     newGlass.ClassName = 'Glass';
+    newGlass.SavedIndex = 0;
+    
+    % Save the new glass in to glass catalogue
+    % if the glass already exists in the catalogue then update its
+    % parameters and type, otherwise add a new glass
+    [savedGlass,catalogueIndex,glassIndex] = extractGlassFromAvailableCatalogues(upper(glassName),glassCatalogueFileList);
+    if isempty(savedGlass)
+        % Make the user choose the catalogue to which the new glass is to
+        % be added.
+        [Selection,ok] = listdlg('PromptString','Select the Glass Catalogue File:',...
+            'SelectionMode','single',...
+            'ListString',glassCatalogueFileList);
+        if ok
+            selectedCatalogueFullName = glassCatalogueFileList{Selection};
+            if isValidObjectCatalogue('Glass', selectedCatalogueFullName)
+                glassIndex = addObjectToObjectCatalogue('Glass', newGlass,selectedCatalogueFullName,'ask');
+            else
+                disp('Error: The selected catalogue is invalid. So the glass is not saved to the catalogue.');
+            end
+        else
+            disp('Warning: The glass is not saved to the catalogue.');
+        end
+    else
+        selectedCatalogueFullName = glassCatalogueFileList{catalogueIndex};
+        glassIndex = addObjectToObjectCatalogue('Glass', newGlass,selectedCatalogueFullName,'ask');
+    end
+    newGlass.SavedIndex = glassIndex;
+    
 end
 
 
-function savedGlass = extractGlassFromAvailableCatalogues(glassName,GlassCatalogueFileList)
+function [savedGlass,catalogueIndex,glassIndex] = extractGlassFromAvailableCatalogues(glassName,GlassCatalogueFileList)
     if nargin == 0
         disp('Error: extractGlassFromAvailableCatalogues needs atleast one argument. ');
+        savedGlass = [];
+        catalogueIndex = [];
+        glassIndex = [];
         return;
     elseif nargin == 1
         % get all glass catalogues
@@ -246,9 +286,13 @@ function savedGlass = extractGlassFromAvailableCatalogues(glassName,GlassCatalog
     end
     % if exists return the glass
     if objectIndex ~= 0
+        glassIndex = objectIndex;
+        catalogueIndex = kk;
         savedGlass = (glassObject);
     else
         savedGlass = [];
+        catalogueIndex = [];
+        glassIndex = [];
     end
 end
 

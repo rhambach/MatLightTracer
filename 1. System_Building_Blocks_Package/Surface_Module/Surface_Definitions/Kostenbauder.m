@@ -202,7 +202,7 @@ function [ returnDataStruct] = Kostenbauder(returnFlag,surfaceParameters,inputDa
             NoIntersectioPoint(imag(distanceToXY) ~= 0) = 1;
             geometricalPathLength(imag(distanceToXY) ~= 0) = NaN;
             noIntersectionPointFlag = NoIntersectioPoint;
-            
+            focalLength = -1/C;
             % Ref: http://www2.ph.ed.ac.uk/~wjh/teaching/mo/slides/lens/lens.pdf
             % additionalPathLength = -(2*pi./wavlenInM).*(intersectionPointXY(1,:).^2+intersectionPointXY(2,:).^2)./(2*focalLength);
             % additionalPathLength = -(intersectionPointXY(1,:).^2+intersectionPointXY(2,:).^2)/(2*focalLength);

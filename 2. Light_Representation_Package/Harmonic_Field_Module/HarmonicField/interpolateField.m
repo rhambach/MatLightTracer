@@ -82,8 +82,9 @@ phaseEyNew(isnan(phaseEyNew)) = 0;
  % construct new harmonic field
  wavelen = oldHarmonicField.Wavelength;
  direction = oldHarmonicField.Direction;
+ domain = oldHarmonicField.Domain;
  newCenter = [newCx,newCy]';
- newInterpolatedField = HarmonicField(newEx,newEy,newDx,newDy,wavelen,newCenter,direction);
+ newInterpolatedField = HarmonicField(newEx,newEy,newDx,newDy,wavelen,newCenter,direction,domain);
  
 end
 

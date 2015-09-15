@@ -33,12 +33,14 @@ function [refractiveIndex] = getRefractiveIndex(glass,wavLenInM,derivativeOrder)
     
     % Connect to glass definition function and get the refractive index
     glassType = glass.Type;
-    glassParameters = glass.Parameters;
+    glassParameters = glass.UniqueParameters;
     
     % Connect to glass Defintion function
     glassDefinitionHandle = str2func(glassType);
     returnFlag = 2; % refractive index
-    [ refractiveIndex] = ...
-        glassDefinitionHandle(returnFlag,glassParameters,wavLenInM,derivativeOrder);
-    
+    inputDataStruct = struct();
+    inputDataStruct.Wavelength = wavLenInM;
+    inputDataStruct.DerivativeOrder = derivativeOrder;
+    [ returnDataStruct] = glassDefinitionHandle(returnFlag,glassParameters,inputDataStruct);
+    refractiveIndex = returnDataStruct.RefractiveIndex;
 end

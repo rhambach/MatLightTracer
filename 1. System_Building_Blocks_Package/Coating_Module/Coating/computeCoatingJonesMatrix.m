@@ -47,15 +47,24 @@ function [jonesMatrixAmplitude,jonesMatrixPower] = computeCoatingJonesMatrix...
     coatingDefinitionHandle = str2func(coatingType);
     returnFlag = 2; % Jones matrix
     wavLen = wavLenInUm*10^-6;
-    referenceWavLen = referenceWavLenInUm*10^-6;    
-    [ ampTransJonesMatrix,ampRefJonesMatrix,powTransJonesMatrix,powRefJonesMatrix] = ...
-        coatingDefinitionHandle(returnFlag,coatingParameters,wavLen,referenceWavLen,...
-        incAngleInDeg,substrateGlass,claddingGlass);
+
+    inputDataStruct = struct();
+    inputDataStruct.Wavelength = wavLen;
+    inputDataStruct.IncidenceAngleInDeg = incAngleInDeg;
+    inputDataStruct.IndexBefore = indexBefore;
+    inputDataStruct.IndexAfter = indexAfter;
+    [ returnDataStruct] = coatingDefinitionHandle(returnFlag,coatingParameters,inputDataStruct);
+    
+    ampTransJonesMatrix = returnDataStruct.AmplitudeTransmissionMatrix;
+    powTransJonesMatrix = returnDataStruct.PowerTransmissionMatrix;
+    ampRefJonesMatrix = returnDataStruct.AmplitudeReflectionMatrix;
+    powRefJonesMatrix = returnDataStruct.PowerReflectionMatrix;
+    
     if reflection
         jonesMatrixAmplitude = ampRefJonesMatrix;
         jonesMatrixPower = powRefJonesMatrix;
     else
         jonesMatrixAmplitude = ampTransJonesMatrix;
-        jonesMatrixPower = powTransJonesMatrix;        
+        jonesMatrixPower = powTransJonesMatrix;
     end
 end

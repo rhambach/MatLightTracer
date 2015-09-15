@@ -1,17 +1,28 @@
-function [ returnData1, returnData2, returnData3 ] = IdealDispersive(...
-        returnFlag,glassParameters,wavelength,derivativeOrder)
-    %IDEALDISPERSIVE : Defn of glass with three parameters n,v,dpgf and the
-    % Currently the dispersion is not computed but in the future it shall
-    % be included as done for Model glass in zemax.
+function [ returnDataStruct] = IdealDispersive(returnFlag,glassParameters,inputDataStruct)
+    % IdealNonDispersive Defn of glass with fixed index.
     % The function returns differnt parameters when requested by the main program.
-    % It follows the common format used for defining user defined coating.
-    % Inputs:
-    %   (returnFlag,glassParameters,wavelength,derivativeOrder)
-    % Outputs: depends on the return flag
-    %   returnFlag = 1
-    %       Outputs: [FieldNames,FieldTypes,DefaultGlassParameterStruct]
-    %   returnFlag = 2
-    %       Outputs: [refractiveIndex]
+    % It follows the common format used for defining user defined glass.
+    % glassParameters = values of {'RefractiveIndex','AbbeNumber',
+    %               'DeltaRelativePartialDispersion','ReferenceWavelength'}
+    % inputDataStruct : Struct of all additional inputs (not included in the surface parameters)
+    % required for computing the return. (Vary depending on the returnFlag)
+    % returnFlag : An integer indicating what is requested. Depending on it the
+    % returnDataStruct will have different fields
+    % 1: Glass specific 'UniqueGlassParameters' table field names
+    % and initial values in Glass Editor GUI
+    %   inputDataStruct:
+    %       empty
+    %   Output Struct:
+    %       returnDataStruct.UniqueParametersStructFieldNames
+    %       returnDataStruct.UniqueParametersStructFieldDisplayNames
+    %       returnDataStruct.UniqueParametersStructFieldFormats
+    %       returnDataStruct.DefaultUniqueParametersStruct
+    % 2:  Return the refractive index of given derivative order
+    %   inputDataStruct:
+    %       inputDataStruct.Wavelength
+    %       inputDataStruct.DerivativeOrder
+    %   returnDataStruct:
+    %       returnDataStruct.RefractiveIndex,
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
@@ -22,46 +33,54 @@ function [ returnData1, returnData2, returnData3 ] = IdealDispersive(...
     
     % <<<<<<<<<<<<<<<<<<< Change History Section >>>>>>>>>>>>>>>>>>>>>>>>>>
     % Date----------Modified By ---------Modification Detail--------Remark
-    % Jun 19,2015   Worku, Norman G.     Original Version  
+    % Jun 19,2015   Worku, Norman G.     Original Version
+    % Sep 07,2015   Worku, Norman G.     Edited to common user defined format
     
-    %% Default input vaalues
-    if nargin == 1
-        if returnFlag == 1
-            % Just continue
-        else
-            disp(['Error: The function IdealDispersive() needs two arguments',...
-                'return type and glassParameters.']);
-            returnData1 = NaN;
-            returnData2 = NaN;
-            returnData3 = NaN;
+    %% Default input values
+    if nargin < 1
+        disp(['Error: The function IdealDispersive() needs atleast one argument',...
+            'the return type.']);
+        returnDataStruct = NaN;
+        return;
+    end
+    if nargin < 2
+        if returnFlag == 2
+            disp(['Error: The function IdealDispersive() needs atleast all three ',...
+                'arguments the compute the required return.']);
+            returnDataStruct = NaN;
             return;
         end
-    elseif nargin < 2
-        disp(['Error: The function IdealDispersive() needs two arguments',...
-            'return type and glassParameters.']);
-        returnData1 = NaN;
-        returnData2 = NaN;
-        returnData3 = NaN;
-        return;
-    elseif nargin == 2
-        wavelength = 0.55*10^-6;
-        derivativeOrder = 0;
-    elseif nargin == 3
-        derivativeOrder = 0;
+    end
+    if nargin < 3
+        if returnFlag == 2
+            disp(['Error: The function IdealDispersive() needs atleast all three ',...
+                'arguments the compute the required return.']);
+            returnDataStruct = NaN;
+            return;
+        end
     end
     
     %%
     switch returnFlag(1)
         case 1 % Return the field names and initial values of glassParameters
             returnData1 = {'RefractiveIndex','AbbeNumber','DeltaRelativePartialDispersion','ReferenceWavelength'};
-            returnData2 = {{'numeric'},{'numeric'},{'numeric'},{'numeric'}};
+            returnData1_Disp = {'Refractive Index','Abbe Number','Delta Relative Partial Dispersion','Reference Wavelength'};
+            returnData2 = {'numeric','numeric','numeric','numeric'};
             defaultGlassParameter = struct();
             defaultGlassParameter.RefractiveIndex = 1;
             defaultGlassParameter.AbbeNumber = 0;
             defaultGlassParameter.DeltaRelativePartialDispersion = 0;
             defaultGlassParameter.ReferenceWavelength = 0.55*10^-6;
             returnData3 = defaultGlassParameter;
+            
+            returnDataStruct.UniqueParametersStructFieldNames = returnData1;
+            returnDataStruct.UniqueParametersStructFieldDisplayNames = returnData1_Disp;
+            returnDataStruct.UniqueParametersStructFieldFormats = returnData2;
+            returnDataStruct.DefaultUniqueParametersStruct = returnData3;
         case 2 % Return the refractive index of given derivative order
+            wavelength = inputDataStruct.Wavelength;
+            derivativeOrder =   inputDataStruct.DerivativeOrder;
+            
             nWav = size(wavelength,2);
             refWavLen = glassParameters.ReferenceWavelength;
             
@@ -80,11 +99,8 @@ function [ returnData1, returnData2, returnData3 ] = IdealDispersive(...
             % glass type of zemax which computes the refractive index at
             % different wavelelngths from the three parameters  !!!
             
-            returnData1 = n*ones(1,nWav);
-            returnData2 = NaN;
-            returnData3 = NaN;
+            refractiveIndex = n*ones(1,nWav);
+            returnDataStruct.RefractiveIndex = refractiveIndex;
     end
-    
-    
 end
 

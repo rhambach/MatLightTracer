@@ -1,5 +1,5 @@
 function [surfaceCoordinateTM,nextReferenceCoordinateTM] = TiltAndDecenter...
-        (surf,refCoordinateTM,~,prevThickness)
+        (surf,refCoordinateTM,prevThickness)
     % TiltAndDecenter: Compute the coordinate transformation matrix
     % of the surface.
     % Inputs:
@@ -21,7 +21,7 @@ function [surfaceCoordinateTM,nextReferenceCoordinateTM] = TiltAndDecenter...
     
     % For detailed see the documentation of the
     % CoordinateTransformationMatrix function
-
+    
     Tx = surf.Tilt(1);
     Ty = surf.Tilt(2);
     Tz = surf.Tilt(3);

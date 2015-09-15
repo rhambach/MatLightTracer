@@ -1,54 +1,65 @@
-function [ returnData1, returnData2, returnData3] = IMAGE( ...
-        returnFlag,componentParameters,firstTilt,firstDecenter,firstTiltDecenterOrder,lastThickness,compTiltMode)
-    %IMAGE COmponent for image surfaces
-
-    %% Default input vaalues
-    if nargin == 0
+function [ returnDataStruct] = IMAGE( ...
+        returnFlag,componentParameters,inputDataStruct)
+    %IMAGE : COmponent for image surfaces
+    % componentParameters = values of {'Unused'}
+    % inputDataStruct : Struct of all additional inputs (not included in the component parameters)
+    % required for computing the return. (Vary depending on the returnFlag)
+    % returnFlag : An integer indicating what is requested. Depending on it the
+    % returnDataStruct will have different fields
+    % 1: About the component
+    %   inputDataStruct:
+    %       empty
+    %   Output Struct:
+    %       returnDataStruct.Name
+    %       returnDataStruct.ImageFullFileName
+    %       returnDataStruct.Description
+    % 2: Component specific 'UniqueParametersStruct' table field names and
+    %    initial values in Surface Editor GUI
+    %   inputDataStruct:
+    %       empty
+    %   Output Struct:
+    %       returnDataStruct.UniqueParametersStructFieldNames
+    %       returnDataStruct.UniqueParametersStructFieldDisplayNames
+    %       returnDataStruct.UniqueParametersStructFieldFormats
+    %       returnDataStruct.DefaultUniqueParametersStruct
+    % 3: Component 'Extra Data' parameters
+    %   inputDataStruct:
+    %       empty
+    %   Output Struct:
+    %       returnDataStruct.UniqueExtraDataFieldNames
+    %       returnDataStruct.DefaultUniqueExtraData
+    % 4: The surface array of the component
+    %   inputDataStruct:
+    %       inputDataStruct.FirstTilt
+    %       inputDataStruct.FirstDecenter
+    %       inputDataStruct.FirstTiltDecenterOrder
+    %       inputDataStruct.LastThickness
+    %       inputDataStruct.ComponentTiltMode
+    %   Output Struct:
+    %       returnDataStruct.SurfaceArray
+    
+    %% Default input values
+    if nargin < 1
         disp('Error: The function IMAGE() needs atleat the return type.');
-        returnData1 = NaN;
-        returnData2 = NaN;
-        returnData3 = NaN;
+        returnDataStruct = NaN;
         return;
-    elseif nargin >= 1
-        if returnFlag == 4
-            if nargin == 1
-                % take the defualt componentparameters
-                returnFlag = 2;
-                [fieldNames,fieldTypes, defaultParameterStruct] = SequenceOfSurfaces(returnFlag);
-                componentParameters = defaultParameterStruct;
-                firstTilt = [0,0,0];
-                firstDecenter = [0,0];
-                firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 10;
-                compTiltMode = 'NAX';
-            elseif nargin == 2
-                firstTilt = [0,0,0];
-                firstDecenter = [0,0];
-                firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 10;
-                compTiltMode = 'NAX';
-            elseif nargin == 3
-                firstDecenter = [0,0];
-                firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 10;
-                compTiltMode = 'NAX';
-            elseif nargin == 4
-                firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
-                lastThickness = 10;
-                compTiltMode = 'NAX';
-            elseif nargin == 5
-                lastThickness = 10;
-                compTiltMode = 'NAX';
-            elseif nargin == 6
-                compTiltMode = 'NAX';
-            else
-            end
-        else
-            % Continue
-        end
-    else
     end
     
+    if returnFlag == 4
+        if nargin < 2
+            % take the defualt componentparameters
+            returnFlag = 2;
+            [returnDataStruct] = IMAGE(returnFlag);
+            componentParameters = returnDataStruct.DefaultUniqueParametersStruct;
+        end
+        if nargin < 3
+            inputDataStruct.FirstTilt = [0,0,0];
+            inputDataStruct.FirstDecenter = [0,0];
+            inputDataStruct.FirstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
+            inputDataStruct.LastThickness = 10;
+            inputDataStruct.ComponentTiltMode = 'NAX';
+        end
+    end
     %%
     switch returnFlag(1)
         case 1 % About  component
@@ -59,29 +70,46 @@ function [ returnData1, returnData2, returnData3] = IMAGE( ...
             returnData2 = {[pathstr,'\IMAGE.jpg']};  % Image file name
             returnData3 = {['Image surface: is a plane sequence.']};  % Text description
             
+            returnDataStruct.Name = returnData1;
+            returnDataStruct.ImageFullFileName = returnData2;
+            returnDataStruct.Description = returnData3;
         case 2 % 'BasicComponentDataFields' table field names and initial values in COmponent Editor GUI
-            returnData1 = {'Unused'}; % parameter names
-            returnData2 = {{'numeric'}}; % parameter types ('Boolean','SQS','char','numeric',{'choise 1','choise 2'})
             defaultCompUniqueStruct = struct();
             defaultCompUniqueStruct.Unused = 0;
-            returnData3 = defaultCompUniqueStruct; % default value
-            
+            returnDataStruct.UniqueParametersStructFieldNames = {'Unused'}; % parameter names
+            returnDataStruct.UniqueParametersStructFieldDisplayNames = {'Unused'}; % parameter names
+            returnDataStruct.UniqueParametersStructFieldFormats = {'numeric'}; % parameter types
+            returnDataStruct.DefaultUniqueParametersStruct= defaultCompUniqueStruct; % default value
         case 3 % 'Extra Data' table field names and initial values in Component Editor GUI
-            returnData1 = {'Unused'};
-            returnData2 = {{'numeric'}};
-            returnData3 = {[0]};
+            returnDataStruct.UniqueExtraDataFieldNames = {'Unused'};
+            returnDataStruct.DefaultUniqueExtraData = {[0]};
         case 4 % return the surface array of the compont
             surfaceArray = Surface;
+            surfaceArray(1).Tilt = inputDataStruct.FirstTilt;
+            surfaceArray(1).Decenter = inputDataStruct.FirstDecenter;
+            surfaceArray(1).TiltDecenterOrder = inputDataStruct.FirstTiltDecenterOrder;
+            surfaceArray(end).Thickness = 0;%inputDataStruct.LastThickness;
+            surfaceArray(end).TiltMode = inputDataStruct.ComponentTiltMode;
+            
+            
+            referenceCoordinateTM = inputDataStruct.ReferenceCoordinateTM;
+            previousThickness = inputDataStruct.PreviousThickness;
+            % Tilt and decenter
+            currentSurface = surfaceArray(1);
+            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(...
+                currentSurface,referenceCoordinateTM,previousThickness);
+            % set surface property
+            currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
+            currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
+            surfaceArray(1) = currentSurface;
+            
+            
+            if strcmpi(surfaceArray(1).Aperture.Type,'FloatingCircularAperture')
+                surfaceArray(1).Aperture.Type = 'CircularAperture';
+                surfaceArray(1).Aperture.UniqueParameters.SmallDiameter = 0;
+                surfaceArray(1).Aperture.UniqueParameters.LargeDiameter = ...
+                    surfaceArray(1).Aperture.UniqueParameters.Diameter;
+            end
             surfaceArray(1).IsImage = 1;
-            surfaceArray(1).Tilt = firstTilt;
-            surfaceArray(1).Decenter = firstDecenter;
-            surfaceArray(1).TiltDecenterOrder = firstTiltDecenterOrder;
-            surfaceArray(end).Thickness = lastThickness;
-            surfaceArray(end).TiltMode = compTiltMode;
-            
-            returnData1 = surfaceArray; % surface array
-            returnData2 = NaN;
-            returnData3 = NaN;
-            
-            
+            returnDataStruct.SurfaceArray = surfaceArray; % surface array
     end

@@ -124,13 +124,17 @@ function [ validSystem,message ] = validateOpticalSystem(parentWindow)
             message{mm} = 'Error: Some Invalid Coating catalogue found. So they are just removed.';
             valid(mm) = 0;
             
-            coatingCatalogueList{invalidCoatingCat} = [];
+            coatingCatalogueList(invalidCoatingCat) = [];
             aodHandles.OpticalSystem.CoatingCataloguesList = coatingCatalogueList;
         end
     else
         mm = mm + 1;
-        message{mm} = 'Error: No Coating catalogue found. Valid optical system needs at least one Coating catalogue. So create a new Coating catalogue first.';
+        message{mm} = 'Error: No Coating catalogue found. So an empty Coating catalogue is created.';
         valid(mm) = 0;
+        
+        parentWindow.ParentHandles = aodHandles;
+        addCoatingCatalogue(parentWindow);
+        aodHandles = parentWindow.ParentHandles;
     end
     
     % Glass Catalogue
@@ -143,20 +147,24 @@ function [ validSystem,message ] = validateOpticalSystem(parentWindow)
                 invalidGlassCat = [invalidGlassCat,gg];
             end
         end
-        if isempty(invalidCoatingCat)
+        if isempty(invalidGlassCat)
             
         else
             mm = mm + 1;
             message{mm} = 'Error: Some Invalid Glass catalogue found. So they are just removed.';
             valid(mm) = 0;
             
-            glassCatalogueList{invalidGlassCat} = [];
+            glassCatalogueList(invalidGlassCat) = [];
             aodHandles.OpticalSystem.GlassCataloguesList = glassCatalogueList;
         end
     else
         mm = mm + 1;
-        message{mm} = 'Error: No Glass catalogue found. Valid optical system needs at least one Glass catalogue. Create a new Glass catalogue first.';
+        message{mm} = 'Error: No Glass catalogue found. So an empty Glass catalogue is created.';
         valid(mm) = 0;
+        
+        parentWindow.ParentHandles = aodHandles;
+        addGlassCatalogue(parentWindow);
+        aodHandles = parentWindow.ParentHandles;
     end
     
     parentWindow.ParentHandles = aodHandles;

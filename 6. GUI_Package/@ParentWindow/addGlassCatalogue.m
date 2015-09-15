@@ -5,6 +5,7 @@ function fullFileName = addGlassCatalogue(myParent,catlogueFullFileName)
     if nargin == 0
         msgbox('Error: The function addGlassCatalogue needs atleast one input argument.');
         fullFileName = NaN;
+        myParent.ParentHandles = aodHandles;
         return;
     elseif nargin == 1
         catalogueFileName = char(cellstr(inputdlg('Enter New Catalogue Name','New Catalogue Name',1,{'GlassCat01'})));
@@ -25,6 +26,7 @@ function fullFileName = addGlassCatalogue(myParent,catlogueFullFileName)
         else
             msgbox('Error: Empty catalogue file name.');
             fullFileName = NaN;
+            myParent.ParentHandles = aodHandles;
             return;
         end
     elseif nargin == 2
@@ -49,6 +51,7 @@ function fullFileName = addGlassCatalogue(myParent,catlogueFullFileName)
                     tblData1(:,3), 'UniformOutput', false)));
                 if alreadyExsist
                     disp([catalogueFileName, ' already exists.']);
+                    myParent.ParentHandles = aodHandles;
                     return;
                 else
                     
@@ -68,16 +71,19 @@ function fullFileName = addGlassCatalogue(myParent,catlogueFullFileName)
             if isempty(relatedCatalogueFullFileNames)
                 msgbox(['Error: The catalogue ',catalogueFileName,ext,' does not exist.']);
                 fullFileName = NaN;
+                myParent.ParentHandles = aodHandles;
                 return;
             elseif strcmpi(relatedCatalogueFullFileNames,catlogueFullFileName)
                 msgbox(['Error: The catalogue ',catalogueFileName,ext,' is an invalid catalogue.']);
                 fullFileName = NaN;
+                myParent.ParentHandles = aodHandles;
                 return;
             else
                 % Try with the all newCatlogueFullFileNames
                 for pp = 1:size(relatedCatalogueFullFileNames,1)
                     if isValidObjectCatalogue('Glass', relatedCatalogueFullFileNames{pp,:} )
                         fullFileName = addGlassCatalogue(myParent,relatedCatalogueFullFileNames{pp,:});
+                        myParent.ParentHandles = aodHandles;
                         return;
                     end
                     
@@ -87,4 +93,5 @@ function fullFileName = addGlassCatalogue(myParent,catlogueFullFileName)
         end
         
     end
+    myParent.ParentHandles = aodHandles;
 end

@@ -975,8 +975,8 @@ function menuCoatingDataEditor_Callback(~,~,parentWindow)
         end
         fontSize = aodHandles.FontSize;
         fontName = aodHandles.FontName;
-        primaryWavLenInUm = getPrimaryWavelength(currentOpticalSystem)*10^6;
-        coatingDataInputDialog(primaryWavLenInUm,coatingCatalogueListFullNames,fontName,fontSize);
+%         primaryWavLenInUm = getPrimaryWavelength(currentOpticalSystem)*10^6;
+        coatingDataInputDialog(coatingCatalogueListFullNames,fontName,fontSize);
     else
         
     end

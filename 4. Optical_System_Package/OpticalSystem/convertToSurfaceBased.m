@@ -10,22 +10,24 @@ function [ updatedSystem ] = convertToSurfaceBased( currentOpticalSystem )
         % Convert From componentArray to surfaceArray
         componentArray = updatedSystem.ComponentArray;
         nComponent = getNumberOfComponents(updatedSystem);
-        totalSurfaceArray = [];
+        totalSurfaceArray = Surface();
+        nextIndex = 1;
         for tt = 1:nComponent
             currentSurfaceArray = getComponentSurfaceArray(componentArray(tt));
             stopSurfaceInComponentIndex = componentArray(tt).StopSurfaceIndex;
             if stopSurfaceInComponentIndex
-                currentSurfaceArray(stopSurfaceInComponentIndex).Stop = 1;
+                currentSurfaceArray(stopSurfaceInComponentIndex).IsStop = 1;
             end
-            totalSurfaceArray = [totalSurfaceArray,currentSurfaceArray];
+            nSurf = length(currentSurfaceArray);
+            totalSurfaceArray(nextIndex:nextIndex+nSurf-1) = currentSurfaceArray;
+            nextIndex = nextIndex+nSurf;
         end
         updatedSystem.SurfaceArray = totalSurfaceArray;
     else
         disp('Warning: The system is already surface based.');
     end
-%     updatedSystem.ComponentArray = Component.empty;
     updatedSystem.ComponentArray = Component();
-    updatedSystem.SystemDefinitionType = 'SurfaceBased';
+    updatedSystem.SystemDefinitionType = 1; %'SurfaceBased';
     updatedSystem.SurfaceArray = updateSurfaceCoordinateTransformationMatrices(updatedSystem.SurfaceArray);
     
 end

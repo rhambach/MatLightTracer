@@ -1,5 +1,5 @@
 function [ optimalVector,optimalMeritFunctionValue,outputStruct ] = ...
-        steepestDescentOptimizer( meritFunctionStruct,optimizationOption )
+        steepestDescentOptimizer( meritFunction,optimizationOption )
     %STEEPESTDESCENTOPTIMIZER Summary of this function goes here
     %   Detailed explanation goes here
     
@@ -8,27 +8,34 @@ function [ optimalVector,optimalMeritFunctionValue,outputStruct ] = ...
     outputFuncHandle = optimizationOption.OutputFcn;
     maxIter = optimizationOption.MaximumIteration;
     
+    currentMeritFunction = meritFunction;
+    optimizableObject = currentMeritFunction.OptimizableObject;
+    operandArray = currentMeritFunction.OptimizationOperand;
+    currentVariableValueVector = getOptimizableVector(optimizableObject);
     
-    currentMeritFunction = meritFunctionStruct;
-    currentOptVector = getOptimizableVector(currentMeritFunction);    
+    %     currentMeritFunction = meritFunction;
+    %     currentVariableValueVector = getOptimizableVector(currentMeritFunction);
+    
     nIter = 0; %initialize iteration counter
     error = 1;          %initialize error
-    delMag = 2;         %set iteration parameter
+    delMag = 1;         %set iteration parameter
     
     while nIter <= maxIter %& error > tolfun
-        [currentMFValue] = getMeritFunctionValue( currentMeritFunction );
-        error = currentMeritFunction.Target - currentMFValue;
-        gradientvector = getGradientVector(currentMeritFunction);%0*currentVariableValues;
-        newOptVector = currentOptVector - delMag*gradientvector;
-        currentMeritFunction = setOptimizableVector(currentMeritFunction,newOptVector); 
-        currentOptVector = newOptVector;
         nIter = nIter+1;
+        [currentMFValue(nIter)] = getMeritFunctionValue( currentMeritFunction );
+        error = 0 - currentMFValue(nIter);
+        gradientvector = getGradientVector(currentMeritFunction);%0*currentVariableValues;
+        newOptVector = currentVariableValueVector - delMag*gradientvector;
+        currentMeritFunction.OptimizableObject = setOptimizableVector(currentMeritFunction.OptimizableObject,newOptVector);
+        currentVariableValueVector = newOptVector;
     end
     
-    optimalVector = currentOptVector;
-    optimalMeritFunctionValue = currentMFValue
+    optimalVector = currentVariableValueVector;
+    optimalMeritFunctionValue = currentMFValue(nIter);
     outputStruct.Algorithm = 'steepestDescentOptimizer';
     outputStruct.NumberOfIterations = nIter;
     outputStruct.ExitMessage = 'Done!!';
+    
+    figure; axes; plot([1:nIter],currentMFValue);
 end
 

@@ -20,8 +20,11 @@ function [fieldNames,fieldFormat,uniqueParamStruct] = getMeritFunctionUniquePara
     % Jun 17,2015   Worku, Norman G.     Original Version
     
     if nargin == 0
-        returnDefault = 1;
-        meritFunctionName = 'DefaultMeritFunction';
+        disp('Error: The function getMeritFunctionUniqueParameters requires atleast 1 input argument.');
+        fieldNames = NaN;
+        fieldFormat = NaN;
+        uniqueParamStruct = NaN;
+        return;
     elseif isMeritFunction(variableInputArgument)
         currentMeritFunction = variableInputArgument;
         returnDefault = 0;
@@ -30,9 +33,11 @@ function [fieldNames,fieldFormat,uniqueParamStruct] = getMeritFunctionUniquePara
         returnDefault = 1;
         meritFunctionName = variableInputArgument;
     else
-        disp('Error: Invalid input to getMeritFunctionUniqueParameters. So it is just ignored.');
-        returnDefault = 1;
-        meritFunctionName = 'DefaultMeritFunction';
+        disp('Error: The function getMeritFunctionUniqueParameters requires atleast 1 input argument.');
+        fieldNames = NaN;
+        fieldFormat = NaN;
+        uniqueParamStruct = NaN;
+        return;
     end
     
     if returnDefault

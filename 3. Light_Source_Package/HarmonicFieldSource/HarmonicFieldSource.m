@@ -1,251 +1,101 @@
 function newHarmonicFieldSource = HarmonicFieldSource(...
-        lateralPosition,direction,distanceToInputPlane,fieldSizeSpecification,...
-        relativeFieldSizeFactor,absoluteBoarderShape,absoluteFieldSize,...
-        edgeSizeSpecification,relativeEdgeSizeFactor,absoluteEdgeSize,...
-        samplingPoints,samplingDistance,additionalBoarderSamplePoints,...
+        lateralPosition,principalDirectionSpecification,...
+        principalDirectionValue,distanceToInputPlane,...
+        fieldSizeSpecification,fieldSizeValue,fieldBoarderShape,...
+        smoothEdgeSizeSpecification,smoothEdgeSizeValue,...
+        zeroBoarderSizeSpecification,zeroBoarderSizeValue,...
+        samplingParameterType,samplingParameterValues,...
         spatialProfileType,spatialProfileParameter,...
         spectralProfileType,spectralProfileParameter,...
-        polarizationProfileType,polarizationProfileParameter)
+        polarizationProfileType,polarizationProfileParameter,mediumName)
     
-    if nargin == 0
+    if nargin < 1
         lateralPosition = [0,0]';% [X;Y] position
-        direction = [0,0,1]';% direction cosine in the direction. The field will be
-        % defined in the plane perpendicular to this direction
-        distanceToInputPlane = 10*10^-3;
-        fieldSizeSpecification = 'Relative'; % 'Relative' to the lateral profile or 'Absolute'
-        relativeFieldSizeFactor = 1; % for relative dimenssioning
-        absoluteBoarderShape = 'Elliptical' ;% 'Elliptical' or 'Rectangular'
-        absoluteFieldSize = [1,1]'; % [size x , size y]
-        edgeSizeSpecification = 'Relative'; % 'Relative' or 'Absolute'
-        relativeEdgeSizeFactor = 0.1; % for relative dimenssioning
-        absoluteEdgeSize = 1; % for absolute
-        samplingPoints = [64,64]';
-        samplingDistance = [10^-6,10^-6]';
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-        
-    elseif nargin == 1
-        direction = [0,0,1]';% direction cosine in the direction. The field will be
-        % defined in the plane perpendicular to this direction
-        distanceToInputPlane = 10*10^-3;
-        fieldSizeSpecification = 'Relative'; % 'Relative' to the lateral profile or 'Absolute'
-        relativeFieldSizeFactor = 1; % for relative dimenssioning
-        absoluteBoarderShape = 'Elliptical' ;% 'Elliptical' or 'Rectangular'
-        absoluteFieldSize = [1,1]'; % [size x , size y]
-        edgeSizeSpecification = 'Relative'; % 'Relative' or 'Absolute'
-        relativeEdgeSizeFactor = 0.1; % for relative dimenssioning
-        absoluteEdgeSize = 1; % for absolute
-        samplingPoints = [64,64]';
-        samplingDistance = [10^-6,10^-6]';
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 2
-        distanceToInputPlane = 10*10^-3;
-        fieldSizeSpecification = 'Relative'; % 'Relative' to the lateral profile or 'Absolute'
-        relativeFieldSizeFactor = 1; % for relative dimenssioning
-        absoluteBoarderShape = 'Elliptical' ;% 'Elliptical' or 'Rectangular'
-        absoluteFieldSize = [1,1]'; % [size x , size y]
-        edgeSizeSpecification = 'Relative'; % 'Relative' or 'Absolute'
-        relativeEdgeSizeFactor = 0.1; % for relative dimenssioning
-        absoluteEdgeSize = 1; % for absolute
-        samplingPoints = [64,64]';
-        samplingDistance = [10^-6,10^-6]';
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 3
-        fieldSizeSpecification = 'Relative'; % 'Relative' to the lateral profile or 'Absolute'
-        relativeFieldSizeFactor = 1; % for relative dimenssioning
-        absoluteBoarderShape = 'Elliptical' ;% 'Elliptical' or 'Rectangular'
-        absoluteFieldSize = [1,1]'; % [size x , size y]
-        edgeSizeSpecification = 'Relative'; % 'Relative' or 'Absolute'
-        relativeEdgeSizeFactor = 0.1; % for relative dimenssioning
-        absoluteEdgeSize = 1; % for absolute
-        samplingPoints = [64,64]';
-        samplingDistance = [10^-6,10^-6]';
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 4
-        relativeFieldSizeFactor = 1; % for relative dimenssioning
-        absoluteBoarderShape = 'Elliptical' ;% 'Elliptical' or 'Rectangular'
-        absoluteFieldSize = [1,1]'; % [size x , size y]
-        edgeSizeSpecification = 'Relative'; % 'Relative' or 'Absolute'
-        relativeEdgeSizeFactor = 0.1; % for relative dimenssioning
-        absoluteEdgeSize = 1; % for absolute
-        samplingPoints = [64,64]';
-        samplingDistance = [10^-6,10^-6]';
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 5
-        absoluteBoarderShape = 'Elliptical' ;% 'Elliptical' or 'Rectangular'
-        absoluteFieldSize = [1,1]'; % [size x , size y]
-        edgeSizeSpecification = 'Relative'; % 'Relative' or 'Absolute'
-        relativeEdgeSizeFactor = 0.1; % for relative dimenssioning
-        absoluteEdgeSize = 1; % for absolute
-        samplingPoints = [64,64]';
-        samplingDistance = [10^-6,10^-6]';
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 6
-        absoluteFieldSize = [1,1]'; % [size x , size y]
-        edgeSizeSpecification = 'Relative'; % 'Relative' or 'Absolute'
-        relativeEdgeSizeFactor = 0.1; % for relative dimenssioning
-        absoluteEdgeSize = 1; % for absolute
-        samplingPoints = [64,64]';
-        samplingDistance = [10^-6,10^-6]';
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 7
-        edgeSizeSpecification = 'Relative'; % 'Relative' or 'Absolute'
-        relativeEdgeSizeFactor = 0.1; % for relative dimenssioning
-        absoluteEdgeSize = 1; % for absolute
-        samplingPoints = [64,64]';
-        samplingDistance = [10^-6,10^-6]';
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 8
-        relativeEdgeSizeFactor = 0.1; % for relative dimenssioning
-        absoluteEdgeSize = 1; % for absolute
-        samplingPoints = [64,64]';
-        samplingDistance = [10^-6,10^-6]';
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 9
-        absoluteEdgeSize = 1; % for absolute
-        samplingPoints = [64,64]';
-        samplingDistance = [10^-6,10^-6]';
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 10
-        samplingPoints = [64,64]';
-        samplingDistance = [10^-6,10^-6]';
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 11
-        samplingDistance = [10^-6,10^-6]';
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 12
-        additionalBoarderSamplePoints = 5;
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 13
-        spatialProfileType = 'GaussianWaveProfile';
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 14
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileType);
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 15
-        spectralProfileType = 'GaussianPowerSpectrum';
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 16
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileType);
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 17
-        polarizationProfileType = 'LinearPolarization'; % Linear, Circular or JonesVector
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-    elseif nargin == 18
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileType);
-        
-    else
     end
-    
-    
+    if nargin < 2
+        principalDirectionSpecification = 1; % Direction cosine XY
+    end
+    if nargin < 3
+        principalDirectionValue = [0,0]';% direction cosine in the direction. The field will be
+        % defined in the plane perpendicular to this direction
+    end
+    if nargin < 4
+        distanceToInputPlane = 10*10^-3;
+    end
+    if nargin < 5
+        fieldSizeSpecification = 1; % 'Relative 
+    end
+    if nargin < 6
+        fieldSizeValue = [1,1]'; % for relative dimenssioning
+    end 
+    if nargin < 7
+        fieldBoarderShape = 1; % 'Elliptical'
+    end
+    if nargin < 8
+        smoothEdgeSizeSpecification = [1]'; % 'Relative'
+    end
+    if nargin < 9
+        smoothEdgeSizeValue = [0.1,0.1]'; % for relative dimenssioning
+    end
+    if nargin < 10
+        zeroBoarderSizeSpecification = 1; % Relative to the actual field size 
+    end
+    if nargin < 11
+        zeroBoarderSizeValue = [0.1,0.1]';
+    end
+    if nargin < 12
+        samplingParameterType = 1; % No. of samples
+    end
+    if nargin < 13
+        samplingParameterValues = [64,64]'; % Sampling of the actual field not including the zero boarder
+    end
+    if nargin < 14
+        spatialProfileType = 1; % 'PlaneWaveProfile'
+    end
+    if nargin < 15
+        spatialProfileTypeString = getSupportedSpatialProfiles(spatialProfileType);
+        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileTypeString);
+    end
+    if nargin < 16
+        spectralProfileType = 1; %'GaussianPowerSpectrum'
+    end
+    if nargin < 17
+        spectralProfileTypeString = getSupportedSpectralProfiles(spectralProfileType);
+        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileTypeString);
+    end
+    if nargin < 18
+        polarizationProfileType = 1; %'LinearPolarization'
+    end
+    if nargin < 19
+        polarizationProfileTypeString = getSupportedPolarizationProfiles(polarizationProfileType);
+        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileTypeString);
+    end
+   if nargin < 20
+        mediumName = 'Vaccum';
+   end
     newHarmonicFieldSource.LateralPosition = lateralPosition;
-    newHarmonicFieldSource.Direction = direction;
+    newHarmonicFieldSource.PrincipalDirectionSpecification = principalDirectionSpecification;
+    newHarmonicFieldSource.PrincipalDirectionValue = principalDirectionValue;
     
     newHarmonicFieldSource.DistanceToInputPlane = distanceToInputPlane;
     newHarmonicFieldSource.FieldSizeSpecification = fieldSizeSpecification;
     
     % For 'Relative' to the lateral profil, the boarder shape is taken
     % directly and the size is scaled with size factor
-    newHarmonicFieldSource.RelativeFieldSizeFactor = relativeFieldSizeFactor;
+    newHarmonicFieldSource.FieldSizeValue = fieldSizeValue;
     % for absolute dimensioning
-    newHarmonicFieldSource.AbsoluteBoarderShape = absoluteBoarderShape;
-    newHarmonicFieldSource.AbsoluteFieldSize = absoluteFieldSize;
+    newHarmonicFieldSource.FieldBoarderShape = fieldBoarderShape;
     
     % additional edge width
-    newHarmonicFieldSource.EdgeSizeSpecification = edgeSizeSpecification;
-    newHarmonicFieldSource.RelativeEdgeSizeFactor = relativeEdgeSizeFactor;
-    newHarmonicFieldSource.AbsoluteEdgeSize = absoluteEdgeSize;
+    newHarmonicFieldSource.SmoothEdgeSizeSpecification = smoothEdgeSizeSpecification;
+    newHarmonicFieldSource.SmoothEdgeSizeValue = smoothEdgeSizeValue;
+
+    newHarmonicFieldSource.ZeroBoarderSizeSpecification = zeroBoarderSizeSpecification;
+    newHarmonicFieldSource.ZeroBoarderSizeValue = zeroBoarderSizeValue;
     
     % Source sampling
-    newHarmonicFieldSource.SamplingPoints = samplingPoints;
-    newHarmonicFieldSource.SamplingDistance = samplingDistance;
-    newHarmonicFieldSource.AdditionalBoarderSamplePoints = additionalBoarderSamplePoints;
+    newHarmonicFieldSource.SamplingParameterType = samplingParameterType;
+    newHarmonicFieldSource.SamplingParameterValues = samplingParameterValues;
     
     % Spatial parameters
     newHarmonicFieldSource.SpatialProfileType = spatialProfileType;
@@ -258,6 +108,8 @@ function newHarmonicFieldSource = HarmonicFieldSource(...
     % Polarization
     newHarmonicFieldSource.PolarizationProfileType = polarizationProfileType;
     newHarmonicFieldSource.PolarizationProfileParameter = polarizationProfileParameter;
+    
+    newHarmonicFieldSource.MediumName = mediumName; 
     newHarmonicFieldSource.ClassName = 'HarmonicFieldSource';
 end
 

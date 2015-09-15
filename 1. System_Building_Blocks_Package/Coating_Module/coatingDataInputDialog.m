@@ -1,4 +1,4 @@
-function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatalogueListFullNames,fontName,fontSize)
+function mainFigHandle = coatingDataInputDialog(coatingCatalogueListFullNames,fontName,fontSize)
     %COATINGDATAINPUTDIALOG Displays a dilog box which is used to view, edit
     % and add coating to the existing coating catalogues. It returns a
     % selected coating object as matlab application data.
@@ -8,7 +8,7 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
     %   button. Then in the matlab editor or any other functions you can
     %   just get the selected coating by, selectedCoating = getappdata(0,'Coating')
     % Inputs:
-    %   ( referenceWavelength,coatingCatalogueListFullNames,fontName,fontSize )
+    %   ( coatingCatalogueListFullNames,fontName,fontSize )
     % Outputs:
     %   [ ]
     
@@ -26,23 +26,16 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
     
     % Default Input
     if nargin < 1
-        % Used as primary wavelength for relative thickness values
-        referenceWavelength = 0.55*10^-6;
         % Get all catalogues from current folder
         coatingCatalogueListFullNames = getAllObjectCatalogues('coating');
+    end
+    if nargin < 2
         fontSize = 9.5;
-        fontName = 'FixedWidth';
-    elseif nargin < 2
-        % Get all catalogues from current folder
-        coatingCatalogueListFullNames = getAllObjectCatalogues('coating');
-        fontSize = 9.5;
-        fontName = 'FixedWidth';
-    elseif nargin == 2
-        fontSize = 9.5;
-        fontName = 'FixedWidth';
-    elseif nargin == 3
+    end
+    if nargin < 3
         fontName = 'FixedWidth';
     end
+    
     
     if isempty(coatingCatalogueListFullNames)
         figureHandle = NaN;
@@ -71,12 +64,13 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
     mainFigHandle = figureHandle.Object.MainFigureHandle;
     
     figureHandle.Object.FirstCatalogueFullName =  coatingCatalogueListFullNames{1};
+    
     % Creation of all uicontrols
     % Panel with fixed size is used as window visible while using the
     % slider to scroll through the uicontrols.
-    figureHandle.Object.panelParametersTop = uipanel( ...
+    figureHandle.Object.panelParameters = uipanel( ...
         'Parent', figureHandle.Object.MainFigureHandle, ...
-        'Tag', 'panelParametersTop', ...
+        'Tag', 'panelParameters', ...
         'Units','Normalized',...
         'Position', [0.45,0.12,0.53,0.85], ...
         'fontSize',fontSize,...
@@ -269,12 +263,12 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
             
             coatingType = selectedCoatingObject.Type;
             coatingName = selectedCoatingObject.Name;
-            coatingParameters = selectedCoatingObject.Parameters;
+            coatingParameters = selectedCoatingObject.UniqueParameters;
             
             figureHandle.Object.CoatingCatalogueFullName = selectedCatalogueFullName;
             figureHandle.Object.CoatingType = coatingType;
             figureHandle.Object.CoatingName = coatingName;
-            figureHandle.Object.Parameters = coatingParameters;
+            figureHandle.Object.UniqueParameters = coatingParameters;
             displayCurrentParameters(figureHandle);
         else
             figureHandle.Object.CoatingCatalogueFullName = selectedCatalogueFullName;
@@ -283,17 +277,14 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
             set(figureHandle.Object.popCoatingType,'Value',1);
             set(figureHandle.Object.tblCoatingList,'Data',[]);
             % Clear the panelParameters
-            delete(get(figureHandle.Object.panelParametersTop,'Child'));
+            delete(get(figureHandle.Object.panelParameters,'Child'));
             makeUneditable(figureHandle);
             disp('Error: The selected coating catalogue is empty.');
             return;
         end
     end
     
-    
     %% ---------------------------------------------------------------------------
-    
-    
     function tblCoatingList_CellSelectionCallback(hObject,eventdata,figureHandle)
         selCell = eventdata.Indices;
         if ~isempty(selCell)
@@ -315,11 +306,12 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
             
             coatingType = selectedCoatingObject.Type;
             coatingName = selectedCoatingObject.Name;
-            coatingParameters = selectedCoatingObject.Parameters;
+            coatingParameters = selectedCoatingObject.UniqueParameters;
             figureHandle.Object.CoatingCatalogueFullName = selectedCatalogueFullName;
             figureHandle.Object.CoatingType = coatingType;
             figureHandle.Object.CoatingName = coatingName;
-            figureHandle.Object.Parameters = coatingParameters;
+            figureHandle.Object.UniqueParameters = coatingParameters;
+            figureHandle.Object.SelectedCoatingIndex = selectedCoatingIndex;
             
             displayCurrentParameters(figureHandle);
         end
@@ -340,23 +332,21 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
         set(figureHandle.Object.popCoatingType,'Value',selectedCoatingTypeIndex);
         set(figureHandle.Object.txtCoatingName,'String',coatingName);
         
-        % connect to coating defintion file and use defualt coating parameter
-        coatingDefinitionHandle = str2func(coatingType);
-        returnFlag = 1; % coating parameters fields and default values
-        [ coatingParameterFields,coatingParameterFormats,defaultParameters] = ...
-            coatingDefinitionHandle(returnFlag);
+        [coatingParameterFieldNames,coatingParameterFieldFormats,...
+            defaultCoatingParameterStruct,coatingParameterFieldDisplayNames] = ...
+            getCoatingUniqueParameters( coatingType);
         fontSize = 11;
         fontName = 'FixedWidth';
         
-        nPar = length(coatingParameterFields);
+        nPar = length(coatingParameterFieldNames);
         % Clear the panelParameters
-        delete(get(figureHandle.Object.panelParametersTop,'Child'));
-        coatingParameters = figureHandle.Object.Parameters;
+        delete(get(figureHandle.Object.panelParameters,'Child'));
+        coatingParameters = figureHandle.Object.UniqueParameters;
         
         % Handle the multilayer cooating in special case
         if strcmpi(coatingType,'MultilayerCoating')
             figureHandle.Object.panelMultilayerData = uipanel( ...
-                'Parent', figureHandle.Object.panelParametersTop, ...
+                'Parent', figureHandle.Object.panelParameters, ...
                 'Tag', 'panelMultilayerData', ...
                 'Units','Normalized',...
                 'Position', [0.0,0.0,1.0,1.0], ...
@@ -385,7 +375,7 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
                 'BackgroundColor', [1 1 1], ...
                 'fontSize',fontSize,...
                 'FontName',fontName,...
-                'String', num2str(referenceWavelength),...
+                'String', num2str(0.55*10^-6),...
                 'Enable','Off');
             
             
@@ -463,122 +453,194 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
                 'CellEditCallback',{@tblMultilayerStack_CellEditCallback,figureHandle});
             
         else
-            figureHandle.Object.panelParametersBottom = uipanel( ...
-                'Parent', figureHandle.Object.panelParametersTop, ...
-                'Tag', 'panelParameters', ...
+            %% New code
+            figureHandle.Object.tblCoatingPatrameters = uitable( ...
+                'Parent', figureHandle.Object.panelParameters, ...
+                'Tag', 'tblCoatingPatrameters', ...
+                'UserData', zeros(1,0), ...
                 'Units','Normalized',...
-                'Position',[0.0,-4.0,0.95,5],...%[0.0,-4,0.95,5],
-                'fontSize',fontSize,...
-                'FontName',fontName);%,...
+                'Position', [0.0,0.0,1.0,1.0], ...
+                'fontSize',fontSize,'FontName',fontName,...
+                'BackgroundColor', [1 1 1;0.961 0.961 0.961], ...
+                'ColumnEditable', [false,true], ...
+                'ColumnFormat', {'char','char'}, ...
+                'ColumnName', {'Parameter Name','Parameter Value'}, ...
+                'ColumnWidth', {150,100}, ...
+                'RowName', 'numbered');
+            set(figureHandle.Object.tblCoatingPatrameters,...
+                'CellEditCallback',{@tblCoatingPatrameters_CellEditCallback,figureHandle},...
+                'CellSelectionCallback',{@tblCoatingPatrameters_CellSelectionCallback,figureHandle});
             
-            figureHandle.Object.sliderParameters = uicontrol('Style','Slider',...
-                'Parent', figureHandle.Object.panelParametersTop,...
-                'Units','normalized','Position',[0.95 0.0 0.05 1.0],...
-                'Value',1);
-            set(figureHandle.Object.sliderParameters,...
-                'Callback',{@sliderParameters_callback,figureHandle});
             
-            panelParametersBottomPosition = get(figureHandle.Object.panelParametersBottom,'Position');
-            verticalScaleFactor = panelParametersBottomPosition(4);
-            verticalOffset = panelParametersBottomPosition(4)-1;
-            
-            verticalFreeSpace = 0.025/verticalScaleFactor;% 2.5% of the the visial window height
-            controlHeight = 0.06/verticalScaleFactor;% 6% of the visial window height
-            topEdge = 0.1/verticalScaleFactor;% 10% of the the visial window height
-            
-            lastUicontrolBottom = panelParametersBottomPosition(4) - topEdge - 4; %panelParametersBottomPosition(4)
-            
-            horizontalFreeSpace = 0.05;% 5% of the visial window width
-            controlWidth = 0.4;% 40% of the visial window width then two controls per line
-            % control arrangement 5% + 40% + 5% + 40% + 5%
-            leftEdge = 0.05;%
-            
+            tempTableData = cell(nPar,2);
             for pp = 1:nPar
-                % Display the parameter name
-                figureHandle.Object.lblCoatingParameter(pp,1) = uicontrol( ...
-                    'Parent', figureHandle.Object.panelParametersBottom, ...
-                    'Tag', 'lblParameter', ...
-                    'Style', 'text', ...
-                    'Units','normalized',...
-                    'Position', [leftEdge,lastUicontrolBottom-verticalFreeSpace,...
-                    controlWidth,controlHeight], ...
-                    'String',coatingParameterFields{pp},...
-                    'HorizontalAlignment','right',...
-                    'Visible','On',...
-                    'fontSize',fontSize,'FontName',fontName);
-                
                 % Display the parameter value text boxes or popup menu
-                parFormat = coatingParameterFormats{pp};
-                parName = coatingParameterFields{pp};
+                parFormat = coatingParameterFieldFormats{pp};
+                parName = coatingParameterFieldNames{pp};
+                parDisplayName = coatingParameterFieldDisplayNames{pp};
                 parValue = coatingParameters.(parName);
-                if strcmpi(parFormat{1},'logical')
-                    nVals = length(parFormat);
-                    % The parameter format is logical
-                    for vv = 1:nVals
-                        figureHandle.Object.chkCoatingParameter(pp,vv) = uicontrol( ...
-                            'Parent', figureHandle.Object.panelParametersBottom, ...
-                            'Tag', 'chkParameter', ...
-                            'Style', 'checkbox', ...
-                            'Units','normalized',...
-                            'Position', [leftEdge+horizontalFreeSpace+controlWidth,lastUicontrolBottom-verticalFreeSpace,...
-                            horizontalFreeSpace,controlHeight], ...
-                            'BackgroundColor', [1 1 1],...
-                            'HorizontalAlignment','left',...
-                            'Visible','On',...
-                            'fontSize',fontSize,'FontName',fontName,...
-                            'Callback',{@chkCoatingParameter_callback,pp,vv,figureHandle});
-                        lastUicontrolBottom = lastUicontrolBottom -verticalFreeSpace -controlHeight;
-                        
-                        currentValue = parValue(vv);
-                        set(figureHandle.Object.txtCoatingParameter(pp,vv),'Value',currentValue);
-                    end
-                elseif strcmpi(parFormat{1},'numeric')||strcmpi(parFormat{1},'char')
-                    nVals = length(parFormat);
-                    
-                    % The parameter format numeric/char
-                    for vv = 1:nVals
-                        figureHandle.Object.txtCoatingParameter(pp,vv) = uicontrol( ...
-                            'Parent', figureHandle.Object.panelParametersBottom, ...
-                            'Tag', 'txtParameter', ...
-                            'Style', 'edit', ...
-                            'Units','normalized',...
-                            'Position', [leftEdge+horizontalFreeSpace+controlWidth,lastUicontrolBottom-verticalFreeSpace,...
-                            controlWidth,controlHeight], ...
-                            'BackgroundColor', [1 1 1],...
-                            'HorizontalAlignment','left',...
-                            'Visible','On',...
-                            'fontSize',fontSize,'FontName',fontName,...
-                            'Callback',{@txtCoatingParameter_callback,pp,vv,figureHandle});
-                        lastUicontrolBottom = lastUicontrolBottom -verticalFreeSpace -controlHeight;
-                        
-                        currentValue = parValue(vv);
-                        set(figureHandle.Object.txtCoatingParameter(pp,vv),'String',currentValue);
-                    end
+                
+                if iscell(parFormat)
+                    % Multiple choice values
+                    parValueDisplay = parFormat{parValue};
                 else
-                    vv = 1;
-                    % The parameter format is list of selection itiems
-                    figureHandle.Object.popCoatingParameter(pp,vv) = uicontrol( ...
-                        'Parent', figureHandle.Object.panelParametersBottom, ...
-                        'Tag', 'popParameter', ...
-                        'Style', 'popupmenu', ...
-                        'Units','normalized',...
-                        'Position', [leftEdge+horizontalFreeSpace+controlWidth,lastUicontrolBottom-verticalFreeSpace,...
-                        controlWidth,controlHeight], ...
-                        'BackgroundColor', [1 1 1],...
-                        'HorizontalAlignment','left',...
-                        'Visible','On',...
-                        'fontSize',fontSize,'FontName',fontName,...
-                        'Callback',{@popCoatingParameter_callback,pp,vv,figureHandle});
-                    
-                    lastUicontrolBottom = lastUicontrolBottom -verticalFreeSpace -controlHeight;
-                    
-                    
-                    tempCoatingParamList = get(figureHandle.Object.popCoatingParameter(pp,vv) ,'String');
-                    currentChoiceIndex = find(ismember(parValue(vv),tempCoatingParamList));
-                    currentValue = currentChoiceIndex;
-                    set(figureHandle.Object.popCoatingParameter(pp,vv) ,'Value',currentValue);
+                    if strcmpi(parFormat,'logical')
+                        if parValue
+                            parValueDisplay = 'True';
+                        else
+                            parValueDisplay = 'False';
+                        end
+                    elseif strcmpi(parFormat,'numeric')
+                        parValueDisplay = num2str(parValue);
+                    elseif strcmpi(parFormat,'char')
+                        parValueDisplay = (parValue);
+                    elseif strcmpi(parFormat,'Glass')
+                        parValueDisplay = (parValue);
+                    else
+                        
+                    end
                 end
+                tempTableData{pp,1} = parDisplayName;
+                tempTableData{pp,2} = parValueDisplay;
             end
+            set(figureHandle.Object.tblCoatingPatrameters,'Data',tempTableData);
+            
+            %% End of new code
+            
+            %  %% Old code
+            % figureHandle.Object.panelParametersBottom = uipanel( ...
+            %     'Parent', figureHandle.Object.panelParametersTop, ...
+            %     'Tag', 'panelParameters', ...
+            %     'Units','Normalized',...
+            %     'Position',[0.0,-4.0,0.95,5],...%[0.0,-4,0.95,5],
+            %     'fontSize',fontSize,...
+            %     'FontName',fontName);%,...
+            %
+            % figureHandle.Object.sliderParameters = uicontrol('Style','Slider',...
+            %     'Parent', figureHandle.Object.panelParametersTop,...
+            %     'Units','normalized','Position',[0.95 0.0 0.05 1.0],...
+            %     'Value',1);
+            % set(figureHandle.Object.sliderParameters,...
+            %     'Callback',{@sliderParameters_callback,figureHandle});
+            %
+            % panelParametersBottomPosition = get(figureHandle.Object.panelParametersBottom,'Position');
+            % verticalScaleFactor = panelParametersBottomPosition(4);
+            % verticalOffset = panelParametersBottomPosition(4)-1;
+            %
+            % verticalFreeSpace = 0.025/verticalScaleFactor;% 2.5% of the the visial window height
+            % controlHeight = 0.06/verticalScaleFactor;% 6% of the visial window height
+            % topEdge = 0.1/verticalScaleFactor;% 10% of the the visial window height
+            %
+            % lastUicontrolBottom = panelParametersBottomPosition(4) - topEdge - 4; %panelParametersBottomPosition(4)
+            %
+            % horizontalFreeSpace = 0.05;% 5% of the visial window width
+            % controlWidth = 0.4;% 40% of the visial window width then two controls per line
+            % % control arrangement 5% + 40% + 5% + 40% + 5%
+            % leftEdge = 0.05;%
+            %
+            % for pp = 1:nPar
+            %     % Display the parameter name
+            %     figureHandle.Object.lblCoatingParameter(pp,1) = uicontrol( ...
+            %         'Parent', figureHandle.Object.panelParametersBottom, ...
+            %         'Tag', 'lblParameter', ...
+            %         'Style', 'text', ...
+            %         'Units','normalized',...
+            %         'Position', [leftEdge,lastUicontrolBottom-verticalFreeSpace,...
+            %         controlWidth,controlHeight], ...
+            %         'String',coatingParameterFieldNames{pp},...
+            %         'HorizontalAlignment','right',...
+            %         'Visible','On',...
+            %         'fontSize',fontSize,'FontName',fontName);
+            %
+            %     % Display the parameter value text boxes or popup menu
+            %     parFormat = coatingParameterFieldFormats{pp};
+            %     parName = coatingParameterFieldNames{pp};
+            %     parValue = coatingParameters.(parName);
+            %
+            %     if strcmpi(parFormat{1},'logical')
+            %         nVals = length(parFormat);
+            %         % The parameter format is logical
+            %         for vv = 1:nVals
+            %             figureHandle.Object.chkCoatingParameter(pp,vv) = uicontrol( ...
+            %                 'Parent', figureHandle.Object.panelParametersBottom, ...
+            %                 'Tag', 'chkParameter', ...
+            %                 'Style', 'checkbox', ...
+            %                 'Units','normalized',...
+            %                 'Position', [leftEdge+horizontalFreeSpace+controlWidth,lastUicontrolBottom-verticalFreeSpace,...
+            %                 horizontalFreeSpace,controlHeight], ...
+            %                 'BackgroundColor', [1 1 1],...
+            %                 'HorizontalAlignment','left',...
+            %                 'Visible','On',...
+            %                 'fontSize',fontSize,'FontName',fontName,...
+            %                 'Callback',{@chkCoatingParameter_callback,pp,vv,figureHandle});
+            %             lastUicontrolBottom = lastUicontrolBottom -verticalFreeSpace -controlHeight;
+            %
+            %             currentValue = parValue(vv);
+            %             set(figureHandle.Object.txtCoatingParameter(pp,vv),'Value',currentValue);
+            %         end
+            %     elseif strcmpi(parFormat{1},'numeric')||strcmpi(parFormat{1},'char')
+            %         nVals = length(parFormat);
+            %
+            %         % The parameter format numeric/char
+            %         for vv = 1:nVals
+            %             figureHandle.Object.txtCoatingParameter(pp,vv) = uicontrol( ...
+            %                 'Parent', figureHandle.Object.panelParametersBottom, ...
+            %                 'Tag', 'txtParameter', ...
+            %                 'Style', 'edit', ...
+            %                 'Units','normalized',...
+            %                 'Position', [leftEdge+horizontalFreeSpace+controlWidth,lastUicontrolBottom-verticalFreeSpace,...
+            %                 controlWidth,controlHeight], ...
+            %                 'BackgroundColor', [1 1 1],...
+            %                 'HorizontalAlignment','left',...
+            %                 'Visible','On',...
+            %                 'fontSize',fontSize,'FontName',fontName,...
+            %                 'Callback',{@txtCoatingParameter_callback,pp,vv,figureHandle});
+            %             lastUicontrolBottom = lastUicontrolBottom -verticalFreeSpace -controlHeight;
+            %
+            %             currentValue = parValue(vv);
+            %             set(figureHandle.Object.txtCoatingParameter(pp,vv),'String',currentValue);
+            %         end
+            %     else
+            %         vv = 1;
+            %         % The parameter format is list of selection itiems
+            %         figureHandle.Object.popCoatingParameter(pp,vv) = uicontrol( ...
+            %             'Parent', figureHandle.Object.panelParametersBottom, ...
+            %             'Tag', 'popParameter', ...
+            %             'Style', 'popupmenu', ...
+            %             'Units','normalized',...
+            %             'Position', [leftEdge+horizontalFreeSpace+controlWidth,lastUicontrolBottom-verticalFreeSpace,...
+            %             controlWidth,controlHeight], ...
+            %             'BackgroundColor', [1 1 1],...
+            %             'HorizontalAlignment','left',...
+            %             'Visible','On',...
+            %             'fontSize',fontSize,'FontName',fontName,...
+            %             'Callback',{@popCoatingParameter_callback,pp,vv,figureHandle});
+            %
+            %         lastUicontrolBottom = lastUicontrolBottom -verticalFreeSpace -controlHeight;
+            %
+            %
+            %         tempCoatingParamList = get(figureHandle.Object.popCoatingParameter(pp,vv) ,'String');
+            %         currentChoiceIndex = find(ismember(parValue(vv),tempCoatingParamList));
+            %         currentValue = currentChoiceIndex;
+            %         set(figureHandle.Object.popCoatingParameter(pp,vv) ,'Value',currentValue);
+            %     end
+            % end
+            %
+            %
+            %
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         end
         % resize the handles.panelSpatialParameters
         %set(handles.panelSpatialParameters,'Position',[0.0,-2.0,0.95,verticalScaleFactor-lastUicontrolBottom]);
@@ -611,7 +673,7 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
             tblData1 = get(figureHandle.Object.tblMultilayerStack,'data');
             tblData1{editedRow,editedColumn} = newGlassName;
             set(figureHandle.Object.tblMultilayerStack, 'Data', tblData1);
-            figureHandle.Object.Parameters.GlassArray(editedRow) =  newGlass;
+            figureHandle.Object.UniqueParameters.GlassArray(editedRow) =  newGlass;
         elseif editedColumn == 2 % Glass thickness changed
             glassThickness = (eventdata.NewData);
             if isempty(glassThickness)
@@ -623,78 +685,119 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
             tblData1 = get(figureHandle.Object.tblMultilayerStack,'data');
             tblData1{editedRow,editedColumn} = newGlassThickness;
             set(figureHandle.Object.tblMultilayerStack, 'Data', tblData1);
-            figureHandle.Object.Parameters.Thickness(editedRow) =  newGlassThickness;
+            figureHandle.Object.UniqueParameters.Thickness(editedRow) =  newGlassThickness;
         elseif editedColumn == 3 % Relative thickness changed
             relativeThickness = (eventdata.EditData);
-            figureHandle.Object.Parameters.RelativeThickness(editedRow) =  logical(relativeThickness);
+            figureHandle.Object.UniqueParameters.RelativeThickness(editedRow) =  logical(relativeThickness);
         else
             
         end
         
     end
     
-    function txtCoatingParameter_callback(~,~,paramIndex1,paramIndex2,figureHandle)
+    function tblCoatingPatrameters_CellEditCallback(hObject,eventdata,figureHandle)
+        % hObject    handle to aodHandles.tblStandardData (see GCBO)
+        % eventdata  structure with the following fields (see UITABLE)
+        %	Indices: row and column indices of the cell(s) edited
+        %	PreviousData: previous data for the cell(s) edited
+        %	EditData: string(s) entered by the user
+        %	NewData: EditData or its converted form set on the Data property. Empty if Data was not changed
+        %	Error: error string when failed to convert EditData to appropriate value for Data
+        % figureHandle    structure with figureHandle and user data (see GUIDATA)
+        editedRow = eventdata.Indices(1);
+        editedColumn = eventdata.Indices(2);
         coatingType = figureHandle.Object.CoatingType;
-        % connect to coating defintion file and use defualt coating parameter
-        coatingDefinitionHandle = str2func(coatingType);
-        returnFlag = 1; % coating parameters fields and default values
-        [ coatingParameterFields,coatingParameterFormats,defaultCoatingparameters] = ...
-            coatingDefinitionHandle(returnFlag);
-        
-        paramName = coatingParameterFields{paramIndex1};
-        paramType = coatingParameterFormats{paramIndex1};
-        editedParamValue = get(figureHandle.Object.txtCoatingParameter(paramIndex1,paramIndex2),'String');
-        if ischar(editedParamValue)
-            editedParamValue = {editedParamValue};
-        end
-        
-        if strcmpi(paramType{1},'numeric')
-            editedParamValue = str2double(editedParamValue);
-            if isempty(editedParamValue)
-                disp('Error: Only numeric values are allowed for the field.');
-                return;
+        [coatingParameterFields,coatingParameterFormats,~] = getCoatingUniqueParameters( coatingType);
+        paramName = coatingParameterFields{editedRow};
+        paramFormat = coatingParameterFormats{editedRow};
+        editedParamValue = eventdata.NewData;
+        if iscell(paramFormat)
+            % Multiple choice values
+            [IsFoundVector,locationIndex] = ismember(editedParamValue,parFormat);
+            if locationIndex
+                editedParamValue = locationIndex;
+            else
+                
             end
-        elseif strcmpi(paramType{1},'char')
-            
         else
-            
+            if strcmpi(paramFormat,'logical')
+                if strcmpi(editedParamValue,'True') || strcmpi(editedParamValue,'1')
+                    editedParamValue = 1;
+                elseif strcmpi(editedParamValue,'False')|| strcmpi(editedParamValue,'0')
+                    editedParamValue = 0;
+                else
+                    
+                end
+            elseif strcmpi(paramFormat,'numeric')
+                editedParamValue = str2double(editedParamValue);
+                if isempty(editedParamValue)
+                    disp('Error: Only numeric values are allowed for the field.');
+                    return;
+                end
+            elseif strcmpi(paramFormat,'char')
+                
+            elseif strcmpi(paramFormat,'Glass')
+                
+            else
+                
+            end
         end
-        oldParameter = figureHandle.Object.Parameters.(paramName);
-        newParameter = oldParameter;
-        newParameter(paramIndex2) = editedParamValue;
-        figureHandle.Object.Parameters.(paramName) = newParameter;
+        figureHandle.Object.UniqueParameters.(paramName) = editedParamValue;
     end
     
-    
-    function sliderParameters_callback(src,~,figureHandle)
-        val = get(src,'Value');
-        panelParametersBottomPosition = get(figureHandle.Object.panelParametersBottom,'Position');
-        set(figureHandle.Object.panelParametersBottom,'units','normalized','Position',...
-            [panelParametersBottomPosition(1),-4+ panelParametersBottomPosition(4)*(1-val),...
-            panelParametersBottomPosition(3) panelParametersBottomPosition(4)]);
+    function tblCoatingPatrameters_CellSelectionCallback(hObject,eventdata,figureHandle)
+        % hObject    handle to aodHandles.tblStandardData (see GCBO)
+        % eventdata  structure with the following fields (see UITABLE)
+        %	Indices: row and column indices of the cell(s) edited
+        %	PreviousData: previous data for the cell(s) edited
+        %	EditData: string(s) entered by the user
+        %	NewData: EditData or its converted form set on the Data property. Empty if Data was not changed
+        %	Error: error string when failed to convert EditData to appropriate value for Data
+        % figureHandle    structure with figureHandle and user data (see GUIDATA)
+        selectedRow = eventdata.Indices(1);
+        selectedColumn = eventdata.Indices(2);
+        if selectedColumn == 2
+            coatingType = figureHandle.Object.CoatingType;
+            [coatingParameterFields,coatingParameterFormats,~] = getCoatingUniqueParameters( coatingType);
+            paramName = coatingParameterFields{selectedRow};
+            paramFormat = coatingParameterFormats{selectedRow};
+            if iscell(paramFormat)
+                % Multiple choice values
+                choice = menu(paramName,paramFormat);
+                if choice == 0
+                    choice = 1;
+                end
+                editedParamValue = choice;
+                figureHandle.Object.UniqueParameters.(paramName) = editedParamValue;
+            else
+                if strcmpi(paramFormat,'logical')
+                    
+                elseif strcmpi(paramFormat,'numeric')
+                    
+                elseif strcmpi(paramFormat,'char')
+                    
+                elseif strcmpi(paramFormat,'Glass')
+                    
+                else
+                    
+                end
+            end
+        end
     end
     
     function popCoatingType_Callback(hObject,~,figureHandle)
-        
         coatingTypeList =  get(figureHandle.Object.popCoatingType,'String');
         selectedCoatingType = coatingTypeList{get(hObject,'Value')};
-        
-        % connect to coating defintion file and use defualt coating parameter
-        coatingDefinitionHandle = str2func(selectedCoatingType);
-        returnFlag = 1; % coating parameters fields and default values
-        [ ~,~,defaultCoatingparameters] = ...
-            coatingDefinitionHandle(returnFlag);
+        [~,~,defaultCoatingparameters] = getCoatingUniqueParameters( selectedCoatingType);
         figureHandle.Object.CoatingType = selectedCoatingType;
-        figureHandle.Object.Parameters = defaultCoatingparameters;
+        figureHandle.Object.UniqueParameters = defaultCoatingparameters;
         
         displayCurrentParameters(figureHandle)
         makeEditable(figureHandle);
     end
     
-    
-    
     function chkReverse_Callback(hObject,evendata,figureHandle)
-        figureHandle.Object.Parameters.UseInReverse = get(hObject,'Value');
+        figureHandle.Object.UniqueParameters.UseInReverse = get(hObject,'Value');
     end
     
     %% ---------------------------------------------------------------------------
@@ -706,7 +809,7 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
             coatingName = coatingNameCellArray{1};
         end
         
-        coatingCatalogueFileList = 'All';
+        coatingCatalogueFileList = {'All'};
         coatingTypeIndex = listdlg('PromptString','Select the coating type :',...
             'SelectionMode','single',...
             'ListString',supportedCoatingTypes);
@@ -715,28 +818,41 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
         else
             coatingType = supportedCoatingTypes{coatingTypeIndex};
         end
-        newCoating = Coating(coatingName,coatingCatalogueFileList,coatingType);
-        figureHandle.Object.CoatingType = coatingType;        
+        % Save the new coating and update the display
+        [newCoating] = Coating(coatingName,coatingCatalogueFileList,coatingType);
+        figureHandle.Object.CoatingType = coatingType;
         figureHandle.Object.CoatingName = coatingName;
-        figureHandle.Object.Parameters = newCoating.Parameters;
-        
-        coatingCatalogueFullName = figureHandle.Object.CoatingCatalogueFullName;
-        addedPosition = addObjectToObjectCatalogue('Coating', newCoating,coatingCatalogueFullName,'ask');
-        refreshCoatingDataInputDialog(figureHandle,addedPosition);
+        figureHandle.Object.UniqueParameters = newCoating.UniqueParameters;
+        coatingSavedIndex = newCoating.SavedIndex;
+        if coatingSavedIndex == 0
+            coatingSavedIndex = 1;
+        end
+        refreshCoatingDataInputDialog(figureHandle,coatingSavedIndex);
         makeEditable(figureHandle);
     end
     %% ---------------------------------------------------------------------------
     function cmdDeleteCoating_Callback(hObject,evendata,figureHandle) %#ok<INUSD>
-        coatingCatalogueIndex = get(figureHandle.Object.popCoatingCatalogueName,'Value');
-        CoatingCatalogueFullName = coatingCatalogueListFullNames{coatingCatalogueIndex};
-        objectType = 'coating';
+        % Confirm action
+        % Construct a questdlg with three options
         objectName = get(figureHandle.Object.txtCoatingName,'String');
-        objectCatalogueFullName = CoatingCatalogueFullName;
-        removeObjectFromObjectCatalogue(objectType, objectName,objectCatalogueFullName )
-        refreshCoatingDataInputDialog(figureHandle,1);
+        choice = questdlg(['Are you sure to delete the coating : ',objectName,' ?'], ...
+            'Confirm Deletion', ...
+            'Yes','No','Yes');
+        % Handle response
+        switch choice
+            case 'Yes'
+                % Delete the coating
+                coatingCatalogueIndex = get(figureHandle.Object.popCoatingCatalogueName,'Value');
+                CoatingCatalogueFullName = coatingCatalogueListFullNames{coatingCatalogueIndex};
+                objectType = 'coating';
+                objectName = get(figureHandle.Object.txtCoatingName,'String');
+                objectCatalogueFullName = CoatingCatalogueFullName;
+                removeObjectFromObjectCatalogue(objectType, objectName,objectCatalogueFullName )
+                refreshCoatingDataInputDialog(figureHandle,1);
+            case 'No'
+                % Do  nothing
+        end
     end
-    
-    
     
     %% ---------------------------------------------------------------------------
     function cmdClearAll_Callback(hObject,evendata,figureHandle) %#ok<INUSD>
@@ -747,10 +863,10 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
         newTable1 = [newRow1];
         set(figureHandle.Object.tblMultilayerStack, 'Data', newTable1);
         
-        figureHandle.Object.Parameters.GlassArray = newGlass;
-        figureHandle.Object.Parameters.Thickness = 0;
-        figureHandle.Object.Parameters.RelativeThickness = 0;
-        figureHandle.Object.Parameters.UseInReverse = 0;
+        figureHandle.Object.UniqueParameters.GlassArray = newGlass;
+        figureHandle.Object.UniqueParameters.Thickness = 0;
+        figureHandle.Object.UniqueParameters.RelativeThickness = 0;
+        figureHandle.Object.UniqueParameters.UseInReverse = 0;
     end
     %% ---------------------------------------------------------------------------
     function cmdAddRow_Callback(hObject,evendata,figureHandle) %#ok<INUSD>
@@ -761,9 +877,9 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
         set(figureHandle.Object.tblMultilayerStack, 'Data', newTable1);
         
         nGlass = size(newTable1,1);
-        figureHandle.Object.Parameters.GlassArray(nGlass) = newGlass;
-        figureHandle.Object.Parameters.Thickness(nGlass) = 0;
-        figureHandle.Object.Parameters.RelativeThickness(nGlass) = 0;
+        figureHandle.Object.UniqueParameters.GlassArray(nGlass) = newGlass;
+        figureHandle.Object.UniqueParameters.Thickness(nGlass) = 0;
+        figureHandle.Object.UniqueParameters.RelativeThickness(nGlass) = 0;
     end
     %% ---------------------------------------------------------------------------
     function cmdRemoveRow_Callback(hObject,evendata,figureHandle) %#ok<INUSD>
@@ -771,9 +887,9 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
         newTable1 = tblData1(1:end-1,:);
         set(figureHandle.Object.tblMultilayerStack, 'Data', newTable1);
         
-        figureHandle.Object.Parameters.GlassArray(end) = [];
-        figureHandle.Object.Parameters.Thickness(end) = [];
-        figureHandle.Object.Parameters.RelativeThickness(end) = [];
+        figureHandle.Object.UniqueParameters.GlassArray(end) = [];
+        figureHandle.Object.UniqueParameters.Thickness(end) = [];
+        figureHandle.Object.UniqueParameters.RelativeThickness(end) = [];
     end
     
     %% ---------------------------------------------------------------------------
@@ -800,8 +916,15 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
         coatingName = figureHandle.Object.CoatingName;
         coatingCatalogueFileList = figureHandle.Object.CoatingCatalogueFullName;
         coatingType = figureHandle.Object.CoatingType;
-        coatingParameters = figureHandle.Object.Parameters;
-        currentCoating = Coating(coatingName,coatingCatalogueFileList,coatingType,coatingParameters);
+        coatingParameters = figureHandle.Object.UniqueParameters;
+        savedIndex = figureHandle.Object.SelectedCoatingIndex;
+        
+        currentCoating = Coating();
+        currentCoating.Name = coatingName;
+        currentCoating.Type = coatingType;
+        currentCoating.UniqueParameters = coatingParameters;
+        currentCoating.ClassName = 'Coating';
+        currentCoating.SavedIndex = savedIndex;
     end
     
     %% ---------------------------------------------------------------------------
@@ -812,15 +935,14 @@ function mainFigHandle = coatingDataInputDialog(referenceWavelength,coatingCatal
     end
     
     function makeEditable(figureHandle)
-        %         set(figureHandle.Object.txtCoatingName,'Enable','On');
         set(figureHandle.Object.popCoatingType,'Enable','On');
-        set(findall(figureHandle.Object.panelParametersTop, '-property', 'enable'), 'enable', 'On');
+        set(findall(figureHandle.Object.panelParameters, '-property', 'enable'), 'enable', 'On');
         set(figureHandle.Object.cmdEditSaveCoating,'String','Save');
     end
     function makeUneditable(figureHandle)
         set(figureHandle.Object.txtCoatingName,'Enable','Off');
         set(figureHandle.Object.popCoatingType,'Enable','Off');
-        set(findall(figureHandle.Object.panelParametersTop, '-property', 'enable'), 'enable', 'off');
+        set(findall(figureHandle.Object.panelParameters, '-property', 'enable'), 'enable', 'off');
         set(figureHandle.Object.cmdEditSaveCoating,'String','Edit');
     end
     

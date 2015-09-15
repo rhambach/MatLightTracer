@@ -38,8 +38,8 @@ function [ isInsideTheOuterAperture ] = IsInsideTheOuterAperture( surfAperture, 
     apertureDefinitionHandle = str2func(apertureType);
     returnFlag = 2; % maximumRadiusXY
     apertureParameters = surfAperture.UniqueParameters;
-    [ maximumRadiusXY] = ...
-        apertureDefinitionHandle(returnFlag,apertureParameters,xyVector_final);
+    [ returnDataStruct] = apertureDefinitionHandle(returnFlag,apertureParameters);
+    maximumRadiusXY = returnDataStruct.MaximumRadiusXY;
     
     switch lower(surfAperture.OuterShape)
         case {'elliptical','circular'}

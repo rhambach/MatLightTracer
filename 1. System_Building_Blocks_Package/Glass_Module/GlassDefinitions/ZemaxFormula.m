@@ -1,16 +1,29 @@
-function [ returnData1, returnData2, returnData3 ] = ZemaxFormula(...
-        returnFlag,glassParameters,wavelength,derivativeOrder)
-    %ZemaxFormula: A user defined function for ZemaxFormula glasses which use dispersion formulas from zemax.
+function [ returnDataStruct] = ZemaxFormula(returnFlag,glassParameters,inputDataStruct)
+    % ZemaxFormula A user defined function for ZemaxFormula glasses which use
+    % dispersion formulas from zemax.
     % The function returns differnt parameters when requested by the main program.
-    % It follows the common format used for defining user defined coating.
-    % Inputs:
-    %   (returnFlag,glassParameters,wavelength,derivativeOrder)
-    % Outputs: depends on the return flag
-    %   returnFlag = 1
-    %       Outputs: [FieldNames,FieldTypes,DefaultGlassParameterStruct]
-    %   returnFlag = 2
-    %       Outputs: [refractiveIndex]
-    
+    % It follows the common format used for defining user defined glass.
+    % glassParameters = values of {'FormulaType','CoefficientData'}
+    % inputDataStruct : Struct of all additional inputs (not included in the surface parameters)
+    % required for computing the return. (Vary depending on the returnFlag)
+    % returnFlag : An integer indicating what is requested. Depending on it the
+    % returnDataStruct will have different fields
+    % 1: Glass specific 'UniqueGlassParameters' table field names
+    % and initial values in Glass Editor GUI
+    %   inputDataStruct:
+    %       empty
+    %   Output Struct:
+    %       returnDataStruct.UniqueParametersStructFieldNames
+    %       returnDataStruct.UniqueParametersStructFieldDisplayNames
+    %       returnDataStruct.UniqueParametersStructFieldFormats
+    %       returnDataStruct.DefaultUniqueParametersStruct
+    % 2:  Return the refractive index of given derivative order
+    %   inputDataStruct:
+    %       inputDataStruct.Wavelength
+    %       inputDataStruct.DerivativeOrder
+    %   returnDataStruct:
+    %       returnDataStruct.RefractiveIndex,
+
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
     %   Advisor: Prof. Herbert Gross
@@ -20,64 +33,72 @@ function [ returnData1, returnData2, returnData3 ] = ZemaxFormula(...
     
     % <<<<<<<<<<<<<<<<<<< Change History Section >>>>>>>>>>>>>>>>>>>>>>>>>>
     % Date----------Modified By ---------Modification Detail--------Remark
-    % Jun 19,2015   Worku, Norman G.     Original Version   
+    % Jun 19,2015   Worku, Norman G.     Original Version
+    % Sep 07,2015   Worku, Norman G.     Edited to common user defined format
     
-    %% Default input vaalues
-    if nargin == 1
-        if returnFlag == 1
-            % Just continue
-        else
-            disp(['Error: The function ZemaxFormula() needs two arguments',...
-                'return type and glassParameters.']);
-            returnData1 = NaN;
-            returnData2 = NaN;
-            returnData3 = NaN;
+    %% Default input values
+    if nargin < 1
+        disp(['Error: The function ZemaxFormula() needs atleast one argument',...
+            'the return type.']);
+        returnDataStruct = NaN;
+        return;
+    end
+    if nargin < 2
+        if returnFlag == 2
+            disp(['Error: The function ZemaxFormula() needs atleast all three ',...
+                'arguments the compute the required return.']);
+            returnDataStruct = NaN;
             return;
         end
-    elseif nargin < 2
-        disp(['Error: The function ZemaxFormula() needs two arguments',...
-            'return type and glassParameters.']);
-        returnData1 = NaN;
-        returnData2 = NaN;
-        returnData3 = NaN;
-        return;
-    elseif nargin == 2
-        wavelength = 0.55*10^-6;
-        derivativeOrder = 0;
-    elseif nargin == 3
-        derivativeOrder = 0;
     end
+    if nargin < 3
+        if returnFlag == 2
+            disp(['Error: The function ZemaxFormula() needs atleast all three ',...
+                'arguments the compute the required return.']);
+            returnDataStruct = NaN;
+            return;
+        end
+    end
+
     %%
     switch returnFlag(1)
         case 1 % Return the field names and initial values of glassParameters
             returnData1 = {'FormulaType','CoefficientData'};
+            returnData1_Disp  = {'Formula Type','Coefficient Data'};
             returnData2 = {{'Schott','Sellmeier1','Sellmeier2',...
-                           'Sellmeier3','Sellmeier4','Sellmeier5','Herzberger',...
-                           'Conrady','HandbookOfOptics1','HandbookOfOptics2',...
-                           'Extended', 'Extended2', 'Extended3'},...
-                           {'numeric','numeric','numeric','numeric','numeric',...
-                           'numeric','numeric','numeric','numeric','numeric'}};
+                'Sellmeier3','Sellmeier4','Sellmeier5','Herzberger',...
+                'Conrady','HandbookOfOptics1','HandbookOfOptics2',...
+                'Extended', 'Extended2', 'Extended3'},'numericL10'};
+            % As automatic input acceptance of array types ('numericL10) is
+            % not supported by the toolbox, the Zemax formula glasses are handled
+            % with special routines.
             defaultGlassParameter = struct();
-            defaultGlassParameter.FormulaType = 'Sellmeier1';
+            defaultGlassParameter.FormulaType = 2;
             defaultGlassParameter.CoefficientData = [0,0,0,0,0,0,0,0,0,0];
             returnData3 = defaultGlassParameter;
+            
+            returnDataStruct.UniqueParametersStructFieldNames = returnData1;
+            returnDataStruct.UniqueParametersStructFieldDisplayNames = returnData1_Disp;
+            returnDataStruct.UniqueParametersStructFieldFormats = returnData2;
+            returnDataStruct.DefaultUniqueParametersStruct = returnData3;
+            
         case 2 % Return the refractive index of given derivative order
+            wavelength = inputDataStruct.Wavelength;
+            derivativeOrder =   inputDataStruct.DerivativeOrder;
+            
             nWav = size(wavelength,2);
             formulaType = glassParameters.FormulaType;
             coefficientData = glassParameters.CoefficientData;
-            
             refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wavelength,derivativeOrder);
             
-            returnData1 = refractiveIndex;
-            returnData2 = NaN;
-            returnData3 = NaN;
+            returnDataStruct.RefractiveIndex = refractiveIndex;
     end
     
     
 end
 
 function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wavLenInM,derivativeOrder)
-        % for a given wavelength. Uses dispersion equation.
+    % for a given wavelength. Uses dispersion equation.
     nRay = size(wavLenInM,2);
     format long;
     
@@ -86,8 +107,8 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
     % are in sq um.
     wavLenInUM = wavLenInM*10^6;
     
-    switch lower(formulaType)
-        case  lower('Schott')
+    switch (formulaType)
+        case  1 %lower('Schott')
             A0 = coefficientData(1);
             A1 = coefficientData(2);
             A2 = coefficientData(3);
@@ -114,7 +135,7 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
                         (a0+a5./wavLenInUM.^8+a4./wavLenInUM.^6+a3./wavLenInUM.^4+...
                         a2./wavLenInUM.^2+a1.*wavLenInUM.^2).^0.5;
             end
-        case  lower('Sellmeier1')
+        case 2 % lower('Sellmeier1')
             
             K1 = coefficientData(1);
             L1 = coefficientData(2);
@@ -151,7 +172,7 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
                         (K3.*wavLenInUM.^2)./(-L3+wavLenInUM.^2)).^0.5;
                     
             end
-        case  lower('Sellmeier2')
+        case 3 % lower('Sellmeier2')
             
             A = coefficientData(1);
             B = coefficientData(2);
@@ -179,7 +200,7 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
                         B2./(-L2.^2+wavLenInUM.^2)).^0.5;
                     
             end
-        case  lower('Sellmeier3')
+        case 4 % lower('Sellmeier3')
             K1 = coefficientData(1);
             L1 = coefficientData(2);
             K2 = coefficientData(3);
@@ -224,7 +245,7 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
                         (K3.*wavLenInUM.^2)./(-L3+wavLenInUM.^2)+(K4.*wavLenInUM.^2)./(-L4+wavLenInUM.^2)).^0.5;
                     
             end
-        case  lower('Sellmeier4')
+        case 5 % lower('Sellmeier4')
             A = coefficientData(1);
             B = coefficientData(2);
             C = coefficientData(3);
@@ -253,7 +274,7 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
                         (D.*wavLenInUM.^2)./(-E+wavLenInUM.^2)).^0.5;
                     
             end
-        case  lower('Sellmeier5')
+        case 6 % lower('Sellmeier5')
             K1 = coefficientData(1);
             L1 = coefficientData(2);
             K2 = coefficientData(3);
@@ -304,7 +325,7 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
                         (K4.*wavLenInUM.^2)./(-L4+wavLenInUM.^2)+(K5.*wavLenInUM.^2)./(-L5+wavLenInUM.^2)).^0.5;
                     
             end
-        case  lower('Herzberger')
+        case 7 % lower('Herzberger')
             A = coefficientData(1);
             B = coefficientData(2);
             C = coefficientData(3);
@@ -330,7 +351,7 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
                         (8.*B.*wavLenInUM.^2)./(-0.028+wavLenInUM.^2).^3-(2.*B)./(-0.028+wavLenInUM.^2).^2;
                     
             end
-        case  lower('Conrady')
+        case 8 % lower('Conrady')
             n0 = coefficientData(1);
             A = coefficientData(2);
             B = coefficientData(3);
@@ -345,7 +366,7 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
                     refractiveIndex=(15.75.*B)./wavLenInUM.^5.5+(2.*A)./wavLenInUM.^3;
                     
             end
-        case  lower('HandbookOfOptics1')
+        case 9 % lower('HandbookOfOptics1')
             A = coefficientData(1);
             B = coefficientData(2);
             C = coefficientData(3);
@@ -365,7 +386,7 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
                         (A-D.*wavLenInUM.^2+B./(-C1+wavLenInUM.^2)).^0.5;
                     
             end
-        case  lower('HandbookOfOptics2')
+        case 10 % lower('HandbookOfOptics2')
             A = coefficientData(1);
             B = coefficientData(2);
             C = coefficientData(3);
@@ -388,7 +409,7 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
                         (A-D.*wavLenInUM.^2+(B.*wavLenInUM.^2)./(-C+wavLenInUM.^2)).^0.5;
                     
             end
-        case  lower('Extended')
+        case 11 % lower('Extended')
             A0 = coefficientData(1);
             A1 = coefficientData(2);
             A2 = coefficientData(3);
@@ -422,7 +443,7 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
                         a5./wavLenInUM.^8+a4./wavLenInUM.^6+a3./wavLenInUM.^4+a2./wavLenInUM.^2+a1.*wavLenInUM.^2).^0.5;
                     
             end
-        case  lower('Extended2')
+        case 12 % lower('Extended2')
             A0 = coefficientData(1);
             A1 = coefficientData(2);
             A2 = coefficientData(3);
@@ -457,7 +478,7 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
                         a6.*wavLenInUM.^4+a7.*wavLenInUM.^6).^0.5;
                     
             end
-        case  lower('Extended3')
+        case 13 % lower('Extended3')
             A0 = coefficientData(1);
             A1 = coefficientData(2);
             A2 = coefficientData(3);
@@ -504,6 +525,6 @@ function refractiveIndex = computeRefractiveIndex(formulaType,coefficientData,wa
             % The 2nd derivative is in 1/(um)^2
             refractiveIndex = refractiveIndex*10^12; % In 1/m^2
     end
-
+    
 end
 

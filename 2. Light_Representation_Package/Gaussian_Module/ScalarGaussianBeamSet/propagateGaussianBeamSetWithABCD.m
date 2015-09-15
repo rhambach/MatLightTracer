@@ -1,4 +1,6 @@
-function [ gaussianBeamOut] = propagateGaussianBeamSetWithABCD( gaussianBeamSet, ABCDInX, ABCDInY,finalCentralRay,finalXDirection,finalYDirection )
+function [ gaussianBeamOut] = propagateGaussianBeamSetWithABCD( gaussianBeamSet, ...
+        ABCDInX, ABCDInY,finalCentralRayPosition,finalCentralRayDirection,...
+        finalCentralRayWavelength,finalXDirection,finalYDirection )
     %propagateGaussianBeamSetWithABCD Propagate gaussian beam with ABCD matrices
     % The code is also vectorized. Multiple inputs and outputs are possible.
     
@@ -29,6 +31,7 @@ function [ gaussianBeamOut] = propagateGaussianBeamSetWithABCD( gaussianBeamSet,
     Dy = ABCDInY(2,2,:);
     qyOut = (Ay.*qyIn + By)./((Cy.*qyIn + Dy));
     
-    gaussianBeamOut = fromQParametersToGaussianBeam...
-        (qxOut,qyOut,finalCentralRay,finalXDirection,finalYDirection);
+    gaussianBeamOut = fromQParametersToGaussianBeamSet...
+        (qxOut,qyOut,finalCentralRayPosition,finalCentralRayDirection,...
+        finalCentralRayWavelength,finalXDirection,finalYDirection);
 end

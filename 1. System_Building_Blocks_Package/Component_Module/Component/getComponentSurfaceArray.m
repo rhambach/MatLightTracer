@@ -1,4 +1,4 @@
-function mySurfaceArray = getComponentSurfaceArray(currentComponent)
+function mySurfaceArray = getComponentSurfaceArray(currentComponent,referenceCoordinateTM,previousThickness)
     % getComponentSurfaceArray: Compute surface parameters of the currentComponent
     % parameter index
     % Input:
@@ -19,6 +19,18 @@ function mySurfaceArray = getComponentSurfaceArray(currentComponent)
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     
+    if nargin < 1
+        disp('Error: The function getComponentSurfaceArray requires atleaast one input argument,currentComponent. ');
+        mySurfaceArray = NaN;
+        return;
+    end
+    if nargin < 2
+        referenceCoordinateTM = eye(4);
+    end
+    if nargin < 3
+        previousThickness = 0;
+    end
+    
     componentDefinitionFileName = currentComponent.Type;
     % Connect the component definition function
     componentDefinitionHandle = str2func(componentDefinitionFileName);
@@ -27,15 +39,31 @@ function mySurfaceArray = getComponentSurfaceArray(currentComponent)
     firstDecenter = currentComponent.FirstDecenter;
     firstTiltDecenterOrder = currentComponent.FirstTiltDecenterOrder;
     lastThickness = currentComponent.LastThickness;
-    lastTiltMode = currentComponent.ComponentTiltMode;
-    [ surfArray ] = componentDefinitionHandle(returnFlag,currentComponent.UniqueParameters,firstTilt,firstDecenter,firstTiltDecenterOrder,lastThickness,lastTiltMode);
+    componentTiltMode = currentComponent.ComponentTiltMode;
+    
+    stopSurfaceInComponentIndex = currentComponent.StopSurfaceIndex;
+    componentParameters = currentComponent.UniqueParameters;
+    
+    inputDataStruct = struct();
+    inputDataStruct.FirstTilt = firstTilt;
+    inputDataStruct.FirstDecenter = firstDecenter;
+    inputDataStruct.FirstTiltDecenterOrder = firstTiltDecenterOrder;
+    inputDataStruct.LastThickness = lastThickness;
+    inputDataStruct.ComponentTiltMode = componentTiltMode;
+    inputDataStruct.ReferenceCoordinateTM = referenceCoordinateTM;
+    inputDataStruct.PreviousThickness = previousThickness;
+    
+    [ returnDataStruct ] = componentDefinitionHandle(returnFlag,...
+        componentParameters,inputDataStruct);
+    surfArray = returnDataStruct.SurfaceArray;
+    
     % Make the stop surface
     for kk = 1:length(surfArray)
         surfArray(kk).IsStop = 0;
     end
-    stopSurfaceInComponentIndex = currentComponent.StopSurfaceIndex;
     if stopSurfaceInComponentIndex
         surfArray(stopSurfaceInComponentIndex).IsStop = 1;
     end
+    
     mySurfaceArray = surfArray;
 end

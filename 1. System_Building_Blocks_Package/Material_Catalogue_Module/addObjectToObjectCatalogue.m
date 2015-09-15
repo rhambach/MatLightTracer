@@ -8,9 +8,9 @@ function [ addedPosition ] = addObjectToObjectCatalogue...
     %  are used to validate the catalogue.
     % Inputs:
     %   (objectType, object,objectCatalogueFullName,ask_replace)
-    % Outputs: 
+    % Outputs:
     %    [ addedPosition ]
-
+    
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
@@ -21,7 +21,7 @@ function [ addedPosition ] = addObjectToObjectCatalogue...
     
     % <<<<<<<<<<<<<<<<<<< Change History Section >>>>>>>>>>>>>>>>>>>>>>>>>>
     % Date----------Modified By ---------Modification Detail--------Remark
-    % Jun 19,2015   Worku, Norman G.     Original Version  
+    % Jun 19,2015   Worku, Norman G.     Original Version
     
     if nargin == 3
         ask_replace = 'ask';
@@ -54,7 +54,8 @@ function [ addedPosition ] = addObjectToObjectCatalogue...
         newObjectNames = {object.Name};
         % locations will be cell array of logicals arrays indicating exactly
         % where the new object name exists in the old catalogue
-        locations = cellfun(@(x) strcmpi(x,existingObjectNames),newObjectNames,'UniformOutput', false);
+        locations = cellfun(@(x) strcmpi(x,existingObjectNames),newObjectNames,...
+            'UniformOutput', false);
         locations = find(cell2mat(locations));
         % Indices of new object which are already exsisting
         alreadyExistingObjIndices = ceil(locations./size(existingObjectNames,2));
@@ -65,7 +66,8 @@ function [ addedPosition ] = addObjectToObjectCatalogue...
                 alternativeName = [repeatedName,'1'];
                 if Ask
                     button = questdlg(strcat(repeatedName, ' is already in the catalogue.',...
-                        ' Do you want to save with new object name: ',alternativeName, ' ?'),'New Object Name','Yes Save','No Replace','Yes Save');
+                        ' Do you want to save with new object name: ',alternativeName, ' ?'),...
+                        'New Object Name','Yes Save','No Replace','Yes Save');
                     switch button
                         case 'Yes Save'
                             % Give new name for the new object

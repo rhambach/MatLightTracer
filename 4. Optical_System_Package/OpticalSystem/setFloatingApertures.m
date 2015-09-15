@@ -12,7 +12,8 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
     end
     
     nField = getNumberOfFieldPoints(updatedOpticalSystem);
-    nSurf = getNumberOfSurfaces(updatedOpticalSystem);
+    [ nonDummySurfaceIndices] = getNonDummySurfaceIndices( updatedOpticalSystem );
+    nNonDummySurf = length(nonDummySurfaceIndices);
     nWav = getNumberOfWavelengths(updatedOpticalSystem);
     
     fieldPointMatrix = updatedOpticalSystem.FieldPointMatrix;
@@ -42,8 +43,11 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
     cheifRayTraceResult = traceChiefRay(updatedOpticalSystem,...
         fieldPointXYAll,wavLenAll,rayTraceOptionStruct);
     nMarginalRayUsed = 1;
-    for kk = 1:nSurf
-        currentSurface = updatedOpticalSystem.SurfaceArray(kk);
+    
+    
+    for kk = 1:nNonDummySurf
+        surfIndex = nonDummySurfaceIndices(kk);
+        currentSurface = updatedOpticalSystem.SurfaceArray(surfIndex);
         if strcmpi(currentSurface.Aperture.Type,'FloatingCircularAperture')
             topMariginalIntersection = [topMariginalRayTraceResult(kk).RayIntersectionPoint];
             bottomMariginalIntersection = [bottomMariginalRayTraceResult(kk).RayIntersectionPoint];
@@ -84,13 +88,12 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
             
             maxRadTocheifRay = max(vertexTocheifRayDist);
             
-            
             maxRadToMariginal_CheifRay = max([maxRadToTopMariginalRay,...
                 maxRadToBottomMariginalRay,maxRadTocheifRay]);
             
             floatingApertureDiameter = 2*maxRadToMariginal_CheifRay;
             
-            updatedOpticalSystem.SurfaceArray(kk).Aperture.UniqueParameters.Diameter = ...
+            updatedOpticalSystem.SurfaceArray(surfIndex).Aperture.UniqueParameters.Diameter = ...
                 floatingApertureDiameter;
         end
     end

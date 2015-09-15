@@ -1,55 +1,66 @@
-function [ U_xyTot,xlinTot,ylinTot] = getSpatialProfile( harmonicFieldSource )
+function [ U_xyTot,xlinTot,ylinTot] = getSpatialProfile( harmonicFieldSource,xlinTot,ylinTot)
     %GETSPATIALPROFILE Returns the spatial profile of the harmonic field
     %source which is computed from The spatial profile + Edge smoothening +
     %Embeding in to border frame.
     
-    spatialProfileType = harmonicFieldSource.SpatialProfileType;
-    spatialProfileParameters = harmonicFieldSource.SpatialProfileParameters;
-    samplingPoints = harmonicFieldSource.SamplingPoints;
-    samplingDistance = harmonicFieldSource.SamplingDistance;
-    smootheningEdgeType = harmonicFieldSource.EdgeSizeSpecification;
-    
-    smootheningEdgeValue = harmonicFieldSource.RelativeEdgeSizeFactor;
-    embeddingFrameSamplePoints = harmonicFieldSource.AdditionalBoarderSamplePoints;
-    
-    switch lower(harmonicFieldSource.FieldSizeSpecification)
-        case lower('Relative')
-            % get the boarder shape and field size from the corresponding
-            % spatial profile function
-            
-            % Connect the spatial profile definition function            
-            spatialProfileDefinitionHandle = str2func(spatialProfileType);
-            returnFlag = 3; %
-            [ boarderShape,fieldDiameter ] = spatialProfileDefinitionHandle(...
-                returnFlag,spatialProfileParameters,samplingPoints,samplingDistance);
-            
-        case lower('Absolute')
-            boarderShape = harmonicFieldSource.AbsoluteBoarderShape;
-            fieldDiameter = harmonicFieldSource.AbsoluteFieldSize;
+    if nargin < 1
+        disp('Error: The function getSpatialProfile requires atleast an input sargument of harmonicFieldSource.');
+        U_xyTot = NaN;
+        xlinTot = NaN;
+        ylinTot = NaN;
+        return;
     end
+    if nargin < 3
+        [ nBoarderPixel1, nBoarderPixel2] = getZeroBoarderSamplePoints( harmonicFieldSource );
+        nBoarderPixel = [ nBoarderPixel1, nBoarderPixel2]';
+        [Nx,Ny] = getNumberOfSamplingPoints(harmonicFieldSource);
+        [dx,dy] = getSamplingDistance(harmonicFieldSource,Nx,Ny);
+        samplingPoints = [Nx,Ny]';
+        samplingDistance = [dx,dy]';
+        [xlin,ylin] = generateSamplingGridVectors(samplingPoints,samplingDistance);
+        
+        [xlinTot,ylinTot] = generateSamplingGridVectors(samplingPoints+2*nBoarderPixel,samplingDistance);
+    else
+        % Get the field size without the zero border
+        [diameterX2,diameterY2] = getSpatialShapeAndSize( harmonicFieldSource,2 );
+        
+        xlin = xlinTot(abs(xlinTot) <= diameterX2/2);
+        ylin = ylinTot(abs(ylinTot) <= diameterY2/2);
+    end
+    spatialProfileType = harmonicFieldSource.SpatialProfileType;
+    spatialProfileParameters = harmonicFieldSource.SpatialProfileParameter;
     
-    % get the spatial profile from the corresponding
-    % spatial profile function
-    % Connect the spatial profile definition function 
-    spatialProfileDefinitionHandle = str2func(spatialProfileType);
-    returnFlag = 2; %
-    [ U_xy ] = spatialProfileDefinitionHandle(...
-        returnFlag,spatialProfileParameters,samplingPoints,samplingDistance);
-       
+    [fieldDiameterX1,fieldDiameterY1,boarderShape] = getSpatialShapeAndSize( harmonicFieldSource,1 );
+    fieldDiameter = [fieldDiameterX1,fieldDiameterY1]';
+    smootheningEdgeType = harmonicFieldSource.SmoothEdgeSizeSpecification;
+    
+    % get the spatial profile from the corresponding spatial profile function
+    % Connect the spatial profile definition function
+    spatialProfileDefinitionHandle = str2func(getSupportedSpatialProfiles(spatialProfileType));
+    returnFlag = 3; %
+    inputDataStruct = struct();
+    [xMesh,yMesh] = meshgrid(xlin,ylin);
+    inputDataStruct.xMesh = xMesh;
+    inputDataStruct.yMesh = yMesh;
+    [ returnDataStruct ] = spatialProfileDefinitionHandle(returnFlag,spatialProfileParameters,inputDataStruct);
+    U_xy = returnDataStruct.SpatialProfileMatrix;
+    
     % compute edge smoothening function
-    switch lower(smootheningEdgeType)
-        case lower('Absolute')
-            absouteEdgeValue = smootheningEdgeValue;
-        case lower('Relative')
-            absouteEdgeValue = (1 - smootheningEdgeValue)*fieldDiameter;
+    smootheningEdgeValue = harmonicFieldSource.SmoothEdgeSizeValue;
+    switch (smootheningEdgeType)
+        case 1 %('Relative')
+            absoluteEdgeValue = (smootheningEdgeValue).*fieldDiameter;
+        case 2 % ('Absolute')
+            absoluteEdgeValue = [smootheningEdgeValue,smootheningEdgeValue]';
     end
     
     [edgeSmootheningFunction] = getEdgeSmootheningFunction(...
-        samplingPoints,samplingDistance,boarderShape,absouteEdgeValue);
+        xlin,ylin,boarderShape,absoluteEdgeValue);
     
     U_xy_SmoothEdge = U_xy.*edgeSmootheningFunction;
+    
     % Add the field into the embedding frame
-    [U_xyTot,xlinTot,ylinTot] = EmbedInToFrame(U_xy_SmoothEdge,...
-        embeddingFrameSamplePoints,samplingPoints,samplingDistance);    
+    
+    [U_xyTot] = EmbedInToFrame(U_xy_SmoothEdge,nBoarderPixel);
 end
 

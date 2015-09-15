@@ -37,15 +37,15 @@ function [ plotted ] = plotGaussianBeamSet( gaussianBeamSet,plotType,nPoints1,nP
     w0y = gaussianBeamSet.WaistRadiusInY;
     zx = gaussianBeamSet.DistanceFromWaistInX;
     zy = gaussianBeamSet.DistanceFromWaistInY;
-    wavLen = gaussianBeamSet.CentralRayBundle.Wavelength;
+    wavLen = gaussianBeamSet.CentralRayWavelength;
     
-    centerPositions = gaussianBeamSet.CentralRayBundle.Position;
+    centerPositions = gaussianBeamSet.CentralRayPosition;
     c0x = centerPositions(1,:);
     c0y = centerPositions(2,:);
     
-    [ wx,wy ] = getSpotRadius(gaussianBeamSet);
-    [ Rx,Ry ] = getRadiusOfCurvature(gaussianBeamSet);
-    [ guoyPhaseX,guoyPhaseY ] = getGuoyPhaseShift(gaussianBeamSet);
+    [ wx,wy ] = getGaussianBeamSpotRadius(gaussianBeamSet);
+    [ Rx,Ry ] = getGaussianBeamRadiusOfCurvature(gaussianBeamSet);
+    [ guoyPhaseX,guoyPhaseY ] = getGaussianBeamGuoyPhaseShift(gaussianBeamSet);
     
     xMax = 3*wx/sqrt(2);
     yMax = 3*wy/sqrt(2);

@@ -174,7 +174,6 @@ function InitializeComponentEditorPanel( parentWindow )
     updateSystemConfigurationWindow( parentWindow );
     updateQuickLayoutPanel(parentWindow,1);
 end
-
 % Local functions
 function btnInsertComponent_Callback(~,~,parentWindow)
     aodHandles = parentWindow.ParentHandles;
@@ -187,9 +186,6 @@ function btnInsertComponent_Callback(~,~,parentWindow)
         InsertNewComponent(parentWindow,'SQS','SequenceOfSurfaces',insertPosition);
     end
 end
-
-
-
 function btnRemoveComponent_Callback(~,~,parentWindow)
     aodHandles = parentWindow.ParentHandles;
     aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
@@ -217,12 +213,11 @@ function btnRemoveComponent_Callback(~,~,parentWindow)
     end
     parentWindow.ParentHandles = aodHandles;
 end
-
 function popStopComponentIndex_Callback(hObject, eventdata,parentWindow)
     aodHandles = parentWindow.ParentHandles;
     aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
     currentOpticalSystem = aodHandles.OpticalSystem;
-    prevStopIndex = getStopComponentIndex(currentOpticalSystem);
+    [prevStopIndex,~,prevStopSurfaceIndex] = getStopComponentIndex(currentOpticalSystem);
     newStopIndex = get(hObject,'Value');
     if newStopIndex == 1 || newStopIndex == getNumberOfComponents(currentOpticalSystem) % Object and image can not be Stop
         newStopIndex = prevStopIndex;
@@ -257,7 +252,7 @@ function tblComponentList_CellSelectionCallback(~, eventdata,parentWindow)
     end
     selectedElementIndex = selectedCell(1);
     aodHandles.SelectedElementIndex = selectedElementIndex;
-
+    
     tblData = get(aodHandles.tblComponentList,'data');
     sizeTblData = size(tblData);
     if selectedElementIndex == 1 % object comp
@@ -291,6 +286,7 @@ function tblComponentList_CellSelectionCallback(~, eventdata,parentWindow)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
     updateSurfaceOrComponentEditorPanel( parentWindow , selectedElementIndex);
 end
+
 % --- Executes when entered data in editable cell(s) in aodHandles.tblComponentLis.
 function tblComponentList_CellEditCallback(~, eventdata,parentWindow)
     % hObject    handle to aodHandles.tblComponentList (see GCBO)
@@ -301,7 +297,7 @@ function tblComponentList_CellEditCallback(~, eventdata,parentWindow)
     %	NewData: EditData or its converted form set on the Data property. Empty if Data was not changed
     %	Error: error string when failed to convert EditData to appropriate value for Data
     % parentWindow: object with structure with aodHandles and user data (see GUIDATA)
-
+    
     aodHandles = parentWindow.ParentHandles;
     aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
     editedCellIndex = eventdata.Indices;
@@ -348,7 +344,6 @@ function tblComponentList_CellEditCallback(~, eventdata,parentWindow)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
     updateSurfaceOrComponentEditorPanel( parentWindow , selectedElementIndex);
 end
-
 function tblComponentBasicParameters_CellSelectionCallback(~, eventdata,parentWindow)
     % hObject    handle to aodHandles.tblComponentList (see GCBO)
     % eventdata  structure with the following fields (see UITABLE)
@@ -412,7 +407,7 @@ function tblComponentBasicParameters_CellSelectionCallback(~, eventdata,parentWi
                 selectedComponent.UniqueParameters.(myName) = newParam;
             end
         elseif strcmpi('SQS',myType)
-            initialSurfaceArray = selectedComponent.UniqueParameters.(myName);
+            initialSurfaceArray = getComponentSurfaceArray(selectedComponent);%.UniqueParameters.(myName);
             isSurfaceArrayComponent = 0;
             glassCatalogueListFullNames = aodHandles.OpticalSystem.GlassCataloguesList;
             coatingCatalogueListFullNames = aodHandles.OpticalSystem.CoatingCataloguesList;
@@ -425,9 +420,16 @@ function tblComponentBasicParameters_CellSelectionCallback(~, eventdata,parentWi
             uiwait(surfaceArrayEnteryFig);
             surfaceArray = getappdata(0,'SurfaceArray');
             selectedComponent.UniqueParameters.(myName)  = surfaceArray;
+            newStopSurf = find([surfaceArray.IsStop]);
+            if newStopSurf
+                [prevStopComp, specified,stopSurfaceIndex] = getStopComponentIndex(aodHandles.OpticalSystem);
+                selectedComponent.StopSurfaceIndex = newStopSurf;
+                aodHandles.OpticalSystem.ComponentArray(prevStopComp).StopSurfaceIndex = 0;
+                aodHandles.OpticalSystem.ComponentArray(prevStopComp).UniqueParameters.SurfaceArray(stopSurfaceIndex).IsStop = 0;
+            end
+            
         elseif strcmpi('numeric',myType) || strcmpi('char',myType)||...
                 strcmpi('Glass',myType) || strcmpi('Coating',myType)
-            
         else
             disp(['Error: Unknown parameter type: ',myType]);
             return;
@@ -439,8 +441,6 @@ function tblComponentBasicParameters_CellSelectionCallback(~, eventdata,parentWi
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
     updateSurfaceOrComponentEditorPanel( parentWindow , selectedElementIndex);
 end
-
-
 function tblComponentTiltDecenterParameters_CellSelectionCallback(~, eventdata,parentWindow)
     % hObject    handle to aodHandles.tblComponentTiltDecenterParameters (see GCBO)
     % eventdata  structure with the following fields (see UITABLE)
@@ -507,8 +507,6 @@ function tblComponentTiltDecenterParameters_CellSelectionCallback(~, eventdata,p
     updateSurfaceOrComponentEditorPanel( parentWindow , selectedElementIndex);
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
 end
-
-
 function tblComponentBasicParameters_CellEditCallback(~, eventdata,parentWindow)
     % hObject    handle to aodHandles.tblComponentList (see GCBO)
     % eventdata  structure with the following fields (see UITABLE)
@@ -518,12 +516,13 @@ function tblComponentBasicParameters_CellEditCallback(~, eventdata,parentWindow)
     %	NewData: EditData or its converted form set on the Data property. Empty if Data was not changed
     %	Error: error string when failed to convert EditData to appropriate value for Data
     % parentWindow: object with structure with aodHandles and user data (see GUIDATA)
-    
-    selectedElementIndex = parentWindow.ParentHandles.SelectedElementIndex;
     aodHandles = parentWindow.ParentHandles;
+    aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+    selectedElementIndex = aodHandles.SelectedElementIndex;
+    
     selectedComponent =  aodHandles.OpticalSystem.ComponentArray(selectedElementIndex);
     if selectedElementIndex > 1
-        previousComponent =  aodHandles.OpticalSystem.ComponentArray(selectedElementIndex-1);        
+        previousComponent =  aodHandles.OpticalSystem.ComponentArray(selectedElementIndex-1);
     else
         previousComponent =  selectedComponent;
     end
@@ -585,14 +584,12 @@ function tblComponentBasicParameters_CellEditCallback(~, eventdata,parentWindow)
         end
     else
     end
-
+    
     aodHandles.OpticalSystem.ComponentArray(selectedElementIndex) = selectedComponent;
     parentWindow.ParentHandles = aodHandles;
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
     updateSurfaceOrComponentEditorPanel( parentWindow,selectedElementIndex );
 end
-
-
 function tblComponentTiltDecenterParameters_CellEditCallback(~, eventdata,parentWindow)
     % hObject    handle to aodHandles.tblComponentTiltDecenterParameters (see GCBO)
     % eventdata  structure with the following fields (see UITABLE)
@@ -602,10 +599,9 @@ function tblComponentTiltDecenterParameters_CellEditCallback(~, eventdata,parent
     %	NewData: EditData or its converted form set on the Data property. Empty if Data was not changed
     %	Error: error string when failed to convert EditData to appropriate value for Data
     % parentWindow: object with structure with aodHandles and user data (see GUIDATA)
-    
-    selectedElementIndex = parentWindow.ParentHandles.SelectedElementIndex;
     aodHandles = parentWindow.ParentHandles;
     aodHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
+    selectedElementIndex = aodHandles.SelectedElementIndex;
     selectedComponent =  aodHandles.OpticalSystem.ComponentArray(selectedElementIndex);
     
     selectedCellIndex = eventdata.Indices;
@@ -688,7 +684,6 @@ function InsertNewComponent(parentWindow,componentTypeDisp,componentType,insertP
     updateSurfaceOrComponentEditorPanel( parentWindow,insertPosition );
     updateQuickLayoutPanel(parentWindow,insertPosition);
 end
-
 function RemoveComponent(parentWindow,removePosition)
     % check if it is stop component
     if getStopComponentIndex(parentWindow.ParentHandles.OpticalSystem) == removePosition

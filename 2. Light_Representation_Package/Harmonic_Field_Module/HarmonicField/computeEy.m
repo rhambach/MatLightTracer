@@ -1,4 +1,4 @@
-function [Ey,x_lin,y_lin] = computeEy(harmonicField)
+function [Ey,xlin,ylin] = computeEy(harmonicField)
   Ey = harmonicField.ComplexAmplitude(:,:,2);
   nx = size(Ey,1); 
   ny = size(Ey,2);
@@ -6,8 +6,6 @@ function [Ey,x_lin,y_lin] = computeEy(harmonicField)
   cy = harmonicField.Center(2);
   dx = harmonicField.SamplingDistance(1);
   dy = harmonicField.SamplingDistance(2); 
-  
-  x_lin = uniformSampling1D(cx,nx,dx);
-  y_lin = uniformSampling1D(cy,ny,dy);
+  [xlin,ylin] = generateSamplingGridVectors([nx,ny],[dx,dy],[cx,cy]);
 end 
 

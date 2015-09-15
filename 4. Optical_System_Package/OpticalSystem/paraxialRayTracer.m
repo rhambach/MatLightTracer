@@ -1,16 +1,12 @@
-function [ yf,uf ] = paraxialRayTracer( optSystem,yi,ui,initialSurf,finalSurf,wavlenInM,reflection,referenceWavlenInM )
+function [ yf,uf ] = paraxialRayTracer( optSystem,yi,ui,initialSurf,finalSurf,wavlenInM,referenceWavlenInM )
     %PARAXIALRAYTRACER performs paraxial ray trace through optical system using
     %yni algorithm.
-    
     if nargin < 6
         disp('Error: Mising argument in paraxialRayTracer function. So calculation is aborted.');
         yf = NaN;
         uf = NaN;
         return;
     elseif nargin == 6
-        reflection = 0;
-        referenceWavlenInM = wavlenInM(1);
-    elseif nargin == 7
         referenceWavlenInM = wavlenInM(1);
     else
     end
@@ -24,6 +20,9 @@ function [ yf,uf ] = paraxialRayTracer( optSystem,yi,ui,initialSurf,finalSurf,wa
     [ nonDummySurfaceArray,nNonDummySurface,nonDummySurfaceIndices,...
         surfaceArray,nSurface ] = getNonDummySurfaceArray(optSystem);
     
+%         startNonDummyIndex = initialNonDummySurf;
+%         endNonDummyIndex = finalNonDummySurf;
+        
     if initialSurf==finalSurf
         yf=yi;
         uf=ui;
@@ -50,6 +49,12 @@ function [ yf,uf ] = paraxialRayTracer( optSystem,yi,ui,initialSurf,finalSurf,wa
             end
             yBefore = y + t*u;
             uBefore = u;
+            if strcmpi(nonDummySurfaceArray(surfIndex).Glass.Name,'MIRROR')
+                reflection = 1;
+            else
+                reflection = 0;
+            end
+            
             [ yAfter,uAfter ] = traceParaxialRaysToThisSurface(surface,yBefore,uBefore,...
                 indexBefore,indexAfter,reverseTracing,reflection,wavlenInM,referenceWavlenInM);
             
@@ -76,10 +81,12 @@ function [ yf,uf ] = paraxialRayTracer( optSystem,yi,ui,initialSurf,finalSurf,wa
         y = yi;
         u = -ui;
         %reverse trace
+        
         indicesAfterEndSurf = find(nonDummySurfaceIndices>=finalSurf);
         endNonDummyIndex = indicesAfterEndSurf(1);
         indicesBeforeStartSurf = find(nonDummySurfaceIndices<=initialSurf);
         startNonDummyIndex = indicesBeforeStartSurf(end);
+        
         reverseTracing = 1;
         
         for surfIndex = startNonDummyIndex:-1:endNonDummyIndex+1
@@ -88,6 +95,11 @@ function [ yf,uf ] = paraxialRayTracer( optSystem,yi,ui,initialSurf,finalSurf,wa
             surface = nonDummySurfaceArray(surfIndex);
             yAfter = y;
             uAfter = u;
+            if strcmpi(nonDummySurfaceArray(surfIndex).Glass.Name,'MIRROR')
+                reflection = 1;
+            else
+                reflection = 0;
+            end
             [ yBefore,uBefore ] = traceParaxialRaysToThisSurface(surface,yAfter,uAfter,...
                 indexBefore,indexAfter,reverseTracing,reflection,wavlenInM,referenceWavlenInM);
             

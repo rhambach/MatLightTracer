@@ -4,7 +4,7 @@ rectCenter = 0;
 rectWidth = 20;
 myRect1D = Rect1D( rectAmplitude,rectCenter,rectWidth );
 nPoints = 500;
-lowerX = -0.5*rectWidth - 5;
+lowerX = -0.5*rectWidth - 10;
 upperX = -lowerX;
 [ ampValuesRect,xValuesRect ] = plotRect1D( myRect1D,lowerX,upperX,nPoints );
 
@@ -17,11 +17,11 @@ nGauss = 10; % shall be odd
 commonAmplitude = 0.6;
 waistRadiusToSpacing = 1;
 
-amplitude = ones(1,nGauss)*commonAmplitude;
+amplitude = ones(nGauss,1)*commonAmplitude;
 
 % Assume the rectangle edge is on the waist of the last gausslets
 waistRadius = (waistRadiusToSpacing*rectWidth)/(nGauss-1 + 2*waistRadiusToSpacing);
-center = linspace(-rectWidth/2 + waistRadius,rectWidth/2 - waistRadius,nGauss); %(-totalWidth/2 )+[0,cumsum(centerSpacing)];
+center = (linspace(-rectWidth/2 + waistRadius,rectWidth/2 - waistRadius,nGauss))'; %(-totalWidth/2 )+[0,cumsum(centerSpacing)];
 
 % %%
 % waistRadiusToSpacing = 1.0;
@@ -47,7 +47,7 @@ center = linspace(-rectWidth/2 + waistRadius,rectWidth/2 - waistRadius,nGauss); 
 % center = (-totalWidth/2 )+[0,cumsum(centerSpacing)];
 
 %%
-[ newGauss1D ] = Gauss1D( amplitude,center,waistRadius );
+[ newGauss1D ] = Gauss1D( amplitude,center,waistRadius, nGauss );
 [ ampValuesDecomposed,xValuesDecomposed ] = plotGauss1D( newGauss1D,lowerX,upperX,nPoints );
 
 

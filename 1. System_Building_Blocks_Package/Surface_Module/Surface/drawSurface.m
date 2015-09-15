@@ -158,9 +158,14 @@ function [xyzPoints] = drawSurface(surface,plotIn2D,nPoints1,nPoints2,...
             yMesh = r*sin(phi);
         end
     else
-        xgv = linspace(-maxR,maxR,nPoints1);
-        ygv = linspace(-maxR,maxR,nPoints2);
-        [xMesh,yMesh] = meshgrid(xgv,ygv);
+        if plotIn2D
+            yMesh = linspace(-maxR,maxR,nPoints2);
+            xMesh = 0*yMesh;
+        else
+            xgv = linspace(-maxR,maxR,nPoints1);
+            ygv = linspace(-maxR,maxR,nPoints2);
+            [xMesh,yMesh] = meshgrid(xgv,ygv);
+        end        
     end
     
     nRow = size(xMesh,1);

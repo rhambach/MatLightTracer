@@ -2,7 +2,7 @@ function [ampTs,ampTp,powTs,powTp,jonesTransMatrix] = getTransmissionCoefficient
         (coating,wavLenInUm,incAngleInDeg,indexBefore,indexAfter,referenceWavLenInUm)
     % getTransmissionCoefficients: Computes the amplitude and power coefficients of
     % transmission using general Fresnel's equations. The function is vectorized so
-    % it can work on multiple sets of inputs once at the same time. i.e incAngle 
+    % it can work on multiple sets of inputs once at the same time. i.e incAngle
     % or wavLen becomes array)
     % Inputs:
     %   (coating,wavLenInUm,incAngleInDeg,substrateGlass,claddingGlass,referenceWavLenInUm)
@@ -41,20 +41,22 @@ function [ampTs,ampTp,powTs,powTp,jonesTransMatrix] = getTransmissionCoefficient
     end
     
     coatingType = coating.Type;
-    coatingParameters = coating.Parameters;
+    coatingParameters = coating.UniqueParameters;
     
-    % Connect to Coating Defintion function
-    if strcmpi(coatingType,'None')
-        coatingDefinitionHandle = @NullCoating;
-    else
-        coatingDefinitionHandle = str2func(coatingType);
-    end
+    coatingDefinitionHandle = str2func(coatingType);
     returnFlag = 2; % Jones matrix
     wavLen = wavLenInUm*10^-6;
-    referenceWavLen = referenceWavLenInUm*10^-6;
-    [ ampTransJonesMatrix,ampRefJonesMatrix,powTransJonesMatrix,powRefJonesMatrix] = ...
-        coatingDefinitionHandle(returnFlag,coatingParameters,wavLen,referenceWavLen,...
-        incAngleInDeg,indexBefore,indexAfter);
+    
+    inputDataStruct = struct();
+    inputDataStruct.Wavelength = wavLen;
+    inputDataStruct.IncidenceAngleInDeg = incAngleInDeg;
+    inputDataStruct.IndexBefore = indexBefore;
+    inputDataStruct.IndexAfter = indexAfter;
+    [ returnDataStruct] = coatingDefinitionHandle(returnFlag,coatingParameters,inputDataStruct);
+    
+    %   returnDataStruct:
+    ampTransJonesMatrix = returnDataStruct.AmplitudeTransmissionMatrix;
+    powTransJonesMatrix = returnDataStruct.PowerTransmissionMatrix;
     
     ampTs = squeeze(ampTransJonesMatrix(1,1,:));
     ampTp = squeeze(ampTransJonesMatrix(2,2,:));

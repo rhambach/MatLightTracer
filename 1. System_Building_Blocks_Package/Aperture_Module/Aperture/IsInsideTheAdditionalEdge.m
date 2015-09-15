@@ -31,17 +31,17 @@ function [ isInsideTheAdditionalEdge ] = IsInsideTheAdditionalEdge( surfAperture
     
     xyVector_final = [initial_r.*cos(new_angleInRad), initial_r.*sin(new_angleInRad)];
     
-
+    
     my_eps = 0;
     
-%     xyVector_final = xyVector;
     % Now connect to the aperture defintion function and compute the
     % maximum Radius in x and y
     apertureDefinitionHandle = str2func(apertureType);
-    returnFlag = 2; % maximumRadiusXY
+    returnFlag = 2;
     apertureParameters = surfAperture.UniqueParameters;
-    [ maximumRadiusXY] = ...
-        apertureDefinitionHandle(returnFlag,apertureParameters,xyVector_final);
+    [ returnDataStruct] = apertureDefinitionHandle(returnFlag,apertureParameters);
+    maximumRadiusXY = returnDataStruct.MaximumRadiusXY;
+    
     maximumRadiusXYWithEdge = maximumRadiusXY*(1+surfAperture.AdditionalEdge);
     switch lower(surfAperture.OuterShape)
         case {'elliptical','circular'}

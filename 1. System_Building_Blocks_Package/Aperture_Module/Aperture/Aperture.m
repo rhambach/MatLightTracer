@@ -29,88 +29,37 @@ function newAperture = Aperture(type,apertDecenter,apertRotInDeg,drawAbsolute,ou
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     
-    if nargin == 0
+    if nargin < 1
         type = 'FloatingCircularAperture';
-        apertDecenter = [0,0];
-        apertRotInDeg = 0;
-        drawAbsolute = 0;
-        apertureDefinitionHandle = str2func(type);
-        returnFlag = 1; % isInsideTheOuterAperture
-        [ ~,~,defaultParameters] = ...
-            apertureDefinitionHandle(returnFlag);
-        outerShape = 'Circular';
-        additionalEdge = 0.1;
-        uniqueParameters = defaultParameters;
-    elseif nargin == 1
-        apertDecenter = [0,0];
-        apertRotInDeg = 0;
-        drawAbsolute = 0;
-        apertureDefinitionHandle = str2func(type);
-        returnFlag = 1; % isInsideTheOuterAperture
-        [ ~,~,defaultParameters] = ...
-            apertureDefinitionHandle(returnFlag);
-        if strcmpi(type,'RectangularAperture')||...
-                strcmpi(type,'RectangularObstruction')
-            outerShape = 'Rectangular';
-        else
-            outerShape = 'Circular';
-        end
-        additionalEdge = 0.1;
-        uniqueParameters = defaultParameters;
-    elseif nargin == 2
-        apertRotInDeg = 0;
-        drawAbsolute = 0;
-        apertureDefinitionHandle = str2func(type);
-        returnFlag = 1; % isInsideTheOuterAperture
-        [ ~,~,defaultParameters] = ...
-            apertureDefinitionHandle(returnFlag);
-        if strcmpi(type,'RectangularAperture')||...
-                strcmpi(type,'RectangularObstruction')
-            outerShape = 'Rectangular';
-        else
-            outerShape = 'Circular';
-        end
-        additionalEdge = 0.1;
-        uniqueParameters = defaultParameters;
-    elseif nargin == 3
-        drawAbsolute = 0;
-        apertureDefinitionHandle = str2func(type);
-        returnFlag = 1; % isInsideTheOuterAperture
-        [ ~,~,defaultParameters] = ...
-            apertureDefinitionHandle(returnFlag);
-        if strcmpi(type,'RectangularAperture')||...
-                strcmpi(type,'RectangularObstruction')
-            outerShape = 'Rectangular';
-        else
-            outerShape = 'Circular';
-        end
-        additionalEdge = 0.1;
-        uniqueParameters = defaultParameters;
-    elseif nargin == 4
-        apertureDefinitionHandle = str2func(type);
-        returnFlag = 1; % isInsideTheOuterAperture
-        [ ~,~,defaultParameters] = ...
-            apertureDefinitionHandle(returnFlag);
-        if strcmpi(type,'RectangularAperture')||...
-                strcmpi(type,'RectangularObstruction')
-            outerShape = 'Rectangular';
-        else
-            outerShape = 'Circular';
-        end
-        additionalEdge = 0.1;
-        uniqueParameters = defaultParameters;
-    elseif nargin == 5
-        if strcmpi(type,'RectangularAperture')||...
-                strcmpi(type,'RectangularObstruction')
-            outerShape = 'Rectangular';
-        else
-            outerShape = 'Circular';
-        end
-        additionalEdge = 0.1;
-    elseif nargin == 6
-        additionalEdge = 0.1;
-    else
     end
+    if nargin < 2
+        apertDecenter = [0,0];
+    end
+    if nargin < 3
+        apertRotInDeg = 0;
+    end
+    if nargin < 4
+        drawAbsolute = 0;
+    end
+    if nargin < 5
+        if strcmpi(type,'RectangularAperture')||...
+                strcmpi(type,'RectangularObstruction')
+            outerShape = 'Rectangular';
+        else
+            outerShape = 'Circular';
+        end
+    end
+    if nargin < 6
+        additionalEdge = 0.1;
+    end
+    if nargin < 7
+        apertureDefinitionHandle = str2func(type);
+        returnFlag = 1;
+        [returnDataStruct] = apertureDefinitionHandle(returnFlag);
+        defaultParameters = returnDataStruct.DefaultUniqueParametersStruct;
+        uniqueParameters = defaultParameters;
+    end
+    
     newAperture.Type = type;
     newAperture.Decenter = apertDecenter;
     newAperture.Rotation = apertRotInDeg;

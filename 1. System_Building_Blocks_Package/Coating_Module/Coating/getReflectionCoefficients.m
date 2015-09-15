@@ -1,8 +1,8 @@
 function [ampRs,ampRp,powRs,powRp,jonesRefMatrix] = getReflectionCoefficients...
-        (coating,wavLenInUm,incAngleInDeg,substrateGlass,claddingGlass,referenceWavLenInUm)
+        (coating,wavLenInUm,incAngleInDeg,indexBefore,indexAfter,referenceWavLenInUm)
     % getReflectionCoefficients: Computes the amplitude and power coefficients of
     % reflection using general Fresnel's equations. The function is vectorized so
-    % it can work on multiple sets of inputs once at the same time. i.e incAngle 
+    % it can work on multiple sets of inputs once at the same time. i.e incAngle
     % or wavLen becomes array)
     % Inputs:
     %   (coating,wavLen,incAngleInDeg,substrateGlass,claddingGlass,referenceWavLen)
@@ -41,16 +41,21 @@ function [ampRs,ampRp,powRs,powRp,jonesRefMatrix] = getReflectionCoefficients...
     end
     
     coatingType = coating.Type;
-    coatingParameters = coating.Parameters;
-    
-    % Connect to Coating Defintion function
+    coatingParameters = coating.UniqueParameters;
     coatingDefinitionHandle = str2func(coatingType);
     returnFlag = 2; % Jones matrix
     wavLen = wavLenInUm*10^-6;
-    referenceWavLen = referenceWavLenInUm*10^-6;
-    [ ampTransJonesMatrix,ampRefJonesMatrix,powTransJonesMatrix,powRefJonesMatrix] = ...
-        coatingDefinitionHandle(returnFlag,coatingParameters,wavLen,referenceWavLen,...
-        incAngleInDeg,substrateGlass,claddingGlass);
+
+    inputDataStruct = struct();
+    inputDataStruct.Wavelength = wavLen;
+    inputDataStruct.IncidenceAngleInDeg = incAngleInDeg;
+    inputDataStruct.IndexBefore = indexBefore;
+    inputDataStruct.IndexAfter = indexAfter;
+    [ returnDataStruct] = coatingDefinitionHandle(returnFlag,coatingParameters,inputDataStruct);
+    
+    %   returnDataStruct:
+    ampRefJonesMatrix = returnDataStruct.AmplitudeReflectionMatrix;
+    powRefJonesMatrix = returnDataStruct.PowerReflectionMatrix;
     
     ampRs = squeeze(ampRefJonesMatrix(1,1,:));
     ampRp = squeeze(ampRefJonesMatrix(2,2,:));

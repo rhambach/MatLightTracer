@@ -119,7 +119,8 @@ function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
     % normalize to pupil radius
     cx = (centerXLinear)'*sampleGridSize./entrancePupilRadius;
     cy = (centerYLinear)'*sampleGridSize./entrancePupilRadius;
-    plot_ellipse(subplotAxes,a,b,cx,cy,phi,direction);
+    plotEllipse(a',b',cx',cy',phi',direction',subplotAxes);
+%     plot_ellipse(subplotAxes,a,b,cx,cy,phi,direction);
     
     set(gcf,'Name',['Pupil Polarization Ellipse Map at surface : ',num2str(surfIndex)]);
     drawn = 1;

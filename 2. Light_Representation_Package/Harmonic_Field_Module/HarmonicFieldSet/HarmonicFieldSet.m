@@ -1,4 +1,4 @@
-function NewHarmonicFieldSet = HarmonicFieldSet(arrayOfHarmonicFields,refIndex)
+function newHarmonicFieldSet = HarmonicFieldSet(arrayOfHarmonicFields,refIndex)
     if nargin == 0
         arrayOfHarmonicFields =  HarmonicField();
         refIndex = 1;
@@ -11,7 +11,7 @@ function NewHarmonicFieldSet = HarmonicFieldSet(arrayOfHarmonicFields,refIndex)
     else
         
     end
-    NewHarmonicFieldSet.ReferenceFieldIndex = refIndex;
+    newHarmonicFieldSet.ReferenceFieldIndex = refIndex;
     nFields = length(arrayOfHarmonicFields);
     
     
@@ -35,9 +35,9 @@ function NewHarmonicFieldSet = HarmonicFieldSet(arrayOfHarmonicFields,refIndex)
             newInterpolatedArrayOfField(ff) = arrayOfHarmonicFields(ff);
         end
     end
-    NewHarmonicFieldSet.HarmonicFieldArray = newInterpolatedArrayOfField;
-    NewHarmonicFieldSet.Center = centerRef;
-    NewHarmonicFieldSet.ClassName = 'HarmonicFieldSet';
+    newHarmonicFieldSet.HarmonicFieldArray = newInterpolatedArrayOfField;
+    newHarmonicFieldSet.LateralPosition = centerRef;
+    newHarmonicFieldSet.ClassName = 'HarmonicFieldSet';
 end
 
 

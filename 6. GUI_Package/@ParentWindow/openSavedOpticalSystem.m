@@ -3,14 +3,14 @@ function opened = openSavedOpticalSystem(parentWindow,savedOpticalSystem)
     % and load it to surface data editor and configuration window.
     % Member of ParentWindow class
     
+    resetParentParameters( parentWindow );
     aodHandles = parentWindow.ParentHandles;
     % Change the title bar to optical system name
     set(aodHandles.FigureHandle,'Name',[savedOpticalSystem.PathName,savedOpticalSystem.FileName]);
     aodHandles.OpticalSystem = savedOpticalSystem;
     
     parentWindow.ParentHandles = aodHandles;
-    % Close all child windows
-    closeAllChildWindows(parentWindow);
+
     %% System Configuration Data
     updateSystemConfigurationWindow( parentWindow );
     % Update the surface or component editor panel

@@ -143,6 +143,7 @@ function [ returnDataStruct] = Standard(returnFlag,surfaceParameters,inputDataSt
             y = inputDataStruct.InputParaxialRayParameters(1,:);
             u = inputDataStruct.InputParaxialRayParameters(2,:);
             reverseTracing = inputDataStruct.ReverseTracingFlag;
+            reflection = inputDataStruct.ReflectionFlag;
             indexBefore = inputDataStruct.IndexBefore;
             indexAfter = inputDataStruct.IndexAfter;
             surfaceRadius = surfaceParameters.Radius;
@@ -160,6 +161,10 @@ function [ returnDataStruct] = Standard(returnFlag,surfaceParameters,inputDataSt
                 n = indexAfter;
                 nPrime = indexBefore;
             end
+            if reflection
+                n = -n;
+            end
+            
             paI = u+yf*c; %The yui method generates the paraxial angles of incidence
             % during the trace and is probably the most common method used in computer programs.
             uf = u+((n/nPrime)-1)*paI;

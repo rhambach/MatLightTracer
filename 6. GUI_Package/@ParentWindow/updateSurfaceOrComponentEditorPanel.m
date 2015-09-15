@@ -63,7 +63,6 @@ function updateSurfaceOrComponentEditorPanel( parentWindow , selectedIndex)
     
     aodHandles.OpticalSystem = currentOpticalSystem;
     parentWindow.ParentHandles =  aodHandles;
-    
 end
 
 
