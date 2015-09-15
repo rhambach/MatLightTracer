@@ -11,7 +11,8 @@ body {
 
 a {
   color: #1e6bb8;
-  text-decoration: none; }
+  text-decoration: none; 
+  text-align: center;}
   a:hover {
     text-decoration: underline; }
 
@@ -58,6 +59,7 @@ a {
   text-align: center;
   background-color: #159957;
   background-image: linear-gradient(120deg, #155799, #159957); }
+  
 
 @media screen and (min-width: 64em) {
   .page-header {
@@ -243,3 +245,48 @@ a {
 @media screen and (max-width: 42em) {
   .site-footer {
     font-size: 0.9rem; } }
+
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li {
+    float: left;
+}
+
+
+
+
+
+
+
+
+
+#menu{
+ text-align:center;
+} 
+#menu ul {
+    height: auto;
+    padding: 8px 0px;
+    margin: 0px;
+}
+
+#menu li { 
+display: inline; 
+padding: 20px; 
+}
+
+#menu a {
+    text-decoration: none;
+    color: #00F;
+    padding: 18px 18px 18px 18px;
+}
+
+#menu a:hover {
+    color: #F90;
+    background-color: #FFF;
+}
