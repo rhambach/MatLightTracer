@@ -1,9 +1,5 @@
 function [ returnDataStruct] = Standard(returnFlag,surfaceParameters,inputDataStruct)
-<<<<<<< HEAD
     %STANDARD Standard surface definition 
-=======
-    %STANDARD Standard surface definition ..
->>>>>>> d606f4f995e4a1a59aced75d37e669d49a53b158
     % surfaceParameters = values of {'Radius','Conic','GratingLineDensity','DiffractionOrder'}
     % inputDataStruct : Struct of all additional inputs (not included in the surface parameters)
     % required for computing the return. (Vary depending on the returnFlag)
