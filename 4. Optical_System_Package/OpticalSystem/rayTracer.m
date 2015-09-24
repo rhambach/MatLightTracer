@@ -54,7 +54,7 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
     if nargin < 6
         nWav = 1;
     end
-
+    
     considerPolarization = rayTraceOptionStruct.ConsiderPolarization;
     recordIntermediateResults = rayTraceOptionStruct.RecordIntermediateResults;
     considerSurfAperture = rayTraceOptionStruct.ConsiderSurfAperture;
@@ -74,7 +74,7 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
     sizeOfInputObjectRay = size(objectRayBundle);
     
     objectRayBundle = objectRayBundle(:);
-    % Determine the start and end indeces in non dummy surface array  
+    % Determine the start and end indeces in non dummy surface array
     [ NonDummySurfaceArray,nNonDummySurface,NonDummySurfaceIndices,...
         surfaceArray,nSurface ] = getNonDummySurfaceArray( optSystem );
     
@@ -91,14 +91,13 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
     wavUnitFactor = getWavelengthUnitFactor(optSystem);
     primaryWavlenInM = getPrimaryWavelength(optSystem);
     
-    %     nRay = length(objectRayBundle);
     nRay = size(objectRayBundle.Position,2);
     
     wavlenInM  = objectRayBundle.Wavelength; % wavlen is in m for Ray object
     wavlenInWavlenUnit = wavlenInM/wavUnitFactor;
     CurrentRayDirection = objectRayBundle.Direction;
     currentRayPositionInM = objectRayBundle.Position;
-    %     currentRayPupilCoordinate = objectRayBundle.PupilCoordinate;
+    % currentRayPupilCoordinate = objectRayBundle.PupilCoordinate;
     
     
     % Since all ray tracing is done in lens units convert the object position
@@ -131,10 +130,6 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
     
     SurfaceNormal = currentSurfaceNormal; % [0,0,1]; % assume plane object surface.
     
-    %     IncidenceAngle = NaN([1,nRay]);
-    %     ExitAngle = computeAngleBetweenVectors...
-    %         (currentSurfaceNormal,CurrentRayDirection);
-    
     GeometricalPathLength = zeros([1,nRay]);
     OpticalPathLength = zeros([1,nRay]);
     AdditionalPathLength = zeros([1,nRay]);
@@ -162,7 +157,7 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
                 GroupPathLength,TotalPathLength,TotalOpticalPathLength,TotalGroupPathLength,...
                 RefractiveIndex,RefractiveIndexFirstDerivative,RefractiveIndexSecondDerivative,...
                 GroupRefractiveIndex,CoatingJonesMatrix,CoatingPMatrix,CoatingQMatrix,TotalPMatrix,TotalQMatrix);
-            %             multipleRayTracerResultAll(startNonDummyIndex,:).RayPupilCoordinates = currentRayPupilCoordinate;
+            % multipleRayTracerResultAll(startNonDummyIndex,:).RayPupilCoordinates = currentRayPupilCoordinate;
         else
             multipleRayTracerResultFinal(startNonDummyIndex,:) = RayTraceResult(nRayPupil,nField,nWav,...
                 RayIntersectionPoint,ExitRayPosition,SurfaceNormal,...
@@ -170,7 +165,7 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
                 GroupPathLength,TotalPathLength,TotalOpticalPathLength,TotalGroupPathLength,...
                 RefractiveIndex,RefractiveIndexFirstDerivative,RefractiveIndexSecondDerivative,...
                 GroupRefractiveIndex,CoatingJonesMatrix,CoatingPMatrix,CoatingQMatrix,TotalPMatrix,TotalQMatrix);
-            %             multipleRayTracerResultFinal(startNonDummyIndex,:).RayPupilCoordinates = currentRayPupilCoordinate;
+            % multipleRayTracerResultFinal(startNonDummyIndex,:).RayPupilCoordinates = currentRayPupilCoordinate;
         end
     else
         if recordIntermediateResults
@@ -180,7 +175,7 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
                 GroupPathLength,TotalPathLength,TotalOpticalPathLength,TotalGroupPathLength,...
                 RefractiveIndex,RefractiveIndexFirstDerivative,RefractiveIndexSecondDerivative,...
                 GroupRefractiveIndex);
-            %              multipleRayTracerResultAll(startNonDummyIndex,:).RayPupilCoordinates = currentRayPupilCoordinate;
+            % multipleRayTracerResultAll(startNonDummyIndex,:).RayPupilCoordinates = currentRayPupilCoordinate;
         else
             multipleRayTracerResultFinal(startNonDummyIndex,:) = RayTraceResult(nRayPupil,nField,nWav,...
                 RayIntersectionPoint,ExitRayPosition,SurfaceNormal,...
@@ -188,11 +183,9 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
                 GroupPathLength,TotalPathLength,TotalOpticalPathLength,TotalGroupPathLength,...
                 RefractiveIndex,RefractiveIndexFirstDerivative,RefractiveIndexSecondDerivative,...
                 GroupRefractiveIndex);
-            %              multipleRayTracerResultFinal(startNonDummyIndex,:).RayPupilCoordinates = currentRayPupilCoordinate;
+            % multipleRayTracerResultFinal(startNonDummyIndex,:).RayPupilCoordinates = currentRayPupilCoordinate;
         end
     end
-    
-    
     
     firstGlass = NonDummySurfaceArray(1).Glass;
     
@@ -213,15 +206,6 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
     else
         secondDerivative_IndexAfter = zeros([1,nRay]);
     end
-    
-    
-    %     if computeGroupPathLength
-    %         [groupIndexAfter,indexAfter, firstDerivative_IndexAfter] = getGroupRefractiveIndex(firstGlass,wavlenInM) ;
-    %     else
-    %         groupIndexAfter = NaN;
-    %         indexAfter = getRefractiveIndex(firstGlass,wavlenInM);
-    %         firstDerivative_IndexAfter = NaN;
-    %     end
     
     % To keep track of mirrored coordinates (after mirror occuring odd times)
     mirroredCoordinate = 0;
@@ -276,20 +260,19 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
         
         if  strcmpi(glassAfter.Name,'Mirror') % reflection
             reflection = 1;
+            mirroredCoordinate = ~mirroredCoordinate;
         else
             reflection = 0;
         end
-        
+
         [ GeometricalPathLength,additionalPath,localRayIntersectionPoint, ...
             localSurfaceNormal,localExitRayPosition,localExitRayDirection,...
             TIR,NoIntersectionPoint]  = traceRealRaysToThisSurface(...
             NonDummySurfaceArray(surfaceIndex),rayInitialPosition,rayDirection,...
-            indexBefore,indexAfter,wavlenInM,primaryWavlenInM,reflection);
+            indexBefore,indexAfter,wavlenInM,primaryWavlenInM,mirroredCoordinate);
         
         AdditionalPathLength = additionalPath;
-        
         TotalPathLength = TotalPathLength + GeometricalPathLength;
-        
         if computeOpticalPathLength
             OpticalPathLength = indexBefore.*(GeometricalPathLength + additionalPath);
             TotalOpticalPathLength = TotalOpticalPathLength + OpticalPathLength;
@@ -342,11 +325,6 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
         
         CurrentRayPosition = localExitRayPosition;
         CurrentRayDirection = localExitRayDirection;
-        % If the current coordinate is mirrored coordinate
-        % => Mirrored Z axis => the normal vector shall be in -ve direction
-        if mirroredCoordinate
-            localSurfaceNormal = -localSurfaceNormal;
-        end
         localIncidentRayDirection = CurrentRayDirection;
         
         if surfaceIndex < nNonDummySurface
@@ -381,7 +359,6 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
                         indexBefore,indexAfter,primaryWaveLenInUm);
                     
                 end
-                mirroredCoordinate = ~mirroredCoordinate;
             elseif ~strcmpi(NonDummySurfaceArray(surfaceIndex).Glass.Name,'Mirror')
                 if considerPolarization
                     localIncidenceAngle = computeAngleBetweenVectors (localSurfaceNormal,...
@@ -430,34 +407,6 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
             GlobalIncidentRayDirection,GlobalExitRayDirection] = ...
             localToGlobalCoordinate(localRayIntersectionPoint,localExitRayPosition,...
             localSurfaceNormal,localIncidentRayDirection,localExitRayDirection,surfaceCoordinateTM);
-        
-        % Add signs to the angles
-        % +Ve angles: CCW when observed from (SurfaceNormal X RayDirection)
-        % from direction with -ve x component
-        % -Ve angles: CW when observed from (SurfaceNormal X RayDirection)
-        % from direction with -ve x component
-        % This makes the angles valid for rays in yz planes with conventional sign convention.
-        % normalToPlaneOfPropagationIncident =  ...
-        %     compute3dCross(GlobalSurfaceNormal,GlobalIncidentRayDirection);
-        %
-        % normalToPlaneOfPropagationExit =  ...
-        %     compute3dCross(GlobalSurfaceNormal,GlobalExitRayDirection);
-        
-        %     if strcmpi(NonDummySurfaceArray(surfaceIndex).Glass.Name,'Mirror')
-        %         % Invert the incidence direction in case of mirrror
-        %         %if mirroredCoordinate
-        %         signOfIncidence = -1;
-        %     else
-        %         signOfIncidence = 1;
-        %     end
-        
-        % GlobalIncidenceAngleSigned = globalIncidenceAngle.* ...
-        %     -sign(normalToPlaneOfPropagationIncident(1));
-        % GlobalIncidenceAngleSigned = globalIncidenceAngle;
-        
-        % GlobalExitAngleSigned = globalExitAngle.* ...
-        %     -sign(normalToPlaneOfPropagationExit(1));
-        % GlobalExitAngleSigned = globalExitAngle;
         
         % Record all neccessary outputs to trace the ray
         if recordIntermediateResults

@@ -22,9 +22,11 @@ function [ surfaceSagMain,surfaceSagAlternative ] = getSurfaceSag( surface,xyCoo
     surfaceParameters = surface.UniqueParameters;
     returnFlag = 4; % Sag
     inputDataStruct = struct();
-    inputDataStruct.xyMeshGrid = xyCoordinateMeshgrid;
+    inputDataStruct.X = xyCoordinateMeshgrid(:,:,1);
+    inputDataStruct.Y = xyCoordinateMeshgrid(:,:,2);
+    inputDataStruct.ExtraData = surface.ExtraData;
     % Connect the surface definition function
-    surfaceDefinitionHandle = str2func(surfaceType);
+    surfaceDefinitionHandle = str2func(GetSupportedSurfaceTypes(surfaceType));
     [returnDataStruct] = surfaceDefinitionHandle(returnFlag,surfaceParameters,inputDataStruct);
     mainSag = returnDataStruct.MainSag;
     alternativeSag = returnDataStruct.AlternativeSag;

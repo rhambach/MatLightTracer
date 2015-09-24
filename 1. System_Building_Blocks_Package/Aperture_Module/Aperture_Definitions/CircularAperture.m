@@ -69,6 +69,7 @@ function [ returnDataStruct] = CircularAperture(returnFlag,apertureParameters,in
     switch returnFlag(1)
         case 1 % Return the field names and initial values of apertureParameters
             returnData1 = {'SmallDiameter','LargeDiameter'};
+            returnData1_Display = {'Small Diameter','Large Diameter'};
             returnData2 = {'numeric','numeric'};
             defaultApertureParameter = struct();
             defaultApertureParameter.SmallDiameter = 10;
@@ -76,7 +77,7 @@ function [ returnDataStruct] = CircularAperture(returnFlag,apertureParameters,in
             returnData3 = defaultApertureParameter;
             
             returnDataStruct.UniqueParametersStructFieldNames = returnData1;
-            returnDataStruct.UniqueParametersStructFieldDisplayNames = returnData1;
+            returnDataStruct.UniqueParametersStructFieldDisplayNames = returnData1_Display;
             returnDataStruct.UniqueParametersStructFieldFormats = returnData2;
             returnDataStruct.DefaultUniqueParametersStruct = returnData3;
         case 2 % Return the maximum radius in x and y axis

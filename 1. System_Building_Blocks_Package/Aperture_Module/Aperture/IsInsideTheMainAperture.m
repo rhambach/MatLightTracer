@@ -40,7 +40,7 @@ function [ isInsideTheMainAperture ] = IsInsideTheMainAperture( surfAperture, xy
     
     % Now connect to the aperture defintion function and compute the
     % isInnsidefunction
-    apertureDefinitionHandle = str2func(apertureType);
+    apertureDefinitionHandle = str2func(GetSupportedSurfaceApertureTypes(apertureType));
     returnFlag = 3; % isInsideTheMainAperture
     apertureParameters = surfAperture.UniqueParameters;
     inputDataStruct.xyVector = xyVector_final;

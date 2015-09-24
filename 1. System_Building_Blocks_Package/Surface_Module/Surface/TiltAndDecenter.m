@@ -30,34 +30,35 @@ function [surfaceCoordinateTM,nextReferenceCoordinateTM] = TiltAndDecenter...
     Dy = surf.Decenter(2);
     Dz = prevThickness;
     
-    order = surf.TiltDecenterOrder;
     tiltMode = surf.TiltMode;
-    
+    orderString = GetSupportedTiltDecenterOrder(surf.TiltDecenterOrder);
+    orderCellArray = {orderString(1:2),orderString(3:4),...
+        orderString(5:6),orderString(7:8),orderString(9:10),orderString(11:12)};
     surfaceCoordinateTM = ...
         computeCoordinateTransformationMatrix...
-        (Tx,Ty,Tz,Dx,Dy,Dz,order,refCoordinateTM);
+        (Tx,Ty,Tz,Dx,Dy,Dz,orderCellArray,refCoordinateTM);
     
     % coordinate transformation matrix for coordinate after the surface calculations
     switch tiltMode
-        case 'DAR'
+        case 1 %'DAR'
             % Reference axis for next surfaces starts at current
             % surface vertex and oriented in the current
             % reference axis
             nextReferenceCoordinateTM = refCoordinateTM;
             nextReferenceCoordinateTM(1:3,4) = surfaceCoordinateTM(1:3,4)-[Dx;Dy;0];
-        case 'NAX'
+        case 2 %'NAX'
             % Reference axis for next surfaces starts at current
             % surface vertex and oriented in the current surfaces
             % local axis
             nextReferenceCoordinateTM = surfaceCoordinateTM;
-        case 'BEN'
+        case 3 %'BEN'
             % Apply Tx and Ty again for the new axis
             % Compute Tz to readjust the new axis so that the meridional
             % plane remains meridional after BENd (OpTaLix)
             Tz = acos((cos(Tx)+cos(Ty))/(1+ cos(Tx)*cos(Ty)));
             Dx=0; Dy=0; Dz=0;
             nextReferenceCoordinateTM = computeCoordinateTransformationMatrix...
-                (Tx,Ty,Tz,Dx,Dy,Dz,order,surfaceCoordinateTM);
+                (Tx,Ty,Tz,Dx,Dy,Dz,orderCellArray,surfaceCoordinateTM);
     end
 end
 

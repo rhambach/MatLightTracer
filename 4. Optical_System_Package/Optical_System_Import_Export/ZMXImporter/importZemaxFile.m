@@ -17,7 +17,6 @@ function opticalSystemObject = importZemaxFile (zmxFullFileName,...
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
     %   Advisor: Prof. Herbert Gross
-    %   Part of the RAYTRACE_TOOLBOX V3.0 (OOP Version)
     %	Optical System Design and Simulation Research Group
     %   Institute of Applied Physics
     %   Friedrich-Schiller-University of Jena
@@ -203,7 +202,7 @@ function opticalSystemObject = importZemaxFile (zmxFullFileName,...
                         switch choice
                             case 'Yes'
                                 [ ~, catalogueFullFileName ] = importAGFGlassCatalogue();
-                                coatingCatalogueListFullNames = [coatingCatalogueListFullNames;{catalogueFullFileName}];
+                                glassCatalogueListFullNames = [glassCatalogueListFullNames;{catalogueFullFileName}];
                             case 'Cancel'
                                 disp(['Glass Catalogue ','Warning: Missing glass catalogue. The glass catalogue :',catName,' is just ignored.']);
                                 %                                 return;
@@ -661,7 +660,7 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                     minimumRadius = minRadius*apertureFactorX;
                     maximumRadius = maxRadius*apertureFactorY;
                     
-                    surfaceObjectArray(surfaceCounter).Aperture = Aperture('EllipticalAperture');
+                    surfaceObjectArray(surfaceCounter).Aperture = Aperture('CircularAperture');
                     surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.SmallDiameter = 2*minimumRadius;
                     surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.LargeDiameter = 2*maximumRadius;
                     surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
@@ -983,25 +982,38 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
             case 'TYPE'
                 % TYPE surfType: 	surfType = STANDARD,EVENASPH,ODDASPHE...
                 % Surface types supported are STANDARD, TILTSURF, DGRATING,
-                % COORDBRK.
+                % COORDBRK,EVENASPH,TOROIDAL
                 % STANDARD, TILTSURF, DGRATING => Standard
                 % COORDBRK => Dummy
                 % PARAXIAL => IdealLens
+                % EVENASPH => EvenAsphere
+                % TOROIDAL => Toroidal
                 
                 zemaxSurfaceType = char(currentLineArray(2,:));
+                supportedSurfaceTypes = GetSupportedSurfaceTypes();
                 if strcmpi(zemaxSurfaceType,'STANDARD')||...
                         strcmpi(zemaxSurfaceType,'TILTSURF')||...
                         strcmpi(zemaxSurfaceType,'DGRATING')
-                    surfaceObjectArray(surfaceCounter).Type = 'Standard';
+                    [~,locationIndex] = ismember('Standard',supportedSurfaceTypes);
+                    surfaceObjectArray(surfaceCounter).Type = locationIndex;
                 elseif strcmpi(zemaxSurfaceType,'COORDBRK')
-                    surfaceObjectArray(surfaceCounter).Type = 'Dummy';
+                    [~,locationIndex] = ismember('Dummy',supportedSurfaceTypes);
+                    surfaceObjectArray(surfaceCounter).Type = locationIndex;
                     nonDummySurface(surfaceCounter) = 0;
                 elseif strcmpi(zemaxSurfaceType,'PARAXIAL')
-                    surfaceObjectArray(surfaceCounter).Type = 'IdealLens';    
+                    [~,locationIndex] = ismember('IdealLens',supportedSurfaceTypes);
+                    surfaceObjectArray(surfaceCounter).Type = locationIndex;  
+                elseif strcmpi(zemaxSurfaceType,'EVENASPH')
+                    [~,locationIndex] = ismember('EvenAsphere',supportedSurfaceTypes);
+                    surfaceObjectArray(surfaceCounter).Type = locationIndex;  
+                elseif strcmpi(zemaxSurfaceType,'TOROIDAL')
+                    [~,locationIndex] = ismember('Toroidal',supportedSurfaceTypes);
+                    surfaceObjectArray(surfaceCounter).Type = locationIndex;      
                 else
                     disp(['Surf ',num2str(surfaceCounter),' Error: Surface '...
                         'type: ',zemaxSurfaceType,' is not supported. It is cosidered as STANDARD' ]);
-                    surfaceObjectArray(surfaceCounter).Type = 'Standard';
+                    [~,locationIndex] = ismember('Standard',supportedSurfaceTypes);
+                    surfaceObjectArray(surfaceCounter).Type = locationIndex;
                 end
                 % Initialize all surface specific data
                 % Other surface type specific standard data
@@ -1108,7 +1120,8 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                     surfaceApertureIsFixedSize = 1;
                     if  mySystem.SystemApertureType == 3 && surfaceObjectArray(surfaceCounter).IsStop
                         % If fixed semidiameter, system aperture float by stop size and current surface is stop
-                        surfaceObjectArray(surfaceCounter).Aperture.Type = 'CircularAperture';
+                        [~,circApertureIndex] = ismember('CircularAperture',GetSupportedSurfaceApertureTypes);
+                        surfaceObjectArray(surfaceCounter).Aperture.Type = circApertureIndex;
                         surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.SmallDiameter = 0;
                         surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters.LargeDiameter = 2*semidiam;
                         surfaceApertureIsSet = 1;
@@ -1140,14 +1153,6 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                         apertureFactorY = 1;
                     end
                     aperParam.Diameter = 2*semidiam*apertureFactorX;
-                    
-                    %                     aperParam(1) = semidiam*apertureFactorX;
-                    %                     aperParam(2) = semidiam*apertureFactorY;
-                    
-                    %                     % Add the margins and Set clear aperture
-                    %                     aperParam(1) = aperParam(1);
-                    %                     aperParam(2) = aperParam(2);
-                    %                     surfaceObjectArray(surfaceCounter).ClearAperture = 1;
                     surfaceObjectArray(surfaceCounter).Aperture.AdditionalEdge = mySystem.SurfaceMarginPercent/100;
                     
                     surfaceObjectArray(surfaceCounter).Aperture.UniqueParameters = aperParam;
@@ -1182,6 +1187,8 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                 value = str2num(char(currentLineArray(3,:)));
                 if  strcmpi(zemaxSurfaceType,'COORDBRK')
                     switch n
+                        case 0
+                            % Unused
                         case 1
                             decParam = surfaceObjectArray(surfaceCounter).Decenter;
                             decParam(1) = value;
@@ -1205,15 +1212,17 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                         case 6
                             order = value;
                             if order == 0 % D->T
-                                surfaceObjectArray(surfaceCounter).TiltDecenterOrder = {'Dx','Dy','Dz','Tx','Ty','Tz'};
+                                surfaceObjectArray(surfaceCounter).TiltDecenterOrder = 1;%{'Dx','Dy','Dz','Tx','Ty','Tz'};
                             else % T->D
-                                surfaceObjectArray(surfaceCounter).TiltDecenterOrder = {'Tx','Ty','Tz','Dx','Dy','Dz'};
+                                surfaceObjectArray(surfaceCounter).TiltDecenterOrder = 2;%{'Tx','Ty','Tz','Dx','Dy','Dz'};
                             end
-                            surfaceObjectArray(surfaceCounter).TiltMode = 'NAX';
+                            surfaceObjectArray(surfaceCounter).TiltMode = 2;%'NAX';
                     end
                 elseif strcmpi(zemaxSurfaceType,'TILTSURF')
                     tiltParam = surfaceObjectArray(surfaceCounter).Tilt;
                     switch n
+                        case 0
+                            % Unused
                         case 1
                             % An angle from x axis => Rotation about y axis
                             tiltParam(2) = atan(value)*180/pi;
@@ -1223,16 +1232,84 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                     end
                     surfaceObjectArray(surfaceCounter).Tilt = tiltParam;
                 elseif strcmpi(zemaxSurfaceType,'DGRATING')
-                    tiltParam = surfaceObjectArray(surfaceCounter).Tilt;
+                    grating = surfaceObjectArray(surfaceCounter).Grating;
                     switch n
+                        case 0
+                            % Unused
                         case 1
                             % Lines per um
-                            surfaceObjectArray(surfaceCounter).UniqueParameters.GratingLineDensity = value;
+                            grating.UniqueParameters.LinesPerMicrometer = value;
                         case 2
                             % DiffractionOrder
-                            surfaceObjectArray(surfaceCounter).UniqueParameters.DiffractionOrder = value;
+                            grating.DiffractionOrder = value;
                     end
-                    surfaceObjectArray(surfaceCounter).Tilt = tiltParam;
+                    surfaceObjectArray(surfaceCounter).Grating = grating;
+                elseif strcmpi(zemaxSurfaceType,'TOROIDAL')
+                    suraceParameters = surfaceObjectArray(surfaceCounter).UniqueParameters;
+                    switch n
+                        case 0
+                            % Extrapolate not used currently
+                        case 1
+                            % RadiusOfRotation
+                            if value == 0
+                                value = Inf; % In zemax Inf radius of curv is set as 0
+                            end
+                            suraceParameters.RadiusOfRotation = value;
+                        case 2
+                            % C2
+                            suraceParameters.C2 = value;
+                        case 3
+                            % C4
+                            suraceParameters.C4 = value;
+                        case 4
+                            % C6
+                            suraceParameters.C6 = value;
+                        case 5
+                            % C8
+                            suraceParameters.C8 = value;
+                        case 6
+                            % C10
+                            suraceParameters.C10 = value;
+                        case 7
+                            % C12
+                            suraceParameters.C12 = value;
+                        case 8
+                            % C14
+                            suraceParameters.C14 = value;    
+                    end
+                    surfaceObjectArray(surfaceCounter).UniqueParameters = suraceParameters;    
+                elseif strcmpi(zemaxSurfaceType,'EVENASPH')
+                    suraceParameters = surfaceObjectArray(surfaceCounter).UniqueParameters;
+                    switch n
+                        case 0
+                            % Unused
+                        case 1
+                            % C2
+                            suraceParameters.C2 = value;
+                        case 2
+                            % C4
+                            suraceParameters.C4 = value;
+                        case 3
+                            % C6
+                            suraceParameters.C6 = value;
+                        case 4
+                            % C8
+                            suraceParameters.C8 = value;
+                        case 5
+                            % C10
+                            suraceParameters.C10 = value;
+                        case 6
+                            % C12
+                            suraceParameters.C12 = value;
+                        case 7
+                            % C14
+                            suraceParameters.C14 = value;
+                        case 8
+                            % C16
+                            suraceParameters.C16 = value;       
+                    end
+                    surfaceObjectArray(surfaceCounter).UniqueParameters = suraceParameters;    
+                else
                 end
             case 'PPAR'
                 % Unknown keyword
@@ -1274,6 +1351,7 @@ function isSurfCommand = isSurfaceCommand(zmxSurfCommand)
         'OBDC','OBSC','SPID','SQAP','SQOB','UDAD','USAP','USOB','COAT',...
         'COMM', 'CONI','VCON','PKUP','CURV','SCOL','SLAB','STOP','SURF',...
         'TYPE','GLAS','DIAM','DISZ','CHZH', 'EDGE','MAZH','OPDZ' ,'PZUP' ,...
-        'TCOC','TCOM' ,'TOLE','TPUP','VDSZ','SCBD','PARM','PPAR','XDAT'};
+        'TCOC','TCOM' ,'TOLE','TPUP','VDSZ','SCBD','PARM','PPAR','XDAT',...
+        'FIMP','LANG',};
     isSurfCommand = ismember(upper(zmxSurfCommand),surfaceCommands);
 end

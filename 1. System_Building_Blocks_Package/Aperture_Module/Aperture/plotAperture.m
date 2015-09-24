@@ -27,7 +27,8 @@ function [  h ] = plotAperture( surfAperture,nPoints1,nPoints2,xyCenterPoint,axe
     % Radius of the largest circle circumscribing the aperture
         maxR = sqrt((maximumRadiusXY(1))^2+(maximumRadiusXY(2))^2);
         maxRWithEdge = (1+surfAperture.AdditionalEdge)*maxR;
-    if strcmpi(outerApertShape,'Circular')||strcmpi(outerApertShape,'Elliptical')  
+    %if strcmpi(outerApertShape,'Circular')||strcmpi(outerApertShape,'Elliptical') 
+    if outerApertShape == 1||outerApertShape == 2 % 'Circular' or 'Elliptical'
         % Draw a circle with radiaus maxR and then cut out the part required
         % using the given X and Y ranges
         %     r = (linspace(-maxR,maxR,nPoints1))';

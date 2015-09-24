@@ -18,10 +18,10 @@ function [ gridType ] = getGridType( currentSurface )
     
     % It depends on the outer aperture shape
     outerApertShape = currentSurface.Aperture.OuterShape;
-    switch lower(outerApertShape)
-        case {'circular','elliptical'}
+    switch (outerApertShape)
+        case {[1],[2]}
             gridType = 'Polar';
-        case 'rectangular'
+        case 3
             gridType = 'Rectangular';
         otherwise
             disp('Error: Unsapported aperture outer shape. So the default rectangular grid is used.');

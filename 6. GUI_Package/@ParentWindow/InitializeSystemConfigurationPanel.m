@@ -577,7 +577,11 @@ end
 
 % Call backs Implementation
 function btnConfigurationOk_Callback(~,~,parentWindow)
+    selectedElementIndex = 2;
+    parentWindow.ParentHandles.OpticalSystem.IsUpdatedSurfaceArray = 0;
     SaveConfigurationData(parentWindow);
+    updateQuickLayoutPanel(parentWindow,selectedElementIndex);
+    updateSurfaceOrComponentEditorPanel( parentWindow,selectedElementIndex );
     close(parentWindow.ParentHandles.SystemConfigurationFigureHandle);
 end
 function btnConfigurationCancel_Callback(~,~,parentWindow)

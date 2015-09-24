@@ -35,14 +35,14 @@ function [ isInsideTheOuterAperture ] = IsInsideTheOuterAperture( surfAperture, 
     
     % Now connect to the aperture defintion function and compute the
     % maximum Radius in x and y
-    apertureDefinitionHandle = str2func(apertureType);
+    apertureDefinitionHandle = str2func(GetSupportedSurfaceApertureTypes(apertureType));
     returnFlag = 2; % maximumRadiusXY
     apertureParameters = surfAperture.UniqueParameters;
     [ returnDataStruct] = apertureDefinitionHandle(returnFlag,apertureParameters);
     maximumRadiusXY = returnDataStruct.MaximumRadiusXY;
     
-    switch lower(surfAperture.OuterShape)
-        case {'elliptical','circular'}
+    switch (surfAperture.OuterShape)
+        case {[1],[2]} % Circular or elliptical
             semiDiamX = maximumRadiusXY(1);
             semiDiamY = maximumRadiusXY(2);
             pointX = xyVector(:,1);
@@ -50,7 +50,7 @@ function [ isInsideTheOuterAperture ] = IsInsideTheOuterAperture( surfAperture, 
             isInsideTheOuterAperture = (((pointX).^2)/semiDiamX^2) + (((pointY).^2)/semiDiamY^2) < 1 + my_eps ;
             
             insideIndex = find(isInsideTheOuterAperture);
-        case 'rectangular'
+        case  3 %'rectangular'
             semiDiamX = maximumRadiusXY(1);
             semiDiamY = maximumRadiusXY(2);
             pointX = xyVector(:,1);

@@ -36,15 +36,15 @@ function [ isInsideTheAdditionalEdge ] = IsInsideTheAdditionalEdge( surfAperture
     
     % Now connect to the aperture defintion function and compute the
     % maximum Radius in x and y
-    apertureDefinitionHandle = str2func(apertureType);
+    apertureDefinitionHandle = str2func(GetSupportedSurfaceApertureTypes(apertureType));
     returnFlag = 2;
     apertureParameters = surfAperture.UniqueParameters;
     [ returnDataStruct] = apertureDefinitionHandle(returnFlag,apertureParameters);
     maximumRadiusXY = returnDataStruct.MaximumRadiusXY;
     
     maximumRadiusXYWithEdge = maximumRadiusXY*(1+surfAperture.AdditionalEdge);
-    switch lower(surfAperture.OuterShape)
-        case {'elliptical','circular'}
+    switch (surfAperture.OuterShape)
+        case {[1],[2]}%{'elliptical','circular'}
             semiDiamX1 = maximumRadiusXY(1);
             semiDiamY1 = maximumRadiusXY(2);
             
@@ -57,7 +57,7 @@ function [ isInsideTheAdditionalEdge ] = IsInsideTheAdditionalEdge( surfAperture
             umInsideTheOuterEllipse  = ((((pointX).^2)/semiDiamX2^2) + (((pointY).^2)/semiDiamY2^2) < 1 + my_eps);
             isInsideTheAdditionalEdge = umInsideTheOuterEllipse & ~umInsideTheInnerEllipse ;
             
-        case 'rectangular'
+        case 2 %'rectangular'
             semiDiamX1 = maximumRadiusXY(1);
             semiDiamY1 = maximumRadiusXY(2);
             

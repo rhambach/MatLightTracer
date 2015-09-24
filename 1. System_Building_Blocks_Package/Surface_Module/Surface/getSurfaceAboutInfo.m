@@ -1,4 +1,4 @@
-function [ dispName, imgFileName, surfDescription ] = getSurfaceAboutInfo( currentComponent )
+function [ dispName, imgFileName, surfDescription ] = getSurfaceAboutInfo( currentSurface )
     %getSurfaceAboutInfo: Returns the information related to the surface
     %type of current surface
     % Inputs:
@@ -18,7 +18,7 @@ function [ dispName, imgFileName, surfDescription ] = getSurfaceAboutInfo( curre
     % Jun 17,2015   Worku, Norman G.     Original Version
     % Jul 10,2015   Worku, Norman G.     input and output are made struct    
     
-    surfaceDefinitionFileName = currentComponent.Type;
+    surfaceDefinitionFileName = currentSurface.Type;
     % Connect the surface definition function
     surfaceDefinitionHandle = str2func(surfaceDefinitionFileName);
     returnFlag = 1; % Basic parameters of the surface

@@ -67,7 +67,8 @@ function [ returnDataStruct] = RectangularAperture(returnFlag,apertureParameters
     switch returnFlag(1)
         case 1 % Return the field names and initial values of apertureParameters
             returnData1 = {'DiameterX','DiameterY'};
-            returnData2 = {{'numeric'},{'numeric'}};
+            returnData1_Display = {'Diameter in X','Diameter in Y'};
+            returnData2 = {'numeric','numeric'};
             defaultApertureParameter = struct();
             defaultApertureParameter.DiameterX = 20;
             defaultApertureParameter.DiameterY = 20;
@@ -75,7 +76,7 @@ function [ returnDataStruct] = RectangularAperture(returnFlag,apertureParameters
             returnData3 = defaultApertureParameter;
             
             returnDataStruct.UniqueParametersStructFieldNames = returnData1;
-            returnDataStruct.UniqueParametersStructFieldDisplayNames = returnData1;
+            returnDataStruct.UniqueParametersStructFieldDisplayNames = returnData1_Display;
             returnDataStruct.UniqueParametersStructFieldFormats = returnData2;
             returnDataStruct.DefaultUniqueParametersStruct = returnData3;
         case 2 % Return the maximum radius in x and y axis

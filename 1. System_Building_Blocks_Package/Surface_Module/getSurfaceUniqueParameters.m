@@ -1,10 +1,10 @@
-function [fieldNames,fieldFormat,uniqueParamStruct] = getSurfaceUniqueParameters( variableInputArgument )
+function [fieldNames,fieldFormat,uniqueParamStruct,fieldDisplayNames] = getSurfaceUniqueParameters( variableInputArgument )
     %getUniqueParameters Returns the field names, formats, and current
     %struct of all unique parameters which are specific to this surface type
     % Inputs:
     % variableInputArgument:
     %       1. Struct/object --> currentSurface
-    %       2. Char --> surfaceType
+    %       2. Char/number --> surfaceType
     % Outputs:
     %   [fieldNames,fieldFormat,uniqueParamStruct]
     
@@ -21,27 +21,45 @@ function [fieldNames,fieldFormat,uniqueParamStruct] = getSurfaceUniqueParameters
     
     if nargin == 0
         returnDefault = 1;
-        surfaceType = 'Standard';
+        surfaceType = 1; %'Standard';
     elseif isSurface(variableInputArgument)
         currentSurface = variableInputArgument;
         returnDefault = 0;
         surfaceType = currentSurface.Type;
     elseif ischar(variableInputArgument)
         returnDefault = 1;
-        surfaceType = variableInputArgument;
+        
+    % If the type is given as string instead of number, then find the index
+    % corresponding to the type string
+
+        supportedSurfaceTypes = GetSupportedSurfaceTypes();
+        typeString = variableInputArgument;
+        [isFound, foundAt] = ismember(typeString,supportedSurfaceTypes);
+        if isFound
+            surfaceType = foundAt;
+        else
+            disp(['Error: The surface type specified is not valid so the ',...
+                'default Standard is used.']);
+            surfaceType = 1;
+        end
+    
+    elseif isnumeric(variableInputArgument)
+        returnDefault = 1;
+        surfaceType = variableInputArgument;    
     else
         disp('Error: Invalid input to getSurfaceUniqueParameters. So it is just ignored.');
         returnDefault = 1;
-        surfaceType = 'Standard';
+        surfaceType = 1; %'Standard';
     end
     
     % Connect the surface definition function
-    surfaceDefinitionHandle = str2func(surfaceType);
+    surfaceDefinitionHandle = str2func(GetSupportedSurfaceTypes(surfaceType));
     returnFlag = 2;
     [returnDataStruct] = surfaceDefinitionHandle(returnFlag);
     fieldNames = returnDataStruct.UniqueParametersStructFieldNames;
     fieldFormat = returnDataStruct.UniqueParametersStructFieldTypes;
     defaultUniqueParamStruct = returnDataStruct.DefaultUniqueParametersStruct;
+    fieldDisplayNames = returnDataStruct.UniqueParametersStructFieldDisplayNames;
     
     if returnDefault
         uniqueParamStruct = defaultUniqueParamStruct;

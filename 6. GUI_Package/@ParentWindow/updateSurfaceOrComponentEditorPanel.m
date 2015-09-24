@@ -8,9 +8,9 @@ function updateSurfaceOrComponentEditorPanel( parentWindow , selectedIndex)
     
     aodHandles = parentWindow.ParentHandles;
     [ currentOpticalSystem,saved] = getCurrentOpticalSystem (parentWindow);
-
+    
     if IsSurfaceBased(currentOpticalSystem)
-
+        
         nSurface = getNumberOfSurfaces(currentOpticalSystem);
         surfaceArray = currentOpticalSystem.SurfaceArray;
         % Read the componets and fill table for Component List
@@ -66,28 +66,28 @@ function updateSurfaceOrComponentEditorPanel( parentWindow , selectedIndex)
 end
 
 
-function       surfaceListTable = generateSurfaceListTable(surfArray);
+function       surfaceListTable = generateSurfaceListTable(surfArray)
     nSurface = length(surfArray);
     surfaceListTable = cell(nSurface,3);
     for kk = 1:nSurface
         if surfArray(kk).IsObject
-            surfType = 'OBJECT';
-            surfTypeDisp = surfType;
+            surfType = 1; %'OBJECT';
+            surfTypeDisp = 'OBJECT';
             surf = 'OBJ';
             comment = 'Object';
         elseif surfArray(kk).IsImage
-            surfType = 'IMAGE';
-            surfTypeDisp = surfType;
+            surfType = 1; %'IMAGE';
+            surfTypeDisp = 'IMAGE';
             surf = 'IMG';
             comment = 'Image';
         elseif surfArray(kk).IsStop
             surfType = surfArray(kk).Type;
-            surfTypeDisp = surfType;
+            surfTypeDisp = GetSupportedSurfaceTypes(surfType);
             surf = 'STOP';
             comment = 'Stop surface';
         else
             surfType = surfArray(kk).Type;
-            surfTypeDisp = surfType;
+            surfTypeDisp = GetSupportedSurfaceTypes(surfType);
             surf = '';
             comment = surfArray(kk).Comment;
         end
@@ -115,7 +115,7 @@ function       componentListTable = generateComponentListTable(compArray);
             fullName = compType;
             compTypeDisp = fullName;
             comp = 'STOP';
-            comment = '';            
+            comment = '';
         else
             compType = compArray(kk).Type;
             fullName = compType;

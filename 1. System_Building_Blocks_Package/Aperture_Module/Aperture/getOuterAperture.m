@@ -23,7 +23,7 @@ function [outerApertShape,outerApertureRadiusXY] = ...
     % Now connect to the aperture defintion function and compute the
     % OuterAperture
     apertureType = surfAperture.Type;
-    apertureDefinitionHandle = str2func(apertureType);
+    apertureDefinitionHandle = str2func(GetSupportedSurfaceApertureTypes(apertureType));
     returnFlag = 2;
     apertureParameters = surfAperture.UniqueParameters;
     [ returnDataStruct] = apertureDefinitionHandle(returnFlag,apertureParameters);
@@ -32,15 +32,11 @@ function [outerApertShape,outerApertureRadiusXY] = ...
     % If both outer and inner apertures are similar then the maximumRadiusXY
     % can be taken as the the outerApertureRadiusXY otherwise it will be
     % computed using the hypothenous of the two radii
-    if ((strcmpi(apertureType,'CircularAperture')||...
-            strcmpi(apertureType,'CircularObstruction')||...
-            strcmpi(apertureType,'FloatingCircularAperture'))&&...
-            (strcmpi(outerApertShape,'Circular')))||...
-            ((strcmpi(apertureType,'RectangularAperture')&&...
-            (strcmpi(outerApertShape,'Rectangular'))))
+    if (((apertureType == 1 || apertureType == 2 || apertureType == 5) && outerApertShape == 1) ||... % apertureType = 'CircularAperture','CircularObstruction','FloatingCircularAperture'))&& outerApertShape = 'Circular'
+         (apertureType == 4 && outerApertShape == 3)||...  % apertureType = 'RectangularAperture' and  outerApertShape = 'Rectangular'
+         (apertureType == 3 && outerApertShape == 2))  % apertureType = 'EllipticalAperture' and  outerApertShape = 'Elliptical'
         outerApertureRadiusXY = maximumRadiusXY;
-    elseif ((strcmpi(apertureType,'EllipticalAperture'))&&...
-            (strcmpi(outerApertShape,'Circular')))
+    elseif apertureType == 1 && outerApertShape == 1 % apertureType = 'EllipticalAperture',outerApertShape,'Circular')))
         outerApertureRadiusXY(1) = max(maximumRadiusXY);   
         outerApertureRadiusXY(2) = outerApertureRadiusXY(1);
     else

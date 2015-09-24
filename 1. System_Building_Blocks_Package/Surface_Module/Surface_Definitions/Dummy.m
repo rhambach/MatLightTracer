@@ -10,6 +10,7 @@ function [ returnDataStruct] = Dummy(returnFlag,surfaceParameters,inputDataStruc
     %       empty
     %   Output Struct:
     %       returnDataStruct.Name
+    %       returnDataStruct.IsGratingEnabled
     %       returnDataStruct.ImageFullFileName
     %       returnDataStruct.Description
     % 2: Surface specific 'UniqueSurfaceParameters' table field names and initial values in Surface Editor GUI
@@ -17,13 +18,14 @@ function [ returnDataStruct] = Dummy(returnFlag,surfaceParameters,inputDataStruc
     %       empty
     %   Output Struct:
     %       returnDataStruct.UniqueParametersStructFieldNames
+    %       returnDataStruct.UniqueParametersStructFieldDisplayNames
     %       returnDataStruct.UniqueParametersStructFieldTypes
     %       returnDataStruct.DefaultUniqueParametersStruct
-    % 3: Surface specific 'Extra Data' table field names and initial values in Surface Editor GUI
+    % 3: Surface specific 'Extra Data' table names and initial values in Surface Editor GUI
     %   inputDataStruct:
     %       empty
     %   Output Struct:
-    %       returnDataStruct.UniqueExtraDataFieldNames
+    %       returnDataStruct.UniqueExtraDataName
     %       returnDataStruct.DefaultUniqueExtraData
     % 4: Return the surface sag at given xyGridPoints computed from rayPosition % Used for plotting the surface
     %   inputDataStruct:
@@ -60,7 +62,7 @@ function [ returnDataStruct] = Dummy(returnFlag,surfaceParameters,inputDataStruc
     %       returnDataStruct.LocalExitRayDirection
     %       returnDataStruct.TotalInternalReflectionFlag
     %       returnDataStruct.NoIntersectionPointFlag
-    
+ 
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
     %   Advisor: Prof. Herbert Gross
@@ -102,24 +104,28 @@ function [ returnDataStruct] = Dummy(returnFlag,surfaceParameters,inputDataStruc
             
             returnDataStruct = struct();
             returnDataStruct.Name = surfName;
+            returnDataStruct.IsGratingEnabled = 0;
+            returnDataStruct.IsExtraDataEnabled = 0;
             returnDataStruct.ImageFullFileName = imageFullFileName;
             returnDataStruct.Description =  description;
         case 2 % Surface specific 'UniqueSurfaceParameters'
             uniqueParametersStructFieldNames = {'Unused'};
-            uniqueParametersStructFieldTypes = {{'numeric'}};
+            uniqueParametersStructFieldDisplayNames = {'Unused'};
+            uniqueParametersStructFieldTypes = {'numeric'};
             defaultUniqueParametersStruct = struct();
             defaultUniqueParametersStruct.Unused = 0;
                         
             returnDataStruct = struct();
             returnDataStruct.UniqueParametersStructFieldNames = uniqueParametersStructFieldNames;
+            returnDataStruct.UniqueParametersStructFieldDisplayNames = uniqueParametersStructFieldDisplayNames;
             returnDataStruct.UniqueParametersStructFieldTypes = uniqueParametersStructFieldTypes;
             returnDataStruct.DefaultUniqueParametersStruct = defaultUniqueParametersStruct;
         case 3 % Surface specific 'Extra Data' table
-            uniqueExtraDataFieldNames = {'Unused'};
-            defaultUniqueExtraData = {[0]};
+            uniqueExtraDataName = {'Unused'};
+            defaultUniqueExtraData = [0];
             
             returnDataStruct = struct();
-            returnDataStruct.UniqueExtraDataFieldNames = uniqueExtraDataFieldNames;
+            returnDataStruct.UniqueExtraDataName = uniqueExtraDataName;
             returnDataStruct.DefaultUniqueExtraData = defaultUniqueExtraData;
         case 4 % Surface sag at given xyGridPoints
             disp('Error: Sag of Dummy surface can not be computed.');
@@ -127,9 +133,21 @@ function [ returnDataStruct] = Dummy(returnFlag,surfaceParameters,inputDataStruc
         case 5 % Paraxial ray trace results
             disp('Error: Paraxial ray trace results of Dummy surface can not be computed.');
             returnDataStruct = struct();
-        case 6 % Real Ray trace results
+        case 6 % Real Ray trace new direction
             disp('Error: Real ray trace results of Dummy surface can not be computed.');
             returnDataStruct = struct();
+        case 7 % F(X,Y,Z)
+            disp('Error: Real ray trace results of Dummy surface can not be computed.');
+            returnDataStruct = struct();    
+        case 8 % F'(X,Y,Z) and surfNormal
+            disp('Error: Real ray trace results of Dummy surface can not be computed.');
+            returnDataStruct = struct(); 
+        case 9 %  ExitRayPosition
+            disp('Error: Real ray trace results of Dummy surface can not be computed.');
+            returnDataStruct = struct(); 
+        case 10 % Additional path
+            disp('Error: Real ray trace results of Dummy surface can not be computed.');
+            returnDataStruct = struct();     
         otherwise
     end
 end

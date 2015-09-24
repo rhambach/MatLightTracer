@@ -69,13 +69,14 @@ function [ returnDataStruct] = FloatingCircularAperture(returnFlag,apertureParam
     switch returnFlag(1)
         case 1 % Return the field names and initial values of apertureParameters
             returnData1 = {'Diameter'};
+            returnData1_Display = {'Diameter'};
             returnData2 = {'numeric'};
             defaultApertureParameter = struct();
             defaultApertureParameter.Diameter = 20;
             returnData3 = defaultApertureParameter;
             
             returnDataStruct.UniqueParametersStructFieldNames = returnData1;
-            returnDataStruct.UniqueParametersStructFieldDisplayNames = returnData1;
+            returnDataStruct.UniqueParametersStructFieldDisplayNames = returnData1_Display;
             returnDataStruct.UniqueParametersStructFieldFormats = returnData2;
             returnDataStruct.DefaultUniqueParametersStruct = returnData3;
         case 2 % Return the maximum radius in x and y axis

@@ -47,9 +47,6 @@ function [ importedGlassArray, catalogueFullFileName ] = importAGFGlassCatalogue
         
         % read the input file
         inputAgfFile = fopen('temAsciiFile', 'r');
-        agfTypes = {'Schott','Sellmeier1','Herzberger','Sellmeier2',...
-            'Conrady','Sellmeier3','HandbookOfOptics1','HandbookOfOptics2',...
-            'Sellmeier4','Extended','Sellmeier5', 'Extended2'};
         glassCounter = 0;
         
         while ~feof(inputAgfFile)
@@ -82,17 +79,14 @@ function [ importedGlassArray, catalogueFullFileName ] = importAGFGlassCatalogue
                     newGlass.Name = upper(glass_name);
                     
                     newGlass.Type = 'ZemaxFormula';
-                    newGlass.Parameters = struct();
-                    newGlass.Parameters.FormulaType = agfTypes{Dispersion_Formula_No};
+                    newGlass.UniqueParameters = struct();
+                    newGlass.UniqueParameters.FormulaType = Dispersion_Formula_No;
                     newGlass.OtherData(6) = MIL_No;
                     newGlass.OtherData(7) = Nd;
                     newGlass.OtherData(8) = Vd;
                     newGlass.OtherData(5) = Exclude_Sub;
                     newGlass.OtherData(4) = Status;
                     newGlass.OtherData(3) = Melt_Freq;
-                    
-%                     newGlass.NMExtraData = [Dispersion_Formula_No,MIL_No,Nd,Vd,Exclude_Sub,Status,Melt_Freq];
-%                     newGlass.Type = char(agfTypes(Dispersion_Formula_No));
                 case 'GC' % Glass Comment
                     try
                         newGlass.Comment =  char(currentLineArray(2,:));
@@ -112,12 +106,9 @@ function [ importedGlassArray, catalogueFullFileName ] = importAGFGlassCatalogue
                     
                     newGlass.OtherData(2) = Density;
                     newGlass.OtherData(9) = dPgF;
-                    
-%                     newGlass.ExtraData = [TCE70 TCE300 Density dPgF Ignore_Thermal_Exp];
                 case 'CD' % Coefficient Data
                     coefficientData = (str2num(char((currentLineArray(2:11)))));
-                    newGlass.Parameters.CoefficientData = coefficientData ;
-%                     newGlass.CoefficientData = (str2num(char((currentLineArray(2:11)))));
+                    newGlass.UniqueParameters.CoefficientData = coefficientData ;
                 case 'TD'
                     D0 = str2num(char(currentLineArray(2,:)));
                     D1 = str2num(char(currentLineArray(3,:)));
@@ -150,16 +141,12 @@ function [ importedGlassArray, catalogueFullFileName ] = importAGFGlassCatalogue
                     newGlass.ResistanceData(3) = SR;
                     newGlass.ResistanceData(4) = AR;
                     newGlass.ResistanceData(5) = PR;
-                    
-%                     newGlass.OtherData = [Rel_Cost,CR,FR,SR,AR,PR];
                 case 'LD'
                     Min_Lambda = str2num(char(currentLineArray(2,:)));
                     Max_Lambda = str2num(char(currentLineArray(3,:)));
                     
                     newGlass.WavelengthRange(1) = Min_Lambda;
                     newGlass.WavelengthRange(2) = Max_Lambda;
-                    
-%                     newGlass.LambdaData = [Min_Lambda Max_Lambda];
                 case 'IT'
                     ITcounter = ITcounter + 1;
                     Lambda = str2num(char(currentLineArray(2,:)));

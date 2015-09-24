@@ -17,7 +17,7 @@ function [yf,uf ] = traceParaxialRaysToThisSurface(currentSurface,yi,ui,...
     inputDataStruct.ReferenceWavelength = referenceWavlenInM;
     
     % Connect the surface definition function
-    surfaceDefinitionHandle = str2func(surfaceType);
+    surfaceDefinitionHandle = str2func(GetSupportedSurfaceTypes(surfaceType));
     [ returnDataStruct] = surfaceDefinitionHandle(returnFlag,...
         surfaceUniqueParameters,inputDataStruct);
     

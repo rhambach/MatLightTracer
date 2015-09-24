@@ -1,4 +1,4 @@
-function [fieldNames,fieldFormat,uniqueParamStruct] = getApertureUniqueParameters( variableInputArgument )
+function [fieldNames,fieldFormat,uniqueParamStruct,fieldDisplayNames] = getApertureUniqueParameters( variableInputArgument )
     %getApertureUniqueParameters Returns the field names, formats, and current
     %struct of all unique parameters which are specific to this Aperture type
     % Inputs:
@@ -21,7 +21,7 @@ function [fieldNames,fieldFormat,uniqueParamStruct] = getApertureUniqueParameter
     
     if nargin == 0
         returnDefault = 1;
-        apertureType = 'FloatingCircularAperture';
+        apertureType = 1; %FloatingCircularAperture';
     elseif isAperture(variableInputArgument)
         currentAperture = variableInputArgument;
         returnDefault = 0;
@@ -32,17 +32,17 @@ function [fieldNames,fieldFormat,uniqueParamStruct] = getApertureUniqueParameter
     else
         disp('Error: Invalid input to getApertureUniqueParameters. So it is just ignored.');
         returnDefault = 1;
-        apertureType = 'FloatingCircularAperture';
+        apertureType = 1; %'FloatingCircularAperture';
     end
     
     % Connect the surface definition function
-    apertureDefinitionHandle = str2func(apertureType);
+    apertureDefinitionHandle = str2func(GetSupportedSurfaceApertureTypes(apertureType));
     returnFlag = 1;
     [returnDataStruct] = apertureDefinitionHandle(returnFlag);
     fieldNames = returnDataStruct.UniqueParametersStructFieldNames;
     fieldFormat = returnDataStruct.UniqueParametersStructFieldFormats;
     defaultUniqueParamStruct = returnDataStruct.DefaultUniqueParametersStruct;
-    
+    fieldDisplayNames = returnDataStruct.UniqueParametersStructFieldDisplayNames;
     if returnDefault
         uniqueParamStruct = defaultUniqueParamStruct;
     else

@@ -1,4 +1,4 @@
-function newAperture = Aperture(type,apertDecenter,apertRotInDeg,drawAbsolute,outerShape,additionalEdge,uniqueParameters)
+function newAperture = Aperture(type,apertDecenter,apertRotInDeg,drawAbsolute,outerShape,additionalEdgeType,additionalEdge,uniqueParameters)
     % Aperture Struct:
     %
     %   Defines aperture attached to an optical surfaces. All aperture
@@ -30,8 +30,22 @@ function newAperture = Aperture(type,apertDecenter,apertRotInDeg,drawAbsolute,ou
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     
     if nargin < 1
-        type = 'FloatingCircularAperture';
+        type = 1; %'FloatingCircularAperture';
     end
+    % If the type is given as string instead of number, then find the index
+    % corresponding to the type string
+    if ~isnumeric(type)
+        supportedApertureTypes = GetSupportedSurfaceApertureTypes();
+        [isFound, foundAt] = ismember(type,supportedApertureTypes);
+        if isFound
+            type = foundAt;
+        else
+            disp(['Error: The aperture type specified is not valid so the ',...
+                'default FloatingCircularAperture is used.']);
+            type = 1;
+        end
+    end
+    
     if nargin < 2
         apertDecenter = [0,0];
     end
@@ -42,18 +56,22 @@ function newAperture = Aperture(type,apertDecenter,apertRotInDeg,drawAbsolute,ou
         drawAbsolute = 0;
     end
     if nargin < 5
-        if strcmpi(type,'RectangularAperture')||...
-                strcmpi(type,'RectangularObstruction')
-            outerShape = 'Rectangular';
+        if type == 4 % Rectangular
+            outerShape = 3; %'Rectangular';
+        elseif type == 3 % Elliptical
+            outerShape = 2; %'Elliptical';
         else
-            outerShape = 'Circular';
+            outerShape = 1; %'Circular';
         end
     end
-    if nargin < 6
+    if nargin < 7
+        additionalEdgeType = 1; % Relative
+    end    
+    if nargin < 7
         additionalEdge = 0.1;
     end
-    if nargin < 7
-        apertureDefinitionHandle = str2func(type);
+    if nargin < 8
+        apertureDefinitionHandle = str2func(GetSupportedSurfaceApertureTypes(type));
         returnFlag = 1;
         [returnDataStruct] = apertureDefinitionHandle(returnFlag);
         defaultParameters = returnDataStruct.DefaultUniqueParametersStruct;
@@ -66,6 +84,7 @@ function newAperture = Aperture(type,apertDecenter,apertRotInDeg,drawAbsolute,ou
     newAperture.DrawAbsolute = drawAbsolute;
     newAperture.OuterShape = outerShape;
     newAperture.AdditionalEdge = additionalEdge;
+    newAperture.AdditionalEdgeType = additionalEdgeType;
     newAperture.UniqueParameters = uniqueParameters;
     newAperture.ClassName = 'Aperture';
 end

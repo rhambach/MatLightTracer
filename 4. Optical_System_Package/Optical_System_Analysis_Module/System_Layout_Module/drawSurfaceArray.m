@@ -97,7 +97,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
             currentGridType = getGridType(surfaceArray(ss));
             currentApertureOuterShape = surfaceArray(ss).Aperture.OuterShape;
             
-            sameApertureType(ss-1) = strcmpi(prevApertureOuterShape,currentApertureOuterShape);
+            sameApertureType(ss-1) = (prevApertureOuterShape == currentApertureOuterShape);
             samegetGridType(ss-1) = strcmpi(prevGridType,currentGridType);
         end
         IsFreeSpace(ss) = (strcmpi(surfaceArray(ss).Glass.Name,'None')||...
@@ -220,10 +220,6 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                 % Compute the singlet boarder surface plot points from the
                 % xyzPoints1 and xyzPoints2
                 if strcmpi(getGridType(secondSurface),'Polar')
-                    %                     mirrorBoarderX = [xyzPoints2(1,:,1);xyzPoints1(1,:,1)];
-                    %                     mirrorBoarderY = [xyzPoints2(1,:,2);xyzPoints1(1,:,2)];
-                    %                     mirrorBoarderZ = [xyzPoints2(1,:,3);xyzPoints1(1,:,3)];
-                    
                     if plotIn2D
                         % Only one angle so take all r for that angle
                         mirrorBoarderX{mirrorCounter} = [xyzPoints2(:,end,1);flipud(xyzPoints1(:,end,1))];

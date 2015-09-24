@@ -1,5 +1,5 @@
 function transformationMatrix = ...
-        computeCoordinateTransformationMatrix(Tx,Ty,Tz,Dx,Dy,Dz,order,refCoordinateTM)
+        computeCoordinateTransformationMatrix(Tx,Ty,Tz,Dx,Dy,Dz,orderCellArray,refCoordinateTM)
     
     % transformationMatrix: computes the coordinate transformation matrix M
     %    (which can be used to transform from global to local coordinate
@@ -43,7 +43,7 @@ function transformationMatrix = ...
     decVector = refCoordinateTM(1:3,4);
     
     for k = 1:6
-        switch upper(order{k})
+        switch upper(orderCellArray{k})
             % compute the rotation matrix
             case 'TX'
                 rotToLocal = [1 0 0;0 cos(tx) sin(tx);0 -sin(tx) cos(tx)]*rotToLocal;

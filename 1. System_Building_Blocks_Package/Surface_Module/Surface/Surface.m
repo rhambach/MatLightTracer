@@ -29,42 +29,55 @@ function NewSurface = Surface(surfType)
     
     if nargin == 0
         % Make single surface component by default
-        surfType = 'Standard';
+        surfType = 1; %'Standard';
     end
-%     NewSurface.ObjectSurface = 0;
-%     NewSurface.ImageSurface = 0;
-%     NewSurface.Stop = 0;
-
-    NewSurface.IsObject = 0;
-    NewSurface.IsImage = 0;
-    NewSurface.IsStop = 0;
-    
+    % If the type is given as string instead of number, then find the index
+    % corresponding to the type string
+    if ~isnumeric(surfType)
+        supportedSurfaceTypes = GetSupportedSurfaceTypes();
+        [isFound, foundAt] = ismember(surfType,supportedSurfaceTypes);
+        if isFound
+            surfType = foundAt;
+        else
+            disp(['Error: The surface type specified is not valid so the ',...
+                'default Standard is used.']);
+            surfType = 1;
+        end
+    end
     NewSurface.Comment = '';
     NewSurface.Type = surfType;
     NewSurface.Thickness = 10;
     NewSurface.Glass = Glass();
+    NewSurface.Coating = Coating();
+    
     [fieldNames,fieldFormat,defaultUniqueParamStruct] = getSurfaceUniqueParameters(surfType);
     NewSurface.UniqueParameters = defaultUniqueParamStruct;
+    
     NewSurface.ExtraData  = [];
+    
     NewSurface.Aperture = Aperture();
-    NewSurface.Coating = Coating();
-    NewSurface.TiltDecenterOrder = {'Dx','Dy','Dz','Tx','Ty','Tz'};
+    
+    NewSurface.Grating = Grating();
+    
+    NewSurface.TiltDecenterOrder = 1; %{'Dx','Dy','Dz','Tx','Ty','Tz'};
     NewSurface.Tilt = [0 0 0];
     NewSurface.Decenter = [0 0];
-    NewSurface.TiltMode = 'DAR';
+    NewSurface.TiltMode = 1; %'DAR';
+    
     % TM = transformation Matrix
     NewSurface.SurfaceCoordinateTM = ...
         [1 0 0 0;0 1 0 0;0 0 1 0;0 0 0 1];
     NewSurface.ReferenceCoordinateTM = ...
         [1 0 0 0;0 1 0 0;0 0 1 0;0 0 0 1];
-    NewSurface.GlassBefore  = Glass();
     
+    NewSurface.GlassBefore  = Glass();
     NewSurface.SurfaceColor = '';
     
-%     NewSurface.Hidden = 0;
-%     NewSurface.Ignored = 0;
-    
+    NewSurface.IsObject = 0;
+    NewSurface.IsImage = 0;
+    NewSurface.IsStop = 0;
     NewSurface.IsHidden = 0;
     NewSurface.IsIgnored = 0;
+    
     NewSurface.ClassName = 'Surface';
 end

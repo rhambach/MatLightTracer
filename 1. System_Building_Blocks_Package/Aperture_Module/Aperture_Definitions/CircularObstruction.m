@@ -69,14 +69,15 @@ function [ returnDataStruct] = CircularObstruction(returnFlag,apertureParameters
     switch returnFlag(1)
         case 1 % Return the field names and initial values of apertureParameters
             returnData1 = {'SmallDiameter','LargeDiameter'};
-            returnData2 = {{'numeric'},{'numeric'}};
+            returnData1_Display = {'Small Diameter','Large Diameter'};
+            returnData2 = {'numeric','numeric'};
             defaultApertureParameter = struct();
             defaultApertureParameter.SmallDiameter = 10;
             defaultApertureParameter.LargeDiameter = 20;
             returnData3 = defaultApertureParameter;
             
             returnDataStruct.UniqueParametersStructFieldNames = returnData1;
-            returnDataStruct.UniqueParametersStructFieldDisplayNames = returnData1;
+            returnDataStruct.UniqueParametersStructFieldDisplayNames = returnData1_Display;
             returnDataStruct.UniqueParametersStructFieldFormats = returnData2;
             returnDataStruct.DefaultUniqueParametersStruct = returnData3;
             
