@@ -175,7 +175,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                 secondSurface = surfaceArray(ss);
                 maxAperture = getMaximumApertureRadius( secondSurface.Aperture );
                 
-                deltaZ = -((-1)^mirrorCounter)*0.05*maxAperture;
+                deltaZ = -((-1)^mirrorCounter)*0.03*maxAperture;
                 % Transform the deltaZ to global coordinate
                 globalShift = [0,0,deltaZ]*(secondSurface.SurfaceCoordinateTM(1:3,1:3));
                 secondSurface.SurfaceCoordinateTM(1:3,4) = ...

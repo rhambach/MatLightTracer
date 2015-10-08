@@ -5,7 +5,7 @@ function [stopIndex, specified,surfaceArray, nSurface] = getStopSurfaceIndex(opt
     [nSurface, surfaceArray ] = getNumberOfSurfaces(optSystem);
     for kk=1:1:nSurface
         curentSurf = surfaceArray(kk);
-        if curentSurf.IsStop
+        if curentSurf.StopSurfaceIndex
             stopIndex = kk;
             specified = 1;
             return;

@@ -72,8 +72,8 @@ function [ returnDataStruct] = CircularAperture(returnFlag,apertureParameters,in
             returnData1_Display = {'Small Diameter','Large Diameter'};
             returnData2 = {'numeric','numeric'};
             defaultApertureParameter = struct();
-            defaultApertureParameter.SmallDiameter = 10;
-            defaultApertureParameter.LargeDiameter = 20;
+            defaultApertureParameter.SmallDiameter = 0;
+            defaultApertureParameter.LargeDiameter = 10;
             returnData3 = defaultApertureParameter;
             
             returnDataStruct.UniqueParametersStructFieldNames = returnData1;
@@ -86,15 +86,22 @@ function [ returnDataStruct] = CircularAperture(returnFlag,apertureParameters,in
             
             returnDataStruct.MaximumRadiusXY = maximumRadiusXY;
         case 3 % Return the if the given points in xyVector are inside or outside the aperture.
-            xyVector = inputDataStruct.xyVector;
+            xyVectorOrMesh = inputDataStruct.xyVector;
+            if ndims(xyVectorOrMesh) == 3
+                pointX = xyVectorOrMesh(:,:,1);
+                pointY = xyVectorOrMesh(:,:,2);
+            elseif ndims(xyVectorOrMesh) == 2
+                pointX = xyVectorOrMesh(:,1);
+                pointY = xyVectorOrMesh(:,2);
+            end
             smallRadius = (apertureParameters.SmallDiameter)/2;
             largeRadius = (apertureParameters.LargeDiameter)/2;
-            pointX = xyVector(:,1);
-            pointY = xyVector(:,2);
+            
+            tol = 10^-15; % Avoids rays falsely flaged as out of aperture due to numerics
             % When small rad = 0 and xy = (0,0) then the result will be NaN
             % so this shall be considered in espetial case (3rd condition)
-            umInsideTheMainAperture = (((((pointX).^2 + (pointY).^2)/largeRadius^2) <= 1) &...
-                ((((pointX).^2 + (pointY).^2)/smallRadius^2) >= 1))|(isnan(((pointX).^2 + (pointY).^2)/smallRadius^2));
+            umInsideTheMainAperture = (((((pointX).^2 + (pointY).^2)/largeRadius^2) <= 1+tol) &...
+                ((((pointX).^2 + (pointY).^2)/smallRadius^2) >= 1-tol))|(isnan(((pointX).^2 + (pointY).^2)/smallRadius^2));
             
             returnDataStruct.IsInsideTheMainAperture = umInsideTheMainAperture;
     end

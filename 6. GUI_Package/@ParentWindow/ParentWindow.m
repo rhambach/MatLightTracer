@@ -20,16 +20,22 @@ classdef ParentWindow < handle
         % Constructor function
         function parentWindow = ParentWindow()
             parentWindow.ParentHandles = struct();
+            
             parentWindow.ParentHandles.FontSize = 10.5;
             parentWindow.ParentHandles.FontName = 'FixedWidth';
             
+            parentWindow.ParentHandles.IsSaved = 0;
+            parentWindow.ParentHandles.PathName = '';
+            parentWindow.ParentHandles.FileName = '';
+
+            parentWindow.ParentHandles.CurrentConfiguration = 1;
             parentWindow.ParentHandles.OpticalSystem = OpticalSystem();
             
             parentWindow.ParentHandles.nMainTab = 4;
             parentWindow.ParentHandles.FigureHandle = figure( ...
                 'Tag', 'parentWindowdow', ...
                 'Units', 'normalized', ...
-                'Position', [0 0.15 1 0.75], ...
+                'Position', [0 0.05 1 0.88], ...
                 'Name', 'parentWindowdow', ...
                 'MenuBar', 'none', ...
                 'NumberTitle', 'off', ...
@@ -55,8 +61,8 @@ classdef ParentWindow < handle
             %----------------- Initialize Panel Components -------------------
             parentWindow.InitializeToolbarPanel;
             parentWindow.InitializeSystemConfigurationPanel;
-            parentWindow.InitializeSurfaceEditorPanel;
-            parentWindow.InitializeComponentEditorPanel;
+            parentWindow.InitializeOpticalElementEditorPanel;
+%             parentWindow.InitializeComponentEditorPanel;
             
             % ---------------- MENU and TOOLBAR ITEMS -------------------------
             parentWindow.InitializeMenuAndToolbarItems;

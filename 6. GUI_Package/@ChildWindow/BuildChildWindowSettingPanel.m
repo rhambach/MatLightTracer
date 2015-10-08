@@ -1,12 +1,11 @@
-function BuildChildWindowSettingPanel...
-        (childWindow,parentWindow)
+function BuildChildWindowSettingPanel(childWindow,parentWindow)
     % This function builds the UI elements of the setting panel of child
     % windows. First all UI components are defined and then placed in the
     % setting window based on the type of current child window.
     
     parentHandle = parentWindow.ParentHandles;
     childHandle = childWindow.ChildHandles;
-        
+    
     fontName = parentHandle.FontName;
     fontSize = parentHandle.FontSize;
     
@@ -311,67 +310,15 @@ function BuildChildWindowSettingPanel...
         'String', {'9', '16', '25', '36', '49', '64'},...
         'Value',1);
     
-    %--------------------------------------------------------------
-    
     % ----- Polarization Parameters ----------------------------------
-    % Define two uipanels panelPolarizationParametersTop and panelPolarizationParametersBottom
-    % The panelPolarizationParametersBottom is child of panelPolarizationParametersTop
-    % and so the panelPolarizationParametersTop is visible and the
-    % panelPolarizationParametersBottom can be of any length depending on the
-    % number of polarization parameters used.
-    
-    % Panel with fixed size is used as window visible while using the
-    % slider to scroll through the uicontrols.
-    panelPolarizationParametersTop = uipanel( ...
-        'Tag', 'panelPolarizationParametersTop', ...
+    panelPolarizationParameters = uipanel( ...
+        'Tag', 'panelPolarizationParameters', ...
         'Units','Normalized',...
-        'Position',[0.02,0.1,0.9,0.8],...
         'FontSize',fontSize,...
         'FontName',fontName,...
         'Title','Polarization Parameters',...
         'Visible','off');%,...
-    
-    panelPolarizationParametersBottom = uipanel( ...
-        'Parent', panelPolarizationParametersTop, ...
-        'Tag', 'panelPolarizationParameters', ...
-        'Units','Normalized',...
-        'Position',[0.0,-4.2,0.95,5],...%[0.0,-4,0.95,5],
-        'FontSize',fontSize,...
-        'FontName',fontName);%,...
-    
-    sliderPolarizationParameters = uicontrol('Style','Slider',...
-        'Parent', panelPolarizationParametersTop,...
-        'Units','normalized','Position',[0.95 0.0 0.05 1.0],...
-        'Value',1);
-    % -----------------------------------------------------------------
-    
-    lblPolarizationProfile = uicontrol( ...
-        'Parent', panelPolarizationParametersTop, ...
-        'Tag', 'lblPolarizationProfile', ...
-        'Style', 'text', ...
-        'HorizontalAlignment','right',...
-        'Units','Normalized',...
-        'Position', [0.02,0.90,0.40,0.075], ...
-        'FontSize',fontSize,...
-        'FontName',fontName,...
-        'Visible','off',...
-        'String', 'Polarization Profile');
-    
-    polarizationProfileList = getSupportedPolarizationProfiles;
-    popPolarizationProfile = uicontrol( ...
-        'Parent', panelPolarizationParametersTop, ...
-        'Tag', 'popSpatialProfile', ...
-        'Style', 'popupmenu', ...
-        'HorizontalAlignment','left',...
-        'Units','Normalized',...
-        'Position', [0.45,0.90,0.45,0.075], ...
-        'BackgroundColor', [1 1 1], ...
-        'String', polarizationProfileList, ...
-        'Value',1,...
-        'Visible','off',...
-        'FontSize',fontSize,'FontName',fontName);
-    
-    
+
     %--------------------------------------------------------------
     lblNumberOfRay = uicontrol( ...
         'Tag', 'lblNumberOfRay', ...
@@ -409,8 +356,7 @@ function BuildChildWindowSettingPanel...
         'Visible','off',...
         'Style', 'popupmenu', ...
         'BackgroundColor', [1 1 1], ...
-        'String', {'Cartesian','Polar',...
-        'Tangential','Sagittal','Cross','Random'},...
+        'String', GetSupportedPupilSamplingTypes ,...
         'Value',1);
     %--------------------------------------------------------------
     chkCheifAndMariginalRay = uicontrol( ...
@@ -1212,20 +1158,15 @@ function BuildChildWindowSettingPanel...
                 case lower('polarizationEllipseMap')
                     %------------------------------------------------------
                     % ----- Polarization Parameters ----------------------------------
-                    set(panelPolarizationParametersTop,...
+                    set(panelPolarizationParameters,...
                         'Parent', childHandle.SettingTab, ...
                         'Units', 'Normalized', ...
                         'BorderType','etchedin',...
                         'Visible','on',...
-                        'Position', [0.25 0.2 0.5 0.35]);
-                    set(get(panelPolarizationParametersTop,'Children'),'Visible','on');
-                    childHandle.panelPolarizationParametersBottom = panelPolarizationParametersBottom;
-                    childHandle.panelPolarizationParametersTop = panelPolarizationParametersTop;
-                    childHandle.sliderPolarizationParameters = sliderPolarizationParameters;
-                    childHandle.lblPolarizationProfile = lblPolarizationProfile;
-                    childHandle.popPolarizationProfile = popPolarizationProfile;
-                    polarizationProfileList = getSupportedPolarizationProfiles;
-                    firstPolarizationProfileType = polarizationProfileList{1};
+                        'Position', [0.15 0.15 0.7 0.4]);
+                    childHandle.panelPolarizationParameters = panelPolarizationParameters;
+                    
+                    firstPolarizationProfileType = 1; % Linear polarizarion
                     childHandle = displayPolarizationProfileParameters(childHandle,firstPolarizationProfileType);
                 case lower('wavefrontAtExitPupil')
                     % Disable surface index pop
@@ -1364,20 +1305,15 @@ function BuildChildWindowSettingPanel...
                 case lower('polarizationRayTrace')
                     set(childHandle.chkShowInTabular,'Enable','off');
                     % ----- Polarization Parameters ----------------------------------
-                    set(panelPolarizationParametersTop,...
+                    
+                    set(panelPolarizationParameters,...
                         'Parent', childHandle.SettingTab, ...
                         'Units', 'Normalized', ...
                         'BorderType','etchedin',...
                         'Visible','on',...
-                        'Position', [0.25 0.2 0.5 0.35]);
-                    set(get(panelPolarizationParametersTop,'Children'),'Visible','on');
-                    childHandle.panelPolarizationParametersBottom = panelPolarizationParametersBottom;
-                    childHandle.panelPolarizationParametersTop = panelPolarizationParametersTop;
-                    childHandle.sliderPolarizationParameters = sliderPolarizationParameters;
-                    childHandle.lblPolarizationProfile = lblPolarizationProfile;
-                    childHandle.popPolarizationProfile = popPolarizationProfile;
-                    polarizationProfileList = getSupportedPolarizationProfiles;
-                    firstPolarizationProfileType = polarizationProfileList{1};
+                        'Position', [0.15 0.15 0.7 0.4]);
+                    childHandle.panelPolarizationParameters = panelPolarizationParameters;
+                     firstPolarizationProfileType =1; % Linear polarization
                     childHandle = displayPolarizationProfileParameters(childHandle,firstPolarizationProfileType);
                     
                     %% Add case statements for new windows in the
@@ -1618,7 +1554,7 @@ function BuildChildWindowSettingPanel...
                         'Visible','on',...
                         'Position', [0.02 0.75 0.20 0.09]);
                     childHandle.lblNumberOfRay = lblNumberOfRay;
-
+                    
                     set(txtNumberOfRay2,...
                         'Parent', childHandle.SettingTab, ...
                         'Units', 'normalized', ...
@@ -2770,117 +2706,96 @@ function BuildChildWindowSettingPanel...
         
         fontSize = 11;
         fontName = 'FixedWidth';
-        % get the Polarization profile parameters from the corresponding
-        % spatial profile function
-        % Connect the Polarization profile definition function
-        polarizationProfileDefinitionHandle = str2func(polarizationProfileType);
-        returnFlag = 1; %
-        [ parameters, parameterFormats, intialValues ] = polarizationProfileDefinitionHandle(...
-            returnFlag);
-        % Calculate the size of panelSpatialParameters based on the number of
-        % parameters
-        nPar = length(parameters);
+
+        % -----------------------------------------------------------------
         
-        % Clear the initialPolVectorXYZ
-        delete(get(myChildHandle.panelPolarizationParametersBottom,'Child'));
+        myChildHandle.lblPolarizationProfile = uicontrol( ...
+            'Parent', myChildHandle.panelPolarizationParameters, ...
+            'Tag', 'lblPolarizationProfile', ...
+            'Style', 'text', ...
+            'HorizontalAlignment','right',...
+            'Units','Normalized',...
+            'Position', [0.02,0.90,0.40,0.075], ...
+            'FontSize',fontSize,...
+            'FontName',fontName,...
+            'Visible','On',...
+            'String', 'Polarization Profile');
         
-        panelPolarizationParametersBottomPosition = get(myChildHandle.panelPolarizationParametersBottom,'Position');
-        verticalScaleFactor = panelPolarizationParametersBottomPosition(4);
-        verticalOffset = panelPolarizationParametersBottomPosition(4)-1;
+        polarizationProfileList = getSupportedPolarizationProfiles;
+        myChildHandle.popPolarizationProfile = uicontrol( ...
+            'Parent', myChildHandle.panelPolarizationParameters, ...
+            'Tag', 'popPolarizationProfile', ...
+            'Style', 'popupmenu', ...
+            'HorizontalAlignment','left',...
+            'Units','Normalized',...
+            'Position', [0.45,0.90,0.45,0.075], ...
+            'BackgroundColor', [1 1 1], ...
+            'String', polarizationProfileList, ...
+            'Value',polarizationProfileType,...
+            'Visible','On',...
+            'FontSize',fontSize,'FontName',fontName);
         
-        verticalFreeSpace = 0.025/verticalScaleFactor;% 2.5% of the the visial window height
-        controlHeight = 0.1/verticalScaleFactor;% 6% of the visial window height
-        topEdge = 0.1/verticalScaleFactor;% 10% of the the visial window height
+        set(myChildHandle.popPolarizationProfile,...
+            'Callback',{@popPolarizationProfile_Callback,childWindow,parentWindow});
         
-        lastUicontrolBottom = panelPolarizationParametersBottomPosition(4) - topEdge - 4; %panelPolarizationParametersBottomPosition(4)
+        myChildHandle.tblPolarizationParameters = uitable( ...
+            'Parent', myChildHandle.panelPolarizationParameters, ...
+            'Tag', 'tblPolarizationParameters', ...
+            'UserData', zeros(1,0), ...
+            'Units','Normalized',...
+            'Position', [0.0,0.0,1.0,0.8], ...
+            'fontSize',fontSize,'FontName',fontName,...
+            'BackgroundColor', [1 1 1;0.961 0.961 0.961], ...
+            'ColumnEditable', [false,true], ...
+            'ColumnFormat', {'char','char'}, ...
+            'ColumnName', {'Parameter Name','Parameter Value'}, ...
+            'ColumnWidth', {300,200}, ...
+            'RowName', 'numbered');
         
-        horizontalFreeSpace = 0.05;% 5% of the visial window width
-        controlWidth = 0.4;% 40% of the visial window width then two controls per line
-        % control arrangement 5% + 40% + 5% + 40% + 5%
-        leftEdge = 0.05;%
+        set(myChildHandle.tblPolarizationParameters,...
+            'CellEditCallback',{@tblPolarizationParameters_CellEditCallback,childWindow,parentWindow},...
+            'CellSelectionCallback',{@tblPolarizationParameters_CellSelectionCallback,childWindow,parentWindow});
         
+        [ polarizationParameterNames,polarizationParameterFormats,...
+            polarizationParameters,polarizationParameterDisplayNames ] = ...
+            getPolarizationProfileParameters( polarizationProfileType );
+        
+        
+        nPar = length(polarizationParameterNames);
+        tempTableData = cell(nPar,2);
         for pp = 1:nPar
-            % Display the parameter name
-            myChildHandle.lblPolarizationParameter(pp,1) = uicontrol( ...
-                'Parent', myChildHandle.panelPolarizationParametersBottom, ...
-                'Tag', 'lblParameter', ...
-                'Style', 'text', ...
-                'Units','normalized',...
-                'Position', [leftEdge,lastUicontrolBottom-verticalFreeSpace,...
-                controlWidth,controlHeight], ...
-                'String',parameters{pp},...
-                'HorizontalAlignment','right',...
-                'Visible','On',...
-                'FontSize',fontSize,'FontName',fontName);
-            
             % Display the parameter value text boxes or popup menu
-            parFormat = parameterFormats{pp};
-            if strcmpi(parFormat{1},'logical')
-                nVals = length(parFormat);
-                % The parameter format is logical
-                for vv = 1:nVals
-                    myChildHandle.chkPolarizationParameter(pp,vv) = uicontrol( ...
-                        'Parent', myChildHandle.panelPolarizationParametersBottom, ...
-                        'Tag', 'chkParameter', ...
-                        'Style', 'checkbox', ...
-                        'Units','normalized',...
-                        'Position', [leftEdge+horizontalFreeSpace+controlWidth,lastUicontrolBottom-verticalFreeSpace,...
-                        horizontalFreeSpace,controlHeight], ...
-                        'String',parFormat, ...
-                        'BackgroundColor', [1 1 1],...
-                        'HorizontalAlignment','left',...
-                        'Visible','On',...
-                        'FontSize',fontSize,'FontName',fontName);
-                    lastUicontrolBottom = lastUicontrolBottom -verticalFreeSpace -controlHeight;
-                    
-                    currentValue = true;
-                    set(myChildHandle.txtPolarizationParameter(pp,vv),'Value',currentValue);
-                end
-            elseif strcmpi(parFormat{1},'numeric')||strcmpi(parFormat{1},'char')
-                nVals = length(parFormat);
-                
-                % The parameter format numeric/char
-                for vv = 1:nVals
-                    myChildHandle.txtPolarizationParameter(pp,vv) = uicontrol( ...
-                        'Parent', myChildHandle.panelPolarizationParametersBottom, ...
-                        'Tag', 'txtParameter', ...
-                        'Style', 'edit', ...
-                        'Units','normalized',...
-                        'Position', [leftEdge+horizontalFreeSpace+controlWidth,lastUicontrolBottom-verticalFreeSpace,...
-                        controlWidth,controlHeight], ...
-                        'String',parFormat, ...
-                        'BackgroundColor', [1 1 1],...
-                        'HorizontalAlignment','left',...
-                        'Visible','On',...
-                        'FontSize',fontSize,'FontName',fontName);
-                    lastUicontrolBottom = lastUicontrolBottom -verticalFreeSpace -controlHeight;
-                    
-                    currentValue = '1';
-                    set(myChildHandle.txtPolarizationParameter(pp,vv),'String',currentValue);
-                end
+            parFormat = polarizationParameterFormats{pp};
+            parName = polarizationParameterNames{pp};
+            parDisplayName = polarizationParameterDisplayNames{pp};
+            parValue = polarizationParameters.(parName);
+            
+            if iscell(parFormat)
+                % Multiple choice values
+                parValueDisplay = parFormat{parValue};
             else
-                vv = 1;
-                % The parameter format is list of selection itiems
-                myChildHandle.popPolarizationParameter(pp,vv) = uicontrol( ...
-                    'Parent', myChildHandle.panelPolarizationParametersBottom, ...
-                    'Tag', 'popParameter', ...
-                    'Style', 'popupmenu', ...
-                    'Units','normalized',...
-                    'Position', [leftEdge+horizontalFreeSpace+controlWidth,lastUicontrolBottom-verticalFreeSpace,...
-                    controlWidth,controlHeight], ...
-                    'String',parFormat, ...
-                    'BackgroundColor', [1 1 1],...
-                    'HorizontalAlignment','left',...
-                    'Visible','On',...
-                    'FontSize',fontSize,'FontName',fontName);
-                
-                lastUicontrolBottom = lastUicontrolBottom -verticalFreeSpace -controlHeight;
-                
-                currentValue = 1;
-                set(myChildHandle.popPolarizationParameter(pp,vv) ,'Value',currentValue);
+                if strcmpi(parFormat,'logical')
+                    if parValue
+                        parValueDisplay = 'True';
+                    else
+                        parValueDisplay = 'False';
+                    end
+                elseif strcmpi(parFormat,'numeric')
+                    parValueDisplay = num2str(parValue);
+                elseif strcmpi(parFormat,'char')
+                    parValueDisplay = (parValue);
+                elseif strcmpi(parFormat,'Glass')
+                    parValueDisplay = (parValue);
+                else
+                    
+                end
             end
+            tempTableData{pp,1} = parDisplayName;
+            tempTableData{pp,2} = parValueDisplay;
         end
+        set(myChildHandle.tblPolarizationParameters,'Data',tempTableData);
         updatedHandles = myChildHandle;
+        
     end
     
     %% End of local functions
@@ -2900,13 +2815,158 @@ function BuildChildWindowSettingPanel...
         'Callback',{@chkCurrentApodization_Callback,childWindow,parentWindow});
     set(chkFieldComponent,...
         'Callback',{@chkFieldComponent_Callback,childWindow,parentWindow});
-    
-    set(sliderPolarizationParameters,...
-        'Callback',{@sliderPolarizationParameters_callback,childWindow,parentWindow});
-    set(popPolarizationProfile,...
-        'Callback',{@popPolarizationProfile_Callback,childWindow,parentWindow});
+
     % Add any new uicontrol callbacks here
     %%
+    
+    function popPolarizationProfile_Callback(~,~,childWindow,parentWindow )
+        childHandle = childWindow.ChildHandles;
+        polarizationProfileType = get(childHandle.popPolarizationProfile,'Value');
+        childHandle = displayPolarizationProfileParameters(childHandle,polarizationProfileType);
+        childWindow.ChildHandles = childHandle;
+    end
+    function tblPolarizationParameters_CellEditCallback(hObject,eventdata,childWindow,parentWindow)
+        % hObject    handle to aodHandles.tblStandardData (see GCBO)
+        % eventdata  structure with the following fields (see UITABLE)
+        %	Indices: row and column indices of the cell(s) edited
+        %	PreviousData: previous data for the cell(s) edited
+        %	EditData: string(s) entered by the user
+        %	NewData: EditData or its converted form set on the Data property. Empty if Data was not changed
+        %	Error: error string when failed to convert EditData to appropriate value for Data
+        % figureHandle    structure with figureHandle and user data (see GUIDATA)
+        
+        childHandle = childWindow.ChildHandles;
+        if isempty(eventdata.Indices)
+            return;
+        end
+        editedRow = eventdata.Indices(1);
+        editedColumn = eventdata.Indices(2);
+        index = get(childHandle.popPolarizationProfile,'Value');
+        [ polarizationProfileType ] = getSupportedPolarizationProfiles(index);
+        
+        %     polarizationProfileTypeList = get(figureHandle.Object.popPolarizationProfile,'String');
+        %     polarizationProfileType = polarizationProfileTypeList{get(figureHandle.Object.popPolarizationProfile,'Value')};
+        %
+        [ polarizationParameterFields, polarizationParameterFormats,~ ] = getPolarizationProfileParameters( polarizationProfileType);
+        
+        paramName = polarizationParameterFields{editedRow};
+        paramFormat = polarizationParameterFormats{editedRow};
+        editedParamValue = hObject.Data{editedRow,2};
+        if iscell(paramFormat)
+            % Multiple choice values
+            [IsFoundVector,locationIndex] = ismember(editedParamValue,paramFormat);
+            if locationIndex
+                editedParamValue = num2str(locationIndex);
+                editedParamValue_Disp = paramFormat{locationIndex};
+            else
+            end
+        else
+            if strcmpi(paramFormat,'logical')
+                if strcmpi(editedParamValue,'True') || strcmpi(editedParamValue,'1')
+                    editedParamValue = 1;
+                    editedParamValue_Disp = 'True';
+                elseif strcmpi(editedParamValue,'False')|| strcmpi(editedParamValue,'0')
+                    editedParamValue = 0;
+                    editedParamValue_Disp = 'False';
+                else
+                    editedParamValue = 0;
+                    editedParamValue_Disp = 'False';
+                end
+            elseif strcmpi(paramFormat,'numeric')
+                editedParamValue_Disp = (editedParamValue);
+                editedParamValue = str2double(editedParamValue);
+                if isempty(editedParamValue)||isnan(editedParamValue)
+                    %disp('Error: Only numeric values are allowed for the field.');
+                    editedParamValue = 0;
+                    editedParamValue_Disp = '0';
+                    tableData1 = get(childHandle.tblPolarizationParameters,'Data');
+                    tableData1{editedRow,2} = editedParamValue_Disp;
+                    set(childHandle.tblPolarizationParameters,'Data',tableData1);
+                end
+            elseif strcmpi(paramFormat,'char')
+                
+            elseif strcmpi(paramFormat,'Glass')
+                
+            else
+                
+            end
+        end
+        
+        tableData1 = get(childHandle.tblPolarizationParameters,'Data');
+        tableData1{editedRow,2} = editedParamValue_Disp;
+        set(childHandle.tblPolarizationParameters,'Data',tableData1);
+    end
+    
+    function tblPolarizationParameters_CellSelectionCallback(hObject,eventdata,childWindow,parentWindow)
+        % hObject    handle to aodHandles.tblStandardData (see GCBO)
+        % eventdata  structure with the following fields (see UITABLE)
+        %	Indices: row and column indices of the cell(s) edited
+        %	PreviousData: previous data for the cell(s) edited
+        %	EditData: string(s) entered by the user
+        %	NewData: EditData or its converted form set on the Data property. Empty if Data was not changed
+        %	Error: error string when failed to convert EditData to appropriate value for Data
+        % figureHandle    structure with figureHandle and user data (see GUIDATA)
+        childHandle = childWindow.ChildHandles;
+        if isempty(eventdata.Indices)
+            return;
+        end
+        selectedRow = eventdata.Indices(1);
+        selectedColumn = eventdata.Indices(2);
+        if selectedColumn == 2
+            index = get(childHandle.popPolarizationProfile,'Value');
+            [ polarizationProfileType ] = getSupportedPolarizationProfiles(index);
+            
+            %         polarizationProfileTypeList = get(figureHandle.Object.popPolarizationProfile,'String');
+            %         polarizationProfileType = polarizationProfileTypeList{get(figureHandle.Object.popPolarizationProfile,'Value')};
+            
+            [ polarizationParameterFields, polarizationParameterFormats,~ ] = getPolarizationProfileParameters( polarizationProfileType);
+            paramName = polarizationParameterFields{selectedRow};
+            paramFormat = polarizationParameterFormats{selectedRow};
+            if iscell(paramFormat)
+                % Multiple choice values
+                choice = menu(paramName,paramFormat);
+                if choice == 0
+                    choice = 1;
+                end
+                editedParamValue = choice;
+                
+                editedParamValue_Disp = paramFormat{editedParamValue};
+                tableData1 = get(childHandle.tblPolarizationParameters,'Data');
+                tableData1{selectedRow,2} = editedParamValue_Disp;
+                set(childHandle.tblPolarizationParameters,'Data',tableData1);
+            else
+                if strcmpi(paramFormat,'logical')
+                    % Multiple choice values True or False
+                    trueFalse =  {'True','False'};
+                    choice = menu(paramName,trueFalse);
+                    if choice == 0
+                        choice = 2; % False by default
+                    end
+                    editedParamValue = choice;
+                    
+                    editedParamValue_Disp = trueFalse{editedParamValue};
+                    tableData1 = get(childHandle.tblPolarizationParameters,'Data');
+                    tableData1{selectedRow,2} = editedParamValue_Disp;
+                    set(childHandle.tblPolarizationParameters,'Data',tableData1);
+                elseif strcmpi(paramFormat,'numeric')
+                    editedParamValue_Disp = hObject.Data{selectedRow,2};
+                    editedParamValue = str2num(editedParamValue_Disp);
+                    if isempty(editedParamValue)||isnan(editedParamValue)
+                        editedParamValue_Disp = '0';
+                    end
+                    tableData1 = get(childHandle.tblPolarizationParameters,'Data');
+                    tableData1{selectedRow,2} = editedParamValue_Disp;
+                    set(childHandle.tblPolarizationParameters,'Data',tableData1);
+                elseif strcmpi(paramFormat,'char')
+                    
+                elseif strcmpi(paramFormat,'Glass')
+                    
+                else
+                    
+                end
+            end
+        end
+    end
     
     function popWavelengthIndex_Callback(hObject, ~,childWindow,parentWindow)
         parentHandle = parentWindow.ParentHandles;
@@ -2964,10 +3024,10 @@ function BuildChildWindowSettingPanel...
         parentHandle = parentWindow.ParentHandles;
         childHandle = childWindow.ChildHandles;
         if get(childHandle.chkCheifAndMariginalRay,'Value')
-            set(childHandle.txtNumberOfRay1,'String','3','Enable','Off');
+            %             set(childHandle.txtNumberOfRay1,'String','3','Enable','Off');
             set(childHandle.txtNumberOfRay2,'String','3','Enable','Off');
         else
-            set(childHandle.txtNumberOfRay1,'String','3','Enable','On');
+            %             set(childHandle.txtNumberOfRay1,'String','3','Enable','On');
             set(childHandle.txtNumberOfRay2,'String','3','Enable','On');
         end
     end
@@ -3048,27 +3108,9 @@ function BuildChildWindowSettingPanel...
         childWindow.ChildHandles = childHandle;
     end
     
-    
-    function sliderPolarizationParameters_callback(hObject,~,childWindow,parentWindow)
-        childHandle = childWindow.ChildHandles;
-        val = get(hObject,'Value');
-        panelPolarizationParametersBottomPosition = get(childHandle.panelPolarizationParametersBottom,'Position');
-        set(childHandle.panelPolarizationParametersBottom,'units','normalized','Position',...
-            [panelPolarizationParametersBottomPosition(1),-4.2+ panelPolarizationParametersBottomPosition(4)*(1-val),...
-            panelPolarizationParametersBottomPosition(3) panelPolarizationParametersBottomPosition(4)]);
-        childWindow.ChildHandles = childHandle;
-    end
-    
-    function popPolarizationProfile_Callback(~,~,childWindow,parentWindow )
-        childHandle = childWindow.ChildHandles;
-        polarizationProfileList = get(childHandle.popPolarizationProfile,'String');
-        polarizationProfileType = polarizationProfileList{get(childHandle.popPolarizationProfile,'Value')};
-        childHandle = displayPolarizationProfileParameters(childHandle,polarizationProfileType);
-        childWindow.ChildHandles = childHandle;
-    end
     % Add any new uicontrol callback definitions here
     
-    %% End of  Callbacks of uicontrols    
+    %% End of  Callbacks of uicontrols
     parentWindow.ParentHandles = parentHandle;
     childWindow.ChildHandles = childHandle;
 end

@@ -126,6 +126,7 @@ function [ returnDataStruct] = ExampleSurface(returnFlag,surfaceParameters,input
             returnDataStruct = struct();
             returnDataStruct.Name = surfName;
             returnDataStruct.IsGratingEnabled = 0;
+            returnDataStruct.IsExtraDataEnabled = 0;
             returnDataStruct.ImageFullFileName = imageFullFileName;
             returnDataStruct.Description =  description;
         case 2 % Surface specific 'UniqueSurfaceParameters'
@@ -212,7 +213,7 @@ function [ returnDataStruct] = ExampleSurface(returnFlag,surfaceParameters,input
             returnDataStruct.LocalExitRayPosition = localRayExitPoint;
         case 10 % additional path
             intersectionPoint = inputDataStruct.RayIntersectionPoint;
-            additionalPathLength = intersectionPoint*0;
+            additionalPathLength = intersectionPoint(1,:)*0;
             returnDataStruct.AdditionalPathLength = additionalPathLength;
         otherwise
     end
@@ -220,15 +221,21 @@ end
 
 function [Z,Fx,Fy,Fz] = getSurfaceSagAndGradient(X,Y)
     r = sqrt(X.^2+Y.^2);
-    % test cone
+    % 1. test cone
     % Z = (r);
     % Fx =
     % Fy =
     % Fz =
-    % test fresnel zones
-    Z = -mod(r,1);
-    Fx = -X./r;
-    Fy = -Y./r;
+    % 2. test fresnel zones
+%     Z = -mod(r,1);
+%     Fx = -X./r;
+%     Fy = -Y./r;
+%     Fz = ones(size(X));
+    % 3. test Sinusoidal
+    a = 5.5;
+    Z = -sin(a*r)/a;
+    Fx = -X.*cos(a*r)./r;
+    Fy = -Y.*cos(a*r)./r;
     Fz = ones(size(X));
 end
 

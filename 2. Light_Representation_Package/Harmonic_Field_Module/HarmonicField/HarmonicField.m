@@ -10,7 +10,7 @@ function newHarmonicField = HarmonicField(Ex,Ey,sampDistX,sampDistY,wavelen,cent
         wavelen = 0.55*10^-6;
         center = [0,0]';
         direction = [0,0,1]';
-        domain = 1;
+        domain = 1;% 1 for Spatial domain, and 2 for spatial frequency 
     elseif nargin > 0 && nargin < 5
         disp('Error: You need to enter all input parameters (Ex,Ey,sampDistX,sampDistY,wavelen) or nothing.');
         newHarmonicField = HarmonicField;
@@ -18,8 +18,10 @@ function newHarmonicField = HarmonicField(Ex,Ey,sampDistX,sampDistY,wavelen,cent
     elseif nargin == 5
         center = [0,0]';
         direction = [0,0,1]';
+        domain = 1;
     elseif nargin == 6
         direction = [0,0,1]';
+        domain = 1;
     elseif nargin == 7
         domain = 1;  % spatial domain  
     else

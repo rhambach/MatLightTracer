@@ -40,7 +40,12 @@ function [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices ] = computePupi
     
     % Allowed pupilSamplingType = 'Cartesian',
     % 'Polar','Tangential','Sagittal','Cross','Random',
-    if ~strcmpi(pupilSamplingType,'Polar')
+    if isnumeric(pupilSamplingType)
+        pupilSamplingTypeString = GetSupportedPupilSamplingTypes(pupilSamplingType);
+    else
+        pupilSamplingTypeString = pupilSamplingType;
+    end
+    if ~strcmpi(pupilSamplingTypeString,'Polar')
         % Make sure that the samplign points are odd so that one f the pupil
         % sampling point will go through origin
         if ~mod(nPoints1,2)
@@ -51,7 +56,7 @@ function [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices ] = computePupi
         end
     end
 
-    switch lower(pupilSamplingType)
+    switch lower(pupilSamplingTypeString)
         case lower({'Cartesian','Rectangular'})
             nPointsX = nPoints1;
             nPointsY = nPoints2;
@@ -147,8 +152,8 @@ function [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices ] = computePupi
             end
             pupilPoint = [zeros(nPointsY,1) ygv' repmat(pupilZLocation,nPointsY,1)];
 %             pupilMeshGrid = NaN;
-            pupilMeshGrid(:,:,1) = zeros(length(ygv),1);
-            pupilMeshGrid(:,:,2) = ygv';
+            pupilMeshGrid(:,:,2) = pupilPoint(:,2);
+            pupilMeshGrid(:,:,1) = pupilPoint(:,1);    
             outsidePupilIndices = [];
         case lower('Sagittal')
             nPointsX = nPoints1;
@@ -161,8 +166,8 @@ function [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices ] = computePupi
             ygv = 0;
             pupilPoint = [xgv' zeros(nPointsX,1) repmat(pupilZLocation,nPointsX,1)];
 %             pupilMeshGrid = NaN;
-            pupilMeshGrid(:,:,2) = zeros(length(xgv),1);
-            pupilMeshGrid(:,:,1) = xgv';            
+            pupilMeshGrid(:,:,2) = pupilPoint(:,2);
+            pupilMeshGrid(:,:,1) = pupilPoint(:,1);               
             
             outsidePupilIndices = [];            
         case lower('Cross')
@@ -179,11 +184,11 @@ function [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices ] = computePupi
             else
                 ygv = linspace(-pupilRadiusInY,pupilRadiusInY,nPointsY);
             end
-            pupilPoint = [[xgv';zeros(nPointsX,1)] [zeros(nPointsY,1);ygv'] repmat(pupilZLocation,nPointsX+nPointsY,1)];
+            pupilPoint = [[xgv';zeros(nPointsY,1)] [zeros(nPointsX,1);ygv'] repmat(pupilZLocation,nPointsX+nPointsY,1)];
             
 %             pupilMeshGrid = NaN;
-            pupilMeshGrid(:,:,2) = ygv';
-            pupilMeshGrid(:,:,1) = xgv';    
+            pupilMeshGrid(:,:,2) = pupilPoint(:,2);
+            pupilMeshGrid(:,:,1) = pupilPoint(:,1);    
             
             outsidePupilIndices = [];            
         case lower('Random')

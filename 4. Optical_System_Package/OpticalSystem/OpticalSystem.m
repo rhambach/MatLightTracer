@@ -4,16 +4,21 @@ function [NewOpticalSystem] =  OpticalSystem(fullFilePath)
     if nargin < 1
         % default constructor with empty argument. By default it is
         % surface based so 3 surfaces are defined.
-        tempSurfaceArray(1) = Surface();
-        tempSurfaceArray(2) = Surface();
-        tempSurfaceArray(3) = Surface();
+        tempSurfaceArray{1} = Surface();
+        tempSurfaceArray{2} = Surface();
+        tempSurfaceArray{3} = Surface();
         
-        tempSurfaceArray(1).IsObject = 1;
-        tempSurfaceArray(2).IsStop = 1;
-        tempSurfaceArray(3).IsImage = 1;
+        tempSurfaceArray{1}.IsObject = 1;
+        tempSurfaceArray{2}.StopSurfaceIndex = 1;
+        tempSurfaceArray{3}.IsImage = 1;
         
-        NewOpticalSystem.SurfaceArray = tempSurfaceArray;
+        % Cell array of surface or components as they apear in the system
+        % defintion
+        NewOpticalSystem.OpticalElementArray = tempSurfaceArray;
         
+        NewOpticalSystem.SurfaceArray = [tempSurfaceArray{:}];
+        NewOpticalSystem.ElementToSurfaceMap = [{1},{2},{3}];
+        NewOpticalSystem.SurfaceToElementMap = [{1},{2},{3}];
         % Component array will be NaN for surface based defintion
         NewOpticalSystem.ComponentArray = Component();
         
@@ -27,7 +32,7 @@ function [NewOpticalSystem] =  OpticalSystem(fullFilePath)
         NewOpticalSystem.LensUnit = 1; % mm
         NewOpticalSystem.WavelengthMatrix = [0.55 1];
         NewOpticalSystem.PrimaryWavelengthIndex = 1;
-        NewOpticalSystem.FieldType = 1; %'ObjectHeight';
+        NewOpticalSystem.FieldType = 2; %'Angle';
         NewOpticalSystem.FieldPointMatrix = [0 0 1];
         
         NewOpticalSystem.IsObjectAfocal = 0;
@@ -43,13 +48,9 @@ function [NewOpticalSystem] =  OpticalSystem(fullFilePath)
         NewOpticalSystem.ApodizationParameters = '';
         
         NewOpticalSystem.FieldNormalization = 1; %'Rectangular';
-        NewOpticalSystem.SystemDefinitionType = 1; %'SurfaceBased';
         NewOpticalSystem.SystemMode = 'SEQ';
         NewOpticalSystem.GlassCataloguesList = getAllObjectCatalogues('Glass');
         NewOpticalSystem.SoftwareVersion = '';
-        NewOpticalSystem.IsSaved = 0;
-        NewOpticalSystem.PathName = '';
-        NewOpticalSystem.FileName = '';
     else
         % Open previously saved optical system from file
         if ~isempty(fullFilePath)

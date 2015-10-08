@@ -28,11 +28,24 @@ function newComponent = Component(compType,uniqueParameters,firstTilt,firstDecen
     %
     if nargin < 1
         % Make single surface component by default
-        compType = 'SequenceOfSurfaces';        
+        compType = 1; %'SequenceOfSurfaces';        
     end
+    % If the type is given as string instead of number, then find the index
+    % corresponding to the type string
+    if ~isnumeric(compType)
+        supportedComponentTypes = GetSupportedComponentTypes();
+        [isFound, foundAt] = ismember(compType,supportedComponentTypes);
+        if isFound
+            compType = foundAt;
+        else
+            disp(['Error: The component type specified is not valid so the ',...
+                'default SequenceOfSurface is used.']);
+            compType = 1;
+        end
+    end    
     if nargin < 2
         % Connect the component definition function
-        componentDefinitionHandle = str2func(compType);
+        componentDefinitionHandle = str2func( GetSupportedComponentTypes(compType));
         returnFlag = 2; % Basic parameters of the component
         [ returnDataStruct] = componentDefinitionHandle(returnFlag);
         uniqueParameters = returnDataStruct.DefaultUniqueParametersStruct;        
@@ -44,10 +57,10 @@ function newComponent = Component(compType,uniqueParameters,firstTilt,firstDecen
          firstDecenter = [0,0];
     end     
     if nargin < 5
-         firstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
+         firstTiltDecenterOrder  = 1;%{'Dx','Dy','Dz','Tx','Ty','Tz'};
     end     
     if nargin < 6
-         compTiltMode = 'DAR';
+         compTiltMode = 1;%'DAR';
     end    
     if nargin < 7
          lastThickness = 10;

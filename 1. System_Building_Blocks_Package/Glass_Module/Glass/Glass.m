@@ -58,8 +58,35 @@ function newGlass = Glass(glassName,glassCatalogueFileList,glassType,glassParame
     
     if nargin < 3 % Mode 1
         if  nargin == 0 || isempty(glassName) || strcmpi(glassName,'None') ||...
-                strcmpi(glassName,'Air') || strcmpi(glassName,'Mirror')% Enable construction  with no inputs, 'none', 'air'
+                strcmpi(glassName,'Air') % Enable construction  with no inputs, 'none', 'air'
             glassName = '';
+            glassCatalogueFileList = {'All'};
+            
+            glassType = 'IdealNonDispersive';
+            [~,~,defaultParamStruct] = getCoatingUniqueParameters( glassType );
+            
+            glassParameters = defaultParamStruct;
+            internalTransmittance  = zeros(1,3);
+            thermalData  = zeros(10,1);
+            wavelengthRange  = zeros(2,1);
+            resistanceData  = zeros(5,1);
+            otherData  = zeros(6,1);
+            glassComment  = 'No comment';
+            
+            newGlass = struct();
+            newGlass.Name = glassName;
+            newGlass.Type = glassType;
+            newGlass.UniqueParameters = glassParameters;
+            newGlass.InternalTransmittance = internalTransmittance;
+            newGlass.ResistanceData = resistanceData;
+            newGlass.ThermalData = thermalData;
+            newGlass.OtherData = otherData;
+            newGlass.WavelengthRange  = wavelengthRange;
+            newGlass.Comment = glassComment; %
+            newGlass.ClassName = 'Glass';
+            return;
+        elseif strcmpi(glassName,'Mirror')
+            glassName = 'Mirror';
             glassCatalogueFileList = {'All'};
             
             glassType = 'IdealNonDispersive';

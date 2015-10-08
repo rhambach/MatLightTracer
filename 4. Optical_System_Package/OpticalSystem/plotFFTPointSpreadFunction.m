@@ -71,9 +71,13 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
                     'Title',['Field Point XY : [',num2str(fieldPointXY(1,fieldIndex)),',',...
                     num2str(fieldPointXY(2,fieldIndex)),']',...
                     ' & Wavelength : ',num2str(wavLen(wavIndex))]);
+
                 subplotAxes = axes('Parent',subplotPanel,...
                     'Units','Normalized',...
-                    'Position',[0.05,0.05,0.9,0.9]);
+                    'Position',[0.25,0.40, 0.50, 0.50]);
+                sectionPlotAxes = axes('Parent',subplotPanel,...
+                    'Units','Normalized',...
+                    'Position',[0.25,0.08, 0.50, 0.20]);
             end
             pupilApodization = PupilWeightMatrixMulti1(:,:,fieldIndex,wavIndex);
             
@@ -107,17 +111,17 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
             wl = wavLen(wavIndex)*getWavelengthUnitFactor(optSystem)*10^3; % Wavelength in mm
             
             kW = (2*pi/(wavLen(wavIndex)*getWavelengthUnitFactor(optSystem)))*...
-                OPDAtExitPupil*getLensUnitFactor(optSystem);
+                OPDAtExitPupil;
             
             efd = sqrt(pupilApodization).*exp(-1i.*kW); % Complex pupil fun
             %%
-            %         z = -getExitPupilLocation(optSystem);
-            %         % Add spherical phase correction as the existing diffraction code
-            %         % assumes the wavefront has curvature = Z of propagation
-            %         [xpm,ypm] = meshgrid(xp,yp);
-            %         rpm = sqrt(xpm.^2+ypm.^2);
-            %         rcurv = z;
-            %         efd = efd .* exp(-1i*pi/(wl*z)*(rpm.^2));
+%                     z = -getExitPupilLocation(optSystem);
+%                     % Add spherical phase correction as the existing diffraction code
+%                     % assumes the wavefront has curvature = Z of propagation
+%                     [xpm,ypm] = meshgrid(xp,yp);
+%                     rpm = sqrt(xpm.^2+ypm.^2);
+%                     rcurv = z;
+%                     efd = efd .* exp(-1i*pi/(wl*z)*(rpm.^2));
             %%
             %  Propagation
             
@@ -183,11 +187,21 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
             if dispPlot
                 %
                 % Plot the PSF
-                surf(subplotAxes,xbm,ybm,intensity')
-                shading interp
+%                 surf(subplotAxes,xbm,ybm,intensity')
+%                 shading interp
+                
+                EnhancedColorPlot({subplotAxes,xbm,ybm,intensity},sectionPlotAxes);
+%                 surf(normX,normY,OPDAtExitPupil,'Parent',subplotAxes,'facecolor','interp',...
+%                     'edgecolor','none',...
+%                     'facelighting','phong');
+                title(subplotAxes,'FFT PSF (Intensity)')
+                zlabel(subplotAxes,'Intensity') % x-axis label
+                xlabel(subplotAxes,'X (m)')
+                ylabel(subplotAxes,'Y (m)')
+                axis(subplotAxes,'tight')
             end
             
-            normalizedIntensityMulti (:,:,fieldIndex,wavIndex) = intensity';
+            normalizedIntensityMulti (:,:,fieldIndex,wavIndex) = intensity;
             peakIntesityMulti(:,:,fieldIndex,wavIndex) = peakIntensity;
             XMulti (:,:,fieldIndex,wavIndex) = xbm;
             YMulti (:,:,fieldIndex,wavIndex) = ybm;

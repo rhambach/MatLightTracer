@@ -473,6 +473,11 @@ function opticalSystemObject = importZemaxFile (zmxFullFileName,...
     mySystem.NumberOfSurfaces =  nSurf;
     mySystem.SurfaceArray(1).IsObject = 1;
     mySystem.SurfaceArray(nSurf).IsImage = 1;
+    % Save all surfaces as optical elements
+    nElement = nSurf;
+    for kk = 1:nElement
+        mySystem.OpticalElementArray{kk} = mySystem.SurfaceArray(kk);
+    end   
     
     %
     % Save all surfaces as components SS
@@ -922,7 +927,7 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
             case 'CONI'
                 % CONI val	Conic constant of the surface.
                 conic = str2num(char(currentLineArray(2,:)));
-                surfaceObjectArray(surfaceCounter).UniqueParameters.Conic = conic;
+                surfaceObjectArray(surfaceCounter).Conic = conic;
             case 'VCON'
                 % VCON	Variable conic constant.
                 if dispWarnings
@@ -946,7 +951,7 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                 %
                 curv = str2num(char(currentLineArray(2,:)));
                 solve = str2num(char(currentLineArray(3,:)));
-                surfaceObjectArray(surfaceCounter).UniqueParameters.Radius = 1/curv;
+                surfaceObjectArray(surfaceCounter).Radius = 1/curv;
                 if dispWarnings
                     if solve
                         disp(['Surf ',num2str(surfaceCounter),' Warning: Surface '...
@@ -970,7 +975,7 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                 end
             case 'STOP'
                 % STOP	Marks Stop Surface.
-                surfaceObjectArray(surfaceCounter).IsStop = 1;
+                surfaceObjectArray(surfaceCounter).StopSurfaceIndex = 1;
             case 'SURF'
                 % SURF index	Surface index starting from 0 @ object surface.
                 surfaceCounter = surfaceCounter + 1;
@@ -1017,7 +1022,7 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                 end
                 % Initialize all surface specific data
                 % Other surface type specific standard data
-                [~,~,uniqueParameterStruct] = getSurfaceUniqueParameters(surfaceObjectArray(surfaceCounter).Type);
+                [~,~,~,uniqueParameterStruct] = getSurfaceUniqueParameters(surfaceObjectArray(surfaceCounter).Type);
                 surfaceObjectArray(surfaceCounter).UniqueParameters = uniqueParameterStruct;
                 
             case 'GLAS'
@@ -1118,7 +1123,7 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                     % If fixed semidiameter, then make the draw absolute
                     % value of the aperture True
                     surfaceApertureIsFixedSize = 1;
-                    if  mySystem.SystemApertureType == 3 && surfaceObjectArray(surfaceCounter).IsStop
+                    if  mySystem.SystemApertureType == 3 && surfaceObjectArray(surfaceCounter).StopSurfaceIndex
                         % If fixed semidiameter, system aperture float by stop size and current surface is stop
                         [~,circApertureIndex] = ismember('CircularAperture',GetSupportedSurfaceApertureTypes);
                         surfaceObjectArray(surfaceCounter).Aperture.Type = circApertureIndex;

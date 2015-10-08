@@ -88,8 +88,8 @@ function [ success ] = plotLongitudinalAberration(opticalSystem)
         grid on;
         hold on;
     end
-    axis equal;
-    xlabel('Z','FontSize',12);
+%     axis equal;
+    xlabel('\Delta Z (m)','FontSize',12);
     ylabel('PY (Normalized)','FontSize',12);
     legend(legendText)
     title('Logitudinal Aberration');

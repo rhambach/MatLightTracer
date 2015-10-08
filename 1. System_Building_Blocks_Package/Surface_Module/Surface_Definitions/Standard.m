@@ -1,6 +1,6 @@
 function [ returnDataStruct] = Standard(returnFlag,surfaceParameters,inputDataStruct)
     %STANDARD Standard surface definition
-    % surfaceParameters = values of {'Radius','Conic'}
+    % surfaceParameters = values of {''}
     % inputDataStruct : Struct of all additional inputs (not included in the surface parameters)
     % required for computing the return. (Vary depending on the returnFlag)
     % returnFlag : An integer indicating what is requested. Depending on it the
@@ -130,12 +130,11 @@ function [ returnDataStruct] = Standard(returnFlag,surfaceParameters,inputDataSt
             returnDataStruct.ImageFullFileName = imageFullFileName;
             returnDataStruct.Description =  description;
         case 2 % Surface specific 'UniqueSurfaceParameters'
-            uniqueParametersStructFieldNames = {'Radius','Conic'};
-            uniqueParametersStructFieldDisplayNames = {'Radius of Curvature','Conic Constant'};
-            uniqueParametersStructFieldTypes = {'numeric','numeric'};
+            uniqueParametersStructFieldNames = {''};
+            uniqueParametersStructFieldDisplayNames = {''};
+            uniqueParametersStructFieldTypes = {''};
             defaultUniqueParametersStruct = struct();
-            defaultUniqueParametersStruct.Radius = Inf;
-            defaultUniqueParametersStruct.Conic = 0;
+
 
             returnDataStruct = struct();
             returnDataStruct.UniqueParametersStructFieldNames = uniqueParametersStructFieldNames;
@@ -150,8 +149,8 @@ function [ returnDataStruct] = Standard(returnFlag,surfaceParameters,inputDataSt
             returnDataStruct.UniqueExtraDataName = uniqueExtraDataName;
             returnDataStruct.DefaultUniqueExtraData = defaultUniqueExtraData;
         case 4 % Surface sag at given xyGridPoints Z = F(X,Y)
-            surfaceRadius = surfaceParameters.Radius;
-            surfaceConic = surfaceParameters.Conic;
+            surfaceRadius = inputDataStruct.Radius;
+            surfaceConic = inputDataStruct.Conic;
             X = inputDataStruct.X;
             Y = inputDataStruct.Y;
             mainSag = computeStandardSurfaceSag(surfaceRadius,surfaceConic,X,Y);
@@ -166,7 +165,7 @@ function [ returnDataStruct] = Standard(returnFlag,surfaceParameters,inputDataSt
             reflection = inputDataStruct.ReflectionFlag;
             indexBefore = inputDataStruct.IndexBefore;
             indexAfter = inputDataStruct.IndexAfter;
-            surfaceRadius = surfaceParameters.Radius;
+            surfaceRadius = inputDataStruct.Radius;
             % the height doesnot change
             yf = y;
             % for angle compute based on the direction of propagation
@@ -212,16 +211,16 @@ function [ returnDataStruct] = Standard(returnFlag,surfaceParameters,inputDataSt
             returnDataStruct.NewLocalRayDirection = newLocalRayDirection;
             returnDataStruct.TIR = TIR;
         case 7 % F(X,Y,Z)
-            curv = (1/surfaceParameters.Radius);
-            conic = surfaceParameters.Conic;
+            curv = (1/inputDataStruct.Radius);
+            conic = inputDataStruct.Conic;
             X = inputDataStruct.RayIntersectionPoint(1,:);
             Y = inputDataStruct.RayIntersectionPoint(2,:);
             Z = inputDataStruct.RayIntersectionPoint(3,:);
             Fxyz = Z - (curv.*(X.^2+Y.^2))./(1+sqrt(1-(conic+1)*curv^2*(X.^2+Y.^2)));
             returnDataStruct.Fxyz = Fxyz;
         case 8 % F'(X,Y,Z) and surface normal
-            curv = (1/surfaceParameters.Radius);
-            conic = surfaceParameters.Conic;
+            curv = (1/inputDataStruct.Radius);
+            conic = inputDataStruct.Conic;
             X = inputDataStruct.RayIntersectionPoint(1,:);
             Y = inputDataStruct.RayIntersectionPoint(2,:);
             Z = inputDataStruct.RayIntersectionPoint(3,:);
@@ -244,7 +243,7 @@ function [ returnDataStruct] = Standard(returnFlag,surfaceParameters,inputDataSt
         case 10 % additionaöl pathlength
             intersectionPoint = inputDataStruct.RayIntersectionPoint;
             % For now just return 0. but shall be corrected
-            additionalPathLength = 0*intersectionPoint;
+            additionalPathLength = 0*intersectionPoint(1,:);
             returnDataStruct.AdditionalPathLength = additionalPathLength;
         otherwise
             

@@ -1,6 +1,7 @@
 function fullFileName = addCoatingCatalogue(myParent,catlogueFullFileName)
     
     aodHandles = myParent.ParentHandles;
+    currentConfig = aodHandles.CurrentConfiguration;
     % If no catalogue full file name is not given then create a new catalogue
     if nargin == 0
         msgbox('Error: The function addCoatingCatalogue needs atleast one input argument.');
@@ -15,7 +16,7 @@ function fullFileName = addCoatingCatalogue(myParent,catlogueFullFileName)
             [ fullFileName ] = createNewObjectCatalogue('Coating', catlogueFullFileName,'ask' );
 %             [catloguePathName,catalogueFileName,ext] = fileparts(fullFileName);
             % Add the catalogue to the OpticalSystem.CoatingCataloguesList
-            aodHandles.OpticalSystem.CoatingCataloguesList = [aodHandles.OpticalSystem.CoatingCataloguesList;{fullFileName}];
+            aodHandles.OpticalSystem(currentConfig).CoatingCataloguesList = [aodHandles.OpticalSystem(currentConfig).CoatingCataloguesList;{fullFileName}];
             
 %             % Add a row with the new coating catalogue
 %             % aodHandles = myParent.ParentHandles;
@@ -47,7 +48,7 @@ function fullFileName = addCoatingCatalogue(myParent,catlogueFullFileName)
             
             % check if the catalogue is already in the imported list of
             % catalogues
-            currentCatalogueList = aodHandles.OpticalSystem.CoatingCataloguesList;
+            currentCatalogueList = aodHandles.OpticalSystem(currentConfig).CoatingCataloguesList;
             if ~isempty(currentCatalogueList)
             nCat = length(currentCatalogueList);
             alreadyExsist = 0;
@@ -77,7 +78,7 @@ function fullFileName = addCoatingCatalogue(myParent,catlogueFullFileName)
 %                 end
 %             end
 
-            aodHandles.OpticalSystem.CoatingCataloguesList = [aodHandles.OpticalSystem.CoatingCataloguesList,{fullFileName}];
+            aodHandles.OpticalSystem(currentConfig).CoatingCataloguesList = [aodHandles.OpticalSystem(currentConfig).CoatingCataloguesList,{fullFileName}];
 
 
 %             % Add a row with the new coating catalogue

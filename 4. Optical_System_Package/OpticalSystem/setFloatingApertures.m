@@ -5,12 +5,13 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
     % radial interesection of the rays with the surfaces.
     
     updatedOpticalSystem = currentOpticalSystem;
+      
     if (isfield(currentOpticalSystem,'IsUpdatedSurfaceArray') && ...
-            currentOpticalSystem.IsUpdatedSurfaceArray)|| ...
-            IsComponentBased(currentOpticalSystem)
+            currentOpticalSystem.IsUpdatedSurfaceArray)
         return;
     end
     
+    lensUnitFactor = getLensUnitFactor(updatedOpticalSystem);
     nField = getNumberOfFieldPoints(updatedOpticalSystem);
     [ nonDummySurfaceIndices] = getNonDummySurfaceIndices( updatedOpticalSystem );
     nNonDummySurf = length(nonDummySurfaceIndices);
@@ -90,14 +91,17 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
                 leftMariginalIntersection = [leftMariginalRayTraceResult(kk).RayIntersectionPoint];
             end
             
-            surfaceVertex = updatedOpticalSystem.SurfaceArray(kk).SurfaceCoordinateTM(1:3,4);
-            vertexToTopMariginal = (topMariginalIntersection(1:2,:) - repmat(repmat(surfaceVertex(1:2,:),[1,nField*nWav]),[1,nMarginalRayUsed]));
+            surfaceVertexInLensUnit = updatedOpticalSystem.SurfaceArray(surfIndex).SurfaceCoordinateTM(1:3,4);
+            % The Vertex in lens unit so convert to SI
+            surfaceVertexInM = surfaceVertexInLensUnit*lensUnitFactor;
+            
+            vertexToTopMariginal = (topMariginalIntersection(1:2,:) - repmat(repmat(surfaceVertexInM(1:2,:),[1,nField*nWav]),[1,nMarginalRayUsed]));
             vertexToTopMariginalDist = computeNormOfMatrix(vertexToTopMariginal,1);
-            vertexToBottomMariginal = (bottomMariginalIntersection(1:2,:) - repmat(repmat(surfaceVertex(1:2,:),[1,nField*nWav]),[1,nMarginalRayUsed]));
+            vertexToBottomMariginal = (bottomMariginalIntersection(1:2,:) - repmat(repmat(surfaceVertexInM(1:2,:),[1,nField*nWav]),[1,nMarginalRayUsed]));
             vertexToBottomMariginalDist = computeNormOfMatrix(vertexToBottomMariginal,1);
-            vertexToRightMariginal = (rightMariginalIntersection(1:2,:) - repmat(repmat(surfaceVertex(1:2,:),[1,nField*nWav]),[1,nMarginalRayUsed]));
+            vertexToRightMariginal = (rightMariginalIntersection(1:2,:) - repmat(repmat(surfaceVertexInM(1:2,:),[1,nField*nWav]),[1,nMarginalRayUsed]));
             vertexToRightMariginalDist = computeNormOfMatrix(vertexToRightMariginal,1);
-            vertexToLeftMariginal = (leftMariginalIntersection(1:2,:) - repmat(repmat(surfaceVertex(1:2,:),[1,nField*nWav]),[1,nMarginalRayUsed]));
+            vertexToLeftMariginal = (leftMariginalIntersection(1:2,:) - repmat(repmat(surfaceVertexInM(1:2,:),[1,nField*nWav]),[1,nMarginalRayUsed]));
             vertexToLeftMariginalDist = computeNormOfMatrix(vertexToLeftMariginal,1);
             
             % If multiple rays are traced then failing rays will have
@@ -107,7 +111,7 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
             vertexToRightMariginalDist(imag(vertexToRightMariginalDist)~=0) = [];
             vertexToLeftMariginalDist(imag(vertexToLeftMariginalDist)~=0) = [];
             
-            vertexTocheifRay = (cheifRayIntersection - repmat(surfaceVertex,[1,nField*nWav]));
+            vertexTocheifRay = (cheifRayIntersection - repmat(surfaceVertexInM,[1,nField*nWav]));
             vertexTocheifRayDist = computeNormOfMatrix(vertexTocheifRay,1);
             
             maxRadToTopMariginalRay = max(vertexToTopMariginalDist);
@@ -117,14 +121,29 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
             
             maxRadTocheifRay = max(vertexTocheifRayDist);
             
-            maxRadToMariginal_CheifRay = max([maxRadToTopMariginalRay,...
+            maxRadToMariginal_CheifRayInM = max([maxRadToTopMariginalRay,...
                 maxRadToBottomMariginalRay,maxRadToRightMariginalRay,...
                 maxRadToLeftMariginalRay,maxRadTocheifRay]);
             
-            floatingApertureDiameter = 2*maxRadToMariginal_CheifRay;
+            % Convert the max radius back to the lens unit before setting
+            maxRadToMariginal_CheifRay = maxRadToMariginal_CheifRayInM/lensUnitFactor;
             
-            updatedOpticalSystem.SurfaceArray(surfIndex).Aperture.UniqueParameters.Diameter = ...
+            if isnan(maxRadToMariginal_CheifRay)
+                % Do nothing if the floatingApertureDiameter is not
+                % computed correctly
+            else
+                floatingApertureDiameter = 2*maxRadToMariginal_CheifRay;
+                if floatingApertureDiameter == 0
+                    floatingApertureDiameter = 10^-15;
+                end
+                updatedOpticalSystem.SurfaceArray(surfIndex).Aperture.UniqueParameters.Diameter = ...
                 floatingApertureDiameter;
+                if isSurface(currentSurface)
+                    updatedOpticalSystem.OpticalElementArray{updatedOpticalSystem.SurfaceToElementMap{surfIndex}}.Aperture.UniqueParameters.Diameter = ...
+                    floatingApertureDiameter;
+                end
+            end
+            
         end
     end
 end

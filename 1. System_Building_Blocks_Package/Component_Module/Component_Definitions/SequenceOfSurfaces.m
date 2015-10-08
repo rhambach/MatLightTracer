@@ -55,9 +55,9 @@ function [ returnDataStruct] = SequenceOfSurfaces( ...
         if nargin < 3
             inputDataStruct.FirstTilt = [0,0,0];
             inputDataStruct.FirstDecenter = [0,0];
-            inputDataStruct.FirstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
+            inputDataStruct.FirstTiltDecenterOrder  = 1;%{'Dx','Dy','Dz','Tx','Ty','Tz'};
             inputDataStruct.LastThickness = 10;
-            inputDataStruct.ComponentTiltMode = 'NAX';
+            inputDataStruct.ComponentTiltMode = 1;%'NAX';
         end
     end
     %%

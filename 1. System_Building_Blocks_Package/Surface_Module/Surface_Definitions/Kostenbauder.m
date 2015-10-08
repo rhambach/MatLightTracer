@@ -217,31 +217,34 @@ function [ returnDataStruct] = Kostenbauder(returnFlag,surfaceParameters,inputDa
             % first compute the intersection of the lines with local z axis on
             % the object side
             focalLength = -1/C;
-            
             rayDirection = inputDataStruct.RayDirection;
             indexBefore = inputDataStruct.IndexBefore;
             indexAfter = inputDataStruct.IndexAfter;
             localRayIntersectionPoint = inputDataStruct.RayIntersectionPoint;
-            
-            posXY = sqrt(localRayIntersectionPoint(1,:).^2 + localRayIntersectionPoint(2,:).^2);
-            dirXY = sqrt(rayDirection(1,:).^2 + rayDirection(2,:).^2);
-            
-            thicknessBefore = -((posXY)./(dirXY)).*sqrt(1-dirXY.^2);
-            thicknessBefore(dirXY == 0) = Inf;
-            % compute image side intersection t'=(ft)/((-fn+t)*n')
-            if abs(focalLength) > 10^16 % For INF focal length
-                thicknessAfter = thicknessBefore./(indexBefore.*indexAfter);
-            else
-                thicknessAfter = (focalLength)./((indexBefore.*focalLength./thicknessBefore + 1).*indexAfter);
-            end
+            % COmpute intersection of the ray with plane perpendiculr to
+            % the radius pointing from origin to localRayIntersectionPoint
+            linePoint = localRayIntersectionPoint;
+            lineVector = rayDirection;
+            planePoint = [0,0,0]';
+            planeNormalVector  = normalize2DMatrix(localRayIntersectionPoint,1);
+            [linePlaneIntersection,distance] = computeLinePlaneIntersection...
+                (linePoint,lineVector,planePoint,planeNormalVector);
+            thicknessBefore = linePlaneIntersection(3,:);
+
+            % compute image side intersection t'=(f)/((fn/t + 1)*n')
+            % The Cartesian convention takes everything to the left of the lens as negative, 
+            thicknessAfter = (focalLength)./((indexBefore.*focalLength./thicknessBefore + 1).*indexAfter);
             % now compute the new ray direction
-            dxAfter = -(localRayIntersectionPoint(1,:));
-            dyAfter = -(localRayIntersectionPoint(2,:));
-            dzAfter = thicknessAfter;
+            dxAfter = sign(thicknessAfter).*(0 -(localRayIntersectionPoint(1,:)));
+            dyAfter = sign(thicknessAfter).*(0 -(localRayIntersectionPoint(2,:)));
+            dzAfter = sign(thicknessAfter).*(thicknessAfter - (localRayIntersectionPoint(3,:)));
             exitRayDirection = normalize2DMatrix([dxAfter;dyAfter;dzAfter],1);
             % For thicknessAfter == Inf, the exit ray dire = parallel to z
             % axis
             exitRayDirection(3,abs(thicknessAfter) > 10^10) = 1;
+            % For intersection point = 000 the ray direction doesnt change
+            exitRayDirection(:,isnan(thicknessBefore)) = rayDirection(:,isnan(thicknessBefore));
+            
             TIR = ones(1,size(exitRayDirection,2));
             
             returnDataStruct = struct();

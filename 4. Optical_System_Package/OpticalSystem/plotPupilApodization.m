@@ -30,10 +30,10 @@ function [ X,Y,pupilApodization ] =...
     % Initialize all values to zero           
     pupilApodization(1:gridSize,1:gridSize) = zeros;
     
-    switch lower(apodType)
-        case lower('None') % None = uniform circular intensity
+    switch (apodType)
+        case 1 %lower('None') % None = uniform circular intensity
             pupilApodization((X./(max(max(X)))).^2+(Y./(max(max(Y)))).^2 < 1) = 1;
-        case lower('Super Gaussian') % Super Gaussian Type and apodParam = struct with fields
+        case 2 %lower('Super Gaussian') % Super Gaussian Type and apodParam = struct with fields
             %  [MaximumIntensity I0, Order m, BeamRadius w];
             I0 = apodParam.MaximumIntensity;
             m = apodParam.Order;

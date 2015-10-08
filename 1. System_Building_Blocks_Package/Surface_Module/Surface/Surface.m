@@ -49,8 +49,10 @@ function NewSurface = Surface(surfType)
     NewSurface.Thickness = 10;
     NewSurface.Glass = Glass();
     NewSurface.Coating = Coating();
+    NewSurface.Radius = Inf;
+    NewSurface.Conic = 0;
     
-    [fieldNames,fieldFormat,defaultUniqueParamStruct] = getSurfaceUniqueParameters(surfType);
+    [fieldNames,fieldDisplayNames,fieldFormat,defaultUniqueParamStruct] = getSurfaceUniqueParameters(surfType);
     NewSurface.UniqueParameters = defaultUniqueParamStruct;
     
     NewSurface.ExtraData  = [];
@@ -73,9 +75,11 @@ function NewSurface = Surface(surfType)
     NewSurface.GlassBefore  = Glass();
     NewSurface.SurfaceColor = '';
     
+    NewSurface.StopSurfaceIndex = 0;
+    
     NewSurface.IsObject = 0;
     NewSurface.IsImage = 0;
-    NewSurface.IsStop = 0;
+%     NewSurface.IsStop = 0;
     NewSurface.IsHidden = 0;
     NewSurface.IsIgnored = 0;
     

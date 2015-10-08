@@ -85,13 +85,20 @@ function [ returnDataStruct] = RectangularAperture(returnFlag,apertureParameters
             
             returnDataStruct.MaximumRadiusXY = maximumRadiusXY;
         case 3 % Return the if the given points in xyVector are inside or outside the aperture.
-            xyVector = inputDataStruct.xyVector;
+            xyVectorOrMesh = inputDataStruct.xyVector;
+            if ndims(xyVectorOrMesh) == 3
+                pointX = xyVectorOrMesh(:,:,1);
+                pointY = xyVectorOrMesh(:,:,2);
+            elseif ndims(xyVectorOrMesh) == 2
+                pointX = xyVectorOrMesh(:,1);
+                pointY = xyVectorOrMesh(:,2);
+            end
             semiDiamX = (apertureParameters.DiameterX)/2;
             semiDiamY = (apertureParameters.DiameterY)/2;
-            pointX = xyVector(:,1);
-            pointY = xyVector(:,2);
-            umInsideTheMainAperture = abs(pointX) < semiDiamX &...
-                abs(pointY) < semiDiamY;
+
+            tol = 10^-15; % Avoids rays falsely flaged as out of aperture due to numerics
+            umInsideTheMainAperture = abs(pointX) < semiDiamX+tol &...
+                abs(pointY) < semiDiamY+tol;
             returnDataStruct.IsInsideTheMainAperture = umInsideTheMainAperture;
     end
 end

@@ -216,7 +216,7 @@ function [ returnDataStruct] = ObjectSurface(returnFlag,surfaceParameters,inputD
         case 10 % additionaöl pathlength
             intersectionPoint = inputDataStruct.RayIntersectionPoint;
             % For now just return 0. but shall be corrected
-            additionalPathLength = 0*intersectionPoint;
+            additionalPathLength = 0*intersectionPoint(1,:);
             returnDataStruct.AdditionalPathLength = additionalPathLength;
         otherwise
     end

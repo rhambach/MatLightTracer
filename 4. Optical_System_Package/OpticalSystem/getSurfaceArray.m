@@ -6,27 +6,7 @@ function [ surfaceArray, nSurface ] = getSurfaceArray( optSystem,surfIndex )
     if nargin == 1
         surfIndex = 0;
     end
-    if isfield(optSystem,'IsUpdatedSurfaceArray') && optSystem.IsUpdatedSurfaceArray
-        updatedSurfaceArray = optSystem.SurfaceArray;
-    else
-        if IsComponentBased(optSystem)
-            componentArray = optSystem.ComponentArray;
-            nComponent = getNumberOfComponents(optSystem);
-            totalSurfaceArray = [];
-            for tt = 1:nComponent
-                currentSurfaceArray = getComponentSurfaceArray(componentArray(tt));
-                stopSurfaceInComponentIndex = componentArray(tt).StopSurfaceIndex;
-                if stopSurfaceInComponentIndex
-                    currentSurfaceArray(stopSurfaceInComponentIndex).IsStop = 1;
-                end
-                totalSurfaceArray = [totalSurfaceArray,currentSurfaceArray];
-            end
-            tempSurfaceArray = totalSurfaceArray;
-        else
-            tempSurfaceArray = optSystem.SurfaceArray;
-        end
-        updatedSurfaceArray = updateSurfaceCoordinateTransformationMatrices(tempSurfaceArray);
-    end
+    updatedSurfaceArray = optSystem.SurfaceArray;
     
     if surfIndex
         % Return the required surface

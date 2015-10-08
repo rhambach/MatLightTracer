@@ -55,9 +55,9 @@ function [ returnDataStruct] = IMAGE( ...
         if nargin < 3
             inputDataStruct.FirstTilt = [0,0,0];
             inputDataStruct.FirstDecenter = [0,0];
-            inputDataStruct.FirstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
+            inputDataStruct.FirstTiltDecenterOrder  = 1; %{'Dx','Dy','Dz','Tx','Ty','Tz'};
             inputDataStruct.LastThickness = 10;
-            inputDataStruct.ComponentTiltMode = 'NAX';
+            inputDataStruct.ComponentTiltMode = 1 ;%'NAX';
         end
     end
     %%
@@ -102,14 +102,13 @@ function [ returnDataStruct] = IMAGE( ...
             currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
             currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
             surfaceArray(1) = currentSurface;
-            
-            
-            if strcmpi(surfaceArray(1).Aperture.Type,'FloatingCircularAperture')
-                surfaceArray(1).Aperture.Type = 'CircularAperture';
+
+            if surfaceArray(1).Aperture.Type == 1 %'FloatingCircularAperture'
+                surfaceArray(1).Aperture.Type = 2; %'CircularAperture';
                 surfaceArray(1).Aperture.UniqueParameters.SmallDiameter = 0;
                 surfaceArray(1).Aperture.UniqueParameters.LargeDiameter = ...
                     surfaceArray(1).Aperture.UniqueParameters.Diameter;
-            end
+            end             
             surfaceArray(1).IsImage = 1;
             returnDataStruct.SurfaceArray = surfaceArray; % surface array
     end

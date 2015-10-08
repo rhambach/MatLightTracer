@@ -38,14 +38,18 @@ function [ pcolorHandle,mainAxesHandle ] = EnhancedColorPlot( input_args,...
         arrowHandle,pcolorHandle,sectionPlotAxesHandle,interpolationMethod})
     
     
-    mainFigure = get(mainAxesHandle,'Parent');
-    crossSectionFigure = get(sectionPlotAxesHandle,'Parent');
+    mainFigure = ancestor(mainAxesHandle,'Figure');
+    crossSectionFigure = ancestor(sectionPlotAxesHandle,'Figure');
+    
+    
     set(mainFigure,'CloseRequestFcn',{@mainFigureCloseRequest_Callback,...
         crossSectionFigure});
     % Set name of the cross section window
     set(crossSectionFigure,'Name',['Cross section view of Figure ',...
-        num2str(get(mainFigure,'Number'))],...
-        'CloseRequestFcn',@crossSectionFigureCloseRequest_Callback);
+        num2str(get(mainFigure,'Number'))]);
+    if crossSectionFigure ~= mainFigure
+        set(crossSectionFigure,'CloseRequestFcn',{@crossSectionFigureCloseRequest_Callback});
+    end
     
     
 end

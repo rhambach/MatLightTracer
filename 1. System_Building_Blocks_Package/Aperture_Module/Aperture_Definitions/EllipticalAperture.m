@@ -84,12 +84,19 @@ function [ returnDataStruct] = EllipticalAperture(returnFlag,apertureParameters,
             maximumRadiusXY(2) = (apertureParameters.DiameterY)/2;
             returnDataStruct.MaximumRadiusXY = maximumRadiusXY;
         case 3 % Return the if the given points in xyVector are inside or outside the aperture.
-            xyVector = inputDataStruct.xyVector;
+            xyVectorOrMesh = inputDataStruct.xyVector;
+            if ndims(xyVectorOrMesh) == 3
+                pointX = xyVectorOrMesh(:,:,1);
+                pointY = xyVectorOrMesh(:,:,2);
+            elseif ndims(xyVectorOrMesh) == 2
+                pointX = xyVectorOrMesh(:,1);
+                pointY = xyVectorOrMesh(:,2);
+            end
             semiDiamX = (apertureParameters.DiameterX)/2;
             semiDiamY = (apertureParameters.DiameterY)/2;
-            pointX = xyVector(:,1);
-            pointY = xyVector(:,2);
-            umInsideTheMainAperture = (((pointX).^2)/semiDiamX^2) + (((pointY).^2)/semiDiamY^2) <= 1;
+
+            tol = 10^-15; % Avoids rays falsely flaged as out of aperture due to numerics
+            umInsideTheMainAperture = (((pointX).^2)/semiDiamX^2) + (((pointY).^2)/semiDiamY^2) <= 1+tol;
             returnDataStruct.IsInsideTheMainAperture = umInsideTheMainAperture;
     end
 end

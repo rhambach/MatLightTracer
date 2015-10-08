@@ -37,5 +37,5 @@ end
 importedOpticalSystem = importZemaxFile (zmxFullFileName,...
     coatingCatalogueListFullNames,glassCatalogueListFullNames);
 
-opened = openSavedOpticalSystem(parentWindow,importedOpticalSystem);
+opened = openSavedOpticalSystem(parentWindow,importedOpticalSystem,0);
 end

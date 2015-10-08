@@ -104,24 +104,24 @@ function plotTransverseRayAberration(optSystem,surfIndex,wavLen,...
     
             if strcmpi(sagittalAberrComp,'X Aberration')
                 sagY(lineIndex,:) = sagittalFanIntersectionPoints(1,:) - cheifRayIntersectionsSagittal(1,:);
-                yLabelSag = 'EX';
+                yLabelSag = '\Delta X (m)';
             elseif strcmpi(sagittalAberrComp,'Y Aberration')
                 sagY(lineIndex,:) = sagittalFanIntersectionPoints(2,:) - cheifRayIntersectionsSagittal(2,:);
-                yLabelSag = 'EY';
+                yLabelSag = '\Delta Y (m)';
             else
             end
             
             if strcmpi(tangentialAberrComp,'X Aberration')
                 tanY(lineIndex,:) = tangentialFanIntersectionPoints(1,:) - cheifRayIntersectionsTangential(1,:);
-                yLabelTan = 'EX';
+                yLabelTan = '\Delta X (m)';
             elseif strcmpi(tangentialAberrComp,'Y Aberration')
                 tanY(lineIndex,:) = tangentialFanIntersectionPoints(2,:) - cheifRayIntersectionsTangential(2,:);
-                yLabelTan = 'EY';
+                yLabelTan = '\Delta Y (m)';
             else
             end
             
-            xLabelTan = 'PY';
-            xLabelSag = 'PX';
+            xLabelTan = 'PY (Normalized)';
+            xLabelSag = 'PX (Normalized)';
             sagX(lineIndex,:) = linspace(-1,1,size(sagY,2));
             tanX(lineIndex,:) = linspace(-1,1,size(tanY,2));
             
@@ -138,12 +138,12 @@ function plotTransverseRayAberration(optSystem,surfIndex,wavLen,...
         'Title',[char(tangentialAberrComp),' for Tangential Fan']);
     tangentialPlotAxes = axes('Parent',tangentialPlotPanel,...
         'Units','Normalized',...
-        'Position',[0.1,0.2,0.88,0.6]);
+        'Position',[0.15,0.2,0.80,0.6]);
 
     
     for tanKK = 1:lineIndex
         currentLineColor = lineColorList(tanKK);
-        plot(tangentialPlotAxes,tanX(tanKK,:),tanY(tanKK,:)/(lensUnitFactor),currentLineColor);
+        plot(tangentialPlotAxes,tanX(tanKK,:),tanY(tanKK,:),currentLineColor);
         hold on;
     end
     grid on;
@@ -158,11 +158,11 @@ function plotTransverseRayAberration(optSystem,surfIndex,wavLen,...
     
     sagittalPlotAxes = axes('Parent',sagittalPlotPanel,...
         'Units','Normalized',...
-        'Position',[0.1,0.2,0.88,0.6]);
+        'Position',[0.15,0.2,0.80,0.6]);
     
     for sagKK = 1:lineIndex
         currentLineColor = lineColorList(sagKK);
-        plot(sagittalPlotAxes,sagX(sagKK,:),sagY(sagKK,:)/(lensUnitFactor),currentLineColor);
+        plot(sagittalPlotAxes,sagX(sagKK,:),sagY(sagKK,:),currentLineColor);
         hold on;
     end
     grid on;

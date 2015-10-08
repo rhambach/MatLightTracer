@@ -1,8 +1,9 @@
 function updateSystemConfigurationWindow( parentWindow )
     %UPDATESYSTEMCONFIGURATIONWINDOW Updates the system configuration
     %window
-    
+     
     aodHandles = parentWindow.ParentHandles;
+    currentConfig = aodHandles.CurrentConfiguration;
     [ currentOpticalSystem,saved] = getCurrentOpticalSystem (parentWindow);
     
     %aperture data
@@ -34,10 +35,7 @@ function updateSystemConfigurationWindow( parentWindow )
     
     wavelengthUnitIndex = currentOpticalSystem.WavelengthUnit;
     set(aodHandles.popWavelengthUnit,'Value',wavelengthUnitIndex);
-    
-    systemDefinitionTypeIndex = currentOpticalSystem.SystemDefinitionType;
-    set(aodHandles.popSystemDefinitionType,'Value',systemDefinitionTypeIndex);
-    
+
     %wavelength data
     set(aodHandles.txtTotalWavelengthsSelected,'String',getNumberOfWavelengths(currentOpticalSystem))
     set(aodHandles.popPrimaryWavlenIndex,'String',num2cell(1:getNumberOfWavelengths(currentOpticalSystem)));
@@ -144,7 +142,7 @@ function updateSystemConfigurationWindow( parentWindow )
             set(aodHandles.txtApodOrder,'String',num2str(apodParam.Order));
             set(aodHandles.txtApodBeamRadius,'String',num2str(apodParam.BeamRadius));
     end
-    aodHandles.OpticalSystem = currentOpticalSystem;
+    aodHandles.OpticalSystem(currentConfig) = currentOpticalSystem;
     parentWindow.ParentHandles = aodHandles;
 end
 

@@ -5,6 +5,8 @@ function rayPathMatrix = computeRayPathMatrix...
     % wavInd,fldInd can be vectors. Then the output rayPathMatrix will be
     % of 5D dimension. (3 X nSurf X nPupilPoints X nFieldPoints X nWav)
 
+    lensUnitFactor = getLensUnitFactor(optSystem);
+    
     [ rayTraceOptionStruct ] = RayTraceOptionStruct( );
     rayTraceOptionStruct.ConsiderPolarization = 0;
     rayTraceOptionStruct.ConsiderSurfAperture = 1;
@@ -19,6 +21,7 @@ function rayPathMatrix = computeRayPathMatrix...
     [ exitRayPositions ] = getAllSurfaceExitRayPosition( polarizedRayTracerResult);
     [ rayIntersectionPoints ] = getAllSurfaceRayIntersectionPoint( polarizedRayTracerResult);
     
-    rayPathMatrix(:,[1:2:2*nSurface],:,:,:) = rayIntersectionPoints;
-    rayPathMatrix(:,[2:2:2*nSurface],:,:,:)  = exitRayPositions;
+    % Convert the intersection points and positions from meter to LensUnit
+    rayPathMatrix(:,[1:2:2*nSurface],:,:,:) = rayIntersectionPoints/lensUnitFactor;
+    rayPathMatrix(:,[2:2:2*nSurface],:,:,:)  = exitRayPositions/lensUnitFactor;
 end

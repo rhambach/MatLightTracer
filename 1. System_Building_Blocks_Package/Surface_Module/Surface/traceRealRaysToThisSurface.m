@@ -66,6 +66,8 @@ function [ geometricalPathLength,additionalPathLength,localRayIntersectionPoint,
         inputDataStruct.ExtraData = currentSurface.ExtraData;
         
         returnFlag = 7; % return the function value F(X,Y,Z)
+        inputDataStruct.Radius = currentSurface.Radius;
+        inputDataStruct.Conic = currentSurface.Conic;
         [ returnDataStruct] = surfaceDefinitionHandle(returnFlag,...
             surfaceUniqueParameters,inputDataStruct);
         F_rem = returnDataStruct.Fxyz;

@@ -1,5 +1,6 @@
 function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
-        wavLen,fieldPointXY,sampleGridSize,jonesVector,coordinate,plotPanelHandle)
+        wavLen,fieldPointXY,sampleGridSize,polarizationProfileType,...
+        polarizationProfileParameters,plotPanelHandle)
     % Plot polarization ellipse map in the pupil of the system for given
     % input polarization states. NB. initialPolVector is defined in the global
     % xyz coordinate of the opt system
@@ -9,7 +10,6 @@ function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
     %   Advisor: Prof. Herbert Gross
-    %   Part of the RAYTRACE_TOOLBOX V3.0 (OOP Version)
     %	Optical System Design and Simulation Research Group
     %   Institute of Applied Physics
     %   Friedrich-Schiller-University of Jena
@@ -22,11 +22,11 @@ function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     
     % Default Inputs
-    if nargin < 6
+    if nargin < 7
         disp('Error: The function requires atleast 6 arguments, optSystem,',...
             ' surfIndex, wavLen, fieldPointXY, sampleGridSize and polVector');
         return;
-    elseif nargin == 6
+    elseif nargin == 7
         plotPanelHandle = uipanel('Parent',figure('Name','Pupil Polarization Ellipse Map'),...
             'Units','normalized','Position',[0,0,1,1]);
     end
@@ -44,23 +44,52 @@ function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
     
     [polarizedRayTracerResult,pupilMeshGrid,outsidePupilIndices] = multipleRayTracer(optSystem,wavLen,...
         fieldPointXY,sampleGridSize,sampleGridSize,PupSamplingType,rayTraceOptionStruct,endSurface);%
-        
+    
     nRay = polarizedRayTracerResult.TotalNumberOfPupilPoints;
     nField = polarizedRayTracerResult.TotalNumberOfFieldPoints;
     nWav = polarizedRayTracerResult.TotalNumberOfWavelengths;
-
+    
     % Take the ray trace result at surface 1 and last surface : surfIndex
     rayTracerResultFirstSurf = polarizedRayTracerResult(1);
     rayTracerResultLastSurf = polarizedRayTracerResult(2);
     
     % Spatial Distribution of Polarization Ellipse in a given surface
+    
+    % Connect the polarization definition function
+    polarizationDefinitionHandle = str2func(getSupportedPolarizationProfiles(polarizationProfileType));
+    returnFlag = 2; %
+    inputDataStruct = struct;
+    inputDataStruct.xMesh = pupilMeshGrid(:,:,1);
+    inputDataStruct.yMesh = pupilMeshGrid(:,:,2);
+    [ returnDataStruct ] = polarizationDefinitionHandle(returnFlag,polarizationProfileParameters,inputDataStruct);
+    jonesVector = returnDataStruct.JonesVector;
+    polDistributionType = returnDataStruct.PolarizationDistributionType;
+    coordinate = returnDataStruct.CoordinateSystem;
+    % For global polarized it will be just a single vector but for locally
+    % polarized it will be matrix of size = pupil points
+    matrixOfJonesVector = jonesVector;
+    
+    
+    switch lower(polDistributionType)
+        case ('global')
+            jonesVectorNew = matrixOfJonesVector;
+        case ('local')
+            % Take only the polarization of those rays inside the pupil (for which
+            % ray trace result exist)
+            Jx = matrixOfJonesVector(:,:,1);
+            Jx(outsidePupilIndices) = [];
+            Jy = matrixOfJonesVector(:,:,2);
+            Jy(outsidePupilIndices) = [];
+            jonesVectorNew = [Jx(:),Jy(:)]';
+    end
+    % The matrix of jones vector is assumed to be defined over the entrance pupil
     entrancePupilRadius = (getEntrancePupilDiameter(optSystem))/2;
     
     % Convert the Jones vector to the polarizationVector in
     % XYZ global coordinate
     rayDirection = [rayTracerResultFirstSurf.ExitRayDirection];
     if strcmpi(coordinate,'SP')
-        jonesVectorSP = (jonesVector);
+        jonesVectorSP = (jonesVectorNew);
         initialPolVectorXYZ = convertJVToPolVector...
             (jonesVectorSP,rayDirection);
     elseif strcmpi(coordinate,'XY')
@@ -71,11 +100,11 @@ function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
         ky = rayDirection(2,:);
         kz = rayDirection(3,:);
         
-        if size(jonesVector,2) == 1
-            jonesVector = jonesVector*ones(1,nRay);
+        if size(jonesVectorNew,2) == 1
+            jonesVectorNew = jonesVectorNew*ones(1,nRay);
         end
-        fieldEx = jonesVector(1,:);
-        fieldEy = jonesVector(2,:);
+        fieldEx = jonesVectorNew(1,:);
+        fieldEy = jonesVectorNew(2,:);
         
         fieldEz = - (kx.*fieldEx + ky.*fieldEy)./(kz);
         
@@ -120,7 +149,7 @@ function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
     cx = (centerXLinear)'*sampleGridSize./entrancePupilRadius;
     cy = (centerYLinear)'*sampleGridSize./entrancePupilRadius;
     plotEllipse(a',b',cx',cy',phi',direction',subplotAxes);
-%     plot_ellipse(subplotAxes,a,b,cx,cy,phi,direction);
+    %     plot_ellipse(subplotAxes,a,b,cx,cy,phi,direction);
     
     set(gcf,'Name',['Pupil Polarization Ellipse Map at surface : ',num2str(surfIndex)]);
     drawn = 1;

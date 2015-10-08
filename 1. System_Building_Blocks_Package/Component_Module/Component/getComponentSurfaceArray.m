@@ -31,7 +31,7 @@ function mySurfaceArray = getComponentSurfaceArray(currentComponent,referenceCoo
         previousThickness = 0;
     end
     
-    componentDefinitionFileName = currentComponent.Type;
+    componentDefinitionFileName = GetSupportedComponentTypes(currentComponent.Type);
     % Connect the component definition function
     componentDefinitionHandle = str2func(componentDefinitionFileName);
     returnFlag = 4; % surface array of the component
@@ -59,10 +59,10 @@ function mySurfaceArray = getComponentSurfaceArray(currentComponent,referenceCoo
     
     % Make the stop surface
     for kk = 1:length(surfArray)
-        surfArray(kk).IsStop = 0;
+        surfArray(kk).StopSurfaceIndex = 0;
     end
     if stopSurfaceInComponentIndex
-        surfArray(stopSurfaceInComponentIndex).IsStop = 1;
+        surfArray(stopSurfaceInComponentIndex).StopSurfaceIndex = 1;
     end
     
     mySurfaceArray = surfArray;

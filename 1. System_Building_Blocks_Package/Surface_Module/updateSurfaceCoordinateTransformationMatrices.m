@@ -9,8 +9,12 @@ function updatedSurfaceArray = updateSurfaceCoordinateTransformationMatrices(sur
     if surfaceArray(1).IsObject
         % Object surface
         objThickness = abs(surfaceArray(1).Thickness);
-        if objThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for graphing
-            objThickness = 0;
+        if objThickness > 10^10 
+            % Replace Inf with INF_OBJ_Z = with small thickness for graphing
+            % The tickness is computed so that the surface lies to the
+            % right of all initial rays
+            
+            objThickness = -0;
         end
         % since global coord but shifted by objThickness
         refCoordinateTM = ...

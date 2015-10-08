@@ -88,7 +88,8 @@ function [ returnDataStruct] = JonesVectorPolarization(returnFlag,polarizationPa
             param2X = polarizationParameters.ImaginaryXOrPhaseX;
             param1Y = polarizationParameters.RealYOrAmplitudeY;
             param2Y = polarizationParameters.ImaginaryYOrPhaseY;
-            coordinate = polarizationParameters.Coordinate;
+            coordTypes = {'SP','XY'};
+            coordinate = coordTypes{polarizationParameters.Coordinate};
             representation = polarizationParameters.Representation;
             
             if representation == 1 % real - imaginary
@@ -96,7 +97,7 @@ function [ returnDataStruct] = JonesVectorPolarization(returnFlag,polarizationPa
                 % Normalize
                 jonesVector = JV/(sqrt((abs(JV(1)))^2 + (abs(JV(2)))^2));
             elseif representation == 2 % amplitude - phase
-                JV = [param1X*exp(1i*param2X); param1Y*exp(1i*param2Y)];
+                JV = [param1X*exp(1i*param2X*pi/180); param1Y*exp(1i*param2Y*pi/180)];
                 % Normalize
                 jonesVector = JV/(sqrt((abs(JV(1)))^2 + (abs(JV(2)))^2));
             else

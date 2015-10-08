@@ -1,4 +1,4 @@
-function [fieldNames,fieldFormat,uniqueParamStruct,fieldDisplayNames] = getSurfaceUniqueParameters( variableInputArgument )
+function [fieldNames,fieldDisplayNames,fieldFormat,uniqueParamStruct] = getSurfaceUniqueParameters( variableInputArgument )
     %getUniqueParameters Returns the field names, formats, and current
     %struct of all unique parameters which are specific to this surface type
     % Inputs:

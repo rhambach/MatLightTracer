@@ -72,7 +72,7 @@ function [ returnDataStruct] = FloatingCircularAperture(returnFlag,apertureParam
             returnData1_Display = {'Diameter'};
             returnData2 = {'numeric'};
             defaultApertureParameter = struct();
-            defaultApertureParameter.Diameter = 20;
+            defaultApertureParameter.Diameter = 10;
             returnData3 = defaultApertureParameter;
             
             returnDataStruct.UniqueParametersStructFieldNames = returnData1;
@@ -85,14 +85,21 @@ function [ returnDataStruct] = FloatingCircularAperture(returnFlag,apertureParam
             
             returnDataStruct.MaximumRadiusXY = maximumRadiusXY;
         case 3 % Return the if the given points in xyVector are inside or outside the aperture.
-            xyVector = inputDataStruct.xyVector;
+            xyVectorOrMesh = inputDataStruct.xyVector;
+            if ndims(xyVectorOrMesh) == 3
+                pointX = xyVectorOrMesh(:,:,1);
+                pointY = xyVectorOrMesh(:,:,2);
+            elseif ndims(xyVectorOrMesh) == 2
+                pointX = xyVectorOrMesh(:,1);
+                pointY = xyVectorOrMesh(:,2);
+            end
             radius = (apertureParameters.Diameter)/2;
-            pointX = xyVector(:,1);
-            pointY = xyVector(:,2);
+
+            tol = 10^-2; % Avoids rays falsely flaged as out of aperture due to numerics
             % If the floating aperture has zero diameter it means only a
             % single point is inside the aperture. So take that in to
             % account aswell
-            umInsideTheMainAperture = ((((pointX).^2 + (pointY).^2)/radius^2) <= 1)|...
+            umInsideTheMainAperture = ((((pointX).^2 + (pointY).^2)/radius^2) <= 1+tol)|...
                 ((((pointX).^2 + (pointY).^2)/radius^2) == 0);
             returnDataStruct.IsInsideTheMainAperture = umInsideTheMainAperture;
     end

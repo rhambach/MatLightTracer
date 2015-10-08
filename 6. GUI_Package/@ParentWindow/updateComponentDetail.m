@@ -4,7 +4,8 @@ function updateComponentDetail( parentWindow,selectedComponentIndex )
     
     aodHandles = parentWindow.ParentHandles;
     [ currentOpticalSystem,saved] = getCurrentOpticalSystem (parentWindow);
-    selectedComponent = currentOpticalSystem.ComponentArray(selectedComponentIndex);
+     selectedComponent = currentOpticalSystem.OpticalElementArray{selectedComponentIndex};
+%     selectedComponent = currentOpticalSystem.ComponentArray(selectedComponentIndex);
     
     % Display component parmeters
     [ paramNames,paramTypes,paramValues,paramValuesDisp] = ...

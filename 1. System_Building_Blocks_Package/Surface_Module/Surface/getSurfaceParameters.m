@@ -30,26 +30,41 @@ function [ paramNames,paramDisplayNames,paramTypes,paramValues,paramValuesDisp] 
                 paramValues{3,1} = currentSurface.Coating;
                 paramValuesDisp{3,1} = currentSurface.Coating.Name;
                 
+                paramNames{4,1} = 'Radius';
+                paramDisplayNames{4,1} = 'Radius';
+                paramTypes{4,1} = 'numeric';
+                paramValues{4,1} = currentSurface.Radius;
+                paramValuesDisp{4,1} = currentSurface.Radius;
+                
+                paramNames{5,1} = 'Conic';
+                paramDisplayNames{5,1} = 'Conic';
+                paramTypes{5,1} = 'numeric';
+                paramValues{5,1} = currentSurface.Conic;
+                paramValuesDisp{5,1} = currentSurface.Conic;
+                
                 % Add additional surface type specific basic parameters
-                [ uniqueParamNames, uniqueParamFormats, uniqueParametersStruct,...
-                    uniqueParamDisplayNames] = ...
+                [ uniqueParamNames, uniqueParamDisplayNames,...
+                    uniqueParamFormats, uniqueParametersStruct] = ...
                     getSurfaceUniqueParameters( currentSurface);
                 nUniqueParams = length(uniqueParamNames);
+                if nUniqueParams == 1 && isempty(uniqueParamNames{1})
+                    return;
+                end
                 for kk = 1:nUniqueParams
-                    paramNames{3+kk,1} = uniqueParamNames{kk};
-                    paramDisplayNames{3+kk,1} = uniqueParamDisplayNames{kk};
-                    paramTypes{3+kk,1} = uniqueParamFormats{kk};
-                    paramValues{3+kk,1} = uniqueParametersStruct.(uniqueParamNames{kk});
+                    paramNames{5+kk,1} = uniqueParamNames{kk};
+                    paramDisplayNames{5+kk,1} = uniqueParamDisplayNames{kk};
+                    paramTypes{5+kk,1} = uniqueParamFormats{kk};
+                    paramValues{5+kk,1} = uniqueParametersStruct.(uniqueParamNames{kk});
                     
-                    switch lower(class(paramValues{3+kk,1}))
+                    switch lower(class(paramValues{5+kk,1}))
                         case lower('logical')
-                            if paramValues{3+kk,1}
-                                paramValuesDisp{3+kk,1}  = '1';
+                            if paramValues{5+kk,1}
+                                paramValuesDisp{5+kk,1}  = '1';
                             else
-                                paramValuesDisp{3+kk,1} = '0';
+                                paramValuesDisp{5+kk,1} = '0';
                             end
                         otherwise
-                            paramValuesDisp{3+kk,1}  = paramValues{3+kk,1};
+                            paramValuesDisp{5+kk,1}  = paramValues{5+kk,1};
                     end
                 end
             case 'TiltDecenter'
@@ -179,11 +194,24 @@ function [ paramNames,paramDisplayNames,paramTypes,paramValues,paramValuesDisp] 
                         paramTypes{1,1} = 'Coating';
                         paramValues{1,1} = currentSurface.Coating;
                         paramValuesDisp{1,1} = currentSurface.Coating.Name;
+                    case 4
+                        paramNames{1,1} = 'Radius';
+                        paramDisplayNames{1,1} = 'Radius';
+                        paramTypes{1,1} = 'numeric';
+                        paramValues{1,1} = currentSurface.Radius;
+                        paramValuesDisp{1,1} = currentSurface.Radius;
+                    case 5
+                        paramNames{1,1} = 'Conic';
+                        paramDisplayNames{1,1} = 'Conic';
+                        paramTypes{1,1} = 'numeric';
+                        paramValues{1,1} = currentSurface.Conic;
+                        paramValuesDisp{1,1} = currentSurface.Conic;    
                     otherwise
                         % Add additional surface type specific basic parameters
-                        [ uniqueParamNames, uniqueParamFormats, uniqueParametersStruct,...
-                            uniqueParamDisplayNames] = getSurfaceUniqueParameters( currentSurface);
-                        uniqueParamIndex = rowNumber-3;
+                        [ uniqueParamNames, uniqueParamDisplayNames,...
+                            uniqueParamFormats, uniqueParametersStruct] = ...
+                                getSurfaceUniqueParameters( currentSurface);
+                        uniqueParamIndex = rowNumber-5;
                         paramNames{1,1} = uniqueParamNames{uniqueParamIndex};
                         paramDisplayNames{1,1} = uniqueParamDisplayNames{uniqueParamIndex};
                         paramTypes{1,1} = uniqueParamFormats{uniqueParamIndex};

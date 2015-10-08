@@ -6,10 +6,10 @@ function [ parentWindow ] = saveMySystem(parentWindow)
     % parentWindow.computeFastSemidiameters;
     
     aodHandles = parentWindow.ParentHandles;
-    if aodHandles.OpticalSystem.IsSaved
-        SavedOpticalSystem = getCurrentOpticalSystem(parentWindow);
-        pathName = aodHandles.OpticalSystem.PathName;
-        fileName = aodHandles.OpticalSystem.FileName;
+    if aodHandles.IsSaved
+        SavedOpticalSystem = getCurrentOpticalSystem(parentWindow,0);
+        pathName = aodHandles.PathName;
+        fileName = aodHandles.FileName;
         % check if pathName exists
         if exist(pathName,'dir')
             saveToMATFile(SavedOpticalSystem,pathName,fileName);

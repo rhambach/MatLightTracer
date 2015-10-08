@@ -31,7 +31,7 @@ function plotFootprintDiagram(optSystem,surfIndex,wavLen,...
     else
         
     end
-    
+    lensUnitFactor = getLensUnitFactor(optSystem);
     NonDummySurfaceIndices = getNonDummySurfaceIndices(optSystem);
     if ~find(ismember(NonDummySurfaceIndices,surfIndex))
         disp('Error:No ray trace data for Dummy surfaces');
@@ -61,8 +61,8 @@ function plotFootprintDiagram(optSystem,surfIndex,wavLen,...
     % Draw the aperture
     currentSurface = getSurfaceArray(optSystem,surfIndex);
     surfAperture = currentSurface.Aperture;
-    nPoints1 = 100;
-    nPoints2 = 100;
+    nPoints1 = 200;
+    nPoints2 = 200;
     xyCenterPoint = [0,0];
     plotAperture( surfAperture,nPoints1,nPoints2,xyCenterPoint,axesHandle );
     hold on
@@ -87,7 +87,10 @@ function plotFootprintDiagram(optSystem,surfIndex,wavLen,...
             % convert from global to local coordinate of the surface
             localIntersectionPoints = globalToLocalPosition...
                 (globalIntersectionPoints, SurfaceCoordinateTM);
-            px = localIntersectionPoints(1,:); py = localIntersectionPoints(2,:);
+            % Covert from meter to lens unit
+            px = localIntersectionPoints(1,:)/lensUnitFactor; 
+            py = localIntersectionPoints(2,:)/lensUnitFactor;
+            
             currentSpotColor = spotColorList(fieldIndex + (wavIndex-1)*nField);
             currentSpotSymbal = '.';
             plot(axesHandle,px,py,[currentSpotColor,currentSpotSymbal]);

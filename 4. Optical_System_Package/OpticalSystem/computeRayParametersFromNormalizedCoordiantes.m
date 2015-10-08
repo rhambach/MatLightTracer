@@ -16,24 +16,24 @@ function [rayPosition,rayDirection] = computeRayParametersFromNormalizedCoordian
     fieldMatrix = optSystem.FieldPointMatrix;
     fieldType = optSystem.FieldType;
     
-    switch lower(optSystem.FieldNormalization)
-        case lower('Rectangular')
+    switch (optSystem.FieldNormalization)
+        case 1% lower('Rectangular')
             Fx = max(abs(fieldMatrix(:,1)));
             Fy = max(abs(fieldMatrix(:,2)));
             objFieldX = Hx * Fx;
             objFieldY = Hy * Fy;
-        case lower('Radial')
+        case 2 %lower('Radial')
             Fr = max(abs(sqrt((fieldMatrix(:,1)).^2 + (fieldMatrix(:,2)).^2 )));
             objFieldX = Hx * Fr;
             objFieldY = Hy * Fr;
     end
     pupilPointPosition = [pupilX,pupilY,pupilZ]';
-    switch lower(fieldType)
-        case lower('ObjectHeight')
+    switch (fieldType)
+        case 1 %lower('ObjectHeight')
             % The given obj field values are ray positions
             rayPosition = [objFieldX,objFieldY,objZ]';
             rayDirection = (pupilPointPosition - rayPosition)/(norm(pupilPointPosition - rayPosition));
-        case lower('Angle')
+        case 2 %lower('Angle')
             % The given obj field values are ray directions
             
             % The angle given indicates the direction of the cheif ray
@@ -73,7 +73,7 @@ function [rayPosition,rayDirection] = computeRayParametersFromNormalizedCoordian
                 % Initial position of cheif ray = that of mariginal ray
                 rayPosition = cheifRayPosition;
                 % Now compute the direction of the mariginal rays
-                rayDirection = pupilSamplingPoint - rayPosition;
+                rayDirection = pupilPointPosition - rayPosition;
                 rayDirection = rayDirection./repmat(sqrt(sum(rayDirection.^2)),[3,1]);
             end
     end

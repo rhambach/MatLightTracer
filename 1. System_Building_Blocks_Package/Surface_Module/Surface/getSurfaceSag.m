@@ -25,6 +25,8 @@ function [ surfaceSagMain,surfaceSagAlternative ] = getSurfaceSag( surface,xyCoo
     inputDataStruct.X = xyCoordinateMeshgrid(:,:,1);
     inputDataStruct.Y = xyCoordinateMeshgrid(:,:,2);
     inputDataStruct.ExtraData = surface.ExtraData;
+    inputDataStruct.Radius = surface.Radius;
+    inputDataStruct.Conic = surface.Conic;
     % Connect the surface definition function
     surfaceDefinitionHandle = str2func(GetSupportedSurfaceTypes(surfaceType));
     [returnDataStruct] = surfaceDefinitionHandle(returnFlag,surfaceParameters,inputDataStruct);

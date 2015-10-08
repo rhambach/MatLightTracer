@@ -6,7 +6,7 @@ function [ surfaceArrayEnteryFig ] = surfaceArrayInputDialog(initialSurfaceArray
     % Default Input
     if nargin == 0
         initialSurfaceArray = Surface();
-        initialSurfaceArray.IsStop = 1;
+        initialSurfaceArray.StopSurfaceIndex = 1;
         isSurfaceArrayComponent = 0;
         glassCatalogueListFullNames = getAllObjectCatalogues('Glass');
         coatingCatalogueListFullNames = getAllObjectCatalogues('Coating');
@@ -181,7 +181,7 @@ function updateSurfaceEditor(figureHandle)
     
     for kk = 1:1:nSurface
         %standard data
-        if currentSurfaceArray(kk).IsStop && ~stopAlreadyFound
+        if currentSurfaceArray(kk).StopSurfaceIndex && ~stopAlreadyFound
             savedBasicData{kk,1} = 'STOP';
             stopAlreadyFound = 1;
         else
@@ -189,7 +189,7 @@ function updateSurfaceEditor(figureHandle)
         end
 
         savedBasicData{kk,2} = char(currentSurfaceArray(kk).Comment);
-        savedBasicData{kk,3} = char(currentSurfaceArray(kk).Type);
+        savedBasicData{kk,3} = GetSupportedSurfaceTypes(currentSurfaceArray(kk).Type);
         savedBasicData{kk,4} = '';
         savedBasicData{kk,5} = (currentSurfaceArray(kk).Thickness);
         savedBasicData{kk,6} = '';
@@ -211,25 +211,38 @@ function updateSurfaceEditor(figureHandle)
         savedBasicData{kk,9} = upper(num2str(currentSurfaceArray(kk).Coating.Name));
         savedBasicData{kk,10} = '';
         
-        % Other surface type specific standard data
-        [fieldNames,fieldFormat,myUniqueParamStruct] = getSurfaceUniqueParameters(currentSurfaceArray(kk));
+        savedBasicData{kk,11} = (currentSurfaceArray(kk).Radius);
+        savedBasicData{kk,12} = '';
         
-        try
+        savedBasicData{kk,13} = (currentSurfaceArray(kk).Conic);
+        savedBasicData{kk,14} = '';
+        % Other surface type specific standard data
+        [fieldNames,fieldDisplayNames,fieldFormat,myUniqueParamStruct] = getSurfaceUniqueParameters(currentSurfaceArray(kk));
+        nUniqueParameters = length(fieldNames);
+        if nUniqueParameters == 1 && isempty(fieldNames{1})
+            % No unique parameters defined
+        else
             for ff = 1:length(fieldNames)
-                savedBasicData{kk,10 + ff} = (currentSurfaceArray(kk).UniqueParameters.(fieldNames{ff}));
-            end
-        catch
-            for ff = 1:10
-                savedBasicData{kk,10 + ff} = myUniqueParamStruct{ff};
+                savedBasicData{kk,14 + ff} = (currentSurfaceArray(kk).UniqueParameters.(fieldNames{ff}));
             end
         end
+        
+%         try
+%             for ff = 1:length(fieldNames)
+%                 savedBasicData{kk,10 + ff} = (currentSurfaceArray(kk).UniqueParameters.(fieldNames{ff}));
+%             end
+%         catch
+%             for ff = 1:10
+%                 savedBasicData{kk,10 + ff} = myUniqueParamStruct{ff};
+%             end
+%         end
         
         % aperture data
         if ~isSurfaceArrayComponent || kk == 1
             currentAperture = currentSurfaceArray(kk).Aperture;
             savedApertureData{kk,1} = savedBasicData{kk,1};
             savedApertureData{kk,2} = savedBasicData{kk,3};
-            savedApertureData{kk,3} = char(currentAperture.Type);
+            savedApertureData{kk,3} = GetSupportedSurfaceApertureTypes(currentAperture.Type);
             savedApertureData{kk,4} = currentAperture.Decenter(1);
             savedApertureData{kk,5} = currentAperture.Decenter(2);
             savedApertureData{kk,6} = currentAperture.Rotation;
@@ -238,7 +251,7 @@ function updateSurfaceEditor(figureHandle)
             savedApertureData{kk,9} = currentAperture.AdditionalEdge;
             
             % Other surface type specific standard data
-            [fieldNames,fieldFormat,myUniqueParamStruct] = getApertureUniqueParameters(currentAperture);
+            [fieldNames,fieldFormat,myUniqueParamStruct,fieldDisplayNames] = getApertureUniqueParameters(currentAperture);
             for ff = 1:length(fieldNames)
                 savedApertureData{kk,9 + ff} = (myUniqueParamStruct.(fieldNames{ff}));
             end
@@ -249,8 +262,9 @@ function updateSurfaceEditor(figureHandle)
         if ~isSurfaceArrayComponent || kk == 1
             savedTiltDecenterData{kk,1} = savedBasicData{kk,1};
             savedTiltDecenterData{kk,2} = savedBasicData{kk,3};
+
             % Validate Data
-            order = char(currentSurfaceArray(kk).TiltDecenterOrder);
+            order = GetSupportedTiltDecenterOrder(currentSurfaceArray(kk).TiltDecenterOrder);
             if isValidGeneralInput(order,'TiltDecenterOrder')
                 savedTiltDecenterData{kk,3} = order;
             else
@@ -274,42 +288,47 @@ function updateSurfaceEditor(figureHandle)
     end
     set(guiHandleStruct.tblSurfaceArrayBasicData, 'Data', savedBasicData);
     % update column properties  basic data table
-    [fieldNames,fieldFormat,myUniqueParamStruct] = getSurfaceUniqueParameters(currentSurfaceArray(selectedSurface));
+    [fieldNames,fieldDisplayNames,fieldFormat,myUniqueParamStruct] = getSurfaceUniqueParameters(currentSurfaceArray(selectedSurface));
     
     nColumns = size(fieldNames,2);
-    columnNames = fieldNames;
+    columnNames = fieldDisplayNames;
     columnWidth = num2cell(100*ones(1,nColumns));
     columnEditable = num2cell(ones(1,nColumns));
-    columnFormat = [fieldFormat{:}];
-    
-    supportedSurfaces = GetSupportedSurfaces();
+    if isempty(fieldFormat{1})
+        columnFormat = {'char'};
+    else
+        columnFormat = [fieldFormat(:)];
+    end
+    supportedSurfaces = GetSupportedSurfaceTypes();
     
     columnName1 =   {'Surface', 'Name/Note', 'Surface Type', '',...
-        'Thickness', '', 'Glass', '','Coating', '',columnNames{:}};
-    columnWidth1 = {80, 100, 120, 15, 80, 15, 80, 15, 80, 15,columnWidth{:}};
+        'Thickness', '', 'Glass', '','Coating', '','Radius', '','Conic', '',columnNames{:}};
+    columnWidth1 = {80, 100, 120, 15, 80, 15, 80, 15, 80, 15, 80, 15,80, 15,columnWidth{:}};
     columnEditable1 =  [false true true false true false true false true ...
-        false columnEditable{:}];
+        false true false true false columnEditable{:}];
     set(guiHandleStruct.tblSurfaceArrayBasicData, 'ColumnFormat', ...
         {'char', 'char',{supportedSurfaces{:}},'char','numeric', 'char','char', 'char',...
-        'char', 'char', columnFormat{:}});
+        'char', 'char','char', 'char','char', 'char', columnFormat{:}});
     set(guiHandleStruct.tblSurfaceArrayBasicData,'ColumnEditable', logical(columnEditable1),...
         'ColumnName', columnName1,'ColumnWidth',columnWidth1);
     
     
     set(guiHandleStruct.tblSurfaceArrayApertureData, 'Data', savedApertureData);
     % update column properties aperture
-    apertureDefinition = currentSurfaceArray(selectedSurface).Aperture.Type;
-    apertureDefinitionHandle = str2func(apertureDefinition);
-    returnFlag = 1;
-    [fieldNames,fieldFormat,defaultUniqueParamStruct] = apertureDefinitionHandle(returnFlag);
+    [fieldNames,fieldFormat,defaultUniqueParamStruct,fieldDisplayNames] = getApertureUniqueParameters( currentSurfaceArray(selectedSurface).Aperture );
+%     apertureDefinition = GetSupportedSurfaceApertureTypes(currentSurfaceArray(selectedSurface).Aperture.Type);
+%     apertureDefinitionHandle = str2func(apertureDefinition);
+%     returnFlag = 1;
+%     [fieldNames,fieldFormat,defaultUniqueParamStruct,fieldDisplayNames] = apertureDefinitionHandle(returnFlag);
+    
     nColumns = size(fieldNames,2);
-    columnNames = fieldNames;
+    columnNames = fieldDisplayNames;
     columnWidth = num2cell(100*ones(1,nColumns));
     columnEditable = num2cell(ones(1,nColumns));
-    columnFormat = [fieldFormat{:}];
+    columnFormat = [fieldFormat(:)];
     
-    supportedApertureTypes = GetSupportedApertureTypes();
-    supportedApertureOuterShapes = GetSupportedApertureOuterShapes();
+    supportedApertureTypes = GetSupportedSurfaceApertureTypes();
+    supportedApertureOuterShapes = GetSupportedSurfaceApertureOuterShapes();
     
     columnName1 =   {'Surface','Surface Type','Aperture Type','DecenterX','DecenterY','Rotation','DrawAbsolute','OuterShape','AdditionalEdge',columnNames{:}};
     columnWidth1 = {80, 120, 120,80,80,80,80,80,80,columnWidth{:}};
@@ -331,7 +350,7 @@ function updateSurfaceEditor(figureHandle)
     columnEditable5 =  ...
         [false false true false true false true false true false ...
         true false true false true false];
-    tiltModes = getSupportedTiltModes();
+    tiltModes = GetSupportedTiltModes();
     set(figureHandle.Object.tblSurfaceArrayTiltDecenterData , 'ColumnFormat', {'char', 'char', 'char','char', 'numeric',...
         'char','numeric', 'char', 'numeric', 'char', 'numeric', 'char', 'numeric', 'char', ...
         tiltModes,'char'});
@@ -366,13 +385,13 @@ function tblSurfaceArrayBasicData_CellEditCallback(~, eventdata,figureHandle,gla
         %if surface type is changed update all tables in the editor
         %         editedSurfaceIndex = eventdata.Indices(1);
         newSurfaceType = eventdata.NewData;
-        prevStopSurfaceIndex = find([guiHandleStruct.TemporarySurfaceArray.IsStop]);
+        prevStopSurfaceIndex = find([guiHandleStruct.TemporarySurfaceArray.StopSurfaceIndex]);
         if isempty(prevStopSurfaceIndex)
             prevStopSurfaceIndex = 1;
         end
         selectedSurface = Surface(newSurfaceType);
         if prevStopSurfaceIndex == selectedSurfaceIndex
-            selectedSurface.IsStop = 1;
+            selectedSurface.StopSurfaceIndex = 1;
         end
     elseif editedColumn == 5 % if thickness is changed
         newParam = str2num(eventdata.EditData);
@@ -390,10 +409,22 @@ function tblSurfaceArrayBasicData_CellEditCallback(~, eventdata,figureHandle,gla
         newCoating = Coating(upper(coatingName),coatingCatalogueListFullNames);
         %         editedSurfaceIndex = eventdata.Indices(1);
         selectedSurface.Coating = newCoating;
+    elseif editedColumn == 11 % if Radius is changed
+        newParam = str2num(eventdata.EditData);
+        if isempty(newParam)
+            newParam = str2num(eventdata.PreviousData);
+        end
+        selectedSurface.Radius = newParam;
+    elseif editedColumn == 13 % if Conic is changed
+        newParam = str2num(eventdata.EditData);
+        if isempty(newParam)
+            newParam = str2num(eventdata.PreviousData);
+        end
+        selectedSurface.Conic = newParam;
     else
         % other unique parameters
-        [ paramNames,paramTypes,paramValues,paramValuesDisp] = ...
-            getSurfaceParameters(selectedSurface,'Basic',editedColumn-7);
+        [ paramNames,paramDisplayNames,paramTypes,paramValues,paramValuesDisp] = ...
+            getSurfaceParameters(selectedSurface,'Basic',editedColumn-9);
         
         myType = paramTypes{1};
         myName = paramNames{1};
@@ -700,12 +731,12 @@ function btnStopSurfaceOfSurfaceArray_Callback(~,~,figureHandle)
     end
     stopSurfaceIndex = selectedSurfaceIndex;
     
-    prevStopSurfaceIndex = find([figureHandle.Object.TemporarySurfaceArray.IsStop]);
+    prevStopSurfaceIndex = find([figureHandle.Object.TemporarySurfaceArray.StopSurfaceIndex]);
     if ~isempty(prevStopSurfaceIndex)
-        guiHandleStruct.TemporarySurfaceArray(prevStopSurfaceIndex).IsStop = 0;
+        guiHandleStruct.TemporarySurfaceArray(prevStopSurfaceIndex).StopSurfaceIndex = 0;
     end
     guiHandleStruct.SelectedSurfaceIndex = selectedSurfaceIndex;
-    guiHandleStruct.TemporarySurfaceArray(stopSurfaceIndex).IsStop = 1;
+    guiHandleStruct.TemporarySurfaceArray(stopSurfaceIndex).StopSurfaceIndex = 1;
     figureHandle.Object = guiHandleStruct;
     updateSurfaceEditor(figureHandle);
 end
@@ -725,7 +756,7 @@ end
 function RemoveSurfaceFromSurfaceArray(figureHandle,removePosition)
     
     guiHandleStruct = figureHandle.Object;
-    prevStopSurfaceIndex = find([guiHandleStruct.TemporarySurfaceArray.IsStop]);
+    prevStopSurfaceIndex = find([guiHandleStruct.TemporarySurfaceArray.StopSurfaceIndex]);
     nSurface = length(guiHandleStruct.TemporarySurfaceArray);
     if prevStopSurfaceIndex == removePosition
         stopSurfaceRemoved = 1;
@@ -750,9 +781,9 @@ function RemoveSurfaceFromSurfaceArray(figureHandle,removePosition)
     
     if stopSurfaceRemoved
         if guiHandleStruct.TemporarySurfaceArray(nextSelectedSurface).IsImage
-            guiHandleStruct.TemporarySurfaceArray(nextSelectedSurface-1).IsStop = 1;
+            guiHandleStruct.TemporarySurfaceArray(nextSelectedSurface-1).StopSurfaceIndex = 1;
         else
-            guiHandleStruct.TemporarySurfaceArray(nextSelectedSurface).IsStop = 1;
+            guiHandleStruct.TemporarySurfaceArray(nextSelectedSurface).StopSurfaceIndex = 1;
         end
     end
     % The next selected row will be the one in the removed position, so if

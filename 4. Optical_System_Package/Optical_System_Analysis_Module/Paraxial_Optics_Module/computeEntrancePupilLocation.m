@@ -33,4 +33,4 @@ function [ pupilPosition ] = computeEntrancePupilLocation(optSystem)
         objThick = nonDummySurfaceArray(1).Thickness;
     end
     pupilPosition = -yobj/uobj- objThick; %from 1st surface of the optical system
-    
+end

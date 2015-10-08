@@ -10,7 +10,7 @@ function [ opened ] = openNewOpticalSystem(parentWindow)
     closeAllChildWindows(parentWindow);    
     resetParentParameters(parentWindow);
     
-    updateSurfaceOrComponentEditorPanel( parentWindow );
+    updateOpticalElementEditorPanel( parentWindow );
     updateSystemConfigurationWindow( parentWindow );  
     selectedElementIndex = 2;
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);

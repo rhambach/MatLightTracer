@@ -1,6 +1,6 @@
-function [ outputGaussianBeamSet ] = gaussianBeamTracer( optSystem,initialGaussianBeamSet,startSurface,endsurface)
+function [ outputGeneralAstigmaticGaussianBeamSet ] = gaussianBeamTracer( optSystem,initialGaussianBeamSet,startSurface,endsurface)
     %GAUSSIANBEAMTRACER Traces gaussian beam from startSurface to endsurface
-    % and returns the output gaussian beam array at endSurface.
+    % and returns the output gaussian beam array at endSurface (which is genrally astigmatic).
     % initialGaussianBeamArray = array of ScalarGaussianBeam objects
     % Intermediate surface results are not neccessary and hence are not recorded
     % The code is also vectorized. Multiple inputs and outputs are possible.
@@ -23,7 +23,7 @@ function [ outputGaussianBeamSet ] = gaussianBeamTracer( optSystem,initialGaussi
     
     if nargin < 1
                 disp('Error: The function gaussianBeamTracer needs atleast the optical system object.');
-        outputGaussianBeamSet = NaN;
+        outputGeneralAstigmaticGaussianBeamSet = NaN;
         return
     end
     if nargin < 2
@@ -32,7 +32,6 @@ function [ outputGaussianBeamSet ] = gaussianBeamTracer( optSystem,initialGaussi
         % = 1;
         
         
-        initialGaussianBeamSet = ScalarGaussianBeam;
         % Take the central ray as chief ray from 1st field point and primary
         % wavelength
         fieldIndex = 1;
@@ -49,13 +48,25 @@ function [ outputGaussianBeamSet ] = gaussianBeamTracer( optSystem,initialGaussi
         
         centralRay =  getChiefRay(optSystem,fieldPointXYInSI,wavelengthInSI);
         
-        initialGaussianBeamSet = ScalarGaussianBeamSet();
-        initialGaussianBeamSet.CentralRayPosition = centralRay.Position;
-        initialGaussianBeamSet.CentralRayDirection = centralRay.Direction;
-        initialGaussianBeamSet.CentralRayWavelength = centralRay.Wavelength;
-        initialGaussianBeamSet.WaistRadiusInX = 1*lensUnitFactor;
-        initialGaussianBeamSet.WaistRadiusInY = 1*lensUnitFactor;
-        initialGaussianBeamSet.DistanceFromWaist = 0*lensUnitFactor;
+        centralRayPosition = centralRay.Position;
+        centralRayDirection = centralRay.Direction;
+        centralRayWavelength = centralRay.Wavelength * 0.5;
+        waistRadiusInX = 1*lensUnitFactor;
+        waistRadiusInY = 0.5*lensUnitFactor;
+        distanceFromWaistInX = 0*lensUnitFactor;
+        distanceFromWaistInY = 0*lensUnitFactor;
+
+    
+        initialGaussianBeamSet = ScalarOrthogonalGaussianBeamSet(centralRayPosition,...
+        centralRayDirection,centralRayWavelength,waistRadiusInX,...
+        waistRadiusInY,distanceFromWaistInX,distanceFromWaistInY);
+%     
+%         initialGaussianBeamSet.CentralRayPosition = centralRay.Position;
+%         initialGaussianBeamSet.CentralRayDirection = centralRay.Direction;
+%         initialGaussianBeamSet.CentralRayWavelength = centralRay.Wavelength;
+%         initialGaussianBeamSet.WaistRadiusInX = 1*lensUnitFactor;
+%         initialGaussianBeamSet.WaistRadiusInY = 1*lensUnitFactor;
+%         initialGaussianBeamSet.DistanceFromWaist = 0*lensUnitFactor;
     end
     
     [ NonDummySurfaceArray,nNonDummySurface,NonDummySurfaceIndices,...
@@ -78,7 +89,7 @@ function [ outputGaussianBeamSet ] = gaussianBeamTracer( optSystem,initialGaussi
     end
     
     % Get all rays representing the gaussian beams
-    [ gaussianBeamRayBundle ] = getGaussianBeamRayBundle( initialGaussianBeamSet );
+    [ gaussianBeamRayBundle ] = getOrthogonalGaussianBeamRayBundle( initialGaussianBeamSet );
     
     % Trace all rays through the optical system
     rayTraceOptionStruct = RayTraceOptionStruct();
@@ -88,9 +99,13 @@ function [ outputGaussianBeamSet ] = gaussianBeamTracer( optSystem,initialGaussi
     
     % Get the final ray bundle
     finalGaussianBeamRayBundle = getAllSurfaceRayBundles(rayTracerResult(2));
+    % The units 
     
-    % Reconstruct the gaussian beams from the rayBundles
-    [ outputGaussianBeamSet ] = convertRayBundlesToGaussianBeamSet( finalGaussianBeamRayBundle );
+    % Reconstruct the generally astigmatic gaussian beams from the rayBundles
+    [ outputGeneralAstigmaticGaussianBeamSet ] = convertRayBundlesToGenerallyAstigmaticGaussianBeamSet( finalGaussianBeamRayBundle);
+    
+%     % Reconstruct the gaussian beams from the rayBundles
+%     [ outputGaussianBeamSet ] = convertRayBundlesToOrthogonalGaussianBeamSet( finalGaussianBeamRayBundle );
 
 end
 

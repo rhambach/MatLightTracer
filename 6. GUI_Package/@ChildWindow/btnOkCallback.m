@@ -19,8 +19,8 @@ function btnOkCallback(childWindow,parentWindow)
     end
     % performs d/t actions based on myName
     handles = childWindow.ChildHandles;
-    [ optSystem,saved] = getCurrentOpticalSystem(parentWindow) ;
-    
+    [ optSystem,saved] = getCurrentOpticalSystem(parentWindow,0) ;
+    currentConfiguration = parentWindow.ParentHandles.CurrentConfiguration;
     % Group Similar windows
     coatingPropertyVsWavelength = ...
         {  'coatingDiattenuationVsWavelength',...
@@ -62,6 +62,7 @@ function btnOkCallback(childWindow,parentWindow)
     
     switch lower(handles.Name)
         case lower(coatingPropertyVsWavelength)
+            optSystem = optSystem(currentConfiguration);
             % Check for inputs whether to take coating from a
             % given surface or use new coating
             
@@ -173,6 +174,7 @@ function btnOkCallback(childWindow,parentWindow)
                     
             end
         case lower(coatingPropertyVsAngle)
+            optSystem = optSystem(currentConfiguration);
             % Check for inputs whether to take coating from a
             % given surface or use new coating
             surfIndexList = (get(handles.popSurfaceIndex,'String'));
@@ -271,6 +273,8 @@ function btnOkCallback(childWindow,parentWindow)
                     
             end
         case lower(gridRaytraceAnalysis)
+            optSystem = optSystem(currentConfiguration);
+            
             surfIndexList = (get(handles.popSurfaceIndex,'String'));
             surfIndexString = surfIndexList(get(handles.popSurfaceIndex,'Value'),:);
             surfIndex = str2double(surfIndexString);
@@ -337,16 +341,9 @@ function btnOkCallback(childWindow,parentWindow)
                     % Read initial polarization state for polarization ray
                     % trace
                     [polarizationProfileType,polarizationProfileParameters] = readPolarizationProfileParameters(handles);
-                    
-                    % Connect the polarization definition function
-                    polarizationDefinitionHandle = str2func(polarizationProfileType);
-                    returnFlag = 2;
-                    [ jonesVector, polDistributionType,coordinate] = polarizationDefinitionHandle(returnFlag,...
-                        polarizationProfileParameters);
-                    
                     plotPupilPolarizationEllipseMap...
                         (optSystem,surfIndex,wavLen,fieldPointXY,...
-                        sampleGridSize,jonesVector,coordinate,handles.GraphTab) ;
+                        sampleGridSize,polarizationProfileType,polarizationProfileParameters,handles.GraphTab) ;
                 case lower('wavefrontAtExitPupil')
                     % read zernike coefiicient number popup
                     zerCoeffList = (get(handles.popZernikeCoefficientNumber,'String'));
@@ -365,6 +362,8 @@ function btnOkCallback(childWindow,parentWindow)
                         handles.GraphTab,handles.textHandle) ;
             end
         case lower(rayTracingAnalysis)
+            optSystem = optSystem(currentConfiguration);
+            
             % Read Hx,Hy,Px,Py and Wavelegth
             Hx = str2double(get(handles.txtHx,'String'));
             Hy = str2double(get(handles.txtHy,'String'));
@@ -398,15 +397,19 @@ function btnOkCallback(childWindow,parentWindow)
                     newRay.Position = rayPositionInSI;
                     
                     % Connect the polarization definition function
-                    polarizationDefinitionHandle = str2func(polarizationProfileType);
-                    returnFlag = 2;
-                    [ jonesVector, polDistributionType,coordinate] = polarizationDefinitionHandle(returnFlag,...
-                        polarizationProfileParameters);
+                    polarizationDefinitionHandle = str2func(getSupportedPolarizationProfiles(polarizationProfileType));
+                    returnFlag = 2; %
+                    inputDataStruct = struct;
+                    inputDataStruct.xMesh = newRay.Position(1);
+                    inputDataStruct.yMesh = newRay.Position(2);
+                    [ returnDataStruct ] = polarizationDefinitionHandle(returnFlag,polarizationProfileParameters,inputDataStruct);
+                    jonesVectorNew = squeeze(returnDataStruct.JonesVector);
+                    coordinate = returnDataStruct.CoordinateSystem;
                     
                     % Convert the Jones vector to the polarizationVector in
                     % XYZ global coordinate
                     if strcmpi(coordinate,'SP')
-                        jonesVectorSP = (jonesVector);
+                        jonesVectorSP = (jonesVectorNew);
                         initialPolVectorXYZ = convertJVToPolVector...
                             (jonesVectorSP,rayDirection);
                     elseif strcmpi(coordinate,'XY')
@@ -417,8 +420,11 @@ function btnOkCallback(childWindow,parentWindow)
                         ky = rayDirection(2,:);
                         kz = rayDirection(3,:);
                         
-                        fieldEx = jonesVector(1,:);
-                        fieldEy = jonesVector(2,:);
+                        if size(jonesVectorNew,2) == 1
+                            jonesVectorNew = jonesVectorNew*ones(1,nRay);
+                        end
+                        fieldEx = jonesVectorNew(1,:);
+                        fieldEy = jonesVectorNew(2,:);
                         
                         fieldEz = - (kx.*fieldEx + ky.*fieldEy)./(kz);
                         
@@ -568,8 +574,8 @@ function btnOkCallback(childWindow,parentWindow)
                             ['Normalized Y Pupil Coord(Py) = ',num2str(Py)],...
                             ['Wavelength = ',num2str(wavLen)],...
                             ['Polarization Specification Coordinate = ',upper(coordinate)],...
-                            ['Initial Jones Vector = [ ',num2str(jonesVector(1,:)),...
-                            ' ; ',num2str(jonesVector(2,:)),' ]'],...
+                            ['Initial Jones Vector = [ ',num2str(jonesVectorNew(1,:)),...
+                            ' ; ',num2str(jonesVectorNew(2,:)),' ]'],...
                             ['Initial Polarization Vector (XYZ) = [ ',num2str(initialPolVectorXYZ(1,:)),...
                             ' ; ',num2str(initialPolVectorXYZ(2,:)),' ; ',num2str(initialPolVectorXYZ(3,:)),' ]'],...
                             ['Wavelength Unit = ',wavUnitText],...
@@ -692,6 +698,8 @@ function btnOkCallback(childWindow,parentWindow)
         case lower(others)
             switch lower(handles.Name)
                 case lower('coatingRefractiveIndexProfile')
+                    optSystem = optSystem(currentConfiguration);
+                    
                     % Check for inputs whether to take coating from a given surface or use new
                     % coating
                     surfIndexList = (get(handles.popSurfaceIndex,'String'));
@@ -728,6 +736,8 @@ function btnOkCallback(childWindow,parentWindow)
                         (myCoating,handles.axesHandle,handles.tableHandle,handles.textHandle);
                     
                 case lower('footprintDiagram')
+                    optSystem = optSystem(currentConfiguration);
+                    
                     surfIndexList = (get(handles.popSurfaceIndex,'String'));
                     surfIndexString = surfIndexList(get(handles.popSurfaceIndex,'Value'));
                     surfIndex = str2double(surfIndexString);
@@ -765,41 +775,54 @@ function btnOkCallback(childWindow,parentWindow)
                         handles.axesHandle);
                     
                 case lower('system2DLayoutDiagram')
+                    % Programmed to handle multiple configurations
                     plotIn2D = 1;
                     numberOfRays2 = str2double(get(handles.txtNumberOfRay2,'String'));
                     numberOfRays1 = numberOfRays2;
                     wavLengthIndexList = (get(handles.popWavelengthIndex,'String'));
                     wavLengthIndexString = (wavLengthIndexList(get(handles.popWavelengthIndex,'Value'),:));
-                    if strcmpi(wavLengthIndexString,'New Wavelength')
-                    elseif strcmpi(wavLengthIndexString,'All')
-                        wavIndex = 1:1:getNumberOfWavelengths(optSystem);
-                    else
-                        wavIndex = str2double(wavLengthIndexString);
+                    
+                    nConfig = length(optSystem);
+                    selectedConfigIndex = get(handles.popMulticonfigurationIndex,'value');
+                    
+                    if selectedConfigIndex < nConfig
+                        optSystem = optSystem(selectedConfigIndex);
                     end
-                    
-                    fldIndexList = (get(handles.popFieldIndex,'String'));
-                    fldIndexString = (fldIndexList(get(handles.popFieldIndex,'Value'),:));
-                    if strcmpi(fldIndexString,'All')
-                        fldIndex = 1:1:getNumberOfFieldPoints(optSystem);
-                    else
-                        fldIndex = str2double(fldIndexString);
+                    cla(handles.axesHandle,'reset');
+                    for cc = 1:length(optSystem)
+                        if strcmpi(wavLengthIndexString,'New Wavelength')
+                        elseif strcmpi(wavLengthIndexString,'All')
+                            wavIndex = 1:1:getNumberOfWavelengths(optSystem(cc));
+                        else
+                            wavIndex = str2double(wavLengthIndexString);
+                        end
+                        
+                        fldIndexList = (get(handles.popFieldIndex,'String'));
+                        fldIndexString = (fldIndexList(get(handles.popFieldIndex,'Value'),:));
+                        if strcmpi(fldIndexString,'All')
+                            fldIndex = 1:1:getNumberOfFieldPoints(optSystem(cc));
+                        else
+                            fldIndex = str2double(fldIndexString);
+                        end
+                        
+                        
+                        % Extract the wavelength and field point
+                        wavLen =  [(optSystem(cc).WavelengthMatrix(wavIndex,1))'];
+                        fieldPointXY =  [(optSystem(cc).FieldPointMatrix(fldIndex,1:2))'];
+                        
+                        pupSampling = 'Tangential';
+                        
+                        % compute totalRayPathMatrix = 3 X nSurf X nTotalRay
+                        totalRayPathMatrix = computeRayPathMatrix(optSystem(cc),wavLen,...
+                            fieldPointXY,pupSampling,numberOfRays1,numberOfRays2);
+                        
+                        plotSystemLayout(optSystem(cc),totalRayPathMatrix,...
+                            plotIn2D,handles.axesHandle);
+                        hold on;
                     end
-                    
-                    
-                    % Extract the wavelength and field point
-                    wavLen =  [(optSystem.WavelengthMatrix(wavIndex,1))'];
-                    fieldPointXY =  [(optSystem.FieldPointMatrix(fldIndex,1:2))'];
-                    
-                    pupSampling = 'Tangential';
-                    
-                    % compute totalRayPathMatrix = 3 X nSurf X nTotalRay
-                    totalRayPathMatrix = computeRayPathMatrix(optSystem,wavLen,...
-                        fieldPointXY,pupSampling,numberOfRays1,numberOfRays2);
-                    
-                    plotSystemLayout(optSystem,totalRayPathMatrix,...
-                        plotIn2D,handles.axesHandle);
-                    
                 case lower('system3DLayoutDiagram')
+                    optSystem = optSystem(currentConfiguration);
+                    
                     plotIn2D = 0;
                     numberOfRays1 = str2double(get(handles.txtNumberOfRay1,'String'));
                     numberOfRays2 = str2double(get(handles.txtNumberOfRay2,'String'));
@@ -833,6 +856,8 @@ function btnOkCallback(childWindow,parentWindow)
                     plotSystemLayout(optSystem,totalRayPathMatrix,...
                         plotIn2D,handles.axesHandle);
                 case lower('paraxialAnalysis')
+                    optSystem = optSystem(currentConfiguration);
+                    
                     showOptions = struct();
                     showOptions.TotalNumberOfSurfaces = get(handles.chkShowTotalNumberOfSurfaces,'Value');
                     showOptions.StopSurfaceIndex = get(handles.chkShowStopSurfaceIndex,'Value');
@@ -853,6 +878,8 @@ function btnOkCallback(childWindow,parentWindow)
                     set(childWindow.ChildHandles.mainTabGroup,'SelectedTab',...
                         childWindow.ChildHandles.TextTab);
                 case lower('pupilApodization')
+                    optSystem = optSystem(currentConfiguration);
+                    
                     % Pupil Apodization
                     apodizationTypeList =  (get(handles.popApodizationType,'String'));
                     apodizationType = char...
@@ -882,6 +909,8 @@ function btnOkCallback(childWindow,parentWindow)
                         sampleGridSize,handles.axesHandle);
                     
                 case lower('transverseRayAberration')
+                    optSystem = optSystem(currentConfiguration);
+                    
                     surfIndexList = (get(handles.popSurfaceIndex,'String'));
                     surfIndexString = surfIndexList(get(handles.popSurfaceIndex,'Value'));
                     surfIndex = str2double(surfIndexString);
@@ -934,6 +963,8 @@ function btnOkCallback(childWindow,parentWindow)
                         handles.GraphTab);
                     
                 case lower('KostenbauderMatrix')
+                    optSystem = optSystem(currentConfiguration);
+                    
                     % Read pilot ray parameters
                     % Read Hx,Hy,Px,Py and Wavelegth
                     Hx = str2double(get(handles.txtHx,'String'));
@@ -1019,6 +1050,8 @@ function btnOkCallback(childWindow,parentWindow)
                     set(childWindow.ChildHandles.mainTabGroup,'SelectedTab',...
                         childWindow.ChildHandles.TextTab);
                 case lower('GDDVsWavelength')
+                    optSystem = optSystem(currentConfiguration);
+                    
                     % Read pilot ray parameters
                     % Read Hx,Hy,Px,Py and Wavelegth
                     Hx = str2double(get(handles.txtHx,'String'));
@@ -1057,6 +1090,8 @@ function btnOkCallback(childWindow,parentWindow)
                         handles.axesHandle, handles.tableHandle,handles.textHandle);
                     
                 case lower('SpatialChirpVsWavelength')
+                    optSystem = optSystem(currentConfiguration);
+                    
                     % Read pilot ray parameters
                     % Read Hx,Hy,Px,Py and Wavelegth
                     Hx = str2double(get(handles.txtHx,'String'));
@@ -1094,6 +1129,8 @@ function btnOkCallback(childWindow,parentWindow)
                         minWavelengthInM ,maxWavelengthInM ,wavelengthStepInM ,...
                         handles.axesHandle, handles.tableHandle,handles.textHandle);
                 case lower('AngularDispersionVsWavelength')
+                    optSystem = optSystem(currentConfiguration);
+                    
                     % Read pilot ray parameters
                     % Read Hx,Hy,Px,Py and Wavelegth
                     Hx = str2double(get(handles.txtHx,'String'));
@@ -1131,6 +1168,8 @@ function btnOkCallback(childWindow,parentWindow)
                         minWavelengthInM ,maxWavelengthInM ,wavelengthStepInM ,...
                         handles.axesHandle, handles.tableHandle,handles.textHandle);
                 case lower('GaussianPulsePropagation')
+                    optSystem = optSystem(currentConfiguration);
+                    
                     % Read pilot ray parameters
                     % Read Hx,Hy,Px,Py and Wavelegth
                     Hx = str2double(get(handles.txtHx,'String'));
@@ -1196,6 +1235,8 @@ function btnOkCallback(childWindow,parentWindow)
                         'FontSize',10);
                     
                 case lower('PulseFrontEvolutionGeometric')
+                    optSystem = optSystem(currentConfiguration);
+                    
                     surfIndexList = (get(handles.popSurfaceIndex,'String'));
                     surfIndexString = surfIndexList(get(handles.popSurfaceIndex,'Value'));
                     surfIndex = str2double(surfIndexString);
@@ -1249,7 +1290,7 @@ function btnOkCallback(childWindow,parentWindow)
                         numberOfTimeSamples,numberOfRays1,numberOfRays2,PupSamplingType,plotIn2D,handles.axesHandle )
                     
                 case lower('FFTFocusedPulse')
-                    
+                    optSystem = optSystem(currentConfiguration);
             end
     end
     
@@ -1257,49 +1298,57 @@ function btnOkCallback(childWindow,parentWindow)
     %% Local function
     function [polarizationType,polarizationParameters] =  readPolarizationProfileParameters(handles)
         
-        polarizationProfileTypeString = get(handles.popPolarizationProfile,'String');
-        polarizationType = polarizationProfileTypeString{get(handles.popPolarizationProfile,'Value')};
+        polarizationType = get(handles.popPolarizationProfile,'Value');
+        polarizationParameterTable = get(handles.tblPolarizationParameters,'Data');
         
         % get the Polarization profile parameters from the corresponding
-        % spatial profile function
-        % Connect the Polarization profile definition function
-        polarizationProfileDefinitionHandle = str2func(polarizationType);
-        returnFlag = 1; %
-        [ parameters, parameterFormats, intialValues ] = polarizationProfileDefinitionHandle(...
-            returnFlag);
+        % Polarization profile function
+        [ polarizationParameterFields, polarizationParameterFormats,polarizationParameterStruct ] = getPolarizationProfileParameters( (polarizationType) );
+        
         % Calculate the size of panelSpatialParameters based on the number of
         % parameters
-        nPar = length(parameters);
+        nPar = length(polarizationParameterFields);
         for pp = 1:nPar
             % Read the parameter value from text boxes or popup menu
-            parFormat = parameterFormats{pp};
-            if strcmpi(parFormat{1},'logical')
-                nVals = length(parFormat);
-                % The parameter format is logical
-                for vv = 1:nVals
-                    parameterValue{pp,vv} = get(handles.txtPolarizationParameter(pp,vv),'Value');
-                end
-            elseif strcmpi(parFormat{1},'char')
-                nVals = length(parFormat);
-                
-                % The parameter format char
-                for vv = 1:nVals
-                    parameterValue{pp,vv} = get(handles.txtPolarizationParameter(pp,vv),'String');
-                end
-            elseif strcmpi(parFormat{1},'numeric')
-                nVals = length(parFormat);
-                
-                % The parameter format numeric
-                for vv = 1:nVals
-                    parameterValue{pp,vv} = str2num(get(handles.txtPolarizationParameter(pp,vv),'String'));
-                end
+            parFormat = polarizationParameterFormats{pp};
+            paramName = polarizationParameterFields{pp};
+            parValue = polarizationParameterTable{pp,2};
+            if iscell(parFormat)
+                % Multiple choice values
+                parValueDisplay = parValue;
+                [isMemeber,foundAtIndex] = ismember(parValue,parFormat);
+                polarizationParameterStruct.(paramName) = foundAtIndex;
             else
-                vv = 1;
-                PolarizationParameterString = get(handles.popPolarizationParameter(pp,vv),'String');
-                parameterValue{pp,vv} = PolarizationParameterString{get(handles.popPolarizationParameter(pp,vv),'Value')};
+                if strcmpi(parFormat,'logical')
+                    if strcmpi(parValue,'1') || strcmpi(parValue,'true')
+                        newParameter = 1;
+                    elseif strcmpi(parValue,'0') || strcmpi(parValue,'false')
+                        newParameter = 0;
+                    else
+                        newParameter = 0;
+                    end
+                    polarizationParameterStruct.(paramName) = newParameter;
+                elseif strcmpi(parFormat,'char')
+                    newParameter = parValue;
+                    polarizationParameterStruct.(paramName) = newParameter;
+                elseif strcmpi(parFormat,'numeric')
+                    if isnumeric(parValue)
+                        newParameter = (parValue);
+                    else
+                        newParameter = str2num(parValue);
+                    end
+                    
+                    if isempty(newParameter)
+                        newParameter = 0;
+                    end
+                    polarizationParameterStruct.(paramName) = newParameter;
+                else
+                    newParameter = parValue;
+                    polarizationParameterStruct.(paramName) = newParameter;
+                end
             end
         end
-        polarizationParameters = parameterValue;
+        polarizationParameters = polarizationParameterStruct;
     end
 end
 

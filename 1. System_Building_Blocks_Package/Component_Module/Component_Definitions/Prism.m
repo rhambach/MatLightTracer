@@ -56,9 +56,11 @@ function [ returnDataStruct] = Prism( ...
         if nargin < 3
             inputDataStruct.FirstTilt = [0,0,0];
             inputDataStruct.FirstDecenter = [0,0];
-            inputDataStruct.FirstTiltDecenterOrder  = {'Dx','Dy','Dz','Tx','Ty','Tz'};
+            [isMember,DxDyDzTxTyTzindex] = ismember('DxDyDzTxTyTz',GetSupportedTiltDecenterOrder);
+            inputDataStruct.FirstTiltDecenterOrder  = DxDyDzTxTyTzindex; %{'Dx','Dy','Dz','Tx','Ty','Tz'};
             inputDataStruct.LastThickness = 10;
-            inputDataStruct.ComponentTiltMode = 'NAX';
+            [isMember,NAXindex] = ismember('NAX',GetSupportedTiltModes);
+            inputDataStruct.ComponentTiltMode = NAXindex; %'NAX';
         end
     end
     
@@ -83,13 +85,13 @@ function [ returnDataStruct] = Prism( ...
             defaultCompUniqueStruct = struct();
             defaultCompUniqueStruct.RayPath = 'S1-S2';
             defaultCompUniqueStruct.Glass = Glass('BK7');
-            defaultCompUniqueStruct.BaseAngle1 = 60;
-            defaultCompUniqueStruct.BaseAngle2 = 60;
-            defaultCompUniqueStruct.FirstSurfaceLengthX = 20;
-            defaultCompUniqueStruct.FirstSurfaceLengthY = 20;
+            defaultCompUniqueStruct.UpperApexAngle = 45;
+            defaultCompUniqueStruct.LowerApexAngle = 90;
+            defaultCompUniqueStruct.FirstSurfaceLengthX = 10;
+            defaultCompUniqueStruct.FirstSurfaceLengthY = 10;
             
-            returnDataStruct.UniqueParametersStructFieldNames = {'RayPath','Glass','BaseAngle1','BaseAngle2','FirstSurfaceLengthX','FirstSurfaceLengthY'}; % parameter names
-            returnDataStruct.UniqueParametersStructFieldDisplayNames = {'Ray Path','Glass Name','Left Base Angle','Right Base Angle','First Surface Width in X','First Surface Width in Y'}; % parameter display names
+            returnDataStruct.UniqueParametersStructFieldNames = {'RayPath','Glass','UpperApexAngle','LowerApexAngle','FirstSurfaceLengthX','FirstSurfaceLengthY'}; % parameter names
+            returnDataStruct.UniqueParametersStructFieldDisplayNames = {'Ray Path','Glass Name','Upper Apex Angle','Lower Apex Angle','First Surface Width in X','First Surface Width in Y'}; % parameter display names
             returnDataStruct.UniqueParametersStructFieldFormats = {{'S1-S2','S1-S3','S1-S2-S3','S1-S3-S2','S1-S2-S3-S1','S1-S3-S2-S1'},'Glass','numeric','numeric','numeric','numeric'}; % parameter types
             returnDataStruct.DefaultUniqueParametersStruct= defaultCompUniqueStruct; % default value
             
@@ -120,13 +122,16 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
     tempSurfaceArray(1).TiltDecenterOrder =  firstTiltDecenterOrder;
     tempSurfaceArray(1).Tilt = firstTilt;
     tempSurfaceArray(1).Decenter = firstDecenter;
-    tempSurfaceArray(1).TiltMode = 'NAX';
+    supportedTiltModes = GetSupportedTiltModes();
+    [isMember,NAXindex] = ismember('NAX',supportedTiltModes);
+    tempSurfaceArray(1).TiltMode = NAXindex;
     
     type = 'RectangularAperture';
     apertDecenter = [0,0];
     apertRotInDeg = 0;
-    drawAbsolute = 0;
-    outerShape = 'Rectangular';
+    drawAbsolute = 1;
+    supportedSurfaceApertureOuterShapes = GetSupportedSurfaceApertureOuterShapes();
+    [~,outerShape] = ismember('Rectangular',supportedSurfaceApertureOuterShapes);
     additionalEdge = 0;
     uniqueParameters = struct();
     uniqueParameters.DiameterX = componentParameters.FirstSurfaceLengthX;
@@ -142,33 +147,32 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
     currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
     tempSurfaceArray(1) = currentSurface;
     
+    additionalEdgeType = 1; % relative
     tempSurfaceArray(1).Aperture = Aperture(type,apertDecenter,apertRotInDeg,...
-        drawAbsolute,outerShape,additionalEdge,uniqueParameters);
+        drawAbsolute,outerShape,additionalEdgeType,additionalEdge,uniqueParameters);
+
     tempSurfaceArray(1).Glass = componentParameters.Glass;
     
     % Set surface2 and surface3 properties
     % Compute the initial tilt and decenters of surf 2 and 3
     % before applicatio of the tilt and decenter of surf 1
-    baseAngle1InRad = componentParameters.BaseAngle1*pi/180;
-    baseAngle2InRad = componentParameters.BaseAngle2*pi/180;
-    
-    baseAngle3InRad = pi - (baseAngle1InRad+baseAngle2InRad);
-    % Alpha is the angle formaed by surf 2 and surf 3
-    alpha = pi-baseAngle1InRad-baseAngle2InRad;
-    %         fullApertureY1 = 2*componentParameters.Aperture_Y_Surf_1;
+    leftBaseAngleInRad = componentParameters.LowerApexAngle*pi/180;
+    apexAngleInRad = componentParameters.UpperApexAngle*pi/180; 
+    rightBaseAngleInRad = pi - (apexAngleInRad+leftBaseAngleInRad);
+
     fullApertureY1 = componentParameters.FirstSurfaceLengthY;
     % Using sin law of triangles
-    fullApertureY2 = (sin (baseAngle2InRad)/sin (alpha))*fullApertureY1;
-    fullApertureY3 = (sin (baseAngle1InRad)/sin (alpha))*fullApertureY1;
+    fullApertureY2 = (sin (leftBaseAngleInRad)/sin (rightBaseAngleInRad))*fullApertureY1;
+    fullApertureY3 = (sin (apexAngleInRad)/sin (rightBaseAngleInRad))*fullApertureY1;
     % Using the centers of each side as decenter
     % parameterrs
     % Decenter of S2 with respect to S1
-    decenterZ2 = 0.5*fullApertureY2*sin(baseAngle1InRad);
-    decenterY2 = -0.5*fullApertureY2*cos(baseAngle1InRad)+0.5*fullApertureY1;
+    decenterZ2 = 0.5*fullApertureY2*sin(apexAngleInRad);
+    decenterY2 = -0.5*fullApertureY2*cos(apexAngleInRad)+0.5*fullApertureY1;
     decenterX2 = 0;
     % Decenter of S3 with respect to S1
-    decenterZ3 = 0.5*fullApertureY3*sin(baseAngle2InRad);
-    decenterY3 = 0.5*fullApertureY3*cos(baseAngle2InRad)-0.5*fullApertureY1;
+    decenterZ3 = 0.5*fullApertureY3*sin(leftBaseAngleInRad);
+    decenterY3 = 0.5*fullApertureY3*cos(leftBaseAngleInRad)-0.5*fullApertureY1;
     decenterX3 = 0;
     
     % Decenter of S1 with respect to S3 or
@@ -186,7 +190,7 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             tempSurfaceArray(2).TiltDecenterOrder = ...
                 tempSurfaceArray(1).TiltDecenterOrder;
             tempSurfaceArray(2).Tilt = ...
-                [-baseAngle1InRad*180/pi,0,0];
+                [-apexAngleInRad*180/pi,0,0];
             tempSurfaceArray(2).Decenter = newDecenter(1:2);
             tempSurfaceArray(2).TiltMode = lastTiltMode;
             
@@ -219,7 +223,7 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             tempSurfaceArray(2).TiltDecenterOrder = ...
                 tempSurfaceArray(1).TiltDecenterOrder;
             tempSurfaceArray(2).Tilt = ...
-                [baseAngle1InRad*180/pi,0,0];
+                [apexAngleInRad*180/pi,0,0];
             tempSurfaceArray(2).Decenter = newDecenter(1:2);
             tempSurfaceArray(2).TiltMode = lastTiltMode;
             
@@ -233,8 +237,8 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             if prevThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for object distance
                 prevThickness = 0;
             end
-            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,prevRefCoordinateTM,...
-                prevSurfCoordinateTM,prevThickness);
+            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,...
+                prevRefCoordinateTM,prevThickness);
             % set surface property
             currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
             currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
@@ -255,13 +259,14 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             
             % 2nd surface parameters
             tempSurfaceArray(2).Thickness = ...
-                - 0.5*fullApertureY1*cos(2*baseAngle1InRad-pi/2);
+                - 0.5*fullApertureY1*cos(2*apexAngleInRad-pi/2);
             tempSurfaceArray(2).TiltDecenterOrder = ...
                 tempSurfaceArray(1).TiltDecenterOrder;
             tempSurfaceArray(2).Tilt = ...
-                [-baseAngle1InRad*180/pi,0,0];
+                [-apexAngleInRad*180/pi,0,0];
             tempSurfaceArray(2).Decenter = newDecenter2(1:2);
-            tempSurfaceArray(2).TiltMode = 'BEN';
+            [isMember,BENindex] = ismember('BEN',supportedTiltModes);
+            tempSurfaceArray(2).TiltMode = BENindex;
             
             % Tilt and decenter
             currentSurface = tempSurfaceArray(2);
@@ -273,8 +278,8 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             if prevThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for object distance
                 prevThickness = 0;
             end
-            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,prevRefCoordinateTM,...
-                prevSurfCoordinateTM,prevThickness);
+            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,...
+                prevRefCoordinateTM,prevThickness);
             % set surface property
             currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
             currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
@@ -284,16 +289,17 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             surf2Aperture.UniqueParameters.DiameterY = fullApertureY2;
             tempSurfaceArray(2).Aperture = surf2Aperture;
             
-            tempSurfaceArray(2).Glass = Glass('MIRROR');
+            tempSurfaceArray(2).Glass = tempSurfaceArray(1).Glass;
+            tempSurfaceArray(2).Glass.Name = 'MIRROR';
             
             % 3rd surface parameters
             tempSurfaceArray(3).Thickness = -lastThickness;
             tempSurfaceArray(3).TiltDecenterOrder = ...
                 tempSurfaceArray(1).TiltDecenterOrder;
             tempSurfaceArray(3).Tilt = ...
-                -[(pi-(2*baseAngle1InRad+baseAngle2InRad))*180/pi,0,0];
+                -[(pi-(2*apexAngleInRad+leftBaseAngleInRad))*180/pi,0,0];
             tempSurfaceArray(3).Decenter = ...
-                [-newDecenter3(1),0.5*fullApertureY1*sin(2*baseAngle1InRad-pi/2)];
+                [-newDecenter3(1),0.5*fullApertureY1*sin(2*apexAngleInRad-pi/2)];
             tempSurfaceArray(3).TiltMode = lastTiltMode;
             
             % Tilt and decenter
@@ -306,8 +312,8 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             if prevThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for object distance
                 prevThickness = 0;
             end
-            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,prevRefCoordinateTM,...
-                prevSurfCoordinateTM,prevThickness);
+            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,...
+                prevRefCoordinateTM,prevThickness);
             % set surface property
             currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
             currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
@@ -327,13 +333,14 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             
             % 2nd surface parameters
             tempSurfaceArray(2).Thickness = ...
-                - 0.5*fullApertureY1*cos(2*baseAngle2InRad-pi/2);
+                - 0.5*fullApertureY1*cos(2*leftBaseAngleInRad-pi/2);
             tempSurfaceArray(2).TiltDecenterOrder = ...
                 tempSurfaceArray(1).TiltDecenterOrder;
             tempSurfaceArray(2).Tilt = ...
-                [baseAngle2InRad*180/pi,0,0];
+                [leftBaseAngleInRad*180/pi,0,0];
             tempSurfaceArray(2).Decenter = newDecenter3(1:2);
-            tempSurfaceArray(2).TiltMode = 'BEN';
+            [isMember,BENindex] = ismember('BEN',supportedTiltModes);
+            tempSurfaceArray(2).TiltMode = BENindex;
             
             
             % Tilt and decenter
@@ -346,8 +353,8 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             if prevThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for object distance
                 prevThickness = 0;
             end
-            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,prevRefCoordinateTM,...
-                prevSurfCoordinateTM,prevThickness);
+            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,...
+                prevRefCoordinateTM,prevThickness);
             % set surface property
             currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
             currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
@@ -358,16 +365,18 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             surf2Aperture.UniqueParameters.DiameterY = fullApertureY2;
             tempSurfaceArray(2).Aperture = surf2Aperture;
             
-            tempSurfaceArray(2).Glass = Glass('MIRROR');
+            tempSurfaceArray(2).Glass = tempSurfaceArray(1).Glass;
+            tempSurfaceArray(2).Glass.Name = 'MIRROR';
+            
             
             % 3rd surface parameters
             tempSurfaceArray(3).Thickness = -lastThickness;
             tempSurfaceArray(3).TiltDecenterOrder = ...
                 tempSurfaceArray(1).TiltDecenterOrder;
             tempSurfaceArray(3).Tilt = ...
-                -[(pi-(2*baseAngle2InRad+baseAngle1InRad))*180/pi,0,0];
+                -[(pi-(2*leftBaseAngleInRad+apexAngleInRad))*180/pi,0,0];
             tempSurfaceArray(3).Decenter = ...
-                [-newDecenter2(1),0.5*fullApertureY1*sin(2*baseAngle2InRad-pi/2)];
+                [-newDecenter2(1),0.5*fullApertureY1*sin(2*leftBaseAngleInRad-pi/2)];
             tempSurfaceArray(3).TiltMode = lastTiltMode;
             
             % Tilt and decenter
@@ -380,8 +389,8 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             if prevThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for object distance
                 prevThickness = 0;
             end
-            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,prevRefCoordinateTM,...
-                prevSurfCoordinateTM,prevThickness);
+            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,...
+                prevRefCoordinateTM,prevThickness);
             % set surface property
             currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
             currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
@@ -403,13 +412,14 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             newDecenter3 = [decenterX3,decenterY3,decenterZ3];
             % 2nd surface parameters
             tempSurfaceArray(2).Thickness = ...
-                - 0.5*fullApertureY1*cos(2*baseAngle1InRad-pi/2);
+                - 0.5*fullApertureY1*cos(2*apexAngleInRad-pi/2);
             tempSurfaceArray(2).TiltDecenterOrder = ...
                 tempSurfaceArray(1).TiltDecenterOrder;
             tempSurfaceArray(2).Tilt = ...
-                [-baseAngle1InRad*180/pi,0,0];
+                [-apexAngleInRad*180/pi,0,0];
             tempSurfaceArray(2).Decenter = newDecenter2(1:2);
-            tempSurfaceArray(2).TiltMode = 'BEN';
+            [isMember,BENindex] = ismember('BEN',supportedTiltModes);
+            tempSurfaceArray(2).TiltMode = BENindex;
             
             % Tilt and decenter
             currentSurface = tempSurfaceArray(2);
@@ -421,8 +431,8 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             if prevThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for object distance
                 prevThickness = 0;
             end
-            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,prevRefCoordinateTM,...
-                prevSurfCoordinateTM,prevThickness);
+            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,...
+                prevRefCoordinateTM,prevThickness);
             % set surface property
             currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
             currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
@@ -432,20 +442,25 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             surf2Aperture.UniqueParameters.DiameterY = fullApertureY2;
             tempSurfaceArray(2).Aperture = surf2Aperture;
             
-            tempSurfaceArray(2).Glass = Glass('MIRROR');
+            tempSurfaceArray(2).Glass = tempSurfaceArray(1).Glass;
+            tempSurfaceArray(2).Glass.Name = 'MIRROR';
+            
             
             % 3rd surface parameters
             s1s3 = sqrt(decenterZ3^2+decenterY3^2);
             tempSurfaceArray(3).Thickness = ...
-                s1s3*cos(2*baseAngle3InRad-baseAngle1InRad-pi/2);
+                s1s3*cos(2*rightBaseAngleInRad-apexAngleInRad-pi/2);
             tempSurfaceArray(3).TiltDecenterOrder = ...
                 tempSurfaceArray(1).TiltDecenterOrder;
             tempSurfaceArray(3).Tilt = ...
-                -[(pi-(2*baseAngle1InRad+baseAngle2InRad))*180/pi,0,0];
+                -[(pi-(2*apexAngleInRad+leftBaseAngleInRad))*180/pi,0,0];
             tempSurfaceArray(3).Decenter = ...
-                [-newDecenter3(1),0.5*fullApertureY1*sin(2*baseAngle1InRad-pi/2)];
-            tempSurfaceArray(3).TiltMode = 'BEN';
-            tempSurfaceArray(3).Glass = Glass('MIRROR');
+                [-newDecenter3(1),0.5*fullApertureY1*sin(2*apexAngleInRad-pi/2)];
+            [isMember,BENindex] = ismember('BEN',supportedTiltModes);
+            tempSurfaceArray(3).TiltMode = BENindex;
+            tempSurfaceArray(3).Glass = tempSurfaceArray(2).Glass;
+            tempSurfaceArray(3).Glass.Name = 'MIRROR';
+            
             
             % Tilt and decenter
             currentSurface = tempSurfaceArray(3);
@@ -457,8 +472,8 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             if prevThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for object distance
                 prevThickness = 0;
             end
-            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,prevRefCoordinateTM,...
-                prevSurfCoordinateTM,prevThickness);
+            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,...
+                prevRefCoordinateTM,prevThickness);
             % set surface property
             currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
             currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
@@ -473,9 +488,9 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             tempSurfaceArray(4).TiltDecenterOrder = ...
                 tempSurfaceArray(1).TiltDecenterOrder;
             tempSurfaceArray(4).Tilt = ...
-                [(baseAngle3InRad-(baseAngle1InRad+baseAngle2InRad))*180/pi,0,0];
+                [(rightBaseAngleInRad-(apexAngleInRad+leftBaseAngleInRad))*180/pi,0,0];
             tempSurfaceArray(4).Decenter = ...
-                [newDecenter3(1),-s1s3*sin(2*baseAngle3InRad-baseAngle1InRad-pi/2)];
+                [newDecenter3(1),-s1s3*sin(2*rightBaseAngleInRad-apexAngleInRad-pi/2)];
             tempSurfaceArray(4).TiltMode = lastTiltMode;
             
             
@@ -489,8 +504,8 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             if prevThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for object distance
                 prevThickness = 0;
             end
-            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,prevRefCoordinateTM,...
-                prevSurfCoordinateTM,prevThickness);
+            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,...
+                prevRefCoordinateTM,prevThickness);
             % set surface property
             currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
             currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
@@ -510,13 +525,14 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             newDecenter3 = [decenterX3,decenterY3,decenterZ3];
             % 2nd surface parameters
             tempSurfaceArray(2).Thickness = ...
-                - 0.5*fullApertureY1*cos(2*baseAngle2InRad-pi/2);
+                - 0.5*fullApertureY1*cos(2*leftBaseAngleInRad-pi/2);
             tempSurfaceArray(2).TiltDecenterOrder = ...
                 tempSurfaceArray(1).TiltDecenterOrder;
             tempSurfaceArray(2).Tilt = ...
-                [baseAngle2InRad*180/pi,0,0];
+                [leftBaseAngleInRad*180/pi,0,0];
             tempSurfaceArray(2).Decenter = newDecenter3(1:2);
-            tempSurfaceArray(2).TiltMode = 'BEN';
+            [isMember,BENindex] = ismember('BEN',supportedTiltModes);
+            tempSurfaceArray(2).TiltMode = BENindex;
             
             % Tilt and decenter
             currentSurface = tempSurfaceArray(2);
@@ -528,8 +544,8 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             if prevThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for object distance
                 prevThickness = 0;
             end
-            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,prevRefCoordinateTM,...
-                prevSurfCoordinateTM,prevThickness);
+            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,...
+                prevRefCoordinateTM,prevThickness);
             % set surface property
             currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
             currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
@@ -538,20 +554,22 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             surf2Aperture = tempSurfaceArray(1).Aperture;
             surf2Aperture.UniqueParameters.DiameterY = fullApertureY3;
             tempSurfaceArray(2).Aperture = surf2Aperture;
+            tempSurfaceArray(2).Glass = tempSurfaceArray(1).Glass;
+            tempSurfaceArray(2).Glass.Name = 'MIRROR';
             
-            tempSurfaceArray(2).Glass = Glass('MIRROR');
             
             % 3rd surface parameters
             s1s2 = sqrt(decenterZ2^2+decenterY2^2);
             tempSurfaceArray(3).Thickness = ...
-                s1s2*cos(2*baseAngle3InRad-baseAngle2InRad-pi/2);
+                s1s2*cos(2*rightBaseAngleInRad-leftBaseAngleInRad-pi/2);
             tempSurfaceArray(3).TiltDecenterOrder = ...
                 tempSurfaceArray(1).TiltDecenterOrder;
             tempSurfaceArray(3).Tilt = ...
-                [(pi-(2*baseAngle2InRad+baseAngle1InRad))*180/pi,0,0];
+                [(pi-(2*leftBaseAngleInRad+apexAngleInRad))*180/pi,0,0];
             tempSurfaceArray(3).Decenter = ...
-                [-newDecenter2(1),0.5*fullApertureY1*sin(2*baseAngle2InRad-pi/2)];
-            tempSurfaceArray(3).TiltMode = 'BEN';
+                [-newDecenter2(1),0.5*fullApertureY1*sin(2*leftBaseAngleInRad-pi/2)];
+            [isMember,BENindex] = ismember('BEN',supportedTiltModes);
+            tempSurfaceArray(3).TiltMode = BENindex;
             
             % Tilt and decenter
             currentSurface = tempSurfaceArray(3);
@@ -563,8 +581,8 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             if prevThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for object distance
                 prevThickness = 0;
             end
-            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,prevRefCoordinateTM,...
-                prevSurfCoordinateTM,prevThickness);
+            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,...
+                prevRefCoordinateTM,prevThickness);
             % set surface property
             currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
             currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
@@ -574,16 +592,18 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             surf3Aperture = tempSurfaceArray(1).Aperture;
             surf3Aperture.UniqueParameters.DiameterY = fullApertureY2;
             tempSurfaceArray(3).Aperture = surf3Aperture;
-            tempSurfaceArray(3).Glass = Glass('MIRROR');
+            tempSurfaceArray(3).Glass = tempSurfaceArray(2).Glass;
+            tempSurfaceArray(3).Glass.Name = 'MIRROR';
+            
             
             % 4th surface parameters
             tempSurfaceArray(4).Thickness = lastThickness;
             tempSurfaceArray(4).TiltDecenterOrder = ...
                 tempSurfaceArray(1).TiltDecenterOrder;
             tempSurfaceArray(4).Tilt = ...
-                [(baseAngle3InRad-(baseAngle1InRad+baseAngle2InRad))*180/pi,0,0];
+                [(rightBaseAngleInRad-(apexAngleInRad+leftBaseAngleInRad))*180/pi,0,0];
             tempSurfaceArray(4).Decenter = ...
-                [newDecenter2(1),s1s2*sin(2*baseAngle3InRad-baseAngle2InRad-pi/2)];
+                [newDecenter2(1),s1s2*sin(2*rightBaseAngleInRad-leftBaseAngleInRad-pi/2)];
             tempSurfaceArray(4).TiltMode = lastTiltMode;
             
             % Tilt and decenter
@@ -596,8 +616,8 @@ function surfArray = computePrismSurfaceArray(componentParameters,firstTilt,firs
             if prevThickness > 10^10 % Replace Inf with INF_OBJ_Z = 0 for object distance
                 prevThickness = 0;
             end
-            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,prevRefCoordinateTM,...
-                prevSurfCoordinateTM,prevThickness);
+            [surfaceCoordinateTM,referenceCoordinateTM] = TiltAndDecenter(currentSurface,...
+                prevRefCoordinateTM,prevThickness);
             % set surface property
             currentSurface.SurfaceCoordinateTM = surfaceCoordinateTM;
             currentSurface.ReferenceCoordinateTM = referenceCoordinateTM;
