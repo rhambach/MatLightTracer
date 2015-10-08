@@ -25,7 +25,7 @@ function [ validSystem,message,currentOpticalSystem ] = validateOpticalSystem(pa
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     aodHandles = parentWindow.ParentHandles;
     mm = 0;
-    valid = 1;
+    isValid = 1;
     nConfig = length(aodHandles.OpticalSystem);
     currentConfig = aodHandles.CurrentConfiguration;
     
@@ -51,7 +51,7 @@ function [ validSystem,message,currentOpticalSystem ] = validateOpticalSystem(pa
                     ' be placed at finite distance']);
                 currentOpticalSystem.SurfaceArray(1).Thickness = 10;
                 currentOpticalSystem.OpticalElementArray{1}.Thickness = 10;
-                valid(mm) = 0;
+                isValid(mm) = 0;
             end
             if tempSystemApertureType == 2% 'OBNA'
                 mm = mm + 1;
@@ -60,7 +60,7 @@ function [ validSystem,message,currentOpticalSystem ] = validateOpticalSystem(pa
                     ' object will be placed at finite distance']);
                 currentOpticalSystem.SurfaceArray(1).Thickness = 10;
                 currentOpticalSystem.OpticalElementArray{1}.Thickness = 10;
-                valid(mm) = 0;
+                isValid(mm) = 0;
             end
         else
             
@@ -78,7 +78,7 @@ function [ validSystem,message,currentOpticalSystem ] = validateOpticalSystem(pa
                 'first surface next to object will be assigned as stop.']);
                 currentOpticalSystem.SurfaceArray(2).StopSurfaceIndex = 1;
                 currentOpticalSystem.OpticalElementArray(2).StopSurfaceIndex = 1;
-            valid(mm) = 0;
+            isValid(mm) = 0;
         end
         
         
@@ -118,7 +118,7 @@ function [ validSystem,message,currentOpticalSystem ] = validateOpticalSystem(pa
                 
                 stopElement.Aperture = newCircularAperture;
                 currentOpticalSystem.OpticalElementArray{stopElementIndex} = stopElement;
-                valid(mm) = 0;
+                isValid(mm) = 0;
             else
             end
         end
@@ -132,7 +132,8 @@ function [ validSystem,message,currentOpticalSystem ] = validateOpticalSystem(pa
             invalidCoatingCat = [];
             for cc = 1:size(coatingCatalogueList,1)
                 coatingCatFullName = coatingCatalogueList{cc};
-                if ~isValidObjectCatalogue('coating', coatingCatFullName)
+                [ valid, fileInfoStruct, dispMsg,relatedCatalogueFullFileNames] = isValidObjectCatalogue('coating', coatingCatFullName);
+                if ~valid && isempty(relatedCatalogueFullFileNames)
                     invalidCoatingCat = [invalidCoatingCat,cc];
                 end
             end
@@ -141,7 +142,7 @@ function [ validSystem,message,currentOpticalSystem ] = validateOpticalSystem(pa
             else
                 mm = mm + 1;
                 message{mm} = 'Error: Some Invalid Coating catalogue found. So they are just removed.';
-                valid(mm) = 0;
+                isValid(mm) = 0;
                 
                 coatingCatalogueList(invalidCoatingCat) = [];
                 currentOpticalSystem.CoatingCataloguesList = coatingCatalogueList;
@@ -149,7 +150,7 @@ function [ validSystem,message,currentOpticalSystem ] = validateOpticalSystem(pa
         else
             mm = mm + 1;
             message{mm} = 'Error: No Coating catalogue found. So an empty Coating catalogue is created.';
-            valid(mm) = 0;
+            isValid(mm) = 0;
             
             parentWindow.ParentHandles = aodHandles;
             addCoatingCatalogue(parentWindow);
@@ -162,7 +163,8 @@ function [ validSystem,message,currentOpticalSystem ] = validateOpticalSystem(pa
             invalidGlassCat = [];
             for gg = 1:size(glassCatalogueList,1)
                 glassCatFullName = glassCatalogueList{gg};
-                if ~isValidObjectCatalogue('glass', glassCatFullName)
+                [ valid, fileInfoStruct, dispMsg,relatedCatalogueFullFileNames] = isValidObjectCatalogue('glass', glassCatFullName);
+                if ~valid && isempty(relatedCatalogueFullFileNames)
                     invalidGlassCat = [invalidGlassCat,gg];
                 end
             end
@@ -171,7 +173,7 @@ function [ validSystem,message,currentOpticalSystem ] = validateOpticalSystem(pa
             else
                 mm = mm + 1;
                 message{mm} = 'Error: Some Invalid Glass catalogue found. So they are just removed.';
-                valid(mm) = 0;
+                isValid(mm) = 0;
                 
                 glassCatalogueList(invalidGlassCat) = [];
                 currentOpticalSystem.GlassCataloguesList = glassCatalogueList;
@@ -179,7 +181,7 @@ function [ validSystem,message,currentOpticalSystem ] = validateOpticalSystem(pa
         else
             mm = mm + 1;
             message{mm} = 'Error: No Glass catalogue found. So an empty Glass catalogue is created.';
-            valid(mm) = 0;
+            isValid(mm) = 0;
             
             parentWindow.ParentHandles = aodHandles;
             addGlassCatalogue(parentWindow);
@@ -192,7 +194,7 @@ function [ validSystem,message,currentOpticalSystem ] = validateOpticalSystem(pa
     aodHandles.CurrentConfiguration = currentConfig;
     
     parentWindow.ParentHandles = aodHandles;
-    if sum(valid) < mm
+    if sum(isValid) < mm
         validSystem = 0;
     else
         validSystem = 1;
