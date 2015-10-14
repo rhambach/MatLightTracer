@@ -1,7 +1,7 @@
 function [ complexFFTofE,deltaInFrequency ] = computeFFT( complexEin,deltaInSpatial,dimension )
-    %COMPUTEFFT returns the FFT of complexE
+    %COMPUTEFFT returns the FFT of complexE in 2d
     % Input:
-    %   complexEin : Can be a column vector or a matrix (2D).
+    %   complexEin : A complex matrix (2D).
     %   deltaInSpatial : The sample spacing in spatial (temporal) domain 
     %   dimension : The dimension (and order of) along which the FT is done.
     %   Note: Both deltaInSpatial and dimension can be vectors of the same
@@ -41,7 +41,10 @@ function [ complexFFTofE,deltaInFrequency ] = computeFFT( complexEin,deltaInSpat
     for k = 1:nDim
         currentDim = dimension(k);
         % Perform the fft
-        tempE = fftshift(fft(fftshift(tempE,currentDim),[],currentDim),currentDim)*(deltaInSpatial(k));
+%         tempE = fftshift(fft(fftshift(tempE,currentDim),[],currentDim),currentDim)*(deltaInSpatial(k));
+        
+        tempE=FFT(tempE,inputDimSize(1),inputDimSize(2));
+        
         N = size(tempE,currentDim);
         deltaInFrequency(k) = 2*pi/ (N*deltaInSpatial(k));
     end

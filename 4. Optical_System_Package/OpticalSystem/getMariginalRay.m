@@ -2,39 +2,37 @@ function [ mariginalRay ] = getMariginalRay(optSystem,fieldPointXYInSI,wavLenInM
     % getMariginalRay Returns the Mariginal ray (as Ray object)  which starts
     % from a field point  and passes throgh the edge of the entrance pupil at
     % point which makes the given angle from the y axis.
-    
-    % angleFromY: determines the angle of the point in the rim of the pupul
-    % from the y axis so that it will be possible to compute Mariginal rays in any
-    % planet(tangential or sagital)
-    % fieldPointXYInSI,wavLenInM are measured in SI unit (meter and degree for angles)
-    % nPupilRays: Number of rays in the tangential plane of the pupil(enable tracing
-    % multiple mariginal rays in the tangential plane)
+    % Inputs:
+    %   fieldPointXYInSI,wavLenInM: are measured in SI unit (meter and degree for angles)
+    %               Defualt values are on axis point for field point and primary wavelength
+    %   angleFromY: determines the angle of the point in the rim of the pupul
+    %               from the y axis so that it will be possible to compute
+    %               Mariginal rays in any planet(tangential or sagital)
+    %               Default value is 0 degree.
+    %   nPupilRays: Number of rays in the tangential plane of the pupil(enable
+    %               tracing multiple mariginal rays in the tangential plane)
+    %               Default value is 1.
     
     pupilRadius = (getEntrancePupilDiameter(optSystem))/2;
     pupilZLocation = (getEntrancePupilLocation(optSystem));
-    
-    if nargin == 0
+    if nargin < 1
         disp('Error: The function getMariginalRay needs atleast the optical system object.');
         mariginalRay = NaN;
         return;
-    elseif nargin == 1
-        % Use the on axis point for field point and primary wavelength as
-        % default
+    end
+    if nargin < 2
+        % Use the on axis point for field point
         fieldPointXYInSI = [0,0]';
+    end
+    if nargin < 3
+        % Use the primary wavelength
         wavLenInM = getPrimaryWavelength(optSystem);
+    end
+    if nargin < 4
         angleFromYinRad = 0;
+    end
+    if nargin < 5
         nPupilRays = 1;
-    elseif nargin == 2
-        % Use the  primary wavelength as default
-        wavLenInM = getPrimaryWavelength(optSystem);
-        angleFromYinRad = 0;
-        nPupilRays = 1;
-    elseif nargin == 3
-        angleFromYinRad = 0;
-        nPupilRays = 1;
-    elseif nargin == 4
-        nPupilRays = 1;
-    else
     end
     
     % Repeat wavLenInM and the scaled values of fieldPointXYInSI, nPupilRay times to

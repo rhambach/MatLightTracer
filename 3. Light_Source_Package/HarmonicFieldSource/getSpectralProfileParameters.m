@@ -7,7 +7,7 @@ function [ fieldNames,fieldFormat,uniqueParamStruct,fieldNamesDisplay ] = getSpe
     if nargin == 0
         returnDefault = 1;
         spectralProfileType = 1; %'GaussianPowerSpectrum';
-    elseif isHarmonicField(variableInputArgument)
+    elseif isHarmonicFieldSource(variableInputArgument)
         inputHarmonicFieldSource = variableInputArgument;
         returnDefault = 0;
         spectralProfileType = inputHarmonicFieldSource.SpectralProfileType;

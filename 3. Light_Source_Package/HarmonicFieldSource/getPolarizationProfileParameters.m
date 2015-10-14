@@ -7,7 +7,7 @@ function [ fieldNames,fieldFormat,uniqueParamStruct,fieldDisplayNames ] = getPol
     if nargin == 0
         returnDefault = 1;
         polarizationProfileType = 1; %'LinearPolarization';
-    elseif isHarmonicField(variableInputArgument)
+    elseif isHarmonicFieldSource(variableInputArgument)
         inputHarmonicFieldSource = variableInputArgument;
         returnDefault = 0;
         polarizationProfileType = inputHarmonicFieldSource.PolarizationProfileType;

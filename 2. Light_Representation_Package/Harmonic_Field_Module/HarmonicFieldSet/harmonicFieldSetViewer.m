@@ -38,7 +38,7 @@ function mainFigHandle = harmonicFieldSetViewer( variableInputArgument,fontSize,
         'Toolbar','figure',...
         'NumberTitle', 'off', ...
         'Units','normalized',...
-        'Position',[0.35,0.2,0.3,0.6],...
+        'Position',[0.3,0.01,0.4,0.8],...
         'Color', get(0,'DefaultUicontrolBackgroundColor'), ...
         'Resize', 'on');
     
@@ -68,7 +68,7 @@ function mainFigHandle = harmonicFieldSetViewer( variableInputArgument,fontSize,
     uimenu(menuFieldManipulation,'Label','Add Spherical Phase','Callback',{@menuAddSphericalPhase_Callback,figureHandle});
     uimenu(menuFieldManipulation,'Label','Fourier Transform (x->k)','Callback',{@menuFFT_Callback,figureHandle},...
         'Separator','on');
-    uimenu(menuFieldManipulation,'Label','Inverse Fourier Transform (k->x)','Callback',{@menuFFT_Callback,figureHandle});
+    uimenu(menuFieldManipulation,'Label','Inverse Fourier Transform (k->x)','Callback',{@menuIFFT_Callback,figureHandle});
     
     
     figureHandle.panelSetting = uipanel( ...
@@ -103,16 +103,6 @@ function mainFigHandle = harmonicFieldSetViewer( variableInputArgument,fontSize,
         'FontSize',fontSize,'FontName',fontName,...
         'Visible','On');
     
-    %         figureHandle.txtGlassName = uicontrol( ...
-    %         'Parent', figureHandle.panelLinePlot, ...
-    %         'Tag', 'txtGlassName', ...
-    %         'Style', 'text', ...
-    %         'HorizontalAlignment','left',...
-    %         'Units','Normalized',...
-    %         'Position', [0.0,0.0,1,1], ...
-    %         'BackgroundColor', [1 1 1], ...
-    %         'FontSize',18,'FontName','symbol',...
-    %         'String', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz');
     % --------------------------------------------------------------------
     figureHandle.buttonGroupFieldComponent = uibuttongroup( ...
         'Parent', figureHandle.panelSetting, ...
@@ -146,6 +136,17 @@ function mainFigHandle = harmonicFieldSetViewer( variableInputArgument,fontSize,
     
     
     % Create three radio buttons in the button group.
+    figureHandle.rbtnAmplitude = uicontrol(figureHandle.buttonGroupParameterToShow,'Style','radiobutton',...
+        'String','A',...
+        'Units','Normalized',...
+        'Position',[0.3 0.0 0.15 1.0], ...
+        'FontSize',fontSize,'FontName',fontName);
+    figureHandle.rbtnPhase = uicontrol(figureHandle.buttonGroupParameterToShow,'Style','radiobutton',...
+        'String','F',...
+        'Units','Normalized',...
+        'Position',[0.45 0.0 0.15 1.0],...
+        'FontSize',fontSize*1.3,'FontName','symbol');
+    
     figureHandle.rbtnReal = uicontrol(figureHandle.buttonGroupParameterToShow,'Style',...
         'radiobutton',...
         'String','Re',...
@@ -159,16 +160,6 @@ function mainFigHandle = harmonicFieldSetViewer( variableInputArgument,fontSize,
         'Position',[0.15 0.0 0.15 1.0], ...
         'FontSize',fontSize,'FontName',fontName);
     
-    figureHandle.rbtnAmplitude = uicontrol(figureHandle.buttonGroupParameterToShow,'Style','radiobutton',...
-        'String','A',...
-        'Units','Normalized',...
-        'Position',[0.3 0.0 0.15 1.0], ...
-        'FontSize',fontSize,'FontName',fontName);
-    figureHandle.rbtnPhase = uicontrol(figureHandle.buttonGroupParameterToShow,'Style','radiobutton',...
-        'String','F',...
-        'Units','Normalized',...
-        'Position',[0.45 0.0 0.15 1.0],...
-        'FontSize',fontSize*1.3,'FontName','symbol');
     
     figureHandle.rbtnEllipseOrientation = uicontrol(figureHandle.buttonGroupParameterToShow,'Style','radiobutton',...
         'String','q',...
@@ -219,23 +210,24 @@ function mainFigHandle = harmonicFieldSetViewer( variableInputArgument,fontSize,
         'Style', 'text', ...
         'HorizontalAlignment','left',...
         'Units','Normalized',...
-        'Position', [0.00,0.00,0.35,0.350], ...
+        'Position', [0.00,0.00,0.30,0.350], ...
         'FontSize',fontSize,'FontName',fontName,...
-        'String', 'Spectral Component Index');
+        'String', 'Current Field Index');
     
-    nSpectralComponents = length(getFrequencyVector( harmonicFieldSet ));
+    %     nHarmonicFields = length(harmonicFieldSet.HarmonicFieldArray );
+    nHarmonicFields = (harmonicFieldSet.NumberOfHarmonicFields );
     
-    AllSpectralComponentIndices = [num2cell(1:nSpectralComponents)];
-    figureHandle.popSpectralComponent = uicontrol( ...
+    AllFieldIndices = [num2cell(1:nHarmonicFields)];
+    figureHandle.popCurrentFieldIndex = uicontrol( ...
         'Parent', figureHandle.panelSetting, ...
-        'Tag', 'popSpectralComponent', ...
+        'Tag', 'popCurrentFieldIndex', ...
         'Style', 'popupmenu', ...
         'HorizontalAlignment','left',...
         'Units','Normalized',...
-        'Position', [0.35,0.00,0.10,0.40], ...
+        'Position', [0.30,0.00,0.10,0.40], ...
         'BackgroundColor', [1 1 1], ...
         'FontSize',fontSize,'FontName',fontName,...
-        'String', AllSpectralComponentIndices);
+        'String', AllFieldIndices);
     
     figureHandle.lblCurrentWavelength = uicontrol( ...
         'Parent', figureHandle.panelSetting, ...
@@ -247,8 +239,8 @@ function mainFigHandle = harmonicFieldSetViewer( variableInputArgument,fontSize,
         'FontSize',fontSize,'FontName',fontName,...
         'String', 'Wavelength ');
     
-    currentWavelengthIndex = get(figureHandle.popSpectralComponent,'Value');
-    currentWavelength = harmonicFieldSet.HarmonicFieldArray(currentWavelengthIndex).Wavelength;
+    currentFieldIndex = get(figureHandle.popCurrentFieldIndex,'Value');
+    currentWavelength = harmonicFieldSet.Wavelength(currentFieldIndex);
     figureHandle.txtCurrentWavelength = uicontrol( ...
         'Parent', figureHandle.panelSetting, ...
         'Tag', 'lblSpectralComponent', ...
@@ -259,15 +251,6 @@ function mainFigHandle = harmonicFieldSetViewer( variableInputArgument,fontSize,
         'FontSize',fontSize,'FontName',fontName,...
         'String', currentWavelength);
     
-    %    figureHandle.chkShowPolarizationEllipse = uicontrol( ...
-    %         'Parent', figureHandle.panelSetting, ...
-    %         'Tag', 'chkShowPolarizationEllipse', ...
-    %         'Style', 'checkbox', ...
-    %         'HorizontalAlignment','left',...
-    %         'Units','Normalized',...
-    %         'Position', [0.81,0.05,0.20,0.35], ...
-    %         'FontSize',fontSize,'FontName',fontName,...
-    %         'String', 'Pol Ellipse');
     figureHandle.lblPlane = uicontrol( ...
         'Parent', figureHandle.panelSetting, ...
         'Tag', 'lblPlane', ...
@@ -311,6 +294,8 @@ function mainFigHandle = harmonicFieldSetViewer( variableInputArgument,fontSize,
         {@buttonGroupParameterToShow_SelectionChangedFcn,figureHandle});
     set(figureHandle.btnRefresh,'ClickedCallback', {@btnRefresh_Callback,figureHandle});
     set(figureHandle.chkShowPolarizationEllipse,'Callback', {@chkShowPolarizationEllipse_Callback,figureHandle});
+    set(figureHandle.popCurrentFieldIndex,'Callback', {@popCurrentFieldIndex_Callback,figureHandle});
+    
     % --------------------------------------------------------------------
     updateHarmonicFieldSetViewer(figureHandle)
     
@@ -330,9 +315,18 @@ function chkShowPolarizationEllipse_Callback(hObject, ~, figureHandle)
     end
 end
 
+function popCurrentFieldIndex_Callback(hObject, ~, figureHandle)
+    % hObject    handle to checkbox1 (see GCBO)
+    % eventdata  reserved - to be defined in a future version of MATLAB
+    % handles    structure with handles and user data (see GUIDATA)
+    
+    % Hint: get(hObject,'Value') returns toggle state of checkbox1
+    updateHarmonicFieldSetViewer(figureHandle)
+end
 function btnRefresh_Callback(~,~,figureHandle)
     updateHarmonicFieldSetViewer(figureHandle)
 end
+
 function menuAddSphericalPhase_Callback(~,~,figureHandle)
     fontName = figureHandle.FontName;
     fontSize = figureHandle.FontSize;
@@ -344,6 +338,9 @@ function menuAddSphericalPhase_Callback(~,~,figureHandle)
     num_lines = 1;
     defaultans = {'0.01','1'};
     answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
+    if isempty(answer)
+        return;
+    end
     sphericalPhaseRad = str2num(answer{1});
     refractiveIndex = str2num(answer{2});
     
@@ -364,17 +361,19 @@ function menuFFT_Callback(~,~,figureHandle)
     fontName = figureHandle.FontName;
     fontSize = figureHandle.FontSize;
     harmonicFieldSet = extractCurrrentHarmonicFieldSet(figureHandle);
-    % Get the spherical phase radius
-    prompt = {'Enter the scaling factor : '};
-    dlg_title = 'Input';
-    num_lines = 1;
-    defaultans = {'1'};
-    answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
-    scalingFactor = str2num(answer{1});
     
-    if isempty(scalingFactor)
-        scalingFactor = 1;
-    end
+    %     % Get the scaling factor
+    %     prompt = {'Enter the scaling factor : '};
+    %     dlg_title = 'Input';
+    %     num_lines = 1;
+    %     defaultans = {'1'};
+    %     answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
+    %     scalingFactor = str2num(answer{1});
+    %
+    %     if isempty(scalingFactor)
+    %         scalingFactor = 1;
+    %     end
+    scalingFactor = [1,1];
     
     [ modifiedHarmonicFieldSet ] = computeFieldFFT( harmonicFieldSet,scalingFactor);
     % Open a new harmonuic field viewer window
@@ -421,21 +420,29 @@ function updateHarmonicFieldSetViewer(figureHandle)
     showEllipseOrientation = get(figureHandle.rbtnEllipseOrientation,'Value');
     showEllipseEccentricity = get(figureHandle.rbtnEllipseEccentricity,'Value');
     
-    selectedSpectralIndex = get(figureHandle.popSpectralComponent,'Value');
+    selectedFieldIndex = get(figureHandle.popCurrentFieldIndex,'Value');
     showPolarizationEllipse = get(figureHandle.chkShowPolarizationEllipse,'Value');
     selectedPlane = get(figureHandle.popPlane,'Value');
     
     % Plot the required quantity
-    [ allExIn3D,allEyIn3D,xMesh,yMesh,freq_vec ] = complexAmplitudeIn3D( harmonicFieldSet );
-    nFreq = length(freq_vec);
-    if selectedSpectralIndex > nFreq
-        selectedSpectralIndex = nFreq;
-        set(figureHandle.popSpectralComponent,'Value',nFreq);
-    end
-    Ex = allExIn3D(:,:,selectedSpectralIndex);
-    Ey = allEyIn3D(:,:,selectedSpectralIndex);
+    allExIn3D = squeeze(harmonicFieldSet.ComplexAmplitude(:,:,1,selectedFieldIndex));
+    allEyIn3D = squeeze(harmonicFieldSet.ComplexAmplitude(:,:,2,selectedFieldIndex));
+    Ex = allExIn3D(:,:,selectedFieldIndex);
+    Ey = allEyIn3D(:,:,selectedFieldIndex);
     Nx = size(allExIn3D,1);
     Ny = size(allExIn3D,2);
+    
+    samplingPoints = [Nx;Ny];
+    samplingDistance = harmonicFieldSet.SamplingDistance(:,selectedFieldIndex);
+    centerXY = harmonicFieldSet.Center(:,selectedFieldIndex);
+    [xlin,ylin] = generateSamplingGridVectors(samplingPoints ,samplingDistance, centerXY);
+    [xMesh,yMesh] = meshgrid(xlin,ylin);
+    
+    nField = harmonicFieldSet.NumberOfHarmonicFields;
+    if selectedFieldIndex > nField
+        selectedFieldIndex = nField;
+        set(figureHandle.popCurrentFieldIndex,'Value',nField);
+    end
     
     
     if showEx
@@ -445,15 +452,13 @@ function updateHarmonicFieldSetViewer(figureHandle)
         complexAmplitude = Ey;
         fieldComponent = 'Ey';
     elseif showEz
-        msgbox('Error: Ez can not be computed currently.');
+        %         msgbox('Error: Ez can not be computed currently.');
+        Ez = computeEz(harmonicFieldSet,selectedFieldIndex);
+        complexAmplitude = Ez;
         fieldComponent = 'Ez';
-        return;
-        %         Ex = allExIn3D(:,:,selectedSpectralIndex);
-        %         Ey = allEyIn3D(:,:,selectedSpectralIndex);
-        %         Ez = function of Ex,Ey and K
     end
     
-    minAmpThreshold = 10^-3;
+    minAmpThreshold = 0.0005; % Is the fraction of amplitude below which the phase is discarded
     if showReal
         requestedValue = real(complexAmplitude);
         valueDisplayedName = 'Real Part';
@@ -468,38 +473,33 @@ function updateHarmonicFieldSetViewer(figureHandle)
         valueDisplayedName = 'Phase (rad)';
         % Avoid phase of very negligible amplitude values
         amplitude = abs(complexAmplitude);
-        requestedValue(amplitude < minAmpThreshold) = 0;
+        requestedValue(amplitude < minAmpThreshold*(max(max(amplitude)))) = 0;
     elseif showEllipseOrientation
         [ semiMajorAxisIn3D,semiMinorAxisIn3D,directionIn3D,orientationAngleIn3D] =...
             polarizationEllipseParametersIn3D( harmonicFieldSet,selectedPlane );
-        requestedValue = orientationAngleIn3D(:,:,selectedSpectralIndex);
-        %         msgbox('Error: showEllipseOrientation can not be computed currently.');
+        requestedValue = orientationAngleIn3D(:,:,selectedFieldIndex);
         fieldComponent = 'Combined';
         valueDisplayedName = 'Ellipse Orientation \theta';
         % Avoid phase of very negligible amplitude values
         amplitude = abs(complexAmplitude);
         requestedValue(amplitude < minAmpThreshold) = 0;
-        %         return;
     elseif showEllipseEccentricity
         [ semiMajorAxisIn3D,semiMinorAxisIn3D,directionIn3D,orientationAngleIn3D] =...
             polarizationEllipseParametersIn3D( harmonicFieldSet,selectedPlane );
-        a = semiMajorAxisIn3D(:,:,selectedSpectralIndex);
-        b = semiMinorAxisIn3D(:,:,selectedSpectralIndex);
+        a = semiMajorAxisIn3D(:,:,selectedFieldIndex);
+        b = semiMinorAxisIn3D(:,:,selectedFieldIndex);
         e = sqrt((a.^2-b.^2)./(a.^2));
         complexEntry = imag(e)~=0;
         if sum(sum(complexEntry))
             e(imag(e)~=0) = sqrt((b.^2-a.^2)./(b.^2));
         end
         requestedValue = e;
-        
-        %         msgbox('Error: showEllipseEccentricity can not be computed currently.');
         fieldComponent = 'Combined';
         valueDisplayedName = 'Ellipse Eccentricity \eps';
         
         % Avoid phase of very negligible amplitude values
         amplitude = abs(complexAmplitude);
         requestedValue(amplitude < minAmpThreshold) = 0;
-        %         return;
     else
         
     end
@@ -509,13 +509,16 @@ function updateHarmonicFieldSetViewer(figureHandle)
     sectionPlotAxesHandle = figureHandle.axesLinePlot;
     sectionTitle = 'Cross sectional view';
     sectionXlabel = 'Position (m)';
-    sectionZlable = [valueDisplayedName,' ,  ',fieldComponent];
+    sectionYlable = [valueDisplayedName,' ,  ',fieldComponent];
     interpolationMethod = 'linear';%'spline';
     lineColor = 'w';
     lineWidth = 1.0;
     
-    modified_pcolor( input_args,...
-        sectionPlotAxesHandle,sectionTitle,sectionXlabel,sectionZlable,interpolationMethod,lineColor,lineWidth );
+    cla(colorPlotAxes,'reset');
+    cla(sectionPlotAxesHandle,'reset');
+    
+    h = EnhancedPColor( input_args,...
+        sectionPlotAxesHandle,interpolationMethod,lineColor,lineWidth,sectionTitle,sectionXlabel,sectionYlable );
     
     title(colorPlotAxes,[valueDisplayedName, ' , Component : ',fieldComponent])
     xlabel(colorPlotAxes,'X Axis (m)') % x-axis label
@@ -539,8 +542,8 @@ function updateHarmonicFieldSetViewer(figureHandle)
         cx = xMesh(courseSampleX,courseSampleY);
         cy = yMesh(courseSampleX,courseSampleY);
         
-        a = semiMajorAxisIn3D(courseSampleX,courseSampleY,selectedSpectralIndex);
-        b = semiMinorAxisIn3D(courseSampleX,courseSampleY,selectedSpectralIndex);
+        a = semiMajorAxisIn3D(courseSampleX,courseSampleY,selectedFieldIndex);
+        b = semiMinorAxisIn3D(courseSampleX,courseSampleY,selectedFieldIndex);
         
         % Normalize a and b to maximum r value
         minDimension = min(max(max(xMesh)) - min(min(xMesh)),max(max(yMesh)) - min(min(yMesh)));
@@ -549,8 +552,8 @@ function updateHarmonicFieldSetViewer(figureHandle)
         a = a*((0.5*minDimension/nEllipse)/maxEllipseRadius);
         b = b*((0.5*minDimension/nEllipse)/maxEllipseRadius);
         
-        phi = orientationAngleIn3D(courseSampleX,courseSampleY,selectedSpectralIndex);
-        direction  = directionIn3D(courseSampleX,courseSampleY,selectedSpectralIndex);
+        phi = orientationAngleIn3D(courseSampleX,courseSampleY,selectedFieldIndex);
+        direction  = directionIn3D(courseSampleX,courseSampleY,selectedFieldIndex);
         hold(colorPlotAxes,'on');
         plotEllipse(a(:),b(:),cx(:),cy(:),phi(:),direction(:),colorPlotAxes);
         hold(colorPlotAxes,'on');
@@ -558,164 +561,6 @@ function updateHarmonicFieldSetViewer(figureHandle)
     
 end
 
-% Modified version of  pcolor
-function [ pcolorHandle,mainAxesHandle ] = modified_pcolor( input_args,...
-        sectionPlotAxesHandle,sectionTitle,sectionXlabel,sectionZlable,...
-        interpolationMethod,lineColor,lineWidth )
-    %EnhancedColorPlot This is enahnced version of matlab pcolor function.
-    % The enahncement is addition of cross sectional viewing feature
-    % The user can easily draw a line on a pcolor plot and then the cross
-    % sectional 1D plot will be displayed in a new figure. Awesome -:)
-    if nargin < 1
-        mainAxesHandle = axes;
-        input_args = {mainAxesHandle,peaks};
-    end
-    hold(input_args{1},'on');
-    pcolorHandle = pcolor(input_args{:});
-    mainAxesHandle = get(pcolorHandle,'parent');
-    if nargin < 2
-        figure;
-        sectionPlotAxesHandle = axes;
-    end
-    
-    if nargin < 3
-        interpolationMethod = 'spline'; %'linear', 'nearest', 'pchip','cubic', or 'spline'
-    end
-    if nargin < 4
-        lineColor = 'w';
-    end
-    if nargin < 5
-        lineWidth = 1.0;
-    end
-    
-    hold on;
-    maxZ = max(max(get(pcolorHandle,'ZData')));
-    mainAxesHandle = get(pcolorHandle,'Parent');
-    hold(mainAxesHandle,'on');
-    arrowHandle = quiver3(mainAxesHandle, 0,0,maxZ,0,0,0,0,'color',lineColor,...
-        'LineWidth',lineWidth ) ;
-    set(pcolorHandle,'ButtonDownFcn',{@mouseButtonDown_Callback,mainAxesHandle,...
-        arrowHandle,pcolorHandle,sectionPlotAxesHandle,sectionTitle,sectionXlabel,...
-        sectionZlable,interpolationMethod})
-end
-
-function mouseButtonDown_Callback(hObject,~,axesHandle,arrowHandle,...
-        pcolorHandle,sectionPlotAxesHandle,sectionTitle,sectionXlabel,...
-        sectionZlable,interpolationMethod)
-    initialCoord = get(axesHandle,'CurrentPoint');
-    initialX = initialCoord(1,1);
-    initialY = initialCoord(1,2);
-    set(arrowHandle,'XData',initialX,'YData',initialY,'UData',0,'VData',0);
-    %disp('mouse down event')
-    
-    fig = ancestor(hObject,'figure');
-    % get the values and store them in the figure's appdata
-    props.WindowButtonMotionFcn = get(fig,'WindowButtonMotionFcn');
-    props.WindowButtonUpFcn = get(fig,'WindowButtonUpFcn');
-    
-    setappdata(fig,'TestGuiCallbacks',props);
-    
-    set(fig,'WindowButtonMotionFcn',{@windowButtonMotion_Callback,axesHandle,...
-        arrowHandle,initialX,initialY,pcolorHandle,sectionPlotAxesHandle,...
-        sectionTitle,sectionXlabel,sectionZlable,interpolationMethod})
-    set(fig,'WindowButtonUpFcn',{@windowButtonUp_Callback,axesHandle,arrowHandle,...
-        initialX,initialY,pcolorHandle,sectionPlotAxesHandle,sectionTitle,...
-        sectionXlabel,sectionZlable,interpolationMethod})
-end
-
-% ---------------------------
-function windowButtonMotion_Callback(~,~,mainAxesHandle,arrowHandle,initialX,...
-        initialY,pcolorHandle,sectionPlotAxesHandle,sectionTitle,sectionXlabel,...
-        sectionZlable,interpolationMethod)
-    currentCoord = get(mainAxesHandle,'CurrentPoint');
-    currentX = currentCoord(1,1);
-    currentY = currentCoord(1,2);
-    UData = currentX - initialX;
-    VData = currentY - initialY;
-    updateArrow(arrowHandle,UData,VData);
-    crossSectionTitle = get(mainAxesHandle,'title');
-    crossSectionTitle = crossSectionTitle.String;
-    crossSectionZLable = get(mainAxesHandle,'zlabel');
-    crossSectionZLable = crossSectionZLable.String;
-    crossSectionXLable = 'Position (m)';
-    updateCrossSectionPlot(pcolorHandle,arrowHandle,sectionPlotAxesHandle,...
-        interpolationMethod,sectionTitle,sectionZlable,sectionXlabel);
-    %disp(['motion event '])
-end
-% ---------------------------
-function windowButtonUp_Callback(hObject,~,mainAxesHandle,arrowHandle,initialX,...
-        initialY,pcolorHandle,sectionPlotAxesHandle,sectionTitle,sectionXlabel,...
-        sectionZlable,interpolationMethod)
-    currentCoord = get(mainAxesHandle,'CurrentPoint');
-    currentX = currentCoord(1,1);
-    currentY = currentCoord(1,2);
-    UData = currentX - initialX;
-    VData = currentY - initialY;
-    updateArrow(arrowHandle,UData,VData);
-    
-    updateCrossSectionPlot(pcolorHandle,arrowHandle,sectionPlotAxesHandle,...
-        interpolationMethod,sectionTitle,sectionZlable,sectionXlabel);
-    %disp('mouse up event')
-    
-    fig = ancestor(hObject,'figure');
-    
-    props = getappdata(fig,'TestGuiCallbacks');
-    set(fig,props);
-    setappdata(fig,'TestGuiCallbacks',[]);
-end
-function updateArrow(arrowHandle,UData,VData)
-    set(arrowHandle,'UData',UData,'VData',VData);
-end
-
-function updateCrossSectionPlot(pcolorHandle,arrowHandle,sectionPlotAxesHandle,...
-        interpolationMethod,crossSectionTitle,crossSectionZLable,crossSectionXLable)
-    % Get the pcolor plot data
-    xData = get(pcolorHandle,'XData');
-    yData = get(pcolorHandle,'YData');
-    
-    % If XData and yData are ngrids thenconvert to meshgrids
-    if size(xData,1) == 1 || size(xData,2) == 1
-        [X,Y] = meshgrid(xData,yData);
-    else
-        X = xData;
-        Y = yData;
-    end
-    
-    V = get(pcolorHandle,'CData');
-    % get the arrow (required cross sectionj) initial and final points
-    initialX = get(arrowHandle,'XData');
-    initialY = get(arrowHandle,'YData');
-    finalX = initialX + get(arrowHandle,'UData');
-    finalY = initialY + get(arrowHandle,'VData');
-    nq = sqrt(sum((size(X)).^2)); %nCrossSectionSampling
-    xq = (linspace(initialX,finalX,nq))';
-    yq = (linspace(initialY,finalY,nq))';
-    
-    
-    % Use the given interpolation method and obtain the ZData of the color
-    % plot at the given sampling points
-    Vq = interp2(X,Y,V,xq,yq,interpolationMethod);
-    
-    pos = sqrt((xq-initialX).^2+(yq-initialY).^2);
-    % Plot the cross section view
-    cla(sectionPlotAxesHandle,'reset')
-    plot(sectionPlotAxesHandle,pos,Vq);
-    
-    % Set  title,xlabel,ylabel of the cross section axes
-    if isempty(crossSectionTitle)
-        crossSectionTitle = 'Untitled';
-    end
-    if isempty(crossSectionXLable)
-        crossSectionXLable = 'Unlabled';
-    end
-    if isempty(crossSectionZLable)
-        crossSectionZLable = 'Unlabled';
-    end
-    title(sectionPlotAxesHandle,crossSectionTitle);
-    xlabel(sectionPlotAxesHandle,crossSectionXLable);%,'XTick',[1:3],'XTickLabel',{'1','50','100'});
-    ylabel(sectionPlotAxesHandle,crossSectionZLable);
-    axis tight
-end
 
 function harmonicFieldSet = extractCurrrentHarmonicFieldSet(figureHandle)
     variableData = figureHandle.HarmonicFieldSet;

@@ -2,21 +2,23 @@ function [ chiefRay ] = getChiefRay( optSystem,fieldPointXYInSI,wavLenInM )
     % getChiefRay returns the chief ray (as Ray object) of the optical system
     % starting from a field point and passing through origin of the entrance pupil.
     % fieldPointXYInSI,wavLenInM are measured in SI unit (meter and degree for angles)
+    % The field points and wavelengths are just optional parameters to
+    % allow computation for field points and wavelengths which are not
+    % specified in the system configuration. By default, the the maximum field
+    % for field point and primary wavelength are used.
     
-    
-    pupilRadius = (getEntrancePupilDiameter(optSystem))/2;
-    pupilZLocation = (getEntrancePupilLocation(optSystem));
-    if nargin == 0
+    % Default inputs
+    if nargin < 1
         disp('Error: The function getChiefRay needs atleast the optical system object.');
         chiefRay = NaN;
-        return;
-    elseif nargin == 1
+    end
+    if nargin < 2
         % Use the maximum field for field point and primary wavelength as
         % default
         % Take all field points and primary wavelength
         fieldPointMatrix = optSystem.FieldPointMatrix;
         fieldPointXY = (fieldPointMatrix(:,1:2))';
-        switch lower(optSystem.FieldType)
+        switch lower(getSupportedFieldTypes(optSystem.FieldType))
             case lower('ObjectHeight')
                 % Change to field points to meter
                 fieldPointXYInSI = fieldPointXY*getLensUnitFactor(optSystem);
@@ -24,12 +26,14 @@ function [ chiefRay ] = getChiefRay( optSystem,fieldPointXYInSI,wavLenInM )
                 % Field values are in degree so Do nothing.
                 fieldPointXYInSI = fieldPointXY;
         end
-        wavLenInM = getPrimaryWavelength(optSystem);
-    elseif nargin == 2
-        % Use the  primary wavelength as default
-        wavLenInM = getPrimaryWavelength(optSystem);
-    else
     end
+    if nargin < 3
+        wavLenInM = getPrimaryWavelength(optSystem);
+    end
+    
+    pupilRadius = (getEntrancePupilDiameter(optSystem))/2;
+    pupilZLocation = (getEntrancePupilLocation(optSystem));
+    
     nField = size(fieldPointXYInSI,2);
     nWav  = size(wavLenInM,2);
     
@@ -98,7 +102,6 @@ function [ chiefRay ] = getChiefRay( optSystem,fieldPointXYInSI,wavLenInM )
                 -radFieldToEnP.*initialDirection(2,:);...
                 repmat(-objThick,[1,nField])];
     end
-    
     
     initialPositionInM = initialPosition*getLensUnitFactor(optSystem);
     chiefRay = ScalarRayBundle(initialPositionInM,initialDirection,wavLenInM);

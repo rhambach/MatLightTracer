@@ -8,7 +8,7 @@ function [ fieldNames,fieldFormat,uniqueParamStruct,fieldDisplayNames ] = getSpa
     if nargin == 0
         returnDefault = 1;
         spatialProfileType = 1;% 'PlaneProfile';
-    elseif isHarmonicField(variableInputArgument)
+    elseif isHarmonicFieldSource(variableInputArgument)
         inputHarmonicFieldSource = variableInputArgument;
         returnDefault = 0;
         spatialProfileType = inputHarmonicFieldSource.SpatialProfileType;

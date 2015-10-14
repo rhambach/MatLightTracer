@@ -41,49 +41,9 @@ function [ updatedSystem,saved] = getCurrentOpticalSystem (parentWindow,configur
     updatedSystem = savedOpticalSystem;
     nConfig = length(savedOpticalSystem);
     for kk = 1:nConfig
-        % Update surface array and coordinate trasnformation matrices for each
-        % surface
-        if isfield(savedOpticalSystem(kk),'IsUpdatedSurfaceArray') && ...
-                savedOpticalSystem(kk).IsUpdatedSurfaceArray
-            updatedSystem(kk) = savedOpticalSystem(kk);
-        else
-            
-            nElement = length(savedOpticalSystem(kk).OpticalElementArray);
-            totalSurfaceArray = [];
-            elementToSurfaceMap = cell(nElement,1);
-            for ee = 1:nElement
-                currentElement = savedOpticalSystem(kk).OpticalElementArray{ee};
-                if isempty(totalSurfaceArray)
-                    nSurfBefore = 0;
-                else
-                    nSurfBefore = length(totalSurfaceArray);
-                end
-                
-                if isSurface(currentElement)
-                    totalSurfaceArray = [totalSurfaceArray,currentElement];
-                elseif isComponent(currentElement)
-                    currentSurfaceArray = getComponentSurfaceArray(currentElement);
-                    stopSurfaceInComponentIndex = currentElement.StopSurfaceIndex;
-                    if stopSurfaceInComponentIndex
-                        currentSurfaceArray(stopSurfaceInComponentIndex).StopSurfaceIndex = 1;
-                    end
-                    totalSurfaceArray = [totalSurfaceArray,currentSurfaceArray];
-                else
-                end
-                nSurfAfter = length(totalSurfaceArray);
-                elementToSurfaceMap{ee} = [nSurfBefore+1:nSurfAfter];
-                surfaceToElementMap(nSurfBefore+1:nSurfAfter) = num2cell(ee*ones(1,nSurfAfter-nSurfBefore));
-            end
-            updatedSurfaceArray = updateSurfaceCoordinateTransformationMatrices(totalSurfaceArray);
-            
-            savedOpticalSystem(kk).SurfaceArray = updatedSurfaceArray;
-            savedOpticalSystem(kk).ElementToSurfaceMap = elementToSurfaceMap;
-            savedOpticalSystem(kk).SurfaceToElementMap = surfaceToElementMap;
-            % Set flaoting apertures
-            updatedSystem(kk) = setFloatingApertures( savedOpticalSystem(kk) );
-            updatedSystem(kk).IsUpdatedSurfaceArray = 1;
-        end
+        [ updatedSystem(kk) ] = updateOpticalSystem( savedOpticalSystem(kk) );
     end
+    
     if configurationIndex
         aodHandles.OpticalSystem(configurationIndex) = updatedSystem;
     else

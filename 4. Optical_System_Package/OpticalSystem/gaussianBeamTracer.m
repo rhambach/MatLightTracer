@@ -50,7 +50,7 @@ function [ outputGeneralAstigmaticGaussianBeamSet ] = gaussianBeamTracer( optSys
         
         centralRayPosition = centralRay.Position;
         centralRayDirection = centralRay.Direction;
-        centralRayWavelength = centralRay.Wavelength * 0.5;
+        centralRayWavelength = centralRay.Wavelength;
         waistRadiusInX = 1*lensUnitFactor;
         waistRadiusInY = 0.5*lensUnitFactor;
         distanceFromWaistInX = 0*lensUnitFactor;

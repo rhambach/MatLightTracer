@@ -1,5 +1,5 @@
 function draw = plotSystemLayout( optSystem,rayPathMatrix,...
-        plotIn2D,axesHandle)
+        plotIn2D,axesHandle,nPoints1,nPoints2)
     % plotSystemLayout: Drwas a 3D or 2D layout diagram
     % Inputs
     %   opticalSystem: the optical system object
@@ -7,8 +7,9 @@ function draw = plotSystemLayout( optSystem,rayPathMatrix,...
     %                   Matrix of ray itersection points to be drwan.
     %   axesHandle: axes on to plot the layout
     %   plotIn2D: Plot the YZ cross section in 2D layout
+    %   nPoints1,nPoints2: Number of sampling points to plot each surface
     % Output
-    %   draw:  1: indicate success of the function
+    %   draw: indicate success (1) or failure (0) of the function plotSystemLayout
     
     % <<<<<<<<<<<<<<<<<<<<<<< Algorithm Section>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %
@@ -27,39 +28,40 @@ function draw = plotSystemLayout( optSystem,rayPathMatrix,...
     % <<<<<<<<<<<<<<<<<<< Change History Section >>>>>>>>>>>>>>>>>>>>>>>>>>
     % Date----------Modified By ---------Modification Detail--------Remark
     % Oct 14,2013   Worku, Norman G.     Original Version       Version 3.0
+    % Oct 14,2015   Worku, Norman G.     Allowed to specify number of points 
+    %                                    to use for surface plots
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    
-    gratingHeight = 0.2;
-    nPoints = 55;
+
     drawEdge = 1;
     % Check for inputs deafualt inputs
     if nargin < 1
         disp(['Error: The function needs atleast the optical system.']);
         return;
-    elseif nargin == 1 % No rays paths are given
-        rayPathMatrix = NaN;
+    end
+    if nargin < 2
+        % No rays paths are given
+         rayPathMatrix = NaN;
+    end
+    if nargin < 3
         plotIn2D = 1;
-        axesHandle = axes('Parent',figure,'Units','normalized',...
-            'Position',[0.05,0,0.95,1]);
-    elseif nargin == 2
-        plotIn2D = 1;
-        axesHandle = axes('Parent',figure,'Units','normalized',...
-            'Position',[0.05,0,0.95,1]);
-    elseif nargin == 3
+    end
+    if nargin < 4
         axesHandle = axes('Parent',figure,'Units','normalized',...
             'Position',[0.05,0,0.95,1]);
     end
+    if nargin < 5
+        nPoints1 = 30;
+    end
+    if nargin < 6
+        nPoints2 = 30;
+    end
     
     NonDummySurfaceArray =  getNonDummySurfaceArray (optSystem);
-    nPoints1 = 'default';
-    nPoints2 = 'default';
-    [ xyzPoints,opticalAxisPoints] = drawSurfaceArray...
-        (NonDummySurfaceArray,plotIn2D,nPoints1,nPoints2,...
+    drawSurfaceArray(NonDummySurfaceArray,plotIn2D,nPoints1,nPoints2,...
         axesHandle,drawEdge);
     hold on;
-    
-    
+
     % Draw rays over the system layout
     if nargin>1 && length(rayPathMatrix)~=1  % NaN is double and its length is 1
         % Use different color for diffrent wavelengths and different line style for

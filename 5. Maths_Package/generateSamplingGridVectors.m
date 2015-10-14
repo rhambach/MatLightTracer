@@ -11,7 +11,7 @@ function [xlin,ylin] = generateSamplingGridVectors(samplingPoints,samplingDistan
     if nargin < 3
         centerXY = [0;0];
     end
-    xlin = uniformSampling1D(centerXY(1),samplingPoints(1),samplingDistance(1));
-    ylin = uniformSampling1D(centerXY(2),samplingPoints(2),samplingDistance(2));
+    xlin = uniformSampling1D(samplingPoints(1),centerXY(1,:),samplingDistance(1,:));
+    ylin = uniformSampling1D(samplingPoints(2),centerXY(2,:),samplingDistance(2,:));
 end
 

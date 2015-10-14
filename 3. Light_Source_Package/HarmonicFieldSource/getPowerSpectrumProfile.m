@@ -13,5 +13,8 @@ function [ intensityVect, wavelengthVect, referenceWavelengthIndex ] = getPowerS
     wavelengthVect = returnDataStruct.WavelengthVector;
        
     referenceWavelengthIndex = floor(length(wavelengthVect)/2);
+    if ~referenceWavelengthIndex
+        referenceWavelengthIndex = 1;
+    end
 end
 

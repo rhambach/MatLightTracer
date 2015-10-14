@@ -3,31 +3,25 @@ function [ outHarmonicFieldSet ] = getHarmonicFieldSet( harmonicFieldSource )
     %   Detailed explanation goes here
     
     [ sampDistX,sampDistY ] = getSamplingDistance( harmonicFieldSource);
-%     [ Nx,Ny ] = getNumberOfSamplingPoints( harmonicFieldSource);
-%     
-%     samplingPoints = harmonicFieldSource.SamplingPoints;
-%     samplingDistance = harmonicFieldSource.SamplingDistance;
-    
     [ intensityVect, wavelengthVect, referenceWavelengthIndex ] = ...
         getPowerSpectrumProfile( harmonicFieldSource );
     [ U_xyTot,xlinTot,ylinTot] = getSpatialProfile( harmonicFieldSource );
     [ matrixOfJonesVector ] = getPolarizationProfile( harmonicFieldSource );
-%     sampDistX = samplingDistance(1);
-%     sampDistY = samplingDistance(2);
-    
+
     center = harmonicFieldSource.LateralPosition;
     direction = getPrincipalDirection(harmonicFieldSource);
     % Construct array of harmonic fields
     nWav = length(wavelengthVect);
-    arrayOfHarmonicFields(nWav) = HarmonicField;
-    for k = 1:nWav
-        wavelen = wavelengthVect(k);
-        Ex = sqrt(intensityVect(k))*matrixOfJonesVector(:,:,1).*U_xyTot;
-        Ey = sqrt(intensityVect(k))*matrixOfJonesVector(:,:,2).*U_xyTot;
-        arrayOfHarmonicFields(k) = HarmonicField(Ex,Ey,sampDistX,sampDistY,wavelen,center,direction);
+    wavelen = (wavelengthVect(:))';
+    Ex = zeros([size(U_xyTot),nWav]);
+    Ey = Ex;
+    for kk = 1:nWav
+        
+        Ex(:,:,kk) = sqrt(intensityVect(kk))*matrixOfJonesVector(:,:,1).*U_xyTot;
+        Ey(:,:,kk) = sqrt(intensityVect(kk))*matrixOfJonesVector(:,:,2).*U_xyTot;
     end
     
     refIndex = referenceWavelengthIndex;
-    outHarmonicFieldSet = HarmonicFieldSet(arrayOfHarmonicFields,refIndex);
+    outHarmonicFieldSet = HarmonicFieldSet(Ex,Ey,sampDistX,sampDistY,wavelen,center,direction,refIndex);
 end
 

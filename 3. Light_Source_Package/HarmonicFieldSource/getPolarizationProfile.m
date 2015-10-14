@@ -1,13 +1,11 @@
 function [ matrixOfJonesVector ] = getPolarizationProfile( harmonicFieldSource )
     %GETPOLARIZATIONPROFILE returns matrix of the Jones vector
     
-%     samplingPoints = harmonicFieldSource.SamplingPoints;
     [ Nx,Ny ] = getNumberOfSamplingPoints( harmonicFieldSource);
     samplingPoints = [ Nx,Ny ]';
     [ dx,dy ] = getSamplingDistance( harmonicFieldSource);
-    samplingDistance = [ dx,dy ];
-%     samplingDistance = harmonicFieldSource.SamplingDistance;
-%     embeddingFrameSamplePoints = harmonicFieldSource.AdditionalBoarderSamplePoints;
+    samplingDistance = [ dx,dy ]';
+
     [ zeroBoarderSamplePoints1, zeroBoarderSamplePoints2] = getZeroBoarderSamplePoints( harmonicFieldSource );
     nBoarderPixel = [ zeroBoarderSamplePoints1, zeroBoarderSamplePoints2]';
     totalSamplingPoints = samplingPoints + 2*nBoarderPixel;

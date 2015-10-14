@@ -1,6 +1,7 @@
-function [ pcolorHandle,mainAxesHandle ] = EnhancedColorPlot( input_args,...
-        sectionPlotAxesHandle,interpolationMethod,lineColor,lineWidth )
-    %EnhancedColorPlot This is enahnced version of matlab pcolor function.
+function [ pcolorHandle,mainAxesHandle ] = EnhancedPColor( input_args,...
+        sectionPlotAxesHandle,interpolationMethod,lineColor,lineWidth,...
+        sectionTitle,sectionXlabel,sectionYlable)
+    %EnhancedPColor This is enahnced version of matlab pcolor function.
     % The enahncement is addition of cross sectional viewing feature
     % The user can easily draw a line on a pcolor plot and then the cross
     % sectional 1D plot will be displayed in a new figure. Awesome -:)
@@ -27,7 +28,26 @@ function [ pcolorHandle,mainAxesHandle ] = EnhancedColorPlot( input_args,...
     if nargin < 5
         lineWidth = 1.0;
     end
-    
+    if nargin < 6
+        crossSectionTitle = get(mainAxesHandle,'title');
+        if isempty(crossSectionTitle)
+            sectionTitle = 'Untitled';
+        else
+            sectionTitle = crossSectionTitle.String;
+        end
+    end
+    if nargin < 7
+        sectionXlabel = 'Distance';
+    end
+    if nargin < 8
+        crossSectionYLable = get(mainAxesHandle,'zlabel');
+        if isempty(crossSectionTitle)
+            sectionYlable = 'Unlabled';
+        else
+            sectionYlable = crossSectionYLable.String;
+        end
+    end
+
     hold on;
     maxZ = max(max(get(pcolorHandle,'ZData')));
     mainAxesHandle = get(pcolorHandle,'Parent');
@@ -35,7 +55,8 @@ function [ pcolorHandle,mainAxesHandle ] = EnhancedColorPlot( input_args,...
     arrowHandle = quiver3(mainAxesHandle, 0,0,maxZ,0,0,0,0,'color',lineColor,...
         'LineWidth',lineWidth ) ;
     set(pcolorHandle,'ButtonDownFcn',{@mouseButtonDown_Callback,mainAxesHandle,...
-        arrowHandle,pcolorHandle,sectionPlotAxesHandle,interpolationMethod})
+        arrowHandle,pcolorHandle,sectionPlotAxesHandle,interpolationMethod,...
+        sectionTitle,sectionXlabel,sectionYlable})
     
     
     mainFigure = ancestor(mainAxesHandle,'Figure');
@@ -55,7 +76,8 @@ function [ pcolorHandle,mainAxesHandle ] = EnhancedColorPlot( input_args,...
 end
 
 function mouseButtonDown_Callback(hObject,~,axesHandle,arrowHandle,...
-        pcolorHandle,sectionPlotAxesHandle,interpolationMethod)
+        pcolorHandle,sectionPlotAxesHandle,interpolationMethod,...
+        sectionTitle,sectionXlabel,sectionYlable)
     initialCoord = get(axesHandle,'CurrentPoint');
     initialX = initialCoord(1,1);
     initialY = initialCoord(1,2);
@@ -68,35 +90,52 @@ function mouseButtonDown_Callback(hObject,~,axesHandle,arrowHandle,...
     props.WindowButtonUpFcn = get(fig,'WindowButtonUpFcn');
     
     setappdata(fig,'TestGuiCallbacks',props);
-    
+    % Get the current axis limits so that the axes can be reseted to the
+    % original zoom position
+    xLimits = get(axesHandle,'XLim');  %# Get the range of the x axis
+    yLimits = get(axesHandle,'YLim');  %# Get the range of the y axis
+    zLimits = get(axesHandle,'ZLim');  %# Get the range of the z axis
+    %,xLimits,yLimits,zLimits
     set(fig,'WindowButtonMotionFcn',{@windowButtonMotion_Callback,axesHandle,...
-        arrowHandle,initialX,initialY,pcolorHandle,sectionPlotAxesHandle,...
-        interpolationMethod})
+        arrowHandle,initialX,initialY,pcolorHandle,sectionPlotAxesHandle,interpolationMethod,...
+        xLimits,yLimits,zLimits,sectionTitle,sectionXlabel,sectionYlable})
     set(fig,'WindowButtonUpFcn',{@windowButtonUp_Callback,axesHandle,arrowHandle,...
-        initialX,initialY,pcolorHandle,sectionPlotAxesHandle,interpolationMethod})
+        initialX,initialY,pcolorHandle,sectionPlotAxesHandle,interpolationMethod,...
+        xLimits,yLimits,zLimits,sectionTitle,sectionXlabel,sectionYlable})
 end
 
 % ---------------------------
 function windowButtonMotion_Callback(~,~,mainAxesHandle,arrowHandle,initialX,...
-        initialY,pcolorHandle,sectionPlotAxesHandle,interpolationMethod)
+        initialY,pcolorHandle,sectionPlotAxesHandle,interpolationMethod,...
+        xLimits,yLimits,zLimits,crossSectionTitle,crossSectionXLable,crossSectionYLable)
     currentCoord = get(mainAxesHandle,'CurrentPoint');
     currentX = currentCoord(1,1);
     currentY = currentCoord(1,2);
     UData = currentX - initialX;
     VData = currentY - initialY;
     updateArrow(arrowHandle,UData,VData);
-    crossSectionTitle = get(mainAxesHandle,'title');
-    crossSectionTitle = crossSectionTitle.String;
-    crossSectionZLable = get(mainAxesHandle,'zlabel');
-    crossSectionZLable = crossSectionZLable.String;
-    crossSectionXLable = 'Position (m)';
+    
+    
+%     crossSectionTitle = get(mainAxesHandle,'title');
+%     crossSectionTitle = crossSectionTitle.String;
+%     crossSectionZLable = get(mainAxesHandle,'zlabel');
+%     crossSectionZLable = crossSectionZLable.String;
+%     crossSectionXLable = 'Position (m)';
+    
     updateCrossSectionPlot(pcolorHandle,arrowHandle,sectionPlotAxesHandle,...
-         interpolationMethod,crossSectionTitle,crossSectionZLable,crossSectionXLable);
+        interpolationMethod,crossSectionTitle,crossSectionXLable,crossSectionYLable);
+    
+    % Reset the axis limits
+    set(mainAxesHandle,'XLim',xLimits);  %# Set the range of the x axis
+    set(mainAxesHandle,'YLim',yLimits);  %# Set the range of the y axis
+    set(mainAxesHandle,'ZLim',zLimits);  %# Set the range of the z axis
+    
     %disp(['motion event '])
 end
 % ---------------------------
 function windowButtonUp_Callback(hObject,~,mainAxesHandle,arrowHandle,initialX,...
-        initialY,pcolorHandle,sectionPlotAxesHandle,interpolationMethod)
+        initialY,pcolorHandle,sectionPlotAxesHandle,interpolationMethod,...
+        xLimits,yLimits,zLimits,crossSectionTitle,crossSectionXLable,crossSectionYLable)
     currentCoord = get(mainAxesHandle,'CurrentPoint');
     currentX = currentCoord(1,1);
     currentY = currentCoord(1,2);
@@ -104,15 +143,21 @@ function windowButtonUp_Callback(hObject,~,mainAxesHandle,arrowHandle,initialX,.
     VData = currentY - initialY;
     updateArrow(arrowHandle,UData,VData);
     
-    crossSectionTitle = get(mainAxesHandle,'title');
-    crossSectionTitle = crossSectionTitle.String;
-    crossSectionZLable = get(mainAxesHandle,'zlabel');
-    crossSectionZLable = crossSectionZLable.String;
-    crossSectionXLable = 'Position (m)';
+%     crossSectionTitle = get(mainAxesHandle,'title');
+%     crossSectionTitle = crossSectionTitle.String;
+%     crossSectionYLable = get(mainAxesHandle,'zlabel');
+%     crossSectionYLable = crossSectionYLable.String;
+%     crossSectionXLable = 'Position (m)';
     
     updateCrossSectionPlot(pcolorHandle,arrowHandle,sectionPlotAxesHandle,...
-        interpolationMethod,crossSectionTitle,crossSectionZLable,crossSectionXLable);
+        interpolationMethod,crossSectionTitle,crossSectionXLable,crossSectionYLable);
     %disp('mouse up event')
+    
+    % Reset the axis limits
+    set(mainAxesHandle,'XLim',xLimits);  %# Set the range of the x axis
+    set(mainAxesHandle,'YLim',yLimits);  %# Set the range of the y axis
+    set(mainAxesHandle,'ZLim',zLimits);  %# Set the range of the z axis
+    
     
     fig = ancestor(hObject,'figure');
     
@@ -125,7 +170,7 @@ function updateArrow(arrowHandle,UData,VData)
 end
 
 function updateCrossSectionPlot(pcolorHandle,arrowHandle,sectionPlotAxesHandle,...
-        interpolationMethod,crossSectionTitle,crossSectionZLable,crossSectionXLable)
+        interpolationMethod,crossSectionTitle,crossSectionXLable,crossSectionYLable)
     % Get the pcolor plot data
     xData = get(pcolorHandle,'XData');
     yData = get(pcolorHandle,'YData');
@@ -165,12 +210,12 @@ function updateCrossSectionPlot(pcolorHandle,arrowHandle,sectionPlotAxesHandle,.
     if isempty(crossSectionXLable)
         crossSectionXLable = 'Unlabled';
     end
-    if isempty(crossSectionZLable)
-        crossSectionZLable = 'Unlabled';
+    if isempty(crossSectionYLable)
+        crossSectionYLable = 'Unlabled';
     end
     title(sectionPlotAxesHandle,crossSectionTitle);
     xlabel(sectionPlotAxesHandle,crossSectionXLable);%,'XTick',[1:3],'XTickLabel',{'1','50','100'});
-    ylabel(sectionPlotAxesHandle,crossSectionZLable);
+    ylabel(sectionPlotAxesHandle,crossSectionYLable);
     axis tight
 end
 

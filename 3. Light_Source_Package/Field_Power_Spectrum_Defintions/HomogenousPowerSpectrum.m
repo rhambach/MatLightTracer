@@ -2,8 +2,8 @@ function [ returnDataStruct] = HomogenousPowerSpectrum(returnFlag,powerSpectrumP
     % HomogenousPowerSpectrum A user defined function for homogenous power spectrum
     % The function returns differnt parameters when requested by the main program.
     % It follows the common format used for defining user defined spectral profiles.
-    % powerSpectrumParameters = values of {'CentralWavelength','HalfWidthHalfMaxima',
-    % 'NumberOfSamplingPoints','CutoffPowerFactor'}
+    % powerSpectrumParameters = values of {'CentralWavelength','SpectralBandwidth',
+    % 'NumberOfSamplePoints'}
     % inputDataStruct : Struct of all additional inputs (not included in the surface parameters)
     % required for computing the return. (Vary depending on the returnFlag)
     % returnFlag : An integer indicating what is requested. Depending on it the
