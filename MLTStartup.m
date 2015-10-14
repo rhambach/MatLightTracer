@@ -1,7 +1,7 @@
 % Simply call the parent window class
 function mainFigHandle = MLTStartup()
-
-
+% Main function comment
+% Writen by norman girma
 warning ('off','all');
 
 % get current path and change current directory to this folder. Assumed
