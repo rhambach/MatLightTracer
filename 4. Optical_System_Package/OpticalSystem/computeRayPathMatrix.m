@@ -1,5 +1,5 @@
-function rayPathMatrix = computeRayPathMatrix...
-        (optSystem,wavLen,fieldPointXY,PupSamplingType,nRay1,nRay2)
+function rayPathMatrix = computeRayPathMatrix(optSystem,wavelengthIndices,...
+        fieldIndices,PupSamplingType,nPupilPoints1,nPupilPoints2)
     % computeRayPathMatrix: computes the ray path coordinates for all field
     % points and wavelengths by performing multiple ray trace. The
     % wavInd,fldInd can be vectors. Then the output rayPathMatrix will be
@@ -14,14 +14,14 @@ function rayPathMatrix = computeRayPathMatrix...
 
     % The polarizedRayTraceResult will be a a vector of RayTraceResult
     % object of size = nSurf.
-    [polarizedRayTracerResult] =  ...
-        multipleRayTracer(optSystem,wavLen,fieldPointXY,nRay1,nRay2,PupSamplingType,rayTraceOptionStruct);
+    [polarizedRayTracerResult] = multipleRayTracer(optSystem,wavelengthIndices, ...
+        fieldIndices,nPupilPoints1,nPupilPoints2,PupSamplingType,rayTraceOptionStruct);
     
     nSurface = length(polarizedRayTracerResult);
     [ exitRayPositions ] = getAllSurfaceExitRayPosition( polarizedRayTracerResult);
     [ rayIntersectionPoints ] = getAllSurfaceRayIntersectionPoint( polarizedRayTracerResult);
     
-    % Convert the intersection points and positions from meter to LensUnit
-    rayPathMatrix(:,[1:2:2*nSurface],:,:,:) = rayIntersectionPoints/lensUnitFactor;
-    rayPathMatrix(:,[2:2:2*nSurface],:,:,:)  = exitRayPositions/lensUnitFactor;
+    % The intersection points and positions are in LensUnit
+    rayPathMatrix(:,[1:2:2*nSurface],:,:,:) = rayIntersectionPoints;
+    rayPathMatrix(:,[2:2:2*nSurface],:,:,:)  = exitRayPositions;
 end

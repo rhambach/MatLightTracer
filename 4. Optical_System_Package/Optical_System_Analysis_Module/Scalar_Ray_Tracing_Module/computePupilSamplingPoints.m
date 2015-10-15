@@ -55,7 +55,7 @@ function [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices ] = computePupi
             nPoints2 = nPoints2 + 1;
         end
     end
-
+    
     switch lower(pupilSamplingTypeString)
         case lower({'Cartesian','Rectangular'})
             nPointsX = nPoints1;
@@ -97,15 +97,14 @@ function [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices ] = computePupi
                     maxR = sqrt((pupilRadiusInX)^2+(pupilRadiusInY)^2);
                 case lower({'Circular','Elliptical'})
                     % Maximum of two sides of the aperture
-                    maxR = max(pupilRadiusInX,pupilRadiusInY);                    
+                    maxR = max(pupilRadiusInX,pupilRadiusInY);
             end
-
+            
             % Draw a circle with radiaus maxR and then cut out the part required
             % using the given X and Y ranges
             if nPointsRadial == 1
                 r = 0;
             else
-%                 r = (linspace(-maxR,maxR,nPointsRadial*2+1))';
                 r = (linspace(0,maxR,nPointsRadial))';
             end
             if nPointsAngular == 1
@@ -135,7 +134,7 @@ function [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices ] = computePupi
                     % so shall be removed except one
                     centerOfApertureIndices = ((xCoord.^2)/(pupilRadiusInX^2)+(yCoord.^2)/(pupilRadiusInY^2)==0);
                     xCoord(centerOfApertureIndices) = [];
-                    yCoord(centerOfApertureIndices) = [];        
+                    yCoord(centerOfApertureIndices) = [];
                     % Add a single center point
                     xCoord = [xCoord;0];
                     yCoord = [yCoord;0];
@@ -151,9 +150,8 @@ function [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices ] = computePupi
                 ygv = linspace(-pupilRadiusInY,pupilRadiusInY,nPointsY);
             end
             pupilPoint = [zeros(nPointsY,1) ygv' repmat(pupilZLocation,nPointsY,1)];
-%             pupilMeshGrid = NaN;
             pupilMeshGrid(:,:,2) = pupilPoint(:,2);
-            pupilMeshGrid(:,:,1) = pupilPoint(:,1);    
+            pupilMeshGrid(:,:,1) = pupilPoint(:,1);
             outsidePupilIndices = [];
         case lower('Sagittal')
             nPointsX = nPoints1;
@@ -165,11 +163,10 @@ function [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices ] = computePupi
             end
             ygv = 0;
             pupilPoint = [xgv' zeros(nPointsX,1) repmat(pupilZLocation,nPointsX,1)];
-%             pupilMeshGrid = NaN;
             pupilMeshGrid(:,:,2) = pupilPoint(:,2);
-            pupilMeshGrid(:,:,1) = pupilPoint(:,1);               
+            pupilMeshGrid(:,:,1) = pupilPoint(:,1);
             
-            outsidePupilIndices = [];            
+            outsidePupilIndices = [];
         case lower('Cross')
             nPointsX = nPoints1;
             nPointsY = nPoints2;
@@ -186,11 +183,10 @@ function [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices ] = computePupi
             end
             pupilPoint = [[xgv';zeros(nPointsY,1)] [zeros(nPointsX,1);ygv'] repmat(pupilZLocation,nPointsX+nPointsY,1)];
             
-%             pupilMeshGrid = NaN;
             pupilMeshGrid(:,:,2) = pupilPoint(:,2);
-            pupilMeshGrid(:,:,1) = pupilPoint(:,1);    
+            pupilMeshGrid(:,:,1) = pupilPoint(:,1);
             
-            outsidePupilIndices = [];            
+            outsidePupilIndices = [];
         case lower('Random')
             nPointsTotal = nPoints1*nPoints2;
             theta = rand(nPointsTotal,1)*(2*pi);
@@ -203,7 +199,7 @@ function [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices ] = computePupi
             % Replace the first ray with a cheif ray
             pupilPoint(1,:) = [0,0,pupilZLocation];
             pupilMeshGrid = NaN;
-            outsidePupilIndices = NaN;            
+            outsidePupilIndices = NaN;
     end
     
     % Make the output in 3xnRay size

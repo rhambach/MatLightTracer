@@ -1,9 +1,9 @@
 function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
-        wavLen,fieldPointXY,sampleGridSize,polarizationProfileType,...
+        wavelengthIndices,fieldIndices,sampleGridSize,polarizationProfileType,...
         polarizationProfileParameters,plotPanelHandle)
     % Plot polarization ellipse map in the pupil of the system for given
     % input polarization states. NB. initialPolVector is defined in the global
-    % xyz coordinate of the opt system
+    % xyz coordinate of the opt system  
     % As Jones vector represent only globally polarized light (fully polarized).
     % Locally polarized (partially polarized) light can not be used here.
     
@@ -42,8 +42,8 @@ function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
     rayTraceOptionStruct.RecordIntermediateResults = 0;
     rayTraceOptionStruct.ComputeOpticalPathLength = 1;
     
-    [polarizedRayTracerResult,pupilMeshGrid,outsidePupilIndices] = multipleRayTracer(optSystem,wavLen,...
-        fieldPointXY,sampleGridSize,sampleGridSize,PupSamplingType,rayTraceOptionStruct,endSurface);%
+    [polarizedRayTracerResult,pupilMeshGrid,outsidePupilIndices] = multipleRayTracer(optSystem,wavelengthIndices,...
+        fieldIndices,sampleGridSize,sampleGridSize,PupSamplingType,rayTraceOptionStruct,endSurface);%
     
     nRay = polarizedRayTracerResult.TotalNumberOfPupilPoints;
     nField = polarizedRayTracerResult.TotalNumberOfFieldPoints;
@@ -113,8 +113,9 @@ function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
         
     end
     
+    wavelengthInM = getSystemWavelengths(optSystem,wavelengthIndices);
     [ finalPolarizationVector ] = computeFinalPolarizationVector(...
-        rayTracerResultLastSurf,initialPolVectorXYZ, wavLen);
+        rayTracerResultLastSurf,initialPolVectorXYZ, wavelengthInM);
     
     ellipseParametersAfterSurface = computeEllipseParameters...
         ( finalPolarizationVector);
@@ -154,3 +155,4 @@ function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
     set(gcf,'Name',['Pupil Polarization Ellipse Map at surface : ',num2str(surfIndex)]);
     drawn = 1;
     % axis equal;
+end

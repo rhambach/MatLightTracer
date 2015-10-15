@@ -60,23 +60,18 @@ function  updateQuickLayoutPanel(parentWindow,selectedElementIndex)
             wavLengthIndexString = (wavLengthIndexList(get(aodHandles.popQuickWavelengthIndex,'Value'),:));
             if strcmpi(wavLengthIndexString,'New Wavelength')
             elseif strcmpi(wavLengthIndexString,'All')
-                wavIndex = 1:1:getNumberOfWavelengths(updatedSystem);
+                wavelengthIndices = 1:1:getNumberOfWavelengths(updatedSystem);
             else
-                wavIndex = str2double(wavLengthIndexString);
+                wavelengthIndices = str2double(wavLengthIndexString);
             end
             
             fldIndexList = (get(aodHandles.popQuickFieldIndex,'String'));
             fldIndexString = (fldIndexList(get(aodHandles.popQuickFieldIndex,'Value'),:));
             if strcmpi(fldIndexString,'All')
-                fldIndex = 1:1:getNumberOfFieldPoints(updatedSystem);
+                fieldIndices = 1:1:getNumberOfFieldPoints(updatedSystem);
             else
-                fldIndex = str2double(fldIndexString);
+                fieldIndices = str2double(fldIndexString);
             end
-            
-            
-            % Extract the wavelength and field point
-            wavLen =  [(updatedSystem.WavelengthMatrix(wavIndex,1))'];
-            fieldPointXY =  [(updatedSystem.FieldPointMatrix(fldIndex,1:2))'];
             
             PupSamplingType = get(aodHandles.popQuickPupilSamplingType,'Value');
             nRay1List = (get(aodHandles.popQuickNumberOfRay1,'String'));
@@ -84,11 +79,11 @@ function  updateQuickLayoutPanel(parentWindow,selectedElementIndex)
             nRay2List = (get(aodHandles.popQuickNumberOfRay2,'String'));
             nRay2 = str2double(nRay2List{get(aodHandles.popQuickNumberOfRay2,'Value')});
             
-            rayPathMatrix = computeRayPathMatrix...
-                (updatedSystem,wavLen,fieldPointXY,PupSamplingType,nRay1,nRay2);
+            rayPathMatrix = computeRayPathMatrix(updatedSystem,...
+                wavelengthIndices,fieldIndices,PupSamplingType,nRay1,nRay2);
             % Plot sytem lyout
             plotSystemLayout( updatedSystem,rayPathMatrix,...
-                plotIn2D,axesHandle); 
+                plotIn2D,axesHandle);
         case 3
             % Enable setting controls
             handleArray1 = [aodHandles.popQuickLayoutDimension,...
@@ -114,7 +109,7 @@ function  updateQuickLayoutPanel(parentWindow,selectedElementIndex)
             
             surfaceArrayIndices = updatedSystem.ElementToSurfaceMap{selectedElementIndex};
             surfaceArray = updatedSystem.SurfaceArray(surfaceArrayIndices);
-
+            
             if ~isempty(surfaceArray)
                 drawSurfaceArray...
                     (surfaceArray,plotIn2D,nPoints1,nPoints2,...

@@ -1,4 +1,4 @@
-function [ chiefRayTraceResult,chiefRay ] = traceChiefRay( optSystem,fieldPointXYInSI,wavLenInM,rayTraceOptionStruct )
+function [ chiefRayTraceResult,chiefRay ] = traceChiefRay( optSystem,fieldIndices,wavelengthIndices,rayTraceOptionStruct )
     %TRACECHIIFRAY Computes the chief ray and traces it theough the
     % given system
     % fieldPointXYInSI,wavLenInM are measured in SI unit (meter and degree for angles)
@@ -8,40 +8,24 @@ function [ chiefRayTraceResult,chiefRay ] = traceChiefRay( optSystem,fieldPointX
         chiefRayTraceResult = NaN;
         chiefRay = NaN;
         return;
-    elseif nargin == 1
-        % Take all field points and primary wavelength
-        nField = optSystem.NumberOfFieldPoints;
-        fieldPointMatrix = optSystem.FieldPointMatrix;
-        
-        fieldPointXY = (fieldPointMatrix(:,1:2))';
-        
-        switch lower(optSystem.FieldType)
-            case lower('ObjectHeight')
-                % Change to field points to meter
-                fieldPointXYInSI = fieldPointXY*getLensUnitFactor(optSystem);
-            case lower('Angle')
-                % Field values are in degree so Do nothing.
-                fieldPointXYInSI = fieldPointXY;
-        end
-        primaryWavelength = getPrimaryWavelength(optSystem);
-        wavLenInM = primaryWavelength*ones(1,nField);%repmat(getPrimaryWavelength(optSystem),[1,nField]);
-        rayTraceOptionStruct = RayTraceOptionStruct();
-    elseif nargin == 2
-        % Take the primary wavelength
-        nField = size(fieldPointXYInSI,2);
-        primaryWavelength = getPrimaryWavelength(optSystem);
-        wavLenInM = primaryWavelength*ones(1,nField);%repmat(getPrimaryWavelength(optSystem),[1,nField]);
-        rayTraceOptionStruct = RayTraceOptionStruct();
-    elseif nargin == 3
-        rayTraceOptionStruct = RayTraceOptionStruct();
-    else
-        
     end
-    chiefRay = getChiefRay(optSystem,fieldPointXYInSI,wavLenInM);
+    if nargin < 2
+        % Take all field points and primary wavelength
+        fieldIndices = [1:size(optSystem.FieldPointMatrix,1)];
+    end
+    if nargin < 3
+        % Primary wavelength
+        wavelengthIndices = optSystem.PrimaryWavelengthIndex;
+    end
+    if nargin < 4
+        rayTraceOptionStruct = RayTraceOptionStruct();
+    end
+    
+    chiefRay = getChiefRay(optSystem,fieldIndices,wavelengthIndices);
     endSurface = getNumberOfSurfaces(optSystem);
     nRayPupil = 1;
-    nField = size(fieldPointXYInSI,2);
-    nWav = length(wavLenInM);
+    nField = length(fieldIndices);
+    nWav = length(wavelengthIndices);
     chiefRayTraceResult = rayTracer(optSystem,chiefRay,rayTraceOptionStruct,...
         endSurface,nRayPupil,nField,nWav);
 end

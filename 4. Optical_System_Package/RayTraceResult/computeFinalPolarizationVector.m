@@ -1,5 +1,5 @@
 function [ finalPolarizationVector ] = computeFinalPolarizationVector(...
-        rayTraceResultFinal,initialPolVector, wavLen)
+        rayTraceResultFinal,initialPolVector, wavLenInM)
     %COMPUTEFINALPOLARIZATIONVECTOR Computes the final polarization vector in
     % global coordinate given the initialPolVector in global xyz coordinate
     
@@ -18,13 +18,12 @@ function [ finalPolarizationVector ] = computeFinalPolarizationVector(...
     nRay = rayTraceResultFinal.TotalNumberOfPupilPoints;
     polarizationVector1 = squeeze(multiplySliced3DMatrices(totalPMatrixs,reshape(initialPolarizationVector,[3,1,nRay])));
     % 2. Effect of OPL
-    k0 = 2*pi./wavLen;
+    k0 = 2*pi./wavLenInM;
     [ totalOpticalPathLength ] = getAllSurfaceTotalOpticalPathLength( rayTraceResultFinal,0);
     totalOpticalPathLength = squeeze(totalOpticalPathLength(:,1,:));
     OPL = totalOpticalPathLength';
     polarizationVector2 = polarizationVector1.*repmat(exp(1i*k0*OPL),[3,1]);
     % 3. Effect of Absorption
-    
     finalPolarizationVector = polarizationVector2;
 end
 

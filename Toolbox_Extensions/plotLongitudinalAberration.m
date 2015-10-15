@@ -27,16 +27,16 @@ function [ success ] = plotLongitudinalAberration(opticalSystem)
     end
     
     
-    fieldPointXY = [0;0];
+    fieldPointIndex = 1;
     wavelengthMatrix = opticalSystem.WavelengthMatrix;
     if wavLenIndex == 0
-        wavLen = (wavelengthMatrix(:,1))';
-    else
-        wavLen = wavelengthMatrix(wavLenIndex,1);
+        wavLenIndex = [1:size(wavelengthMatrix,1)];
     end
     
-    nWav = size(wavLen,2);
-    nField = size(fieldPointXY,2);
+    wavLen = getSystemWavelengths(opticalSystem,wavLenIndex);
+    nWav = length(wavLenIndex);
+    nField = length(fieldPointIndex);
+    
     % trace the tangntial rays
     % polarizedRayTracerResult =  nSurf X nRay X nField X nWav
     % pupil sampling = 5: Tangential Plane
@@ -48,8 +48,8 @@ function [ success ] = plotLongitudinalAberration(opticalSystem)
     rayTraceOptionStruct.ConsiderSurfAperture = 1;
     rayTraceOptionStruct.RecordIntermediateResults = 0;
     
-    [tangentialRayTracerResult] = multipleRayTracer(opticalSystem,wavLen,...
-        fieldPointXY,1,nRay,PupSamplingType,rayTraceOptionStruct,endSurface);
+    [tangentialRayTracerResult] = multipleRayTracer(opticalSystem,wavLenIndex,...
+        fieldPointIndex,1,nRay,PupSamplingType,rayTraceOptionStruct,endSurface);
     
     % Assign different symbals and colors for lines of d/t wavelengths
     availablelineColor = repmat(['b','k','r','g','c','m','y'],1,20); % 7*20 = 140
@@ -88,8 +88,8 @@ function [ success ] = plotLongitudinalAberration(opticalSystem)
         grid on;
         hold on;
     end
-%     axis equal;
-    xlabel('\Delta Z (m)','FontSize',12);
+    %     axis equal;
+    xlabel('\Delta Z (Lens Unit)','FontSize',12);
     ylabel('PY (Normalized)','FontSize',12);
     legend(legendText)
     title('Logitudinal Aberration');

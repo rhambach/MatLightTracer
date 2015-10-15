@@ -1,51 +1,37 @@
 function [ mariginalRayTraceResult,mariginalRay ] = traceMariginalRay( ...
-        optSystem,fieldPointXYInSI,wavLenInM,angleFromYinRad,...
+        optSystem,fieldIndices,wavelengthIndices,angleFromYinRad,...
         rayTraceOptionStruct, nPupilRays )
     %TRACEMARIGINALRAY Computes the mariginal ray and traces it theough the
     % given system
-    % fieldPointXYInSI,wavLenInM are measured in SI unit (meter and degree for angles)
-    % system.
-    if nargin == 0
-        disp('Error: The function getMariginalRay needs atleast the optical system object.');
+    %   wavelengthIndices,fieldIndices: Vectors indicating the wavelength and
+    %               field indices to be used
+    if nargin < 1
+        disp('Error: The function getMariginalRay needs atleast optical system');
         mariginalRayTraceResult = NaN;
         mariginalRay = NaN;
         return;
-    elseif nargin == 1
-        % Use the on axis point for field point and primary wavelength as
-        % default
-        fieldPointXYInSI = [0,0]';
-        wavLenInM = getPrimaryWavelength(optSystem);
-        angleFromYinRad = 0;
-        rayTraceOptionStruct = RayTraceOptionStruct();
-        rayTraceOptionStruct.ConsiderSurfAperture = 1;
-        rayTraceOptionStruct.RecordIntermediateResult = 1;
-        nPupilRays = 1;
-    elseif nargin == 2
-        % Use the  primary wavelength as default
-        wavLenInM = getPrimaryWavelength(optSystem);
-        angleFromYinRad = 0;
-        rayTraceOptionStruct = RayTraceOptionStruct();
-        rayTraceOptionStruct.ConsiderSurfAperture = 1;
-        rayTraceOptionStruct.RecordIntermediateResult = 1;
-        nPupilRays = 1;
-    elseif nargin == 3
-        angleFromYinRad = 0;
-        rayTraceOptionStruct = RayTraceOptionStruct();
-        rayTraceOptionStruct.ConsiderSurfAperture = 1;
-        rayTraceOptionStruct.RecordIntermediateResult = 1;
-        nPupilRays = 1;
-    elseif nargin == 4
-        rayTraceOptionStruct = RayTraceOptionStruct();
-        rayTraceOptionStruct.ConsiderSurfAperture = 1;
-        rayTraceOptionStruct.RecordIntermediateResult = 1;
-        nPupilRays = 1;
-    elseif nargin == 5
-        nPupilRays = 1;
-    elseif nargin == 6
-        
     end
-    mariginalRay = getMariginalRay(optSystem,fieldPointXYInSI,wavLenInM,angleFromYinRad,nPupilRays);
-    mariginalRayTraceResult = rayTracer(optSystem,mariginalRay,rayTraceOptionStruct);
+    if nargin < 2
+        % Take all field points and primary wavelength
+        fieldIndices = [0,0]';
+    end
+    if nargin < 3
+        % Primary wavelength
+        wavelengthIndices = optSystem.PrimaryWavelengthIndex;
+    end
+    if nargin < 4
+        angleFromYinRad = 0;
+    end
+    if nargin < 5
+        rayTraceOptionStruct = RayTraceOptionStruct();
+        rayTraceOptionStruct.ConsiderSurfaceAperture = 1;
+        rayTraceOptionStruct.RecordIntermediateResult = 1;
+    end
+    if nargin < 6
+        nPupilRays = 1;
+    end
     
+    mariginalRay = getMariginalRay(optSystem,fieldIndices,wavelengthIndices,angleFromYinRad,nPupilRays);
+    mariginalRayTraceResult = rayTracer(optSystem,mariginalRay,rayTraceOptionStruct);
 end
 

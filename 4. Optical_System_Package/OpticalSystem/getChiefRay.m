@@ -1,10 +1,11 @@
-function [ chiefRay ] = getChiefRay( optSystem,fieldPointXYInSI,wavLenInM )
+function [ chiefRay ] = getChiefRay( optSystem,fieldIndices,wavelengthIndices )
     % getChiefRay returns the chief ray (as Ray object) of the optical system
     % starting from a field point and passing through origin of the entrance pupil.
-    % fieldPointXYInSI,wavLenInM are measured in SI unit (meter and degree for angles)
-    % The field points and wavelengths are just optional parameters to
+    % wavelengthIndices,fieldIndices: Vectors indicating the wavelength and
+    % field indices to be used
+    % The fieldIndices and wavelengthIndices are just optional parameters to
     % allow computation for field points and wavelengths which are not
-    % specified in the system configuration. By default, the the maximum field
+    % specified in the system configuration. By default, all available field
     % for field point and primary wavelength are used.
     
     % Default inputs
@@ -13,24 +14,26 @@ function [ chiefRay ] = getChiefRay( optSystem,fieldPointXYInSI,wavLenInM )
         chiefRay = NaN;
     end
     if nargin < 2
-        % Use the maximum field for field point and primary wavelength as
-        % default
         % Take all field points and primary wavelength
-        fieldPointMatrix = optSystem.FieldPointMatrix;
-        fieldPointXY = (fieldPointMatrix(:,1:2))';
-        switch lower(getSupportedFieldTypes(optSystem.FieldType))
-            case lower('ObjectHeight')
-                % Change to field points to meter
-                fieldPointXYInSI = fieldPointXY*getLensUnitFactor(optSystem);
-            case lower('Angle')
-                % Field values are in degree so Do nothing.
-                fieldPointXYInSI = fieldPointXY;
-        end
-    end
-    if nargin < 3
-        wavLenInM = getPrimaryWavelength(optSystem);
+        fieldIndices = [1:size(optSystem.FieldPointMatrix,1)];
     end
     
+    if nargin < 3
+        % Primary wavelength
+        wavelengthIndices = optSystem.PrimaryWavelengthIndex;
+    end
+    
+    fieldPointMatrix = optSystem.FieldPointMatrix;
+    fieldPointXY = (fieldPointMatrix(fieldIndices,1:2))';
+    switch lower(getSupportedFieldTypes(optSystem.FieldType))
+        case lower('ObjectHeight')
+            % Change to field points to meter
+            fieldPointXYInSI = fieldPointXY*getLensUnitFactor(optSystem);
+        case lower('Angle')
+            % Field values are in degree so Do nothing.
+            fieldPointXYInSI = fieldPointXY;
+    end
+    wavLenInM = getSystemWavelengths(optSystem,wavelengthIndices);
     pupilRadius = (getEntrancePupilDiameter(optSystem))/2;
     pupilZLocation = (getEntrancePupilLocation(optSystem));
     

@@ -1,10 +1,11 @@
-function [ mariginalRay ] = getMariginalRay(optSystem,fieldPointXYInSI,wavLenInM,angleFromYinRad,nPupilRays)
+function [ mariginalRay ] = getMariginalRay(optSystem,fieldIndices,...
+        wavelengthIndices,angleFromYinRad,nPupilRays)
     % getMariginalRay Returns the Mariginal ray (as Ray object)  which starts
     % from a field point  and passes throgh the edge of the entrance pupil at
     % point which makes the given angle from the y axis.
     % Inputs:
-    %   fieldPointXYInSI,wavLenInM: are measured in SI unit (meter and degree for angles)
-    %               Defualt values are on axis point for field point and primary wavelength
+    %   wavelengthIndices,fieldIndices: Vectors indicating the wavelength and
+    %               field indices to be used
     %   angleFromY: determines the angle of the point in the rim of the pupul
     %               from the y axis so that it will be possible to compute
     %               Mariginal rays in any planet(tangential or sagital)
@@ -22,11 +23,11 @@ function [ mariginalRay ] = getMariginalRay(optSystem,fieldPointXYInSI,wavLenInM
     end
     if nargin < 2
         % Use the on axis point for field point
-        fieldPointXYInSI = [0,0]';
+        fieldIndices = [0;0];
     end
     if nargin < 3
-        % Use the primary wavelength
-        wavLenInM = getPrimaryWavelength(optSystem);
+        % Primary wavelength
+        wavelengthIndices = optSystem.PrimaryWavelengthIndex;
     end
     if nargin < 4
         angleFromYinRad = 0;
@@ -38,8 +39,12 @@ function [ mariginalRay ] = getMariginalRay(optSystem,fieldPointXYInSI,wavLenInM
     % Repeat wavLenInM and the scaled values of fieldPointXYInSI, nPupilRay times to
     % enable multiple mariginal rays in the range from zero to max field
     % point.
-    nField = size(fieldPointXYInSI,2);
-    nWav  = size(wavLenInM,2);
+    nField = length(fieldIndices);
+    nWav  = length(wavelengthIndices);
+    
+    fieldPointXYInSI = getSystemFieldPoints(optSystem,fieldIndices);
+    wavLenInM = getSystemWavelengths(optSystem,wavelengthIndices);
+    
     
     firstSurf = getSurfaceArray(optSystem,1);
     if abs(firstSurf.Thickness) > 10^10 % object at infinity

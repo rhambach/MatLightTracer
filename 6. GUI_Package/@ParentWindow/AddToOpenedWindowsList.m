@@ -5,7 +5,7 @@ function added = AddToOpenedWindowsList(parentWindow,childWindow)
     aodHandles = parentWindow.ParentHandles;
     childId = childWindow.ChildHandles.Index;
     
-%     nChildrensOpened = length (aodHandles.ChildWindow);
+    %     nChildrensOpened = length (aodHandles.ChildWindow);
     aodHandles.menuOpenedWindows(childId) = uimenu( ...
         'Parent', aodHandles.menuWindows, ...
         'Tag', ['menuOpenedWindows',num2str(childWindow.ChildHandles.Index)], ...
@@ -20,7 +20,12 @@ end
 
 function menuOpenedWindows_Callback(~,~,childIndex,parentWindow)
     childWin = findChild(parentWindow,childIndex);
-    if ~isempty(childWin)&& strcmpi(get(childWin.ChildHandles.FigureHandle,'Visible'),'on')
-        figure(childWin.ChildHandles.FigureHandle);
+    try
+        if ~isempty(childWin)&& strcmpi(get(childWin.ChildHandles.FigureHandle,'Visible'),'on')
+            figure(childWin.ChildHandles.FigureHandle);
+        end
+    catch
+        RemoveFromOpenedWindowsList( parentWindow,childWin);
+        delete(childWin);
     end
 end

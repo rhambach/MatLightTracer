@@ -1,5 +1,5 @@
-function plotTransverseRayAberration(optSystem,surfIndex,wavLen,...
-        fieldPointXY,numberOfRays1,numberOfRays2,sagittalAberrComp,tangentialAberrComp,...
+function plotTransverseRayAberration(optSystem,surfIndex,wavelengthIndices,...
+        fieldIndices,numberOfRays1,numberOfRays2,sagittalAberrComp,tangentialAberrComp,...
         plotPanelHandle)
     % Displays the transverse ray aberration of sagittal and tangetial ray fans
     % on any surface with respect to the cheif ray.
@@ -42,16 +42,16 @@ function plotTransverseRayAberration(optSystem,surfIndex,wavLen,...
     % Assign different symbals and colors for lines of d/t wavelengths
     % and feild points respectively
     availablelineColor = repmat(['b','k','r','g','c','m','y'],1,20); % 7*20 = 140
-    lineColorList = availablelineColor(1:size(wavLen,2)*size(fieldPointXY,2));
+    lineColorList = availablelineColor(1:length(wavelengthIndices)*length(fieldIndices));
     
     %cla(axesHandle,'reset')
     delete(allchild(plotPanelHandle));
     
     % polarizedRayTracerResult =  nSurfWithoutDummy X nRay X nField X nWav
-    [sagittalRayTracerResult] = multipleRayTracer(optSystem,wavLen,...
-        fieldPointXY,numberOfRays1,numberOfRays2,'Sagittal');
-    [tangentialRayTracerResult] = multipleRayTracer(optSystem,wavLen,...
-        fieldPointXY,numberOfRays1,numberOfRays2,'Tangential');
+    [sagittalRayTracerResult] = multipleRayTracer(optSystem,wavelengthIndices,...
+        fieldIndices,numberOfRays1,numberOfRays2,'Sagittal');
+    [tangentialRayTracerResult] = multipleRayTracer(optSystem,wavelengthIndices,...
+        fieldIndices,numberOfRays1,numberOfRays2,'Tangential');
     
     nSurfaceWithOutDummy = size(sagittalRayTracerResult,1);
     
@@ -64,14 +64,7 @@ function plotTransverseRayAberration(optSystem,surfIndex,wavLen,...
     % wavelength analysis)or the specified wavelength (for single wavelegnth).
     if nWav > 1
         % Use the primary wavelength for the cheif ray
-        cheifRayWavLenInMet = getPrimaryWavelength(optSystem);
-        %     % Change wavlegth back to the system wavelength unit
-        %     wavUnitFactor = optSystem.getWavelengthUnitFactor;
-        %     cheifRayWavLenInM = cheifRayWavLenInMet/wavUnitFactor;
-    elseif nWav == 1
-        % Use the specified wavelength for the cheif ray
-        cheifRayWavLenInMet = wavLen*getPrimaryWavelength(optSystem);
-    else
+        wavelengthIndices = optSystem.PrimaryWavelengthIndex;
     end
     
     % cheifRayTraceResult: nSurf X nField as each field point has different
@@ -80,11 +73,13 @@ function plotTransverseRayAberration(optSystem,surfIndex,wavLen,...
     rayTraceOptionStruct.ConsiderSurfaceAperture = 0;
     rayTraceOptionStruct.RecordIntermediateResults = 0;
     
-    chiefRayTraceResult = traceChiefRay(optSystem,fieldPointXY,cheifRayWavLenInMet,rayTraceOptionStruct);
+    chiefRayTraceResult = traceChiefRay(optSystem,fieldIndices,wavelengthIndices,rayTraceOptionStruct);
     
     % All raytracing are done with out recording intermediate results so the
     % index of last surface will be 2
     rayTraceResultIndexOfLastSurface = 2;
+    fieldPointXY = getSystemFieldPoints(optSystem,fieldIndices);
+    wavLen = getSystemWavelengths(optSystem,wavelengthIndices);
     
     % Use different color for diffrent wavelengths and different field points.
     for wavIndex = 1:nWav
@@ -104,19 +99,19 @@ function plotTransverseRayAberration(optSystem,surfIndex,wavLen,...
     
             if strcmpi(sagittalAberrComp,'X Aberration')
                 sagY(lineIndex,:) = sagittalFanIntersectionPoints(1,:) - cheifRayIntersectionsSagittal(1,:);
-                yLabelSag = '\Delta X (m)';
+                yLabelSag = '\Delta X (Lens Unit)';
             elseif strcmpi(sagittalAberrComp,'Y Aberration')
                 sagY(lineIndex,:) = sagittalFanIntersectionPoints(2,:) - cheifRayIntersectionsSagittal(2,:);
-                yLabelSag = '\Delta Y (m)';
+                yLabelSag = '\Delta Y (Lens Unit)';
             else
             end
             
             if strcmpi(tangentialAberrComp,'X Aberration')
                 tanY(lineIndex,:) = tangentialFanIntersectionPoints(1,:) - cheifRayIntersectionsTangential(1,:);
-                yLabelTan = '\Delta X (m)';
+                yLabelTan = '\Delta X (Lens Unit)';
             elseif strcmpi(tangentialAberrComp,'Y Aberration')
                 tanY(lineIndex,:) = tangentialFanIntersectionPoints(2,:) - cheifRayIntersectionsTangential(2,:);
-                yLabelTan = '\Delta Y (m)';
+                yLabelTan = '\Delta Y (Lens Unit)';
             else
             end
             

@@ -1,5 +1,5 @@
 function [ XMulti,YMulti,OPDAtExitPupilMulti,PupilWeightMatrixMulti,RMSMulti,WPVMulti,ZERMulti,SrehlRatioMuti] =...
-        plotWavefrontAtExitPupil( optSystem,wavLen,fieldPointXY,rayGridSize,...
+        plotWavefrontAtExitPupil( optSystem,wavelengthIndices,fieldIndices ,rayGridSize,...
         zerCoeff,plotPanelHandle,textHandle)
     % PLOTWAVEFRONTATEXITPUPIL: computes and plots the OPD surface in the exit pupil of
     % the system.
@@ -36,11 +36,23 @@ function [ XMulti,YMulti,OPDAtExitPupilMulti,PupilWeightMatrixMulti,RMSMulti,WPV
     nSurf = getNumberOfSurfaces(optSystem);
     PupSamplingType = 'Cartesian';
     numberOfRays = rayGridSize^2;
+    
+    wavelengthUnitFactor = getWavelengthUnitFactor(optSystem);
+    lensUnitFactor = getLensUnitFactor(optSystem);
+    wavLenInM = getSystemWavelengths(optSystem,wavelengthIndices);
+    wavLen = wavLenInM/wavelengthUnitFactor;
+    switch (optSystem.FieldType)
+        case 1 %('ObjectHeight')
+            fieldPointXYInM = getSystemFieldPoints(optSystem,fieldIndices);
+            fieldPointXY = fieldPointXYInM/lensUnitFactor;
+        case 2 %('Angle')
+            fieldPointXY = getSystemFieldPoints(optSystem,fieldIndices);
+    end
     % Now perform scalar ray trace
     rayTraceOptionStruct = RayTraceOptionStruct;
     rayTraceOptionStruct.ComputeOpticalPathLength = 1;
-    [polarizedRayTracerResult,pupilMeshGrid,outsidePupilIndices] = multipleRayTracer(optSystem,wavLen,...
-        fieldPointXY,rayGridSize,rayGridSize,PupSamplingType,rayTraceOptionStruct);%,pupilMeshGrid,outsidePupilIndices
+    [polarizedRayTracerResult,pupilMeshGrid,outsidePupilIndices] = multipleRayTracer(optSystem,wavelengthIndices,...
+        fieldIndices,rayGridSize,rayGridSize,PupSamplingType,rayTraceOptionStruct);%,pupilMeshGrid,outsidePupilIndices
     
     X = pupilMeshGrid(:,:,1);
     Y = pupilMeshGrid(:,:,2);
@@ -136,18 +148,18 @@ function [ XMulti,YMulti,OPDAtExitPupilMulti,PupilWeightMatrixMulti,RMSMulti,WPV
                     rayExitPupilIntersection = intersectionPoint1;
                 end
             end
-%                         %% If plane exit pupil is assumed
-%                         % Determine parameterr for Z of exit pupil from the global axis.
-%                         % NB. Exit pupil location is measured from the image plane
-%                         ExitPupilZ = getTotalTrack(optSystem) + getExitPupilLocation(optSystem);
-%                         % Line(Ray):  (x0,y0,z0) + t*(dx,dy,dz)  = (X,Y,Z)
-%                         t = (ExitPupilZ - initialPosition(3,:))./initialDirection(3,:);
-%                         intersectionPoint1 = initialPosition + repmat(t,[3,1]).*initialDirection;
-%                         rayExitPupilIntersection = intersectionPoint1;
+            %                         %% If plane exit pupil is assumed
+            %                         % Determine parameterr for Z of exit pupil from the global axis.
+            %                         % NB. Exit pupil location is measured from the image plane
+            %                         ExitPupilZ = getTotalTrack(optSystem) + getExitPupilLocation(optSystem);
+            %                         % Line(Ray):  (x0,y0,z0) + t*(dx,dy,dz)  = (X,Y,Z)
+            %                         t = (ExitPupilZ - initialPosition(3,:))./initialDirection(3,:);
+            %                         intersectionPoint1 = initialPosition + repmat(t,[3,1]).*initialDirection;
+            %                         rayExitPupilIntersection = intersectionPoint1;
             
             additionalOpticalPath = sqrt(sum((initialPosition-rayExitPupilIntersection).^2,1));
             
-            %additionalOpticalPath = 0*additionalOpticalPath; 
+            %additionalOpticalPath = 0*additionalOpticalPath;
             %         if polarized
             %             totalOPLAtExitPupil = objectToImageOPLSum;
             %         else
@@ -287,10 +299,10 @@ function [ XMulti,YMulti,OPDAtExitPupilMulti,PupilWeightMatrixMulti,RMSMulti,WPV
                 
                 normX = X./(0.5*exitPupilDiameter);
                 normY = Y./(0.5*exitPupilDiameter);
-                EnhancedColorPlot({subplotAxes,normX,normY,OPDAtExitPupil},sectionPlotAxes);
-%                 surf(normX,normY,OPDAtExitPupil,'Parent',subplotAxes,'facecolor','interp',...
-%                     'edgecolor','none',...
-%                     'facelighting','phong');
+                EnhancedPColor({subplotAxes,normX,normY,OPDAtExitPupil},sectionPlotAxes);
+                %                 surf(normX,normY,OPDAtExitPupil,'Parent',subplotAxes,'facecolor','interp',...
+                %                     'edgecolor','none',...
+                %                     'facelighting','phong');
                 title(subplotAxes,'OPD at Exit Pupil')
                 zlabel(subplotAxes,'OPD (in Waves)') % x-axis label
                 xlabel(subplotAxes,'X - Pupil(Rel. Units)')

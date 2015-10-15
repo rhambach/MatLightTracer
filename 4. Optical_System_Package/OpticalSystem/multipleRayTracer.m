@@ -1,9 +1,9 @@
 function [multipleRayTracerResult,pupilMeshGrid,outsidePupilIndices ] = ...
-        multipleRayTracer(optSystem,wavLenInWavUnit,fieldPointXYInLensUnit,...
-        nRay1,nRay2,pupSamplingType,rayTraceOptionStruct,endSurface) %
+        multipleRayTracer(optSystem,wavelengthIndices,fieldIndices,...
+        nPupilPoints1,nPupilPoints2,pupSamplingType,rayTraceOptionStruct,endSurface) %
     % Trace bundle of rays through an optical system based on the pupil
-    % sampling specified. Multiple rays can be defined with wavLenInWavUnit (1XnWav),
-    % fieldPointXYInLensUnit (2XnField) and the total number of ray will be nRay*nWav*nField
+    % sampling specified. Multiple rays can be defined with wavelengthIndices (1XnWav),
+    % fieldIndices (1XnField) and the total number of ray will be nRay*nWav*nField
     % That is all rays from each field point with each of wavelegths will be
     % traced. And the result will be 4 dimensional matrix (nNonDummySurface X nRay X nField X nWav).
     
@@ -26,59 +26,31 @@ function [multipleRayTracerResult,pupilMeshGrid,outsidePupilIndices ] = ...
     if nargin < 1
         disp('Error: The function multipleRayTracer needs atleast optical system');
         return;
-    elseif nargin == 1
-        % Take all field points and primary wavelength
-        nField = optSystem.getNumberOfFieldPoints;
-        fieldPointMatrix = optSystem.FieldPointMatrix;
-        fieldPointXYInLensUnit = (fieldPointMatrix(:,1:2))';
-        wavLenInWavUnit = repmat(getPrimaryWavelength(optSystem)/getWavelengthUnitFactor(optSystem),[1,nField]);
-        
-        nRay1 = 3;
-        nRay2 = 3;
-        pupSamplingType = 'Cartesian';
-        rayTraceOptionStruct = RayTraceOptionStruct();
-        [NonDummySurfaceIndices,updatedSurfaceArray,endSurface] = getNonDummySurfaceIndices(optSystem);    
-    elseif nargin == 2
-        % Take all field points and given wavelength
-        nField = optSystem.getNumberOfFieldPoints;
-        fieldPointMatrix = optSystem.FieldPointMatrix;
-        fieldPointXYInLensUnit = (fieldPointMatrix(:,1:2))';
-        wavLenInWavUnit = repmat(wavLenInWavUnit(1),[1,nField]);
-        
-        nRay1 = 3;
-        nRay2 = 3;
-        pupSamplingType ='Cartesian';
-        rayTraceOptionStruct = RayTraceOptionStruct();
-        [NonDummySurfaceIndices,updatedSurfaceArray,endSurface] = getNonDummySurfaceIndices(optSystem);    
-    elseif nargin == 3
-        nRay1 = 3;
-        nRay2 = 3;
-        pupSamplingType ='Cartesian';
-        rayTraceOptionStruct = RayTraceOptionStruct();
-        [NonDummySurfaceIndices,updatedSurfaceArray,endSurface] = getNonDummySurfaceIndices(optSystem);    
-    elseif nargin == 4
-        nRay2 = 3;
-        pupSamplingType ='Cartesian';
-        rayTraceOptionStruct = RayTraceOptionStruct();
-        [NonDummySurfaceIndices,updatedSurfaceArray,endSurface] = getNonDummySurfaceIndices(optSystem);    
-    elseif nargin == 5
-        pupSamplingType ='Cartesian';
-        rayTraceOptionStruct = RayTraceOptionStruct();
-        [NonDummySurfaceIndices,updatedSurfaceArray,endSurface] = getNonDummySurfaceIndices(optSystem);    
-    elseif nargin == 6
-        rayTraceOptionStruct = RayTraceOptionStruct();
-        [NonDummySurfaceIndices,updatedSurfaceArray,endSurface] = getNonDummySurfaceIndices(optSystem);    
-    elseif nargin == 7
-        [NonDummySurfaceIndices,updatedSurfaceArray,endSurface] = getNonDummySurfaceIndices(optSystem); 
-    else
-        [NonDummySurfaceIndices,updatedSurfaceArray] = getNonDummySurfaceIndices(optSystem); 
     end
-    
+    if nargin < 2
+        wavelengthIndices =  optSystem.PrimaryWavelengthIndex;
+    end
+    if nargin < 3
+        fieldIndices = 1;
+    end
+    if nargin < 4
+        nPupilPoints1 = 3;
+    end
+    if nargin < 5
+        nPupilPoints2 = 3;
+    end
+    if nargin < 6
+        pupSamplingType ='Cartesian';
+    end
+    if nargin < 7
+        rayTraceOptionStruct = RayTraceOptionStruct();
+    end
+    [NonDummySurfaceIndices,updatedSurfaceArray,nSurface] = getNonDummySurfaceIndices(optSystem);    
+    if nargin < 8
+        endSurface = nSurface;
+    end
+
     tic
-    %     % Update the surrface array
-    %     optSystem.SurfaceArray = updatedSurfaceArray;
-    %     optSystem.IsUpdatedSurfaceArray = 1;
-    
     % Determine the number of non dummy surfaces used for ray tracing
     % That can be used for final reshaping of the ray trace result matrix.
     startNonDummyIndex = 1; % Ray trace start from object surface
@@ -89,13 +61,14 @@ function [multipleRayTracerResult,pupilMeshGrid,outsidePupilIndices ] = ...
     
     %% Compute initial ray bundle parameters
     pupilShape = 'Circular';
-    nField = size(fieldPointXYInLensUnit,2);
-    nWav  = size(wavLenInWavUnit,2);
+    nField = length(fieldIndices);
+    nWav  = length(wavelengthIndices);
+    
     
     [ initialRayBundle, pupilSamplingPoints,pupilMeshGrid,...
         outsidePupilIndices   ] = ...
-        computeInitialRayArray( optSystem, wavLenInWavUnit,...
-        fieldPointXYInLensUnit, nRay1,nRay2,pupSamplingType);
+        getInitialRayBundle( optSystem, wavelengthIndices,...
+        fieldIndices, nPupilPoints1,nPupilPoints2,pupSamplingType);
     nRayPupil = size(pupilSamplingPoints,2);
     
     %===============RAYTRACE For Bundle of Ray========================

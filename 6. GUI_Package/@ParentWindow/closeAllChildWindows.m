@@ -6,7 +6,11 @@ function [ childsclosed ] = closeAllChildWindows(parentWindow)
     for k = 1 : nChildren
         curentChildWindow = parentWindow.ParentHandles.ChildWindows(k);
         if isvalid(curentChildWindow) % Undeleted valid object
-            closeChild(curentChildWindow);
+            try
+                closeChild(parentWindow,curentChildWindow);
+            catch
+                RemoveFromOpenedWindowsList(parentWindow,curentChildWindow);
+            end
         end
     end
     childsclosed = 1;

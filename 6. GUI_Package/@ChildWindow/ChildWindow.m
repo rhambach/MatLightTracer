@@ -190,8 +190,7 @@ classdef ChildWindow < handle
             btnOkCallback(childWindow,myParent);
         end
         function btnCancel_Callback(childWindow,~,~, myParent)
-            RemoveFromOpenedWindowsList(myParent,childWindow);
-            closeChild(childWindow);
+            closeChild(myParent,childWindow);
         end
     end
 end

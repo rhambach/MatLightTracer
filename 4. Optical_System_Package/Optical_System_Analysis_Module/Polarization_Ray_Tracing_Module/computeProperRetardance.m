@@ -81,7 +81,7 @@ function allRetardance = computeProperRetardance( PorJ,QorR )
             else
                 retardance(k) = NaN;
             end
-        elseif matDim(1) == 3 % PorJ is a 3X3 P matrix
+        elseif firstDim == 3 && secondDim  == 3 % PorJ is a 3X3 P matrix
             P = PorJ(:,:,k);
             Q = QorR(:,:,k);
             if ~(isnan(P(1,1)) || isnan(P(2,2)) || isnan(P(3,3)) || isnan(Q(1,1)) || isnan(Q(2,2)) || isnan(Q(3,3)))

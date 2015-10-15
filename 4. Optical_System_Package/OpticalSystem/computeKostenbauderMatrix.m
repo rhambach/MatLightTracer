@@ -97,7 +97,7 @@ function [ finalKostenbauderMatrix, interfaceKostenbauderMatrices,mediumKostenba
                 && ~endSurfInclusive
             interfaceKostenbauderMatrices(:,:,surfaceIndex) = eye(4);
         else
-            surfaceParameters = NonDummySurfaceArray(surfaceIndex).OtherStandardData;
+            surfaceParameters = NonDummySurfaceArray(surfaceIndex).UniqueParameters;
             switch NonDummySurfaceArray(surfaceIndex).Type
                 case 'Standard'
                     radius = getRadiusOfCurvature(NonDummySurfaceArray(surfaceIndex))*lensUnit;

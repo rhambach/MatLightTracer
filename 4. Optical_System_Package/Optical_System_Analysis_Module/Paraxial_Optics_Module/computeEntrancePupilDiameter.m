@@ -1,5 +1,5 @@
 function entPupilDiameter = computeEntrancePupilDiameter...
-        (optSystem,entPupilLocation, objectRefractiveIndex,objThick)
+        (optSystem,entPupilLocation, objectRefractiveIndex,objThickInM)
     % computeObjectNA: compute the paraxial object space NA
     % Inputs
     %   systemApertureType: 'ENPD' given enterenace pupil, OBNA given object NA,
@@ -35,7 +35,7 @@ function entPupilDiameter = computeEntrancePupilDiameter...
             entPupilDiameter  = systemApertureValue;
         case 2 %'OBNA' % given 'Object Space NA'
             U0 = asin(systemApertureValue/objectRefractiveIndex);
-            entPupilDiameter = abs(2*tan(U0)* (entPupilLocation + objThick));
+            entPupilDiameter = abs(2*tan(U0)* (entPupilLocation + objThickInM));
         case 3 %'FLST' % Float by stop size
             % Trace a paraxial ray from object to stop and then determine the scaling
             % factor of initial angle so that the ray height at stop is equal to stop
@@ -52,7 +52,7 @@ function entPupilDiameter = computeEntrancePupilDiameter...
             
             U0 = scaleFactor*uobj;
 %             entPupilDiameter = abs(2*tan(U0)* (entPupilLocation + objThick));
-            entPupilDiameter = abs(2*(U0)* (entPupilLocation + objThick));
+            entPupilDiameter = abs(2*(U0)* (entPupilLocation + objThickInM));
         case 4 %'OBFN' % given 'Object Space F#'
             
         case 5 %'IMNA' % given 'Image Space NA'

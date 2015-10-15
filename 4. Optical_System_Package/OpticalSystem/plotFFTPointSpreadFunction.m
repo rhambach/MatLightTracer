@@ -1,9 +1,9 @@
 function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioMuti1 ] =...
-        plotFFTPointSpreadFunction( optSystem,wavLen,fieldPointXY,gridSize,...
+        plotFFTPointSpreadFunction( optSystem,wavelengthIndices,fieldIndices,gridSize,...
         spotPlotRadius, plotPanelHandle,textHandle)
     % plotFFTPointSpreadFunction Summary of this function goes here
     %   if axesHandle is not given then plot is not needed and only
-    %   calculated datas shall be returned.
+    %   calculated datas shall be returned. wavelengthIndices, fieldIndices
     %   apodType,apodParam : Apodization type index and corresponding
     %   apodization parameters.
     
@@ -31,6 +31,21 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
         
     end
     
+    wavelengthUnitFactor = getWavelengthUnitFactor(optSystem);
+    lensUnitFactor = getLensUnitFactor(optSystem);
+    wavLenInM = getSystemWavelengths(optSystem,wavelengthIndices);
+    wavLen = wavLenInM/wavelengthUnitFactor;
+    switch (optSystem.FieldType)
+        case 1 %('ObjectHeight')
+            fieldPointXYInM = getSystemFieldPoints(optSystem,fieldIndices);
+            fieldPointXY = fieldPointXYInM/lensUnitFactor;
+        case 2 %('Angle')
+            fieldPointXY = getSystemFieldPoints(optSystem,fieldIndices);
+    end
+    
+    %     wavLen = getSystemWavelengths(wavelengthIndices);
+    %     fieldPointXY = getSystemFieldPoints(fieldIndices);
+    
     % Read apodization parameters of the optical system
     apodType = optSystem.ApodizationType;
     apodParam = optSystem.ApodizationParameters;
@@ -42,7 +57,7 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
     
     [ XMulti1,YMulti1,OPDAtExitPupilMulti1,PupilWeightMatrixMulti1,...
         RMSMulti1,WPVMulti1,ZERMulti1,SrehlRatioMuti1 ] = ...
-        plotWavefrontAtExitPupil(optSystem,wavLen,fieldPointXY,gridSize,...
+        plotWavefrontAtExitPupil(optSystem,wavelengthIndices,fieldIndices,gridSize,...
         zerCoeff);
     nField = size(OPDAtExitPupilMulti1,3);
     nWav = size(OPDAtExitPupilMulti1,4);
@@ -71,7 +86,7 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
                     'Title',['Field Point XY : [',num2str(fieldPointXY(1,fieldIndex)),',',...
                     num2str(fieldPointXY(2,fieldIndex)),']',...
                     ' & Wavelength : ',num2str(wavLen(wavIndex))]);
-
+                
                 subplotAxes = axes('Parent',subplotPanel,...
                     'Units','Normalized',...
                     'Position',[0.25,0.40, 0.50, 0.50]);
@@ -108,20 +123,20 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
             %         mod_OPDAtExitPupil = [zeros(size(OPDAtExitPupil,1),1),OPDAtExitPupil];
             %         mod_OPDAtExitPupil = [mod_OPDAtExitPupil;zeros(1,size(mod_OPDAtExitPupil,2))];
             
-            wl = wavLen(wavIndex)*getWavelengthUnitFactor(optSystem)*10^3; % Wavelength in mm
+            %             wlInMM = wavLen(wavIndex)*getWavelengthUnitFactor(optSystem)*10^3; % Wavelength in mm
             
             kW = (2*pi/(wavLen(wavIndex)*getWavelengthUnitFactor(optSystem)))*...
-                OPDAtExitPupil;
+                OPDAtExitPupil*getLensUnitFactor(optSystem);
             
             efd = sqrt(pupilApodization).*exp(-1i.*kW); % Complex pupil fun
             %%
-%                     z = -getExitPupilLocation(optSystem);
-%                     % Add spherical phase correction as the existing diffraction code
-%                     % assumes the wavefront has curvature = Z of propagation
-%                     [xpm,ypm] = meshgrid(xp,yp);
-%                     rpm = sqrt(xpm.^2+ypm.^2);
-%                     rcurv = z;
-%                     efd = efd .* exp(-1i*pi/(wl*z)*(rpm.^2));
+            %                     z = -getExitPupilLocation(optSystem);
+            %                     % Add spherical phase correction as the existing diffraction code
+            %                     % assumes the wavefront has curvature = Z of propagation
+            %                     [xpm,ypm] = meshgrid(xp,yp);
+            %                     rpm = sqrt(xpm.^2+ypm.^2);
+            %                     rcurv = z;
+            %                     efd = efd .* exp(-1i*pi/(wl*z)*(rpm.^2));
             %%
             %  Propagation
             
@@ -134,7 +149,7 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
             sampDistX = ((max(max(X))-min(min(X)))/(npx-1))*getLensUnitFactor(optSystem);
             sampDistY = ((max(max(Y))-min(min(Y)))/(npy-1))*getLensUnitFactor(optSystem);
             wavelen = wavLen(wavIndex)*getWavelengthUnitFactor(optSystem);
-            initialHarmonicField = HarmonicField(Ex,Ey,sampDistX,sampDistY,wavelen);
+            initialHarmonicField = HarmonicFieldSet(Ex,Ey,sampDistX,sampDistY,wavelen);
             
             propagationDistance = -getExitPupilLocation(optSystem)*getLensUnitFactor(optSystem);
             outputWindowSize = 2*spotPlotRadius*getLensUnitFactor(optSystem);
@@ -163,8 +178,8 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
             % ys = xs;
             %%  end of new code
             
-            % %         efds = fraunhoferDiffraction(efd,wl, abs(xp(1)-xp(2)), z);
-            %         efds = prop_fraun_fft(xp,yp,efd,xs,ys,z,wl);
+            % % efds = fraunhoferDiffraction(efd,wl, abs(xp(1)-xp(2)), z);
+            %  efds = prop_fraun_fft(xp,yp,efd,xs,ys,z,wl);
             %%
             intensity = abs(efds).^2;
             
@@ -182,18 +197,10 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
                 num2str(fieldPointXY(2,fieldIndex)),']'],...
                 ['Wavelength : ',num2str(wavLen(wavIndex))],...
                 ['Srehl Ratio (Approximation of Marechal) : ',num2str(strehlRatio)],'');
-            % ['Peak Intensity : ',num2str(peakIntensity)],'');
             
             if dispPlot
-                %
                 % Plot the PSF
-%                 surf(subplotAxes,xbm,ybm,intensity')
-%                 shading interp
-                
-                EnhancedColorPlot({subplotAxes,xbm,ybm,intensity},sectionPlotAxes);
-%                 surf(normX,normY,OPDAtExitPupil,'Parent',subplotAxes,'facecolor','interp',...
-%                     'edgecolor','none',...
-%                     'facelighting','phong');
+                EnhancedPColor({subplotAxes,xbm,ybm,intensity},sectionPlotAxes);
                 title(subplotAxes,'FFT PSF (Intensity)')
                 zlabel(subplotAxes,'Intensity') % x-axis label
                 xlabel(subplotAxes,'X (m)')
@@ -205,11 +212,6 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
             peakIntesityMulti(:,:,fieldIndex,wavIndex) = peakIntensity;
             XMulti (:,:,fieldIndex,wavIndex) = xbm;
             YMulti (:,:,fieldIndex,wavIndex) = ybm;
-            %     %
-            %     % Plot the 2D cross section in subfigure 2
-            %     subplot(1,2,2);
-            %     plot(xs,int(:,npy/2+1),'r-'); hold on;
-            %     plot(ys,int(npx/2+1,:),'b-'); %hold on;
         end
     end
     if dispText

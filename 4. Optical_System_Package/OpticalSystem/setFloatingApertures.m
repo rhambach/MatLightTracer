@@ -5,7 +5,7 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
     % radial interesection of the rays with the surfaces.
     
     updatedOpticalSystem = currentOpticalSystem;
-      
+    
     if (isfield(currentOpticalSystem,'IsUpdatedSurfaceArray') && ...
             currentOpticalSystem.IsUpdatedSurfaceArray)
         return;
@@ -18,17 +18,14 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
     nWav = getNumberOfWavelengths(updatedOpticalSystem);
     
     fieldPointMatrix = updatedOpticalSystem.FieldPointMatrix;
-    if updatedOpticalSystem.FieldType == 1
-        fieldPointXYInSI = (fieldPointMatrix(:,1:2))'*getLensUnitFactor(updatedOpticalSystem);
-    else
-        fieldPointXYInSI = (fieldPointMatrix(:,1:2))';
-    end
+    fieldPointIndices = size(fieldPointMatrix,1);
+    
     wavelengthMatrix = updatedOpticalSystem.WavelengthMatrix;
-    wavLenInM = (wavelengthMatrix(:,1))'*getWavelengthUnitFactor(updatedOpticalSystem);
+    wavLenIndices = size(wavelengthMatrix,1);
     
     % Repeat wavelegths for each field point and vice versa
-    fieldPointXYAll = repmat(fieldPointXYInSI,[1,nWav]);
-    wavLenAll = cell2mat(arrayfun(@(x) x*ones(1,nField),wavLenInM,'UniformOutput',false));
+    fieldPointIndicesAll = repmat(fieldPointIndices,[1,nWav]);
+    wavLenIndicesAll = cell2mat(arrayfun(@(x) x*ones(1,nField),wavLenIndices,'UniformOutput',false));
     
     % For top and bottom rays
     angleFromYinRad1 = 0;
@@ -44,16 +41,16 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
     rayTraceOptionStruct.RecordIntermediateResults = 1;
     
     topMariginalRayTraceResult = traceMariginalRay(updatedOpticalSystem,...
-        fieldPointXYAll,wavLenAll,angleFromYinRad1,rayTraceOptionStruct);
+        fieldPointIndicesAll,wavLenIndicesAll,angleFromYinRad1,rayTraceOptionStruct);
     bottomMariginalRayTraceResult = traceMariginalRay(updatedOpticalSystem,...
-        fieldPointXYAll,wavLenAll,angleFromYinRad2,rayTraceOptionStruct);
+        fieldPointIndicesAll,wavLenIndicesAll,angleFromYinRad2,rayTraceOptionStruct);
     
     rightMariginalRayTraceResult = traceMariginalRay(updatedOpticalSystem,...
-        fieldPointXYAll,wavLenAll,angleFromYinRad3,rayTraceOptionStruct);
+        fieldPointIndicesAll,wavLenIndicesAll,angleFromYinRad3,rayTraceOptionStruct);
     leftMariginalRayTraceResult = traceMariginalRay(updatedOpticalSystem,...
-        fieldPointXYAll,wavLenAll,angleFromYinRad4,rayTraceOptionStruct);
+        fieldPointIndicesAll,wavLenIndicesAll,angleFromYinRad4,rayTraceOptionStruct);
     cheifRayTraceResult = traceChiefRay(updatedOpticalSystem,...
-        fieldPointXYAll,wavLenAll,rayTraceOptionStruct);
+        fieldPointIndicesAll,wavLenIndicesAll,rayTraceOptionStruct);
     nMarginalRayUsed = 1;
     
     
@@ -75,14 +72,14 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
                     (nMarginalRayUsed == 1)
                 N = 100;
                 topMariginalRayTraceResult = traceMariginalRay(updatedOpticalSystem,...
-                    fieldPointXYAll,wavLenAll,angleFromYinRad1,rayTraceOptionStruct,N);
+                    fieldPointIndicesAll,wavLenIndicesAll,angleFromYinRad1,rayTraceOptionStruct,N);
                 bottomMariginalRayTraceResult = traceMariginalRay(updatedOpticalSystem,...
-                    fieldPointXYAll,wavLenAll,angleFromYinRad2,rayTraceOptionStruct,N);
+                    fieldPointIndicesAll,wavLenIndicesAll,angleFromYinRad2,rayTraceOptionStruct,N);
                 
                 rightMariginalRayTraceResult = traceMariginalRay(updatedOpticalSystem,...
-                    fieldPointXYAll,wavLenAll,angleFromYinRad3,rayTraceOptionStruct,N);
+                    fieldPointIndicesAll,wavLenIndicesAll,angleFromYinRad3,rayTraceOptionStruct,N);
                 leftMariginalRayTraceResult = traceMariginalRay(updatedOpticalSystem,...
-                    fieldPointXYAll,wavLenAll,angleFromYinRad4,rayTraceOptionStruct,N);
+                    fieldPointIndicesAll,wavLenIndicesAll,angleFromYinRad4,rayTraceOptionStruct,N);
                 nMarginalRayUsed = N;
                 
                 topMariginalIntersection = [topMariginalRayTraceResult(kk).RayIntersectionPoint];
@@ -125,8 +122,7 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
                 maxRadToBottomMariginalRay,maxRadToRightMariginalRay,...
                 maxRadToLeftMariginalRay,maxRadTocheifRay]);
             
-            % Convert the max radius back to the lens unit before setting
-            maxRadToMariginal_CheifRay = maxRadToMariginal_CheifRayInM/lensUnitFactor;
+            maxRadToMariginal_CheifRay = maxRadToMariginal_CheifRayInM;
             
             if isnan(maxRadToMariginal_CheifRay)
                 % Do nothing if the floatingApertureDiameter is not
@@ -137,10 +133,10 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
                     floatingApertureDiameter = 10^-15;
                 end
                 updatedOpticalSystem.SurfaceArray(surfIndex).Aperture.UniqueParameters.Diameter = ...
-                floatingApertureDiameter;
+                    floatingApertureDiameter;
                 if isSurface(currentSurface)
                     updatedOpticalSystem.OpticalElementArray{updatedOpticalSystem.SurfaceToElementMap{surfIndex}}.Aperture.UniqueParameters.Diameter = ...
-                    floatingApertureDiameter;
+                        floatingApertureDiameter;
                 end
             end
             

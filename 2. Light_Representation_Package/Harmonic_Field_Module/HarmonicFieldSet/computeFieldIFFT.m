@@ -26,11 +26,6 @@ function [ modifiedHarmonicFieldSet ] = computeFieldIFFT( harmonicFieldSet )
         else
             modifiedHarmonicFieldSet.Domain = 1; % Spatial domain
         end
-
-%         curentHarmonicField.ComplexAmplitude = newComplexAmplitude;
-%         curentHarmonicField.Domain = 2; % Spatial frequency domain
-%         curentHarmonicField.SamplingDistance = deltaIn1stDomain; % in Spatial frequency domain
-%         modifiedHarmonicFieldSet.HarmonicFieldArray(kk) = curentHarmonicField;
     end
 end
 

@@ -1,5 +1,5 @@
-function plotFootprintDiagram(optSystem,surfIndex,wavLen,...
-        fieldPointXY,numberOfRays1,numberOfRays2,PupSamplingType,...
+function plotFootprintDiagram(optSystem,surfIndex,wavelengthIndices,...
+        fieldIndices,numberOfRays1,numberOfRays2,PupSamplingType,...
         axesHandle)
     % Displays the footprint of the beam superimposed on any surface. Used for
     % showing the effects of vignetting and for checking surface apertures.
@@ -44,7 +44,7 @@ function plotFootprintDiagram(optSystem,surfIndex,wavLen,...
     % availableSpotSymbal = repmat(['*','o','v','x','s','+','.','d','^','<','>'],1,9); % 11*9 = 99
     availableSpotColor = repmat(['b','k','r','g','c','m'],1,20); % 7*20 = 140
     % spotSymbal = availableSpotSymbal(1:size(fieldPointXY,2));
-    spotColorList = availableSpotColor(1:size(wavLen,2)*size(fieldPointXY,2));
+    spotColorList = availableSpotColor(1:length(wavelengthIndices)*length(fieldIndices));
     
     cla(axesHandle,'reset')
     
@@ -55,8 +55,8 @@ function plotFootprintDiagram(optSystem,surfIndex,wavLen,...
     rayTraceOptionStruct.ConsiderSurfaceAperture = 1;
     rayTraceOptionStruct.RecordIntermediateResults = 0;
     
-    polarizedRayTracerResult = multipleRayTracer(optSystem,wavLen,...
-        fieldPointXY,numberOfRays1,numberOfRays2,PupSamplingType,rayTraceOptionStruct,endSurface);
+    polarizedRayTracerResult = multipleRayTracer(optSystem,wavelengthIndices,...
+        fieldIndices,numberOfRays1,numberOfRays2,PupSamplingType,rayTraceOptionStruct,endSurface);
     
     % Draw the aperture
     currentSurface = getSurfaceArray(optSystem,surfIndex);
@@ -88,8 +88,8 @@ function plotFootprintDiagram(optSystem,surfIndex,wavLen,...
             localIntersectionPoints = globalToLocalPosition...
                 (globalIntersectionPoints, SurfaceCoordinateTM);
             % Covert from meter to lens unit
-            px = localIntersectionPoints(1,:)/lensUnitFactor; 
-            py = localIntersectionPoints(2,:)/lensUnitFactor;
+            px = localIntersectionPoints(1,:); 
+            py = localIntersectionPoints(2,:);
             
             currentSpotColor = spotColorList(fieldIndex + (wavIndex-1)*nField);
             currentSpotSymbal = '.';

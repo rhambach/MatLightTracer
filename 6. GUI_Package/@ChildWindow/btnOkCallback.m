@@ -299,11 +299,7 @@ function btnOkCallback(childWindow,parentWindow)
             else
                 fldIndex = str2double(fldIndexString);
             end
-            
-            
-            % Extract the wavelength and field point
-            wavLen =  [(optSystem.WavelengthMatrix(wavIndex,1))'];
-            fieldPointXY =  [(optSystem.FieldPointMatrix(fldIndex,1:2))'];
+
             % 1: Cartesian 2: Polar Grid 3: Hexagonal
             % 4: Isoenergetic Circular 5: Tangential Plane 6: Sagittal Plane 7:Random
             
@@ -319,19 +315,19 @@ function btnOkCallback(childWindow,parentWindow)
             switch lower(handles.Name)
                 case lower('amplitudeTransmissionMap')
                     plotAmplitudeTransmissionMap...
-                        (optSystem,surfIndex,wavLen,fieldPointXY,...
+                        (optSystem,surfIndex,wavIndex,fldIndex,...
                         sampleGridSize,handles.GraphTab);
                 case lower('phaseMap')
                     plotPhaseMap...
-                        (optSystem,surfIndex,wavLen,fieldPointXY,...
+                        (optSystem,surfIndex,wavIndex,fldIndex,...
                         sampleGridSize,handles.GraphTab);
                 case lower('wavefrontDiattenuationMap')
                     plotWavefrontDiattenuationMap...
-                        (optSystem,surfIndex,wavLen,fieldPointXY,...
+                        (optSystem,surfIndex,wavIndex,fldIndex,...
                         sampleGridSize,handles.GraphTab);
                 case lower('wavefrontRetardanceMap')
                     plotWavefrontRetardanceMap...
-                        (optSystem,surfIndex,wavLen,fieldPointXY,...
+                        (optSystem,surfIndex,wavIndex,fldIndex,...
                         sampleGridSize,handles.GraphTab) ;
                     
                 case lower('polarizationEllipseMap')
@@ -342,7 +338,7 @@ function btnOkCallback(childWindow,parentWindow)
                     % trace
                     [polarizationProfileType,polarizationProfileParameters] = readPolarizationProfileParameters(handles);
                     plotPupilPolarizationEllipseMap...
-                        (optSystem,surfIndex,wavLen,fieldPointXY,...
+                        (optSystem,surfIndex,wavIndex,fldIndex,...
                         sampleGridSize,polarizationProfileType,polarizationProfileParameters,handles.GraphTab) ;
                 case lower('wavefrontAtExitPupil')
                     % read zernike coefiicient number popup
@@ -350,15 +346,15 @@ function btnOkCallback(childWindow,parentWindow)
                     zerCoeffString = (zerCoeffList(get(handles.popZernikeCoefficientNumber,'Value'),:));
                     zerCoeff = str2double(zerCoeffString);
                     
-                    plotWavefrontAtExitPupil(optSystem,wavLen,...
-                        fieldPointXY,sampleGridSize,zerCoeff,...
+                    plotWavefrontAtExitPupil(optSystem,wavIndex,fldIndex,...
+                        sampleGridSize,zerCoeff,...
                         handles.GraphTab,handles.textHandle) ;
                 case lower('FFTPSF')
                     spotPlotRadius = str2double(...
                         get(handles.txtPSFPlotRadius,'String'));
                     
-                    plotFFTPointSpreadFunction(optSystem,wavLen,...
-                        fieldPointXY,sampleGridSize,spotPlotRadius,...
+                    plotFFTPointSpreadFunction(optSystem,wavIndex,fldIndex,...
+                        sampleGridSize,spotPlotRadius,...
                         handles.GraphTab,handles.textHandle) ;
             end
         case lower(rayTracingAnalysis)
@@ -763,15 +759,12 @@ function btnOkCallback(childWindow,parentWindow)
                     else
                         fldIndex = str2double(fldIndexString);
                     end
-                    
-                    % Extract the wavelength and field point
-                    wavLen =  [(optSystem.WavelengthMatrix(wavIndex,1))'];
-                    fieldPointXY =  [(optSystem.FieldPointMatrix(fldIndex,1:2))'];
+
                     pupSamplingTypeList = (get(handles.popPupilSamplingType,'String'));
                     PupSamplingType = (pupSamplingTypeList{get(handles.popPupilSamplingType,'Value'),:});
                     
-                    plotFootprintDiagram(optSystem,surfIndex,wavLen,...
-                        fieldPointXY,numberOfRays1,numberOfRays2,PupSamplingType,...
+                    plotFootprintDiagram(optSystem,surfIndex,wavIndex,...
+                        fldIndex,numberOfRays1,numberOfRays2,PupSamplingType,...
                         handles.axesHandle);
                     
                 case lower('system2DLayoutDiagram')
@@ -804,17 +797,12 @@ function btnOkCallback(childWindow,parentWindow)
                         else
                             fldIndex = str2double(fldIndexString);
                         end
-                        
-                        
-                        % Extract the wavelength and field point
-                        wavLen =  [(optSystem(cc).WavelengthMatrix(wavIndex,1))'];
-                        fieldPointXY =  [(optSystem(cc).FieldPointMatrix(fldIndex,1:2))'];
-                        
+                                          
                         pupSampling = 'Tangential';
                         
                         % compute totalRayPathMatrix = 3 X nSurf X nTotalRay
-                        totalRayPathMatrix = computeRayPathMatrix(optSystem(cc),wavLen,...
-                            fieldPointXY,pupSampling,numberOfRays1,numberOfRays2);
+                        totalRayPathMatrix = computeRayPathMatrix(optSystem(cc),wavIndex,...
+                            fldIndex,pupSampling,numberOfRays1,numberOfRays2);
                         
                         plotSystemLayout(optSystem(cc),totalRayPathMatrix,...
                             plotIn2D,handles.axesHandle);
@@ -842,17 +830,13 @@ function btnOkCallback(childWindow,parentWindow)
                     else
                         fldIndex = str2double(fldIndexString);
                     end
-                    
-                    % Extract the wavelength and field point
-                    wavLen =  [(optSystem.WavelengthMatrix(wavIndex,1))'];
-                    fieldPointXY =  [(optSystem.FieldPointMatrix(fldIndex,1:2))'];
-                    
+ 
                     pupSamplingTypeList = (get(handles.popPupilSamplingType,'String'));
                     pupSamplingType = (pupSamplingTypeList{get(handles.popPupilSamplingType,'Value'),:});
                     
                     % compute totalRayPathMatrix = 3 X nSurf X nTotalRay
-                    totalRayPathMatrix = computeRayPathMatrix(optSystem,wavLen,...
-                        fieldPointXY,pupSamplingType,numberOfRays1,numberOfRays2);
+                    totalRayPathMatrix = computeRayPathMatrix(optSystem,wavIndex,...
+                        fldIndex,pupSamplingType,numberOfRays1,numberOfRays2);
                     plotSystemLayout(optSystem,totalRayPathMatrix,...
                         plotIn2D,handles.axesHandle);
                 case lower('paraxialAnalysis')
@@ -944,11 +928,7 @@ function btnOkCallback(childWindow,parentWindow)
                     if strcmpi(fldIndexString,'All') && strcmpi(wavLengthIndexString,'All')
                         disp('Warning: Many number of lines, the graph could be complex.');
                     end
-                    
-                    % Extract the wavelength and field point
-                    wavLen =  [(optSystem.WavelengthMatrix(wavIndex,1))'];
-                    fieldPointXY =  [(optSystem.FieldPointMatrix(fldIndex,1:2))'];
-                    
+
                     % Sagittal and tangetial aberration components
                     sagAberrCompList = (get(handles.popSagittalAberration,'String'));
                     sagittalAberrComp = sagAberrCompList(get(handles.popSagittalAberration,'Value'));
@@ -958,8 +938,8 @@ function btnOkCallback(childWindow,parentWindow)
                     % Since two graphs will be drawn (sagittal and tangential),
                     % handles.GraphTab is passed instead of the axes
                     % handle.
-                    plotTransverseRayAberration(optSystem,surfIndex,wavLen,...
-                        fieldPointXY,numberOfRays1,numberOfRays2,sagittalAberrComp,tangentialAberrComp,...
+                    plotTransverseRayAberration(optSystem,surfIndex,wavIndex,...
+                        fldIndex,numberOfRays1,numberOfRays2,sagittalAberrComp,tangentialAberrComp,...
                         handles.GraphTab);
                     
                 case lower('KostenbauderMatrix')
@@ -1262,10 +1242,7 @@ function btnOkCallback(childWindow,parentWindow)
                     else
                         fldIndex = str2double(fldIndexString);
                     end
-                    
-                    % Extract the wavelength and field point
-                    wavLen =  [(optSystem.WavelengthMatrix(wavIndex,1))'];
-                    fieldPointXY =  [(optSystem.FieldPointMatrix(fldIndex,1:2))'];
+
                     pupSamplingTypeList = (get(handles.popPupilSamplingType,'String'));
                     PupSamplingType = (pupSamplingTypeList{get(handles.popPupilSamplingType,'Value'),:});
                     plotIn2D = (get(handles.chk2DCrossSection,'Value'));
@@ -1285,9 +1262,9 @@ function btnOkCallback(childWindow,parentWindow)
                     end
                     numberOfTimeSamples =    numberOfSteps;
                     
-                    plotPhaseAndPulseFrontEvolution( ...
-                        optSystem, wavLen,fieldPointXY, surfIndex, deltaTime,...
-                        numberOfTimeSamples,numberOfRays1,numberOfRays2,PupSamplingType,plotIn2D,handles.axesHandle )
+                    plotPhaseAndPulseFrontEvolution(optSystem, wavIndex,fldIndex, ...
+                        surfIndex, deltaTime,numberOfTimeSamples,numberOfRays1,...
+                        numberOfRays2,PupSamplingType,plotIn2D,handles.axesHandle )
                     
                 case lower('FFTFocusedPulse')
                     optSystem = optSystem(currentConfiguration);

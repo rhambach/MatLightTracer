@@ -1,6 +1,20 @@
-function [ newScalarRayBundle ] = ScalarRayBundle( pos,dir,wav,nRays )
-    %ScalarRayBundle Summary of this function goes here
-    %   Detailed explanation goes here
+function [ newScalarRayBundle ] = ScalarRayBundle( position,direction,wavelength,nRays )
+    %ScalarRayBundle Used to define ray bundles which can be traced through
+    %optical systems.
+    % Inputs:
+    %   position,direction: 3 x N matrix of ray position and direction
+    %   wavelength: 1 x N vector of wavelengths corresponding to the rays
+    %   nRays: Optional argument specifying the number of rays to
+    %   construct. By defualt the the number of rays will be determined by
+    %   the maximum number of 2nd dimensions of the inputs matrices and
+    %   vector. If the 2nd dimension of an input argument is less than the
+    %   number of rays to be constructed, then the values for the last 
+    %   ray will be simply repeated for all unspacified values. But if the
+    %   input argument size is greater than the number of rays, then the
+    %   extra values are just discarded. 
+    % Output:
+    %   newScalarRayBundle: A scalalr ray bundle structure.
+    
     if nargin == 0
         % Empty constructor
         newScalarRayBundle.Position = [0;0;0]; % default position
@@ -9,10 +23,10 @@ function [ newScalarRayBundle ] = ScalarRayBundle( pos,dir,wav,nRays )
         newScalarRayBundle.ClassName = 'ScalarRayBundle';
     else
         if nargin == 1
-            dir = [0;0;1]; % default dirction
-            wav = 0.55*10^-6;  % default
+            direction = [0;0;1]; % default dirction
+            wavelength = 0.55*10^-6;  % default
         elseif nargin == 2
-            wav = 0.55*10^-6; % default
+            wavelength = 0.55*10^-6; % default
         else
         end
         
@@ -20,9 +34,9 @@ function [ newScalarRayBundle ] = ScalarRayBundle( pos,dir,wav,nRays )
         % That is when dir, pos  = 3 X N matrix
         
         % Determine the size of each inputs
-        nPos = size(pos,2);
-        nDir = size(dir,2);
-        nWav = size(wav,2);
+        nPos = size(position,2);
+        nDir = size(direction,2);
+        nWav = size(wavelength,2);
         % The number of array to be initialized is maximum of all inputs
         nMax = max([nPos,nDir,nWav]);
         
@@ -33,25 +47,25 @@ function [ newScalarRayBundle ] = ScalarRayBundle( pos,dir,wav,nRays )
         % Fill the smaller inputs to have nMax size by repeating their
         % last element
         if nPos < nMax
-            pos = cat(2,pos,repmat(pos(:,end),[1,nMax-nPos]));
+            position = cat(2,position,repmat(position(:,end),[1,nMax-nPos]));
         else
-            pos = pos(:,1:nMax);
+            position = position(:,1:nMax);
         end
         if nDir < nMax
-            dir = cat(2,dir,repmat(dir(:,end),[1,nMax-nDir]));
+            direction = cat(2,direction,repmat(direction(:,end),[1,nMax-nDir]));
         else
-            dir = dir(:,1:nMax);
+            direction = direction(:,1:nMax);
         end
         if nWav < nMax
-            wav = cat(2,wav,repmat(wav(end),[1,nMax-nWav]));
+            wavelength = cat(2,wavelength,repmat(wavelength(end),[1,nMax-nWav]));
         else
-            wav = wav(:,1:nMax);
+            wavelength = wavelength(:,1:nMax);
         end
         
         newScalarRayBundle = ScalarRayBundle;
-        newScalarRayBundle.Position = pos;
-        newScalarRayBundle.Direction = dir;
-        newScalarRayBundle.Wavelength = wav;
+        newScalarRayBundle.Position = position;
+        newScalarRayBundle.Direction = direction;
+        newScalarRayBundle.Wavelength = wavelength;
         newScalarRayBundle.ClassName = 'ScalarRayBundle';
     end
 end

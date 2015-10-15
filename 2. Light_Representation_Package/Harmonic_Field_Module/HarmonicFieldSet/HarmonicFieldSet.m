@@ -125,7 +125,7 @@ function newHarmonicFieldSet = HarmonicFieldSet(Ex,Ey,sampDistX,sampDistY,wavele
         disp('Error: Ex and Ey must be of the same size');
         return;
     end
-
+    
     if ~mod(nPoints1,2)
         nPoints1 = nPoints1 + 1;
         Ex = cat(1,Ex,zeros(1,nPoints2,nFields));
@@ -138,14 +138,14 @@ function newHarmonicFieldSet = HarmonicFieldSet(Ex,Ey,sampDistX,sampDistY,wavele
     end
     
     newHarmonicFieldSet.ReferenceFieldIndex = referenceIndex;
-
+    
     newHarmonicFieldSet.ComplexAmplitude = cat(3,permute(Ex,[1,2,4,3]),permute(Ey,[1,2,4,3]));
     newHarmonicFieldSet.SamplingDistance = [sampDistX;sampDistY];
     newHarmonicFieldSet.Wavelength = wavelen;
     newHarmonicFieldSet.Center = center;
     newHarmonicFieldSet.Direction = direction;
     newHarmonicFieldSet.Domain = domain; % 1 for Spatial domain, and 2 for spatial frequency
-    newHarmonicFieldSet.NumberOfHarmonicFields = nFields; 
+    newHarmonicFieldSet.NumberOfHarmonicFields = nFields;
     
     newHarmonicFieldSet.ClassName = 'HarmonicFieldSet';
 end
