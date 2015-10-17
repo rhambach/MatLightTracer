@@ -1,6 +1,6 @@
 function [ incidenceAngleSigned ] = getAllSurfaceIncidenceAngle( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceIncidenceAngle: Returns the exit ray direction of a specific
+    %getAllSurfaceIncidenceAngle: Returns the Incidence Angle of a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)

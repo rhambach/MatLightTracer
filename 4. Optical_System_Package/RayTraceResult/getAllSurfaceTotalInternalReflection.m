@@ -1,7 +1,7 @@
 function [ totalInternalReflections ] = getAllSurfaceTotalInternalReflection( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceTotalInternalReflection: Returns the exit ray direction of a specific
-    % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
+    %getAllSurfaceTotalInternalReflection: Returns the Total Internal Reflection flags 
+    % of a specific ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)
     %   (rayPupilIndex,rayFieldIndex,rayWavIndex) : Indices specifying a given

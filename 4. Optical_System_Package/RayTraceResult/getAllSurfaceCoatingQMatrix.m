@@ -1,6 +1,6 @@
 function [ coatingQMatrixs ] = getAllSurfaceCoatingQMatrix( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceCoatingQMatrix: Returns the exit ray direction of a specific
+    %getAllSurfaceCoatingQMatrix: Returns the Coating Q Matrix of a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)

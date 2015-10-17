@@ -1,6 +1,6 @@
 function [ totalPMatrixs ] = getAllSurfaceTotalPMatrix( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceTotalPMatrix: Returns the exit ray direction of a specific
+    %getAllSurfaceTotalPMatrix: Returns the Total Polarization Matrix of a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)

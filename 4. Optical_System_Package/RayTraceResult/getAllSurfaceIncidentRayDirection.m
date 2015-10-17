@@ -1,6 +1,6 @@
 function [ incidentRayDirection ] = getAllSurfaceIncidentRayDirection( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceExitRayDirection: Returns the exit ray direction of a specific
+    %getAllSurfaceExitRayDirection: Returns the Incident Ray Direction of a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)

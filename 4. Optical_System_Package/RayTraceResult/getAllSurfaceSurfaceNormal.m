@@ -1,6 +1,6 @@
 function [ surfaceNormals ] = getAllSurfaceSurfaceNormal( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceSurfaceNormal: Returns the exit ray direction of a specific
+    %getAllSurfaceSurfaceNormal: Returns the Surface Normal associated with a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)

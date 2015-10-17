@@ -1,5 +1,4 @@
-function [IntensityBeforeCoating,IntensityAfterCoating] =  ...
-         getIntensity(RayTraceResult)
+function [IntensityBeforeCoating,IntensityAfterCoating] = getIntensity(RayTraceResult)
      % getIntensity: Returns intensity parameters of the ray before
      % and after the coating of a surface
      %   The function is also vectorized so if the inputs are array then 

@@ -1,6 +1,6 @@
 function [ totalOpticalPathLengths ] = getAllSurfaceTotalOpticalPathLength( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceTotalOpticalPathLength: Returns the exit ray direction of a specific
+    %getAllSurfaceTotalOpticalPathLength: Returns the Total Optical Path Length of a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)

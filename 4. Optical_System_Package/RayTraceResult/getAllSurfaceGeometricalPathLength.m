@@ -1,6 +1,6 @@
 function [ pathLengths ] = getAllSurfaceGeometricalPathLength( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfacePathLength: Returns the exit ray direction of a specific
+    %getAllSurfacePathLength: Returns the Geometrical Path Length of a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)

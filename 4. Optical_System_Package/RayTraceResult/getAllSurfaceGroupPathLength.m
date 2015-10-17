@@ -1,6 +1,6 @@
 function [ groupPathLength,groupPathLength2 ] = getAllSurfaceGroupPathLength( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceGroupPathLength: Returns the exit ray Position of a specific
+    %getAllSurfaceGroupPathLength: Returns the Group Path Length of a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)

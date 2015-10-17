@@ -1,6 +1,6 @@
 function [ refractiveIndex ] = getAllSurfaceRefractiveIndex( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceRefractiveIndex: Returns the exit ray direction of a specific
+    %getAllSurfaceRefractiveIndex: Returns the Refractive Index of a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)

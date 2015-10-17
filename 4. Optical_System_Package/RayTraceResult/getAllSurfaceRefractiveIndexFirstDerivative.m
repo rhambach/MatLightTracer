@@ -1,7 +1,8 @@
 function [ refractiveIndexFirstDerivatives ] = getAllSurfaceRefractiveIndexFirstDerivative( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceRefractiveIndexFirstDerivative: Returns the exit ray direction of a specific
-    % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
+    %getAllSurfaceRefractiveIndexFirstDerivative: Returns the Refractive Index 
+    % First Derivative of a specific ray specified by 
+    % (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)
     %   (rayPupilIndex,rayFieldIndex,rayWavIndex) : Indices specifying a given

@@ -1,6 +1,6 @@
 function [ coatingPMatrixs ] = getAllSurfaceCoatingPMatrix( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceCoatingPMatrix: Returns the exit ray direction of a specific
+    %getAllSurfaceCoatingPMatrix: Returns the Coating Polarization Matrix of a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)

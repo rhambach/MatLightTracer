@@ -1,6 +1,6 @@
 function [ classNames ] = getClassName( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceClassName: Returns the exit ray direction of a specific
+    %getAllSurfaceClassName: Returns the Class Name of a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)
