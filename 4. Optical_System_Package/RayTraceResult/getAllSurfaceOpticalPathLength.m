@@ -1,5 +1,5 @@
-function [ opticalPathLength,opticalPathLength2 ] = getAllSurfaceOpticalPathLength( allSurfaceRayTraceResult,...
-        rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
+function [ opticalPathLength,opticalPathLength2 ] = getAllSurfaceOpticalPathLength(...
+        allSurfaceRayTraceResult,rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
     %getAllSurfaceOpticalPathLength: Returns the Optical Path Length of a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
@@ -26,51 +26,56 @@ function [ opticalPathLength,opticalPathLength2 ] = getAllSurfaceOpticalPathLeng
     else
         
     end
-    
-    
-    % Compute the GeometricalPathLength,indexBefore and additionalPath
-    requestedResultFieldName1 = 'GeometricalPathLength';
-    requestedFieldFirstDim1 = 1;
-    geometricalPathLength = getRayTraceResultFieldForAllSurfaces( ...
-        allSurfaceRayTraceResult,requestedResultFieldName1,requestedFieldFirstDim1,...
-        rayPupilIndices,rayFieldIndices,rayWavelengthIndices);
-    
-    requestedResultFieldName2 = 'RefractiveIndex';
-    requestedFieldFirstDim2 = 1;
-    refractiveIndex = getRayTraceResultFieldForAllSurfaces( ...
-        allSurfaceRayTraceResult,requestedResultFieldName2,requestedFieldFirstDim2,...
-        rayPupilIndices,rayFieldIndices,rayWavelengthIndices);
-    
-    % compute the indexBefore each surface matrice
-    nSurf = size(refractiveIndex,2);
-    nPupilIndice = size(refractiveIndex,3);
-    nFieldIndice = size(refractiveIndex,4);
-    nWavelengthIndice = size(refractiveIndex,5);
-    if nWavelengthIndice == 1 && nFieldIndice == 1
-        indexBefore(1,:,:) = 0*refractiveIndex+1;
-        indexBefore(1,2:end,:) = refractiveIndex(1,1:end-1,:);
-    elseif nWavelengthIndice == 1
-        indexBefore(1,:,:,:) = 0*refractiveIndex+1;
-        indexBefore(1,2:end,:,:) = refractiveIndex(1,1:end-1,:,:);
-    else
-        indexBefore(1,1,:,:,:) = 0*refractiveIndex+1;
-        indexBefore(1,2:end,:,:,:) = refractiveIndex(1,1:end-1,:,:,:);
-    end
-    requestedResultFieldName2 = 'AdditionalPathLength';
-    requestedFieldFirstDim2 = 1;
-    additionalPathLength = getRayTraceResultFieldForAllSurfaces( ...
-        allSurfaceRayTraceResult,requestedResultFieldName2,requestedFieldFirstDim2,...
-        rayPupilIndices,rayFieldIndices,rayWavelengthIndices);
-    
-    % now compute the OpticalPathLength
-    opticalPathLength = indexBefore.*(geometricalPathLength + additionalPathLength);
-    
-    
-    %% for checking
+    % check if the OPL is already computed and included in the raytrace
+    % result
     requestedResultFieldName = 'OpticalPathLength';
     requestedFieldFirstDim = 1;
-    opticalPathLength2 = getRayTraceResultFieldForAllSurfaces( ...
+    oplFromRaytraceResult = getRayTraceResultFieldForAllSurfaces( ...
         allSurfaceRayTraceResult,requestedResultFieldName,requestedFieldFirstDim,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices);
+    
+    if sum(oplFromRaytraceResult(:))== 0
+        % The OPL is not computed during the ray trace so Compute if from the
+        % the GeometricalPathLength,indexBefore and additionalPath.
+        requestedResultFieldName1 = 'GeometricalPathLength';
+        requestedFieldFirstDim1 = 1;
+        geometricalPathLength = getRayTraceResultFieldForAllSurfaces( ...
+            allSurfaceRayTraceResult,requestedResultFieldName1,requestedFieldFirstDim1,...
+            rayPupilIndices,rayFieldIndices,rayWavelengthIndices);
+        
+        requestedResultFieldName2 = 'RefractiveIndex';
+        requestedFieldFirstDim2 = 1;
+        refractiveIndex = getRayTraceResultFieldForAllSurfaces( ...
+            allSurfaceRayTraceResult,requestedResultFieldName2,requestedFieldFirstDim2,...
+            rayPupilIndices,rayFieldIndices,rayWavelengthIndices);
+        
+        % compute the indexBefore each surface matrice
+        nSurf = size(refractiveIndex,2);
+        nPupilIndice = size(refractiveIndex,3);
+        nFieldIndice = size(refractiveIndex,4);
+        nWavelengthIndice = size(refractiveIndex,5);
+        if nWavelengthIndice == 1 && nFieldIndice == 1
+            indexBefore(1,:,:) = 0*refractiveIndex+1;
+            indexBefore(1,2:end,:) = refractiveIndex(1,1:end-1,:);
+        elseif nWavelengthIndice == 1
+            indexBefore(1,:,:,:) = 0*refractiveIndex+1;
+            indexBefore(1,2:end,:,:) = refractiveIndex(1,1:end-1,:,:);
+        else
+            indexBefore(1,1,:,:,:) = 0*refractiveIndex+1;
+            indexBefore(1,2:end,:,:,:) = refractiveIndex(1,1:end-1,:,:,:);
+        end
+        requestedResultFieldName2 = 'AdditionalPathLength';
+        requestedFieldFirstDim2 = 1;
+        additionalPathLength = getRayTraceResultFieldForAllSurfaces( ...
+            allSurfaceRayTraceResult,requestedResultFieldName2,requestedFieldFirstDim2,...
+            rayPupilIndices,rayFieldIndices,rayWavelengthIndices);
+        
+        % now compute the OpticalPathLength
+        opticalPathLength = indexBefore.*(geometricalPathLength + additionalPathLength);
+    else
+        % The OPL is already computed during the ray trace so just take
+        % that value.
+        opticalPathLength = oplFromRaytraceResult;
+    end
 end
 
