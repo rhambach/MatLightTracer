@@ -429,8 +429,8 @@ function updateHarmonicFieldSetViewer(figureHandle)
     allEyIn3D = squeeze(harmonicFieldSet.ComplexAmplitude(:,:,2,selectedFieldIndex));
     Ex = allExIn3D(:,:,selectedFieldIndex);
     Ey = allEyIn3D(:,:,selectedFieldIndex);
-    Nx = size(allExIn3D,1);
-    Ny = size(allExIn3D,2);
+    Nx = size(allExIn3D,2);
+    Ny = size(allExIn3D,1);
     
     samplingPoints = [Nx;Ny];
     samplingDistance = harmonicFieldSet.SamplingDistance(:,selectedFieldIndex);
@@ -505,7 +505,7 @@ function updateHarmonicFieldSetViewer(figureHandle)
     end
     
     
-    input_args = {colorPlotAxes,xMesh,yMesh,requestedValue};
+    
     sectionPlotAxesHandle = figureHandle.axesLinePlot;
     sectionTitle = 'Cross sectional view';
     sectionXlabel = 'Position (m)';
@@ -514,11 +514,14 @@ function updateHarmonicFieldSetViewer(figureHandle)
     lineColor = 'w';
     lineWidth = 1.0;
     
+    
+    pause(0.00001); % Sometimes with out this pause the pcolor will not be correctly plotted. I dont know why
     cla(colorPlotAxes,'reset');
     cla(sectionPlotAxesHandle,'reset');
-    
+    input_args = {colorPlotAxes,xMesh,yMesh,requestedValue};
     h = EnhancedPColor( input_args,...
         sectionPlotAxesHandle,interpolationMethod,lineColor,lineWidth,sectionTitle,sectionXlabel,sectionYlable );
+    axis(colorPlotAxes,'equal');
     
     title(colorPlotAxes,[valueDisplayedName, ' , Component : ',fieldComponent])
     xlabel(colorPlotAxes,'X Axis (m)') % x-axis label
@@ -539,11 +542,11 @@ function updateHarmonicFieldSetViewer(figureHandle)
         courseSampleX = [1:floor(Nx/courseSampFact):Nx];
         courseSampleY = [1:floor(Ny/courseSampFact):Ny];
         
-        cx = xMesh(courseSampleX,courseSampleY);
-        cy = yMesh(courseSampleX,courseSampleY);
+        cx = xMesh(courseSampleY,courseSampleX);
+        cy = yMesh(courseSampleY,courseSampleX);
         
-        a = semiMajorAxisIn3D(courseSampleX,courseSampleY,selectedFieldIndex);
-        b = semiMinorAxisIn3D(courseSampleX,courseSampleY,selectedFieldIndex);
+        a = semiMajorAxisIn3D(courseSampleY,courseSampleX,selectedFieldIndex);
+        b = semiMinorAxisIn3D(courseSampleY,courseSampleX,selectedFieldIndex);
         
         % Normalize a and b to maximum r value
         minDimension = min(max(max(xMesh)) - min(min(xMesh)),max(max(yMesh)) - min(min(yMesh)));
@@ -552,8 +555,8 @@ function updateHarmonicFieldSetViewer(figureHandle)
         a = a*((0.5*minDimension/nEllipse)/maxEllipseRadius);
         b = b*((0.5*minDimension/nEllipse)/maxEllipseRadius);
         
-        phi = orientationAngleIn3D(courseSampleX,courseSampleY,selectedFieldIndex);
-        direction  = directionIn3D(courseSampleX,courseSampleY,selectedFieldIndex);
+        phi = orientationAngleIn3D(courseSampleY,courseSampleX,selectedFieldIndex);
+        direction  = directionIn3D(courseSampleY,courseSampleX,selectedFieldIndex);
         hold(colorPlotAxes,'on');
         plotEllipse(a(:),b(:),cx(:),cy(:),phi(:),direction(:),colorPlotAxes);
         hold(colorPlotAxes,'on');
@@ -566,10 +569,6 @@ function harmonicFieldSet = extractCurrrentHarmonicFieldSet(figureHandle)
     variableData = figureHandle.HarmonicFieldSet;
     if isHarmonicFieldSet(variableData)
         harmonicFieldSet = (variableData);
-    elseif isHarmonicField(variableData)
-        % If single harmonic field is passed then convert it to a harmonic
-        % field set
-        harmonicFieldSet = HarmonicFieldSet(variableData);
     elseif strcmpi(variableData,'CurrentHarmonicFieldSource')
         % To view the harmonic field source being built using harmonic field
         % source editor window, one can pass harmonicFieldSet = 'CurrentHarmonicFieldSource'

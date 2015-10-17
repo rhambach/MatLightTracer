@@ -4,8 +4,8 @@ function [ semiMajorAxisIn3D,semiMinorAxisIn3D,directionIn3D,orientationAngleIn3
     
     allExIn3D = squeeze(harmonicFieldSet.ComplexAmplitude(:,:,1,:));
     allEyIn3D = squeeze(harmonicFieldSet.ComplexAmplitude(:,:,2,:));
-    Nx = size(allExIn3D,1);
-    Ny = size(allExIn3D,2);
+    Nx = size(allExIn3D,2);
+    Ny = size(allExIn3D,1);
     
     samplingPoints = [Nx;Ny];
     samplingDistance = harmonicFieldSet.SamplingDistance;

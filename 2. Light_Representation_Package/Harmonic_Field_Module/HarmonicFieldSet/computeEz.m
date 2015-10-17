@@ -23,7 +23,7 @@ function [Ez,xlin,ylin] = computeEz(harmonicFieldSet,selectedFieldIndex)
     nFields = harmonicFieldSetIn2ndDomain.NumberOfHarmonicFields;
     deltaIn2ndDomain = harmonicFieldSetIn2ndDomain.SamplingDistance;
     wavelength = harmonicFieldSetIn2ndDomain.Wavelength;
-    Ez = zeros(nx,ny,nFields);
+    Ez = zeros(ny,nx,nFields);
     samplingDistanceNew = zeros(2,nFields);
     if selectedFieldIndex
         [Kx,Ky] = meshgrid(kxlin(:,:,selectedFieldIndex),kylin(:,:,selectedFieldIndex));

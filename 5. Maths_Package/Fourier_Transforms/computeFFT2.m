@@ -1,7 +1,7 @@
 function [ complexFFTofE,deltaInFrequency ] = computeFFT2( complexEin,deltaInSpatial )
     %COMPUTEFFT2 returns the FFT of complexE in 2d
     % Input:
-    %   complexEin : A complex matrix (2D).
+    %   complexEin : A complex matrix (2D). It can also handle 1D vector
     %   deltaInSpatial : The sample spacing in spatial domain (2 x 1 vector)
     
     % Output:

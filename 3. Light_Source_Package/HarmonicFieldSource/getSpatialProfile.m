@@ -17,6 +17,7 @@ function [ U_xyTot,xlinTot,ylinTot] = getSpatialProfile( harmonicFieldSource,xli
         [dx,dy] = getSamplingDistance(harmonicFieldSource,Nx,Ny);
         samplingPoints = [Nx,Ny]';
         samplingDistance = [dx,dy]';
+%         lateralPosition = harmonicFieldSource.LateralPosition;
         [xlin,ylin] = generateSamplingGridVectors(samplingPoints,samplingDistance);
         
         [xlinTot,ylinTot] = generateSamplingGridVectors(samplingPoints+2*nBoarderPixel,samplingDistance);
@@ -42,6 +43,7 @@ function [ U_xyTot,xlinTot,ylinTot] = getSpatialProfile( harmonicFieldSource,xli
     [xMesh,yMesh] = meshgrid(xlin,ylin);
     inputDataStruct.xMesh = xMesh;
     inputDataStruct.yMesh = yMesh;
+    inputDataStruct.LateralPosition = harmonicFieldSource.LateralPosition;
     [ returnDataStruct ] = spatialProfileDefinitionHandle(returnFlag,spatialProfileParameters,inputDataStruct);
     U_xy = returnDataStruct.SpatialProfileMatrix;
     
@@ -53,14 +55,16 @@ function [ U_xyTot,xlinTot,ylinTot] = getSpatialProfile( harmonicFieldSource,xli
         case 2 % ('Absolute')
             absoluteEdgeValue = [smootheningEdgeValue,smootheningEdgeValue]';
     end
-    
+     lateralPosition = harmonicFieldSource.LateralPosition;
+%         xlin = xlin - lateralPosition(1);
+%     ylin = ylin - lateralPosition(2);
+%     xlinTot = xlinTot - lateralPosition(1);
+%     ylinTot = ylinTot - lateralPosition(2);  
     [edgeSmootheningFunction] = getEdgeSmootheningFunction(...
-        xlin,ylin,boarderShape,absoluteEdgeValue);
-    
+        xlin,ylin,boarderShape,absoluteEdgeValue,lateralPosition);
     U_xy_SmoothEdge = U_xy.*edgeSmootheningFunction;
     
     % Add the field into the embedding frame
-    
-    [U_xyTot] = EmbedInToFrame(U_xy_SmoothEdge,nBoarderPixel);
+    [U_xyTot] = EmbedInToFrame(U_xy_SmoothEdge,nBoarderPixel);  
 end
 

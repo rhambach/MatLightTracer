@@ -1,4 +1,4 @@
-function [diameterX,diameterY, boarderShape] = getSpatialShapeAndSize( harmonicFieldSource,boarderLevelIndex )
+function [diameterXNew,diameterYNew, boarderShape] = getSpatialShapeAndSize( harmonicFieldSource,boarderLevelIndex )
     %GETSPATIALSHAPEANDSIZE Summary of this function goes here
     %   Detailed explanation goes here
     
@@ -36,6 +36,17 @@ function [diameterX,diameterY, boarderShape] = getSpatialShapeAndSize( harmonicF
                 boarderShape = absoluteBoarderShape;
             end
             
+                        % Consider the lateral offset. Increase the size so that the center of
+            % the whole field is at origin.
+            Cx = harmonicFieldSource.LateralPosition(1);
+            Cy = harmonicFieldSource.LateralPosition(2);
+%             Cx = 0;
+%             Cy = 0;
+            diameterXNew = diameterX + abs(Cx); %2*max(abs([Cx+diameterX/2,Cx-diameterX/2]));
+            diameterYNew = diameterY + abs(Cy); %2*max(abs([Cy+diameterY/2,Cy-diameterY/2]));
+
+% diameterXNew = diameterX;
+%             diameterYNew = diameterY;
         case 2
             [diameterX1,diameterY1, boarderShape] = getSpatialShapeAndSize( harmonicFieldSource,1 );
             % 2. With smooth edge
@@ -49,6 +60,8 @@ function [diameterX,diameterY, boarderShape] = getSpatialShapeAndSize( harmonicF
                 diameterX = diameterX1 + 2*absoluteEdgeSize(1);
                 diameterY = diameterY1 + 2*absoluteEdgeSize(2);
             end
+            diameterXNew = diameterX;
+            diameterYNew = diameterY;
         case 3
             % 3. With additional zero boarder
             [diameterX2,diameterY2] = getSpatialShapeAndSize( harmonicFieldSource,2 );
@@ -58,7 +71,12 @@ function [diameterX,diameterY, boarderShape] = getSpatialShapeAndSize( harmonicF
             diameterX = diameterX2 + 2*zeroBoarderAbsoluteSize1;
             diameterY = diameterY2 + 2*zeroBoarderAbsoluteSize2;
             boarderShape = 2; % rectangle
+
+            diameterXNew = diameterX;
+            diameterYNew = diameterY;
         otherwise
     end
+    
+    
 end
 

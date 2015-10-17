@@ -46,6 +46,10 @@ function newHarmonicFieldSet = HarmonicFieldSet(Ex,Ey,sampDistX,sampDistY,wavele
         
     end
     
+    % The field is usually assumed to be centered at origin
+    center = [0,0]';
+    
+    
     if (size(Ex,1)~= size(Ey,1))||(size(Ex,2)~= size(Ey,2))
         disp('Error: Sizes of Ex and Ey must be the same');
         return;

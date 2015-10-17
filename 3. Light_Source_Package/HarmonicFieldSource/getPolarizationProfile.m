@@ -30,7 +30,7 @@ function [ matrixOfJonesVector ] = getPolarizationProfile( harmonicFieldSource )
     polDistributionType = returnDataStruct.PolarizationDistributionType;
     switch lower(polDistributionType)
         case ('global')
-            matrixOfJonesVector = repmat(reshape(jonesVector,1,1,2),totalSamplingPoints(1),totalSamplingPoints(2));
+            matrixOfJonesVector = repmat(reshape(jonesVector,1,1,2),totalSamplingPoints(2),totalSamplingPoints(1));
         case ('local')
             matrixOfJonesVector = jonesVector;
     end

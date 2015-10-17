@@ -1,7 +1,7 @@
 function [ complexIFFTofE,deltaInSpatial ] = computeIFFT2( complexEin,deltaInFrequency )
     %COMPUTEIFFT2 returns the IFFT of complexE 
     % Input:
-    %   complexEin : Can be a column vector or a matrix (2D).
+    %   complexEin : Can be a matrix (2D). It can also handle 1D vector
     %   deltaInSpatial : The sample spacing in spatial domain (2 x 1  vector)
     % Output:
     %   complexFFTofE : Th resulting field in the spatial domain
