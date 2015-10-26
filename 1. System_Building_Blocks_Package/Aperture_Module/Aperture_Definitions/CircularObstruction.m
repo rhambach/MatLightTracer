@@ -101,7 +101,7 @@ function [ returnDataStruct] = CircularObstruction(returnFlag,apertureParameters
             largeRadius = (apertureParameters.LargeDiameter)/2;
 
             tol = 10^-15; % Avoids rays falsely flaged as out of aperture due to numerics
-            umInsideTheMainAperture = ((((pointX).^2 + (pointY).^2)/largeRadius^2) >= 1-tol) &...
+            umInsideTheMainAperture = ((((pointX).^2 + (pointY).^2)/largeRadius^2) >= 1-tol) |...
                 ((((pointX).^2 + (pointY).^2)/smallRadius^2) <= 1+tol);
             returnDataStruct.IsInsideTheMainAperture = umInsideTheMainAperture;
     end
