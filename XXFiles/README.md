@@ -1,2 +1,0 @@
-# ProjectOne
-Project on progress
