@@ -12,7 +12,7 @@ function [ C ] = computeSurfaceColor( X,Y,Z,peakColor,valleyColor,nLevels,refAxi
         P = Z;
     end
     
-    colorGrad = colorGradient(peakColor,valleyColor,nLevels);
+    colorGrad = computeLinearColorGradient(peakColor,valleyColor,nLevels);
     stepSize = (max(max(P) - min(min(P))))/nLevels;
     if stepSize == 0
         stepSize = 1;
