@@ -123,17 +123,28 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
     surfColor = zeros(nSurface,3);
     centerPoints = zeros(3,nSurface);
     for ss =  1:nSurface
-        if mod(ss,4)== 0
-            surfColor(ss,:) = [0,1,0.5];
-        elseif mod(ss,4)== 1
-            surfColor(ss,:) = [0,0.75,0.75];
-        elseif mod(ss,4)== 2
-            surfColor(ss,:) = [0,1,0.75];
-        else
-            surfColor(ss,:) = [0,0.75,1];
+        %         if mod(ss,4)== 0
+        %             surfColor(ss,:) = [0,1,0.5];
+        %         elseif mod(ss,4)== 1
+        %             surfColor(ss,:) = [0,0.75,0.75];
+        %         elseif mod(ss,4)== 2
+        %             surfColor(ss,:) = [0,1,0.75];
+        %         else
+        %             surfColor(ss,:) = [0,0.75,1];
+        %         end
+        if mod(ss,2)== 0
+            % Brown scale
+            surfColor(ss,:) = [139,69,19]/256; % Saddle brown
+            surfDarkerColor(ss,:) = [139,69,19]/256; % Saddle brown
+            surfDarkerLighter(ss,:) = [210,105,30]/256; % chocolate
+        elseif mod(ss,2)== 1
+            % Gray scale
+            surfColor(ss,:) = [105,105,105]/256; % dim gray / dim grey
+            surfDarkerColor(ss,:) = [105,105,105]/256; % dim gray / dim grey
+            surfDarkerLighter(ss,:) = [119,136,153]/256; % light slate gray
         end
-        centerPoints(:,ss) = surfaceArray(ss).SurfaceCoordinateTM(1:3,4);
         
+        centerPoints(:,ss) = surfaceArray(ss).SurfaceCoordinateTM(1:3,4);
         
         if IsMirror(ss) || IsFreeSpace(ss) || ~sameApertureType(ss) || ~samegetGridType(ss) || nSurface == 1
             if ~surfacePointsComputedFlag(ss)
@@ -393,10 +404,17 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
             x = xyzPointsCurrent(:,:,1);
             y = xyzPointsCurrent(:,:,2);
             z = xyzPointsCurrent(:,:,3);
-            surf(axesHandle,x,z,y,z+35,'Facecolor','interp',...
+            valleyColor = surfDarkerColor(ss,:);
+            peakColor = surfDarkerLighter(ss,:);
+            nLevels = 100;
+            refAxisIndex = 3; % Z axis
+            [ C ] = computeSurfaceColor( x,y,z,peakColor,valleyColor,nLevels,refAxisIndex );
+            
+            surf(axesHandle,x,z,y,C,'Facecolor','interp',...
                 'edgecolor','none','FaceAlpha', 0.6);
             hold(axesHandle,'on');
         end
+        
         % Plot the edges for matching singlets with slightly darker color
         for ss = 1:singletCounter
             surf(axesHandle,[singletBoarderX{ss}],[singletBoarderZ{ss}],[singletBoarderY{ss}],...
