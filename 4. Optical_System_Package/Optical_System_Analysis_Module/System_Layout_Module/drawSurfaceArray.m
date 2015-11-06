@@ -407,8 +407,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
             valleyColor = surfDarkerColor(ss,:);
             peakColor = surfDarkerLighter(ss,:);
             nLevels = 100;
-            refAxisIndex = 3; % Z axis
-            [ C ] = computeSurfaceColor( x,y,z,peakColor,valleyColor,nLevels,refAxisIndex );
+            [ C ] = computeSurfaceColor(z,peakColor,valleyColor,nLevels );
             
             surf(axesHandle,x,z,y,C,'Facecolor','interp',...
                 'edgecolor','none','FaceAlpha', 0.6);
