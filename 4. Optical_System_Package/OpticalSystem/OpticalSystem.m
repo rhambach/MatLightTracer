@@ -54,10 +54,19 @@ function [NewOpticalSystem] =  OpticalSystem(fullFilePath)
     else
         % Open previously saved optical system from file
         if ~isempty(fullFilePath)
-            load(fullFilePath);
-            % load the object SavedOpticalSystem object to new optical
-            % system
-            NewOpticalSystem = SavedOpticalSystem;
+            % Determine weather the optical system is .mat file (Format
+            % used by MatLightTracer) or .zmx (Zemax format).
+            [pathstr,name,ext] = fileparts(fullFilePath);
+            if strcmpi(ext,'.mat')
+                load(fullFilePath);
+                % load the object SavedOpticalSystem object to new optical
+                % system
+                NewOpticalSystem = SavedOpticalSystem;
+            elseif strcmpi(ext,'.zmx')
+                NewOpticalSystem = importZemaxFile (fullFilePath);
+            else
+                
+            end
         else
             disp('Error:The file does not exist');
             NewOpticalSystem = OpticalSystem;
