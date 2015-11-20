@@ -51,10 +51,13 @@ function draw = plotSystemLayout( optSystem,rayPathMatrix,...
             'Position',[0.05,0,0.95,1]);
     end
     if nargin < 5
-        nPoints1 = 30;
+%         nPoints1 = 30;
+        nPoints1 = 150;
     end
     if nargin < 6
-        nPoints2 = 30;
+%         nPoints2 = 30; % Small number of sampling points create some
+%         probelms in system layout drawing
+        nPoints2 = 150;
     end
     
     NonDummySurfaceArray =  getNonDummySurfaceArray (optSystem);
