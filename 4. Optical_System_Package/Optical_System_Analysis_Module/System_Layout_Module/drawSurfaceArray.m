@@ -123,27 +123,27 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
     surfColor = zeros(nSurface,3);
     centerPoints = zeros(3,nSurface);
     for ss =  1:nSurface
-        %         if mod(ss,4)== 0
-        %             surfColor(ss,:) = [0,1,0.5];
-        %         elseif mod(ss,4)== 1
-        %             surfColor(ss,:) = [0,0.75,0.75];
-        %         elseif mod(ss,4)== 2
-        %             surfColor(ss,:) = [0,1,0.75];
-        %         else
-        %             surfColor(ss,:) = [0,0.75,1];
+        %         %         if mod(ss,4)== 0
+        %         %             surfColor(ss,:) = [0,1,0.5];
+        %         %         elseif mod(ss,4)== 1
+        %         %             surfColor(ss,:) = [0,0.75,0.75];
+        %         %         elseif mod(ss,4)== 2
+        %         %             surfColor(ss,:) = [0,1,0.75];
+        %         %         else
+        %         %             surfColor(ss,:) = [0,0.75,1];
+        %         %         end
+        %         if mod(ss,2)== 0
+        %             % Brown scale
+        %             surfColor(ss,:) = [139,69,19]/256; % Saddle brown
+        %             surfDarkerColor(ss,:) = [139,69,19]/256; % Saddle brown
+        %             surfDarkerLighter(ss,:) = [210,105,30]/256; % chocolate
+        %         elseif mod(ss,2)== 1
+        %             % Gray scale
+        %             surfColor(ss,:) = [105,105,105]/256; % dim gray / dim grey
+        %             surfDarkerColor(ss,:) = [105,105,105]/256; % dim gray / dim grey
+        %             surfDarkerLighter(ss,:) = [119,136,153]/256; % light slate gray
         %         end
-        if mod(ss,2)== 0
-            % Brown scale
-            surfColor(ss,:) = [139,69,19]/256; % Saddle brown
-            surfDarkerColor(ss,:) = [139,69,19]/256; % Saddle brown
-            surfDarkerLighter(ss,:) = [210,105,30]/256; % chocolate
-        elseif mod(ss,2)== 1
-            % Gray scale
-            surfColor(ss,:) = [105,105,105]/256; % dim gray / dim grey
-            surfDarkerColor(ss,:) = [105,105,105]/256; % dim gray / dim grey
-            surfDarkerLighter(ss,:) = [119,136,153]/256; % light slate gray
-        end
-        
+        %
         centerPoints(:,ss) = surfaceArray(ss).SurfaceCoordinateTM(1:3,4);
         
         if IsMirror(ss) || IsFreeSpace(ss) || ~sameApertureType(ss) || ~samegetGridType(ss) || nSurface == 1
@@ -154,7 +154,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                 drawnAperture = [apartSizeX(ss),apartSizeY(ss)];
                 %             [outerApertShape,maximumRadiusXY] = getOuterAperture(surfaceArray(ss).Aperture);
                 xyzPoints1 = drawSurface(surfaceArray(ss),plotIn2D,nPoints1,nPoints2,...
-                    -1,surfColor,2*drawnApertureRadiusXY(ss,:));
+                    -1,0,2*drawnApertureRadiusXY(ss,:));
                 %             xyzPoints(:,:,:,ss) = xyzPoints1;
                 xyzPoints{ss+mirrorCounter} = xyzPoints1;
                 surfacePointsComputedFlag(ss) = 1;
@@ -192,7 +192,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                 secondSurface.SurfaceCoordinateTM(1:3,4) = ...
                     secondSurface.SurfaceCoordinateTM(1:3,4)+globalShift';
                 xyzPoints2 = drawSurface(secondSurface,plotIn2D,nPoints1,nPoints2,...
-                    -1,surfColor,2*drawnApertureRadiusXY(ss,:));
+                    -1,0,2*drawnApertureRadiusXY(ss,:));
                 %                 xyzPoints{ss+1+mirrorCounter} = xyzPoints2;
                 
                 [xyzPoints1_New,xyzPoints2_New] = ...
@@ -250,13 +250,13 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
             if ~surfacePointsComputedFlag(ss)
                 % Compute the surface plot points and compute the singlet border
                 xyzPoints1 = drawSurface(surfaceArray(ss),plotIn2D,nPoints1,nPoints2,...
-                    -1,surfColor(ss,:),2*drawnApertureRadiusXY(ss,:));
+                    -1,0,2*drawnApertureRadiusXY(ss,:));
                 xyzPoints{ss+mirrorCounter} = xyzPoints1;
                 surfacePointsComputedFlag(ss) = 1;
             else
                 % Compute the surface plot points just for the computation of the singlet border
                 xyzPoints1 = drawSurface(surfaceArray(ss),plotIn2D,nPoints1,nPoints2,...
-                    -1,surfColor(ss,:),2*drawnApertureRadiusXY(ss,:));
+                    -1,0,2*drawnApertureRadiusXY(ss,:));
             end
             if surfaceArray(ss+1).Aperture.DrawAbsolute
                 
@@ -266,7 +266,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
             
             
             xyzPoints2 = drawSurface(surfaceArray(ss+1),plotIn2D,nPoints1,nPoints2,...
-                -1,surfColor(ss,:),2*drawnApertureRadiusXY(ss+1,:));
+                -1,0,2*drawnApertureRadiusXY(ss+1,:));
             
             
             
@@ -319,7 +319,32 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
             end
         end
     end
-    
+    % Surface Colors
+    surfColor = zeros(length(xyzPoints),3);
+    surfDarkerColor = surfColor;
+    surfDarkerLighter = surfColor;
+    for ss =  1:length(xyzPoints)
+        %         if mod(ss,4)== 0
+        %             surfColor(ss,:) = [0,1,0.5];
+        %         elseif mod(ss,4)== 1
+        %             surfColor(ss,:) = [0,0.75,0.75];
+        %         elseif mod(ss,4)== 2
+        %             surfColor(ss,:) = [0,1,0.75];
+        %         else
+        %             surfColor(ss,:) = [0,0.75,1];
+        %         end
+        if mod(ss,2)== 0
+            % Brown scale
+            surfColor(ss,:) = [139,69,19]/256; % Saddle brown
+            surfDarkerColor(ss,:) = [139,69,19]/256; % Saddle brown
+            surfDarkerLighter(ss,:) = [210,105,30]/256; % chocolate
+        elseif mod(ss,2)== 1
+            % Gray scale
+            surfColor(ss,:) = [105,105,105]/256; % dim gray / dim grey
+            surfDarkerColor(ss,:) = [105,105,105]/256; % dim gray / dim grey
+            surfDarkerLighter(ss,:) = [119,136,153]/256; % light slate gray
+        end
+    end
     % Plot all surfaces
     if plotIn2D
         % Plot mirrors
@@ -350,7 +375,7 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
         box(axesHandle,'On')
         axis equal
     else
-        for ss =  1:nSurface
+        for ss =  1:length(xyzPoints)
             xyzPointsCurrent = xyzPoints{ss};
             x = xyzPointsCurrent(:,:,1);
             y = xyzPointsCurrent(:,:,2);
