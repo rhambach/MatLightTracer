@@ -195,32 +195,8 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                     -1,surfColor,2*drawnApertureRadiusXY(ss,:));
                 %                 xyzPoints{ss+1+mirrorCounter} = xyzPoints2;
                 
-                % If o the dimensions of xyzPoints1 and xyzPoints2 are differnnt,
-                % then so that should be corrected. Simply reduce the size of
-                % the larger one to the smaller one (this just reduces the
-                % sampling points, nothing more).
-                nSampleX1 = size(xyzPoints1,1);
-                nSampleY1 = size(xyzPoints1,2);
-                nSampleX2 = size(xyzPoints2,1);
-                nSampleY2 = size(xyzPoints2,2);
-                
-                xyzPoints1_New = xyzPoints1;
-                xyzPoints2_New = xyzPoints2;
-                if nSampleX1 < nSampleX2
-                    xyzPoints2_New([2:ceil((nSampleX2-2)/(nSampleX2-nSampleX1)):nSampleX2-1],:,:) = [];
-                elseif nSampleX1 > nSampleX2
-                    xyzPoints1_New([2:ceil((nSampleX1-2)/(nSampleX1-nSampleX2)):nSampleX1-1],:,:) = [];
-                else
-                    
-                end
-                
-                if nSampleY1 < nSampleY2
-                    xyzPoints2_New(:,[2:ceil((nSampleY2-2)/(nSampleY2-nSampleY1)):nSampleY2-1],:) = [];
-                elseif nSampleY1 > nSampleY2
-                    xyzPoints1_New(:,[2:ceil((nSampleY1-2)/(nSampleY1-nSampleY2)):nSampleY1-1],:) = [];
-                else
-                    
-                end
+                [xyzPoints1_New,xyzPoints2_New] = ...
+                    balanceNumberOfSamplingPointsOfTwoSurfaces(xyzPoints1,xyzPoints2);
                 xyzPoints1 = xyzPoints1_New;
                 xyzPoints2 = xyzPoints2_New;
                 
@@ -293,34 +269,9 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
                 -1,surfColor(ss,:),2*drawnApertureRadiusXY(ss+1,:));
             
             
-            % If one of the two surfaces is tilted or has large outer
-            % aperture size than the other, then the dimensions of
-            % xyzPoints1 and xyzPoints2 could be differnnt so that should
-            % be corrected. Simply reduce the size of the larger one to the
-            % smaller one (this just reduces the sampling points, nothing
-            % more).
-            nSampleX1 = size(xyzPoints1,1);
-            nSampleY1 = size(xyzPoints1,2);
-            nSampleX2 = size(xyzPoints2,1);
-            nSampleY2 = size(xyzPoints2,2);
             
-            xyzPoints1_New = xyzPoints1;
-            xyzPoints2_New = xyzPoints2;
-            if nSampleX1 < nSampleX2
-                xyzPoints2_New([2:ceil((nSampleX2-2)/(nSampleX2-nSampleX1)):nSampleX2-1],:,:) = [];
-            elseif nSampleX1 > nSampleX2
-                xyzPoints1_New([2:ceil((nSampleX1-2)/(nSampleX1-nSampleX2)):nSampleX1-1],:,:) = [];
-            else
-                
-            end
-            
-            if nSampleY1 < nSampleY2
-                xyzPoints2_New(:,[2:ceil((nSampleY2-2)/(nSampleY2-nSampleY1)):nSampleY2-1],:) = [];
-            elseif nSampleY1 > nSampleY2
-                xyzPoints1_New(:,[2:ceil((nSampleY1-2)/(nSampleY1-nSampleY2)):nSampleY1-1],:) = [];
-            else
-                
-            end
+            [xyzPoints1_New,xyzPoints2_New] = ...
+                balanceNumberOfSamplingPointsOfTwoSurfaces(xyzPoints1,xyzPoints2);
             xyzPoints1 = xyzPoints1_New;
             xyzPoints2 = xyzPoints2_New;
             
@@ -442,3 +393,40 @@ function [ xyzPoints,centerPoints] = drawSurfaceArray...
     hold off;
     %     camlight
     lighting gouraud
+end
+
+function [xyzPoints1_New,xyzPoints2_New] = ...
+        balanceNumberOfSamplingPointsOfTwoSurfaces(xyzPoints1,xyzPoints2)
+    % If one of the two surfaces is tilted or has large outer
+    % aperture size than the other, then the dimensions of
+    % xyzPoints1 and xyzPoints2 could be differnnt so that should
+    % be corrected. Simply reduce the size of the larger one to the
+    % smaller one (this just reduces the sampling points, nothing
+    % more).
+    nSampleX1 = size(xyzPoints1,1);
+    nSampleY1 = size(xyzPoints1,2);
+    nSampleX2 = size(xyzPoints2,1);
+    nSampleY2 = size(xyzPoints2,2);
+    
+    xyzPoints1_New = xyzPoints1;
+    xyzPoints2_New = xyzPoints2;
+    if nSampleX1 < nSampleX2
+        pointsTobeRemoved = [2:floor((nSampleX2-2)/(nSampleX2-nSampleX1)):nSampleX2-1];
+        xyzPoints2_New(pointsTobeRemoved(1:nSampleX2 - nSampleX1),:,:) = [];
+    elseif nSampleX1 > nSampleX2
+        pointsTobeRemoved = [2:floor((nSampleX1-2)/(nSampleX1-nSampleX2)):nSampleX1-1];
+        xyzPoints1_New(pointsTobeRemoved(1:nSampleX1 - nSampleX2),:,:) = [];
+    else
+        
+    end
+    
+    if nSampleY1 < nSampleY2
+        pointsTobeRemoved = [2:floor((nSampleY2-2)/(nSampleY2-nSampleY1)):nSampleY2-1];
+        xyzPoints2_New(:,pointsTobeRemoved(1:nSampleY2 - nSampleY1),:) = [];
+    elseif nSampleY1 > nSampleY2
+        pointsTobeRemoved = [2:floor((nSampleY1-2)/(nSampleY1-nSampleY2)):nSampleY1-1];
+        xyzPoints1_New(:,pointsTobeRemoved(1:nSampleY1 - nSampleY2),:) = [];
+    else
+        
+    end
+end
