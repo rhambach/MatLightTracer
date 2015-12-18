@@ -452,7 +452,7 @@ function rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTrace
                 end
             end
         end
-        % now the currentnt ray becomes global ray agin
+        % now the current ray becomes global ray again
         CurrentRayPosition = GlobalExitRayPosition;
         CurrentRayDirection = GlobalExitRayDirection;
         if considerSurfaceAperture

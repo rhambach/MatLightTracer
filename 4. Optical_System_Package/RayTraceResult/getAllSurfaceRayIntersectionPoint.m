@@ -1,13 +1,13 @@
 function [ surfaceRayIntersectionPoint ] = getAllSurfaceRayIntersectionPoint( allSurfaceRayTraceResult,...
         rayPupilIndices,rayFieldIndices,rayWavelengthIndices)
-    %getAllSurfaceExitRayDirection: Returns the Ray Intersection Point of a specific
+    %getAllSurfaceRayIntersectionPoint: Returns the Ray Intersection Point of a specific
     % ray specified by (rayPupilIndex,rayFieldIndex,rayWavIndex) for all surfaces
     % Input:
     %   allSurfaceRayTraceResult: vector of raytrace result (size = nSurf)
     %   (rayPupilIndex,rayFieldIndex,rayWavIndex) : Indices specifying a given
     %   ray
     % Output:
-    %   exitRayDirections: is (3 X nSurf X nPupilPointsRequested X nFieldRequested X nWavRequested)
+    %   RayIntersectionPoint: is (3 X nSurf X nPupilPointsRequested X nFieldRequested X nWavRequested)
     
     if nargin == 0
         disp(['Error: The function  getAllSurfaceRayIntersectionPoint requires ',...
