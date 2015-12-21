@@ -442,7 +442,7 @@ function btnOkCallback(childWindow,parentWindow)
             rayTracerResult = rayTracer(optSystem,newRay,rayTraceOptionStruct);
             
             % Display results based on the type of raytrace
-            nSurf = getNumberOfSurfaces(optSystem);
+            nSurf = getNumberOfNonDummySurfaces(optSystem);
             [ lensUnitFactor,lensUnitText ] = getLensUnitFactor(optSystem);
             [ wavUnitFactor, wavUnitText] = getWavelengthUnitFactor(optSystem);
             %             stopIndex = getStopSurfaceIndex(optSystem);

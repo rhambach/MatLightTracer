@@ -1,6 +1,6 @@
 function [xyzPoints] = drawSurface(surface,plotIn2D,nPoints1,nPoints2,...
         axesHandle,surfColor,drawnApertureDiameterXY,sectionDrawn)
-    % drawSurface: Drwas a single surface in 3D/2D layout diagram
+    % drawSurface: Draws a single surface in 3D/2D layout diagram
     % Inputs
     %   (surface,plotIn2D,nPoints1,nPoints2,...
     %    axesHandle,surfColor,drawnAperture,sectionDrawn)
