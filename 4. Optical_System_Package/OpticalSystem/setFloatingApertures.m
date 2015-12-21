@@ -17,15 +17,10 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
     nNonDummySurf = length(nonDummySurfaceIndices);
     nWav = getNumberOfWavelengths(updatedOpticalSystem);
     
-    fieldPointMatrix = updatedOpticalSystem.FieldPointMatrix;
-    fieldPointIndices = size(fieldPointMatrix,1);
-    
-    wavelengthMatrix = updatedOpticalSystem.WavelengthMatrix;
-    wavLenIndices = size(wavelengthMatrix,1);
-    
-    % Repeat wavelegths for each field point and vice versa
-    fieldPointIndicesAll = repmat(fieldPointIndices,[1,nWav]);
-    wavLenIndicesAll = cell2mat(arrayfun(@(x) x*ones(1,nField),wavLenIndices,'UniformOutput',false));
+    % construct all combinations of wavelengths and field point indices (row vectors)
+    [W,F] = meshgrid(1:nWav,1:nField);
+    fieldPointIndicesAll = reshape(F,1,nWav*nField);
+    wavLenIndicesAll = reshape(W,1,nWav*nField);
     
     % For top and bottom rays
     angleFromYinRad1 = 0;
@@ -35,7 +30,7 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
     angleFromYinRad3 = pi/2;
     angleFromYinRad4 = 3*pi/2;
     
-    % Ignore current apertures in the computation of flaoting
+    % Ignore current apertures in the computation of floating
     rayTraceOptionStruct = RayTraceOptionStruct( );
     rayTraceOptionStruct.ConsiderSurfAperture = 0;
     rayTraceOptionStruct.RecordIntermediateResults = 1;
@@ -67,9 +62,11 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
             % If the mariginal rays fail to intersect, then trace N other
             % rays in the tangential plane and take the farthest one
             % intersecting the surface
-            if (isnan(topMariginalIntersection)|isnan(bottomMariginalIntersection)|...
-                    isnan(rightMariginalIntersection)|isnan(leftMariginalIntersection)) & ...
-                    (nMarginalRayUsed == 1)
+            
+            % FIXME: logical array in if clause, use all or any
+            if (nMarginalRayUsed == 1) & (isnan(topMariginalIntersection)|isnan(bottomMariginalIntersection)|...
+                    isnan(rightMariginalIntersection)|isnan(leftMariginalIntersection)) 
+                    
                 N = 100;
                 topMariginalRayTraceResult = traceMariginalRay(updatedOpticalSystem,...
                     fieldPointIndicesAll,wavLenIndicesAll,angleFromYinRad1,rayTraceOptionStruct,N);
