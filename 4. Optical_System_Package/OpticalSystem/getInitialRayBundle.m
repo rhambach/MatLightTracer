@@ -5,8 +5,8 @@ function [ initialRayBundle, pupilSamplingPoints,pupilMeshGrid,outsidePupilIndic
     % Inputs:
     % wavelengthIndices,fieldIndices: Vectors indicating the wavelength and
     %           field indices to be used
-    % nPupilPoints1,nPupilPoints2: The number of sampling points of the
-    %           interance pupil.
+    % nPupilPoints1,nPupilPoints2: The number of sampling points in the
+    %           entrance pupil.
     % pupilSamplingType: An integer indicating the pupil sampling type
     % Output:
     %   initialRayBundle: The initial ray bundles at the object plane

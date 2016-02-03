@@ -92,8 +92,8 @@ function plotFootprintDiagram(optSystem,surfIndex,wavelengthIndices,...
             py = localIntersectionPoints(2,:);
             
             currentSpotColor = spotColorList(fieldIndex + (wavIndex-1)*nField);
-            currentSpotSymbal = '.';
-            plot(axesHandle,px,py,[currentSpotColor,currentSpotSymbal]);
+            currentSpotSymbol = '.';
+            plot(axesHandle,px,py,[currentSpotColor,currentSpotSymbol]);
             hold on;
         end
     end

@@ -13,17 +13,17 @@ function [ newScalarRayBundle ] = ScalarRayBundle( position,direction,wavelength
     %   input argument size is greater than the number of rays, then the
     %   extra values are just discarded. 
     % Output:
-    %   newScalarRayBundle: A scalalr ray bundle structure.
+    %   newScalarRayBundle: A scalar ray bundle structure.
     
     if nargin == 0
         % Empty constructor
         newScalarRayBundle.Position = [0;0;0]; % default position
-        newScalarRayBundle.Direction = [0;0;1]; % default dirction
+        newScalarRayBundle.Direction = [0;0;1]; % default direction
         newScalarRayBundle.Wavelength = 0.55*10^-6; % default
         newScalarRayBundle.ClassName = 'ScalarRayBundle';
     else
         if nargin == 1
-            direction = [0;0;1]; % default dirction
+            direction = [0;0;1]; % default direction
             wavelength = 0.55*10^-6;  % default
         elseif nargin == 2
             wavelength = 0.55*10^-6; % default
