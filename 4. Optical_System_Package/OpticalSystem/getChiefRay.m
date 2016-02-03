@@ -15,7 +15,7 @@ function [ chiefRay ] = getChiefRay( optSystem,fieldIndices,wavelengthIndices )
     end
     if nargin < 2
         % Take all field points and primary wavelength
-        fieldIndices = [1:size(optSystem.FieldPointMatrix,1)];
+        fieldIndices = [1:getNumberOfFieldPoints(optSystem)];
     end
     
     if nargin < 3

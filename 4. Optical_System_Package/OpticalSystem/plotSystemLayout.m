@@ -3,7 +3,7 @@ function draw = plotSystemLayout( optSystem,rayPathMatrix,...
     % plotSystemLayout: Drwas a 3D or 2D layout diagram
     % Inputs
     %   opticalSystem: the optical system object
-    %   rayPathMatrix:  3 dimensional matrix of dimensions(nNonDummySurface X 3 X nRay)
+    %   rayPathMatrix:  3 dimensional matrix of dimensions(3 X nNonDummySurface X nPupil X nField X nWav)
     %                   Matrix of ray itersection points to be drwan.
     %   axesHandle: axes on to plot the layout
     %   plotIn2D: Plot the YZ cross section in 2D layout
@@ -56,7 +56,7 @@ function draw = plotSystemLayout( optSystem,rayPathMatrix,...
     end
     if nargin < 6
 %         nPoints2 = 30; % Small number of sampling points create some
-%         probelms in system layout drawing
+%         problems in system layout drawing
         nPoints2 = 150;
     end
     

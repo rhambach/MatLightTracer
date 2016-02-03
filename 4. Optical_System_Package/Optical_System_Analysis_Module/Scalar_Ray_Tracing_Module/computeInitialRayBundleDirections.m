@@ -9,7 +9,7 @@ function [ initialRayBundleDirections ] = computeInitialRayBundleDirections...
     % Input:
     %   fieldPointPosition: 3 X nField Matrice of Position of object point 
     %   which is initial position of all rays.
-    %   pupilSamplingPoints: 3 X nRay  matrix containg values of 
+    %   pupilSamplingPoints: 3 X nRay  matrix containing values of 
     %   pupil sampling coordinates for all field points (the same for all).
 
     % Outputs:
