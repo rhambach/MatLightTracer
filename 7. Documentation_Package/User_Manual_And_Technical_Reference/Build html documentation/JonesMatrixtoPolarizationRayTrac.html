@@ -1,0 +1,102 @@
+﻿<html>
+	
+<head>
+	<title>Jones Matrix to Polarization Ray Tracing Matrix</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.3.1.364">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "MatLightTracer Version 1.0 Reference.html?" + sTopicUrl;
+			}
+			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+			{
+				top.FrameTOC.SelectTocItem("JonesMatrixtoPolarizationRayTrac");
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Jones Matrix to Polarization Ray Tracing Matrix</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="ProgrammingandAlgorithmsReferen1.html">Programming and Algorithms Reference</a> &rsaquo;&rsaquo; <a href="PolarizationRayTracingModule.html">Polarization Ray Tracing Module</a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="PolarizationRayTracingModule.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="PolarizationRayTracingModule.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="PolarizationRayTracingthroughInt.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps34"><a name="_Toc370907112"></a>
+<span class="rvts71">Transformation of Jones Matrix to Polarization Ray Tracing Matrix</span></p>
+<p class="rvps23"><span class="rvts45">Because of their equivalence, it is possible to obtain Polarization Ray Tracing Matrix from the Jones Matrix of an optical element for a given incident and exiting directions, </span><span class="rvts44">k</span><span class="rvts75">q-1 </span><span class="rvts45">and </span><span class="rvts44">k</span><span class="rvts75">q</span><span class="rvts45">. In Jones calculus, calculation of reflection and refraction at q</span><span class="rvts85">th</span><span class="rvts45"> interface (optical element) requires transformation of the field from global {x,y,z} to local s-p coordinates before the interface {s</span><span class="rvts75">q</span><span class="rvts45">,p</span><span class="rvts75">q</span><span class="rvts45">,k</span><span class="rvts75">q-1</span><span class="rvts45">}</span><span class="rvts75"> </span><span class="rvts45">and then from local s-p &nbsp;after the interface {s’</span><span class="rvts75">q</span><span class="rvts45">,p’</span><span class="rvts75">q</span><span class="rvts45">,k</span><span class="rvts75">q</span><span class="rvts45">} &nbsp;back to the global coordinates. </span></p>
+<p class="rvps23"><span class="rvts45">The local coordinates before and after the interface are related as follows. The reflected and transmitted rays k</span><span class="rvts75">q</span><span class="rvts45"> both lie on the same plane which contains the incident ray k</span><span class="rvts75">q-1</span><span class="rvts45">. The p (p for “parallel”) components of the local coordinates also lie in this plane by definition. As the s (s for “senkrecht” or perpendicular in Deutsch) components of the local coordinate systems are perpendicular to the plane containing p and k- components, it will be the same before and after the interface.</span></p>
+<p class="rvps23"><img alt="" style="padding : 1px;" src="lib/NeuesElement146.png"/></p>
+<p class="rvps23"><span class="rvts45">And the p - components are perpendicular to both k- and s- components so</span></p>
+<p class="rvps23"><img alt="" style="padding : 1px;" src="lib/NeuesElement145.png"/></p>
+<p class="rvps23"><span class="rvts45">Given the local coordinates before and after the interface in terms of global xyz coordinate </span><img alt="" style="padding : 1px;" src="lib/NeuesElement144.png"/><span class="rvts45"> orthogonal matrices for the transformation of the electric field vector from global to local and then back to local coordinate are given by [7] as follows:</span></p>
+<p class="rvps23"><img alt="" style="padding : 1px;" src="lib/NeuesElement143.png"/></p>
+<p class="rvps23"><img alt="" style="padding : 1px;" src="lib/NeuesElement142.png"/><span class="rvts75">&nbsp;</span><span class="rvts45"> acts on incident field </span><span class="rvts44">E</span><span class="rvts75">q-1 </span><span class="rvts45">in global coordinate system and transforms to {s</span><span class="rvts75">q</span><span class="rvts45">,p</span><span class="rvts75">q</span><span class="rvts45">,k</span><span class="rvts75">q-1</span><span class="rvts45">} local coordinate and </span><img alt="" style="padding : 1px;" src="lib/NeuesElement141.png"/><span class="rvts45"> transforms the fields in the local coordinate {s’</span><span class="rvts75">q</span><span class="rvts45">,p’</span><span class="rvts75">q</span><span class="rvts45">,k</span><span class="rvts75">q</span><span class="rvts45">} back to the global coordinates.</span></p>
+<p class="rvps23"><span class="rvts45">The conversion of a 2x2 Jones Matrix, which is defined in the local {s,p} coordinates, to the polarization ray tracing matrices involves the following steps:</span></p>
+<ol style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: decimal;">
+<li class="rvps49" style="text-indent: 0px"><span class="rvts45">The incident field vector E</span><span class="rvts75">q-1 </span><span class="rvts45">is transformed to the local {s</span><span class="rvts75">q</span><span class="rvts45">,p</span><span class="rvts75">q</span><span class="rvts45">,k</span><span class="rvts75">q-1</span><span class="rvts45">} coordinate</span></li>
+</ol>
+<p class="rvps50"><span class="rvts45"> </span><img alt="" style="padding : 1px;" src="lib/NeuesElement140.png"/></p>
+<ol style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: decimal;">
+<li class="rvps49" style="text-indent: 0px"><span class="rvts45">The resulting vector is multiplied with the Jones matrix. But before that the Jones matrix should be converted to 3x3 matrix by padding &nbsp;a row and a column (with 1 in their last term and 0 in the rest). </span></li>
+</ol>
+<p class="rvps50"><span class="rvts45"> &nbsp; &nbsp; </span><img alt="" style="padding : 1px;" src="lib/NeuesElement139.png"/></p>
+<p class="rvps23"><span class="rvts45">This vector is automatically in the local coordinate system {s’</span><span class="rvts75">q</span><span class="rvts45">,p’</span><span class="rvts75">q</span><span class="rvts45">,k</span><span class="rvts75">q</span><span class="rvts45">} after the element.</span></p>
+<ol style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: decimal;">
+<li class="rvps49" style="text-indent: 0px"><span class="rvts45">Finally the vector is transformed back to the global </span></li>
+</ol>
+<p class="rvps50"><span class="rvts45"> &nbsp; </span><img alt="" style="padding : 1px;" src="lib/NeuesElement138.png"/><span class="rvts45">. This will be the electric field vector E</span><span class="rvts75">q</span><span class="rvts45"> after the optical element. </span></p>
+<p class="rvps23"><span class="rvts45">So &nbsp;</span></p>
+<p class="rvps23"><img alt="" style="padding : 1px;" src="lib/NeuesElement137.png"/></p>
+<p class="rvps23"><span class="rvts45">Therefore, the polarization ray tracing matrix </span><img alt="" style="padding : 1px;" src="lib/NeuesElement136.png"/><span class="rvts45"> is given by</span></p>
+<p class="rvps23"><img alt="" style="padding : 1px;" src="lib/NeuesElement135.png"/></p>
+<p class="rvps23"><span class="rvts45">Note that a given Jones matrix can give different polarization ray tracing matrices depending on the incident and exiting ray directions. </span></p>
+<p></p>
+<p class="rvps6"><span class="rvts20">Created with the Personal Edition of HelpNDoc: </span><a class="rvts21" href="http://www.helpndoc.com/feature-tour">Easily create EBooks</a></p>
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; &lt;2016&gt; by &lt;Norman G. Worku (normangirma2012@gmail.com), Optical System Design Research Group, FSU, Jena&gt;. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

@@ -20,6 +20,7 @@ function [ returnDataStruct] = RadialPolarization(returnFlag,polarizationParamet
     %   inputDataStruct:
     %       inputDataStruct.xMesh
     %       inputDataStruct.yMesh
+    %       inputDataStruct.BeamCenter 
     %   returnDataStruct:
     %       returnDataStruct.JonesVector
     %       returnDataStruct.PolarizationDistributionType
@@ -82,8 +83,10 @@ function [ returnDataStruct] = RadialPolarization(returnFlag,polarizationParamet
             originAngleInRad = originAngle*pi/180;
             x = inputDataStruct.xMesh;
             y = inputDataStruct.yMesh;
+            Cx = inputDataStruct.BeamCenter(1);
+            Cy = inputDataStruct.BeamCenter(2);
             
-            allPolAngle = atan(y./x);
+            allPolAngle = atan((y-Cy)./(x-Cx));
             allPolAngle(isnan(allPolAngle)) = originAngleInRad;
             
             jonesVector = cat(3,cos(allPolAngle),sin(allPolAngle));

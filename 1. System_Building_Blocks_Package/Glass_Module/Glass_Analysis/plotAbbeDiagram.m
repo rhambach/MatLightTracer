@@ -66,24 +66,18 @@ function [ refractiveIndexArray,abbeNumberArray, glassNameCellArray ] = ...
     
     allNames = cell(numberOfGlass,1);
     for gg = 1:numberOfGlass
-        if strcmpi(class(glassObjectArray),'Glass')
+        if isGlass(glassObjectArray(gg))
             glassObject = glassObjectArray(gg);
             name = glassObjectArray(gg).Name;
-        elseif isstruct(glassObjectArray)
-            % Get glass name
-            name = glassObjectArray(gg).Name;
-            % Compute refractive index
-            glassObject = Glass(glassObjectArray(gg).Name,glassObjectArray(gg).GlassType,...
-                glassObjectArray(gg).CoefficientData,[0,0,0]);
         else
             disp('Error: The GlassArray input should be either array of glass objects or glass structs!');
             plotted = 0;
             return;
         end
         
-        nd(gg) = glassObject.getRefractiveIndex(wavLend);
+        nd(gg) = getRefractiveIndex(glassObject,wavLend);
         % Compute the abbe number
-        vd(gg) = glassObject.getAbbeNumber(wavLenF,wavLend,wavLenC);
+        vd(gg) = getAbbeNumber(glassObject,wavLenF,wavLend,wavLenC);
         
         if isnumeric(axesHandle) && axesHandle == -1 % No ploting is required
             continue;

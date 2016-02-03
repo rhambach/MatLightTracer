@@ -1,4 +1,4 @@
-function [ newScalarRayBundle ] = ScalarRayBundle( position,direction,wavelength,nRays )
+function [ newScalarRayBundle ] = ScalarRayBundle( position,direction,wavelength,nPupilPoints,nFieldPoints,nWavelengths )
     %ScalarRayBundle Used to define ray bundles which can be traced through
     %optical systems.
     % Inputs:
@@ -20,6 +20,9 @@ function [ newScalarRayBundle ] = ScalarRayBundle( position,direction,wavelength
         newScalarRayBundle.Position = [0;0;0]; % default position
         newScalarRayBundle.Direction = [0;0;1]; % default dirction
         newScalarRayBundle.Wavelength = 0.55*10^-6; % default
+        newScalarRayBundle.FixedParameters.TotalNumberOfPupilPoints = 1;
+        newScalarRayBundle.FixedParameters.TotalNumberOfFieldPoints = 1;
+        newScalarRayBundle.FixedParameters.TotalNumberOfWavelengths = 1;
         newScalarRayBundle.ClassName = 'ScalarRayBundle';
     else
         if nargin == 1
@@ -37,13 +40,26 @@ function [ newScalarRayBundle ] = ScalarRayBundle( position,direction,wavelength
         nPos = size(position,2);
         nDir = size(direction,2);
         nWav = size(wavelength,2);
+        
         % The number of array to be initialized is maximum of all inputs
         nMax = max([nPos,nDir,nWav]);
         
-        if nargin > 3
-            % limit nMax to the nRays
-            nMax = nRays;
+        if nargin < 4
+            nPupilPoints = nMax;
+            nFieldPoints = 1;
+            nWavelengths = 1;
         end
+        if nargin == 4
+            nFieldPoints = 1;
+            nWavelengths = 1;
+        end
+        if nargin == 5
+            nWavelengths = 1;
+        end
+        % limit nMax to the nRays
+        nMax = nPupilPoints*nFieldPoints*nWavelengths;
+        
+        
         % Fill the smaller inputs to have nMax size by repeating their
         % last element
         if nPos < nMax
@@ -66,6 +82,11 @@ function [ newScalarRayBundle ] = ScalarRayBundle( position,direction,wavelength
         newScalarRayBundle.Position = position;
         newScalarRayBundle.Direction = direction;
         newScalarRayBundle.Wavelength = wavelength;
+
+        newScalarRayBundle.FixedParameters.TotalNumberOfPupilPoints = nPupilPoints;
+        newScalarRayBundle.FixedParameters.TotalNumberOfFieldPoints = nFieldPoints;
+        newScalarRayBundle.FixedParameters.TotalNumberOfWavelengths = nWavelengths;
+        
         newScalarRayBundle.ClassName = 'ScalarRayBundle';
     end
 end

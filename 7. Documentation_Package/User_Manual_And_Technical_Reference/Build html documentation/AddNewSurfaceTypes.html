@@ -1,0 +1,445 @@
+﻿<html>
+	
+<head>
+	<title>Add New Surface Types</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.3.1.364">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "MatLightTracer Version 1.0 Reference.html?" + sTopicUrl;
+			}
+			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+			{
+				top.FrameTOC.SelectTocItem("AddNewSurfaceTypes");
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Add New Surface Types</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="ProgrammingandAlgorithmsReferen1.html">Programming and Algorithms Reference</a> &rsaquo;&rsaquo; <a href="ExamplesofExtendingtheToolbox.html">Examples of Extending the Toolbox</a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="ExamplesofExtendingtheToolbox.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="Method2Asseparatetoolusingtheexi.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="TransverseRayAberrationDiagram.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps29"><span class="rvts104">Add New Surface Types</span></p>
+<p class="rvps29"><span class="rvts54">The surface module of the MatLightTracing toolbox ( located at </span><span class="rvts52">...\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module</span><span class="rvts54">) has two main folders: </span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts109">1. </span><span class="rvts108">Surface</span></p>
+<p class="rvps29"><span class="rvts54">Here a struct </span><span class="rvts52">'Surface'</span><span class="rvts54"> is defined with all properties which are common to all surface types such as </span><span class="rvts52">Type, Radius, Conic, Thickness, Glass</span><span class="rvts54">, ... </span></p>
+<p class="rvps29"><span class="rvts54">The " </span><span class="rvts52">Type</span><span class="rvts54"> " field determines the specific class of surface type to which the current surface belongs. For instance, the </span><span class="rvts52">Type</span><span class="rvts54"> field could be </span><span class="rvts52">Standard, EvenAsphere,...</span></p>
+<p class="rvps29"><span class="rvts54">In addition to the fields common to all surface types, the </span><span class="rvts52">Surface</span><span class="rvts54"> struct has an additional field called "</span><span class="rvts52">UniqueParameres</span><span class="rvts54">" which is used to hold parameters which are unique to certain type of surface. The </span><span class="rvts52">UniqueParameres</span><span class="rvts54"> field is struct by itself which can have different sub-fields depending on the surface type.</span></p>
+<p class="rvps29"><span class="rvts54">For instance, for </span><span class="rvts52">EvenAsphere</span><span class="rvts54"> surface type, the polynomial coefficients are fields of the </span><span class="rvts52">UniqueParameres </span><span class="rvts54">struct</span><span class="rvts52">. </span><span class="rvts54">But the </span><span class="rvts52">UniqueParameres </span><span class="rvts54">of the</span><span class="rvts52">&nbsp;</span><span class="rvts54"> </span><span class="rvts52">Standard</span><span class="rvts54"> surface is just an empty struct as there are no additional parameters unique to </span><span class="rvts52">Standard</span><span class="rvts54"> surface types. </span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts109">2. </span><span class="rvts108">Surface_Defintions</span></p>
+<p class="rvps29"><span class="rvts54">This folder has the definition files of each surface type in the MatLightTracer toolbox. The name of the surface type definition files should be the same as the surface type name. For instance </span><span class="rvts52">Standard</span><span class="rvts54"> types are defined in the file named </span><span class="rvts52">Standard.m</span><span class="rvts54"> and </span><span class="rvts52">EvenAsphere</span><span class="rvts54"> surface type is defined in Matlab function file named </span><span class="rvts52">EvenAsphere.m.</span></p>
+<p class="rvps29"><span class="rvts52"><br/></span></p>
+<p class="rvps29"><span class="rvts54">With the MatLightTracing it is simple to extend supported surface types by adding a new surface types. It requires writing a separate Matlab function which follows certain common format described in this section. Once the function is written and included in the Surface definition folder, the new surface can be used in any optical systems as any other existing surface types.</span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts54">Let us assume we want to add an </span><span class="rvts52">Toroidal</span><span class="rvts54"> surface type, then we have to follow the following steps.</span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts97">Step 1</span><span class="rvts103">: &nbsp;Surface Parameter Identification</span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts54">Identify the parameters used in the new surface type to be defined. &nbsp;The radius of curvature and conic constant are common to all surface types so you need to find any additional parameter required. In the case of Toroidal surface we need </span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;">
+<li class="rvps29"><span class="rvts54">Radius of Rotation and </span></li>
+<li class="rvps29"><span class="rvts54">Polynomial coefficients (C2, C4, C6, C8, C10, C12, C14).</span></li>
+</ul>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts97">Step 2:</span><span class="rvts103"> &nbsp;Add a function named </span><span class="rvts105">'Toroidal.m'</span><span class="rvts103"> &nbsp;to the following folder</span></p>
+<p class="rvps29"><span class="rvts106">'...\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface_Definitions'.</span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts54">These functions all have the following common format</span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts52">[ returnDataStruct] = Toroidal (returnFlag, uniqueParameters ,inputDataStruct)</span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: circle;">
+<li class="rvps29"><span class="rvts52">Toroidal</span><span class="rvts54">: Is the name of the surface type</span></li>
+<li class="rvps29"><span class="rvts52">returnFlag</span><span class="rvts54">: an integer number indicating what to be returned to the calling function (for instance a ray tracing routine).</span></li>
+<li class="rvps29"><span class="rvts52">uniqueParameters</span><span class="rvts54">: is an struct of unique parameters unique to the current user defined surface/feature.</span></li>
+<li class="rvps29"><span class="rvts52">inputDataStruct</span><span class="rvts54">: a structure of additional parameters required for computing the required parameter.</span></li>
+<li class="rvps29"><span class="rvts52">returnDataStruct</span><span class="rvts54">: a struct with the results to be returned to the calling function.</span></li>
+</ul></ul>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts54">NB. The inputDataStruct and returnDataStruct may vary depending on the return type required.</span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts54">Now based on the return flag, the function computes different things as follows </span></p>
+<p class="rvps29"><span class="rvts97">1: About the surface</span></p>
+<p class="rvps29"><span class="rvts56"> inputDataStruct:</span></p>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;empty</span></p>
+<p class="rvps29"><span class="rvts56">Output Struct:</span></p>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span><span class="rvts52"> returnDataStruct.Name</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.IsGratingEnabled</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.ImageFullFileName</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.Description</span></p>
+<p class="rvps29"><span class="rvts56">Source Code:</span></p>
+<p class="rvps33"><span class="rvts98">surfName = {</span><span class="rvts100">'Toroidal'</span><span class="rvts98">,</span><span class="rvts100">'TORD'</span><span class="rvts98">}; </span><span class="rvts99">% display name</span></p>
+<p class="rvps33"><span class="rvts99">% look for image description in the current folder and return</span></p>
+<p class="rvps33"><span class="rvts99">% full address</span></p>
+<p class="rvps33"><span class="rvts98">[pathstr,name,ext] = fileparts(mfilename(</span><span class="rvts100">'fullpath'</span><span class="rvts98">));</span></p>
+<p class="rvps33"><span class="rvts98">imageFullFileName = {[pathstr,</span><span class="rvts100">'\Surface.jpg'</span><span class="rvts98">]}; &nbsp;</span><span class="rvts99">% Image file name</span></p>
+<p class="rvps33"><span class="rvts98">description = {[</span><span class="rvts100">'Toroidal: Used to define standard conical surfaces.'</span><span class="rvts98">]}; &nbsp;</span><span class="rvts99">% Text description</span></p>
+<p class="rvps29"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct = struct();</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.Name = surfName;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.IsGratingEnabled = 1;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.IsExtraDataEnabled = 1;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.ImageFullFileName = imageFullFileName;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.Description = &nbsp;description;</span></p>
+<p class="rvps29"><span class="rvts96"><br/></span></p>
+<p class="rvps29"><span class="rvts56">Description</span><span class="rvts52">:</span></p>
+<p class="rvps33"><span class="rvts54">Return the general information related with the current surface type.</span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts97">2: Surface specific 'UniqueSurfaceParameters' table field names and initial values in Surface Editor GUI</span></p>
+<p class="rvps29"><span class="rvts56"> inputDataStruct:</span></p>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;empty</span></p>
+<p class="rvps29"><span class="rvts56">Output Struct:</span></p>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts52">returnDataStruct.UniqueParametersStructFieldNames</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.UniqueParametersStructFieldDisplayNames</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.UniqueParametersStructFieldTypes</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.DefaultUniqueParametersStruct</span></p>
+<p class="rvps29"><span class="rvts56">Source Code:</span></p>
+<p class="rvps33"><span class="rvts98">uniqueParametersStructFieldNames = {</span><span class="rvts100">'RadiusOfRotation'</span><span class="rvts98">,</span><span class="rvts100">'C2'</span><span class="rvts98">,</span><span class="rvts100">'C4'</span><span class="rvts98">,</span><span class="rvts100">'C6'</span><span class="rvts98">,</span><span class="rvts100">'C8'</span><span class="rvts98">,</span><span class="rvts100">'C10'</span><span class="rvts98">,</span><span class="rvts100">'C12'</span><span class="rvts98">,</span><span class="rvts100">'C14'</span><span class="rvts98">};</span></p>
+<p class="rvps33"><span class="rvts98">uniqueParametersStructFieldDisplayNames = {</span><span class="rvts100">'Radius Of Rotation'</span><span class="rvts98">,</span><span class="rvts100">'C 2'</span><span class="rvts98">,</span><span class="rvts100">'C 4'</span><span class="rvts98">,</span><span class="rvts100">'C 6'</span><span class="rvts98">,</span><span class="rvts100">'C 8'</span><span class="rvts98">,</span><span class="rvts100">'C 10'</span><span class="rvts98">,</span><span class="rvts100">'C 12'</span><span class="rvts98">,</span><span class="rvts100">'C 14'</span><span class="rvts98">};</span></p>
+<p class="rvps33"><span class="rvts98">uniqueParametersStructFieldTypes = {</span><span class="rvts100">'numeric'</span><span class="rvts98">,</span><span class="rvts100">'numeric'</span><span class="rvts98">,</span><span class="rvts100">'numeric'</span><span class="rvts98">,</span><span class="rvts100">'numeric'</span><span class="rvts98">,</span><span class="rvts100">'numeric'</span><span class="rvts98">, </span><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts100">'numeric'</span><span class="rvts98">,</span><span class="rvts100">'numeric'</span><span class="rvts98">,</span><span class="rvts100">'numeric'</span><span class="rvts98">};</span></p>
+<p class="rvps29"><span class="rvts98"><br/></span></p>
+<p class="rvps33"><span class="rvts98">defaultUniqueParametersStruct = struct();</span></p>
+<p class="rvps33"><span class="rvts98">defaultUniqueParametersStruct.RadiusOfRotation = Inf;</span></p>
+<p class="rvps33"><span class="rvts98">defaultUniqueParametersStruct.C2 = 0;</span></p>
+<p class="rvps33"><span class="rvts98">defaultUniqueParametersStruct.C4 = 0;</span></p>
+<p class="rvps33"><span class="rvts98">defaultUniqueParametersStruct.C6 = 0;</span></p>
+<p class="rvps33"><span class="rvts98">defaultUniqueParametersStruct.C8 = 0;</span></p>
+<p class="rvps33"><span class="rvts98">defaultUniqueParametersStruct.C10 = 0;</span></p>
+<p class="rvps33"><span class="rvts98">defaultUniqueParametersStruct.C12 = 0;</span></p>
+<p class="rvps33"><span class="rvts98">defaultUniqueParametersStruct.C14 = 0;</span></p>
+<p class="rvps29"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct = struct();</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.UniqueParametersStructFieldNames = uniqueParametersStructFieldNames;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.UniqueParametersStructFieldDisplayNames = uniqueParametersStructFieldDisplayNames;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.UniqueParametersStructFieldTypes = uniqueParametersStructFieldTypes;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.DefaultUniqueParametersStruct = defaultUniqueParametersStruct;</span></p>
+<p class="rvps29"><span class="rvts96"><br/></span></p>
+<p class="rvps29"><span class="rvts56">Description</span><span class="rvts52">:</span></p>
+<p class="rvps33"><span class="rvts54">Returns the names, display names, data types, and default values of all fields of the </span><span class="rvts52">UniqueParameters </span><span class="rvts54">struct of the current surface type. &nbsp;</span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: circle;">
+<li class="rvps29"><span class="rvts35">FieldNames</span><span class="rvts30"> – Cell array of actual names of the fields in the struct UniqueParameters. Therefore they should fulfill normal structure field name criterion. Later they can be referenced as </span><span class="rvts51">uniqueParamStruct.(fieldNameString)</span></li>
+<li class="rvps29"><span class="rvts35">FieldDisplayNames</span><span class="rvts30"> – Cell array of field names to be displayed in user interfaces. They can be any string but short and meaningful names are recommended.</span></li>
+<li class="rvps29"><span class="rvts35">FieldFormats</span><span class="rvts30"> – Cell array of field formats. They can be one of the following</span></li>
+</ul></ul>
+<ul style="text-indent: 0px; margin-left: 144px; list-style-position: outside; list-style-type: disc;">
+<li class="rvps62" style="margin-left: 0px; text-indent: 0px"><span class="rvts38">‘numeric’ : for numbers</span></li>
+<li class="rvps62" style="margin-left: 0px; text-indent: 0px"><span class="rvts38">‘logical’ : for Boolean</span></li>
+<li class="rvps62" style="margin-left: 0px; text-indent: 0px"><span class="rvts38">‘char’ : for strings</span></li>
+<li class="rvps62" style="margin-left: 0px; text-indent: 0px"><span class="rvts38">{‘Choise1’, ‘Choise1’} &nbsp;: &nbsp;for multiple choice variables</span></li>
+<li class="rvps62" style="margin-left: 0px; text-indent: 0px"><span class="rvts38">‘Glass’ : for Glass names</span></li>
+<li class="rvps62" style="margin-left: 0px; text-indent: 0px"><span class="rvts38">‘Coating’ : for coating names</span></li>
+<li class="rvps62" style="margin-left: 0px; text-indent: 0px"><span class="rvts38">‘SQS’: for sequence of surfaces</span></li>
+</ul>
+<p class="rvps29"><span class="rvts97">3: Surface specific 'Extra Data' table names and initial values in Surface Editor GUI</span></p>
+<p class="rvps29"><span class="rvts56"> inputDataStruct:</span></p>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;empty</span></p>
+<p class="rvps29"><span class="rvts56">Output Struct:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.UniqueExtraDataName</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.DefaultUniqueExtraData</span></p>
+<p class="rvps29"><span class="rvts56">Source Code:</span></p>
+<p class="rvps33"><span class="rvts98">uniqueExtraDataName = {</span><span class="rvts100">'ZernikeStandardSagCoefficients'</span><span class="rvts98">};</span></p>
+<p class="rvps33"><span class="rvts98">defaultUniqueExtraData = [0];</span></p>
+<p class="rvps29"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct = struct();</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.UniqueExtraDataName = uniqueExtraDataName;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.DefaultUniqueExtraData = defaultUniqueExtraData;</span></p>
+<p class="rvps29"><span class="rvts101"><br/></span></p>
+<p class="rvps29"><span class="rvts56">Description</span><span class="rvts52">:</span></p>
+<p class="rvps33"><span class="rvts54">This is used to hold an array of numbers associated with the given surface. This is used if the surface has for example so many polynomial coefficients. </span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts97">4: Return the surface sag at given xyGridPoints computed from rayPosition ( Used for plotting the surface)</span></p>
+<p class="rvps29"><span class="rvts56"> inputDataStruct:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.X</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.Y</span></p>
+<p class="rvps29"><span class="rvts56">Output Struct:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.MainSag</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.AlternativeSag</span></p>
+<p class="rvps29"><span class="rvts56">Source Code:</span></p>
+<p class="rvps33"><span class="rvts98">surfaceRadius = inputDataStruct.Radius;</span></p>
+<p class="rvps33"><span class="rvts98">surfaceConic = inputDataStruct.Conic;</span></p>
+<p class="rvps33"><span class="rvts98">X = inputDataStruct.X;</span></p>
+<p class="rvps33"><span class="rvts98">Y = inputDataStruct.Y;</span></p>
+<p class="rvps29"><span class="rvts98"><br/></span></p>
+<p class="rvps33"><span class="rvts98">radiusOfRotation = surfaceParameters.RadiusOfRotation;</span></p>
+<p class="rvps33"><span class="rvts98">C2 = surfaceParameters.C2;</span></p>
+<p class="rvps33"><span class="rvts98">C4 = surfaceParameters.C4;</span></p>
+<p class="rvps33"><span class="rvts98">C6 = surfaceParameters.C6;</span></p>
+<p class="rvps33"><span class="rvts98">C8 = surfaceParameters.C8;</span></p>
+<p class="rvps33"><span class="rvts98">C10 = surfaceParameters.C10;</span></p>
+<p class="rvps33"><span class="rvts98">C12 = surfaceParameters.C12;</span></p>
+<p class="rvps33"><span class="rvts98">C14 = surfaceParameters.C14;</span></p>
+<p class="rvps29"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps33"><span class="rvts98">mainSag = computeToroidalSurfaceSag(surfaceRadius,surfaceConic,</span><span class="rvts102">...</span></p>
+<p class="rvps33"><span class="rvts98">radiusOfRotation,C2,C4,C6,C8,C10,C12,C14,X,Y);</span></p>
+<p class="rvps29"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct = struct();</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.MainSag = mainSag;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.AlternativeSag = mainSag;</span></p>
+<p class="rvps29"><span class="rvts96"><br/></span></p>
+<p class="rvps29"><span class="rvts56">Description</span><span class="rvts52">:</span></p>
+<p class="rvps33"><span class="rvts54">NB: X and Y are vectors of values corresponding to points on XY plane for which the surface sag has to be computed. The function to compute the surface sag can be either placed in the same function as the surface definition or can be just a separate function. But it is recommended is to keep everything here in the single surface definition file so that addition, edition and removal of any surface types becomes very easy. </span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts97">5: Paraxial ray trace results (Ray height and angle)</span></p>
+<p class="rvps29"><span class="rvts56">inputDataStruct:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.InputParaxialRayParameters</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.IndexBefore</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.IndexAfter</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.Wavelength</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.ReflectionFlag</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.ReverseTracingFlag</span></p>
+<p class="rvps29"><span class="rvts56">Output Struct:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.OutputParaxialRayParameters</span></p>
+<p class="rvps29"><span class="rvts56">Source Code:</span></p>
+<p class="rvps33"><span class="rvts98">y = inputDataStruct.InputParaxialRayParameters(1,:);</span></p>
+<p class="rvps33"><span class="rvts98">u = inputDataStruct.InputParaxialRayParameters(2,:);</span></p>
+<p class="rvps33"><span class="rvts98">reverseTracing = inputDataStruct.ReverseTracingFlag;</span></p>
+<p class="rvps33"><span class="rvts98">reflection = inputDataStruct.ReflectionFlag;</span></p>
+<p class="rvps33"><span class="rvts98">indexBefore = inputDataStruct.IndexBefore;</span></p>
+<p class="rvps33"><span class="rvts98">indexAfter = inputDataStruct.IndexAfter;</span></p>
+<p class="rvps33"><span class="rvts98">surfaceRadius = inputDataStruct.Radius;</span></p>
+<p class="rvps33"><span class="rvts99">% the height doesnot change</span></p>
+<p class="rvps33"><span class="rvts98">yf = y;</span></p>
+<p class="rvps33"><span class="rvts99">% for angle compute based on the direction of propagation</span></p>
+<p class="rvps33"><span class="rvts102">if</span><span class="rvts98"> ~reverseTracing</span></p>
+<p class="rvps31"><span class="rvts99">%forward trace</span></p>
+<p class="rvps31"><span class="rvts98">c = 1/surfaceRadius;</span></p>
+<p class="rvps31"><span class="rvts98">n = indexBefore;</span></p>
+<p class="rvps31"><span class="rvts98">nPrime = indexAfter;</span></p>
+<p class="rvps33"><span class="rvts102">else</span></p>
+<p class="rvps31"><span class="rvts99">%reverse trace</span></p>
+<p class="rvps31"><span class="rvts98">c = -1/surfaceRadius;</span></p>
+<p class="rvps31"><span class="rvts98">n = indexAfter;</span></p>
+<p class="rvps31"><span class="rvts98">nPrime = indexBefore;</span></p>
+<p class="rvps33"><span class="rvts102">end</span></p>
+<p class="rvps33"><span class="rvts102">if</span><span class="rvts98"> reflection</span></p>
+<p class="rvps31"><span class="rvts98">n = -n;</span></p>
+<p class="rvps33"><span class="rvts102">end</span></p>
+<p class="rvps33"><span class="rvts98">paI = u+yf*c; </span><span class="rvts99">%The yui method generates the paraxial angles of incidence</span></p>
+<p class="rvps33"><span class="rvts99">% during the trace and is probably the most common method used in computer programs.</span></p>
+<p class="rvps33"><span class="rvts98">uf = u+((n/nPrime)-1)*paI;</span></p>
+<p class="rvps33"><span class="rvts98">outputParaxialRayParameters = [yf,uf]';</span></p>
+<p class="rvps29"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct = struct();</span></p>
+<p class="rvps33"><span class="rvts98">returnDataStruct.OutputParaxialRayParameters = outputParaxialRayParameters;</span></p>
+<p class="rvps29"><span class="rvts96"><br/></span></p>
+<p class="rvps29"><span class="rvts56">Description</span><span class="rvts52">:</span></p>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts54">Since the paraxial ray tracing calculation is simple it is just done right here in the code. But it can also be done in a separate function. </span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts97">6: New ray direction for real ray tracing</span></p>
+<p class="rvps29"><span class="rvts56">inputDataStruct</span><span class="rvts54">:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.RayDirection</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.LocalSurfaceNormal</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.IndexBefore</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.IndexAfter</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.WavelengthInUm</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.DiffractionOrder</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.GratingVectorDirection</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.GratingLinesPerMicrometer</span></p>
+<p class="rvps29"><span class="rvts56">Output Struct:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.NewLocalRayDirection</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.TIR</span></p>
+<p class="rvps29"><span class="rvts56">Source Code:</span></p>
+<p class="rvps21"><span class="rvts98">rayDirection = inputDataStruct.RayDirection;</span></p>
+<p class="rvps21"><span class="rvts98">localSurfaceNormal = inputDataStruct.LocalSurfaceNormal;</span></p>
+<p class="rvps21"><span class="rvts98">indexBefore = inputDataStruct.IndexBefore;</span></p>
+<p class="rvps21"><span class="rvts98">indexAfter = inputDataStruct.IndexAfter;</span></p>
+<p class="rvps21"><span class="rvts98">wavelengthInUm = inputDataStruct.WavelengthInUm;</span></p>
+<p class="rvps21"><span class="rvts98">diffractionOrder = inputDataStruct.DiffractionOrder;</span></p>
+<p class="rvps21"><span class="rvts98">gratingVectorDirection = inputDataStruct.GratingVectorDirection;</span></p>
+<p class="rvps21"><span class="rvts98">gratingLinesPerMicrometer = inputDataStruct.GratingLinesPerMicrometer;</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps21"><span class="rvts99">% Use the general snells law</span></p>
+<p class="rvps21"><span class="rvts98">[newLocalRayDirection,TIR] = computeGeneralRefractionReflection </span><span class="rvts102">...</span></p>
+<p class="rvps21"><span class="rvts98">(rayDirection,localSurfaceNormal,indexBefore,indexAfter,</span><span class="rvts102">...</span></p>
+<p class="rvps21"><span class="rvts98">wavelengthInUm,diffractionOrder,gratingVectorDirection,gratingLinesPerMicrometer);</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps21"><span class="rvts98">returnDataStruct = struct();</span></p>
+<p class="rvps21"><span class="rvts98">returnDataStruct.NewLocalRayDirection = newLocalRayDirection;</span></p>
+<p class="rvps21"><span class="rvts98">returnDataStruct.TIR = TIR;</span></p>
+<p class="rvps29"><span class="rvts56">Description</span><span class="rvts52">:</span></p>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts54">The new ray direction for real ray tracing can usually be computed using the general_reflection_refraction routine which uses the generalized &nbsp;</span><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts54">vectorial Snells law together with grating equations for computing the new ray direction after an interface. But this option is &nbsp;provided here and explicitly open for programming in order to allow user defined algorithms used for refracted and reflected ray directions.</span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts97"> 7: Return the function values of F(X,Y,Z) at the given ray intersection points</span></p>
+<p class="rvps29"><span class="rvts56">inputDataStruct:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.RayIntersectionPoint</span></p>
+<p class="rvps29"><span class="rvts56">Output Struct:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.Fxyz</span></p>
+<p class="rvps29"><span class="rvts56">Source Code:</span></p>
+<p class="rvps21"><span class="rvts98">R = surfaceParameters.RadiusOfRotation;</span></p>
+<p class="rvps21"><span class="rvts102">if</span><span class="rvts98"> abs(R) == Inf</span></p>
+<p class="rvps63"><span class="rvts98">R = sign(R)*10^12; </span><span class="rvts99">% Since Inf results in NaN</span></p>
+<p class="rvps21"><span class="rvts102">end</span></p>
+<p class="rvps21"><span class="rvts98">c = (1/inputDataStruct.Radius);</span></p>
+<p class="rvps21"><span class="rvts98">k = inputDataStruct.Conic;</span></p>
+<p class="rvps21"><span class="rvts98">C2 = surfaceParameters.C2;</span></p>
+<p class="rvps21"><span class="rvts98">C4 = surfaceParameters.C4;</span></p>
+<p class="rvps21"><span class="rvts98">C6 = surfaceParameters.C6;</span></p>
+<p class="rvps21"><span class="rvts98">C8 = surfaceParameters.C8;</span></p>
+<p class="rvps21"><span class="rvts98">C10 = surfaceParameters.C10;</span></p>
+<p class="rvps21"><span class="rvts98">C12 = surfaceParameters.C12;</span></p>
+<p class="rvps21"><span class="rvts98">C14 = surfaceParameters.C14;</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps21"><span class="rvts98">X = inputDataStruct.RayIntersectionPoint(1,:);</span></p>
+<p class="rvps21"><span class="rvts98">Y = inputDataStruct.RayIntersectionPoint(2,:);</span></p>
+<p class="rvps21"><span class="rvts98">Z = inputDataStruct.RayIntersectionPoint(3,:);</span></p>
+<p class="rvps21"><span class="rvts98">fy = (c.*(Y.^2))./(1+sqrt(1-(k+1)*c^2*(Y.^2)))+</span><span class="rvts102">...</span></p>
+<p class="rvps63"><span class="rvts98">(C2*Y.^2 + C4*Y.^4 + C6*Y.^6 + C8*Y.^8 + C10*Y.^10 + C12*Y.^12 + C14*Y.^14);</span></p>
+<p class="rvps21"><span class="rvts98">Fxyz = Z - fy - (1/(2*R))*(X.^2 + Z.^2 - fy.^2);</span></p>
+<p class="rvps21"><span class="rvts98">returnDataStruct.Fxyz = Fxyz;</span></p>
+<p class="rvps21"><span class="rvts98"><br/></span></p>
+<p class="rvps29"><span class="rvts56">Description</span><span class="rvts52">:</span></p>
+<p class="rvps33"><span class="rvts54">The numerical method of intersection point computation requires the implicit surface function F(X,Y,Z) . If our surface has analytical formula then that can be just rearranged in the form F(X,Y,Z) = 0 and used directly here. </span></p>
+<p class="rvps29"><span class="rvts52"> </span></p>
+<p class="rvps29"><span class="rvts97">8: Return F'(X,Y,Z),the derivatives function values of F, &nbsp;at the given ray intersection points and the surface normals</span></p>
+<p class="rvps29"><span class="rvts56">inputDataStruct:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.RayIntersectionPoint</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.RayDirection</span></p>
+<p class="rvps29"><span class="rvts56">Output Struct:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.FxyzDerivative</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.SurfaceNormal</span></p>
+<p class="rvps29"><span class="rvts56">Source Code:</span></p>
+<p class="rvps21"><span class="rvts98">c = (1/inputDataStruct.Radius);</span></p>
+<p class="rvps21"><span class="rvts98">conic = inputDataStruct.Conic;</span></p>
+<p class="rvps21"><span class="rvts98">radiusOfRotation = surfaceParameters.RadiusOfRotation;</span></p>
+<p class="rvps21"><span class="rvts98">C2 = surfaceParameters.C2;</span></p>
+<p class="rvps21"><span class="rvts98">C4 = surfaceParameters.C4;</span></p>
+<p class="rvps21"><span class="rvts98">C6 = surfaceParameters.C6;</span></p>
+<p class="rvps21"><span class="rvts98">C8 = surfaceParameters.C8;</span></p>
+<p class="rvps21"><span class="rvts98">C10 = surfaceParameters.C10;</span></p>
+<p class="rvps21"><span class="rvts98">C12 = surfaceParameters.C12;</span></p>
+<p class="rvps21"><span class="rvts98">C14 = surfaceParameters.C14;</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps21"><span class="rvts98">X = inputDataStruct.RayIntersectionPoint(1,:);</span></p>
+<p class="rvps21"><span class="rvts98">Y = inputDataStruct.RayIntersectionPoint(2,:);</span></p>
+<p class="rvps21"><span class="rvts98">Z = inputDataStruct.RayIntersectionPoint(3,:);</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps21"><span class="rvts98">k = inputDataStruct.RayDirection(1,:);</span></p>
+<p class="rvps21"><span class="rvts98">l = inputDataStruct.RayDirection(2,:);</span></p>
+<p class="rvps21"><span class="rvts98">m = inputDataStruct.RayDirection(3,:);</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps21"><span class="rvts99">% Compute its the derivative F'(X,Y,Z)</span></p>
+<p class="rvps21"><span class="rvts98">[Fx,Fy,Fz] = computeToroidalPartialDerivates(c,conic,radiusOfRotation,</span><span class="rvts102">...</span></p>
+<p class="rvps64"><span class="rvts98">C2,C4,C6,C8,C10,C12,C14,X,Y);</span></p>
+<p class="rvps21"><span class="rvts98">Fderivative = Fx.*k + Fy.*l + Fz.*m;</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class="rvps21"><span class="rvts98">surfNormal = [Fx;Fy;Fz];</span></p>
+<p class="rvps21"><span class="rvts98">normalizedSurfaceNormal = normalize2DMatrix( surfNormal,1);</span></p>
+<p class="rvps21"><span class="rvts98">returnDataStruct.SurfaceNormal = normalizedSurfaceNormal;</span></p>
+<p class="rvps21"><span class="rvts98">returnDataStruct.FxyzDerivative = Fderivative;</span></p>
+<p class="rvps2"><span class="rvts96"><br/></span></p>
+<p class="rvps29"><span class="rvts56">Description</span><span class="rvts52">:</span></p>
+<p class="rvps33"><span class="rvts54">The numerical method of intersection point computation requires the derivatives of the implicit surface function F'(X,Y,Z) . If our surface has analytical formula then that can be just rearranged in the form F(X,Y,Z) = 0 and then the analytical derivatives could be obtained and used directly here. </span></p>
+<p class="rvps33"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts97">9: Return the ray Exit position (This allows the ray input and exit positions to be decoupled)</span></p>
+<p class="rvps29"><span class="rvts56">inputDataStruct:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;inputDataStruct.RayIntersectionPoint</span></p>
+<p class="rvps29"><span class="rvts56">Output Struct:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;returnDataStruct.LocalExitRayPosition</span></p>
+<p class="rvps29"><span class="rvts56">Source Code:</span></p>
+<p class="rvps21"><span class="rvts98">localRayExitPoint = inputDataStruct.RayIntersectionPoint;</span></p>
+<p class="rvps21"><span class="rvts98">returnDataStruct.LocalExitRayPosition = localRayExitPoint;</span></p>
+<p class="rvps29"><span class="rvts56">Description</span><span class="rvts52">:</span></p>
+<p class="rvps33"><span class="rvts54">The exit position of the ray from a given surface is usually equal to the intersection point. But in some ideal surfaces it is not the case, for instance in Kostenbauder surface the ray exit position differs from the intersection point depending on the wavelength. To allow modeling of such ideal surfaces the exit ray position computation is made open for user programming. </span></p>
+<p class="rvps33"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts97">10: Return any additional path related to the surface that is not given by the surface sag.</span></p>
+<p class="rvps29"><span class="rvts56">inputDataStruct:</span></p>
+<p class="rvps29"><span class="rvts54"> &nbsp;&nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; inputDataStruct.RayIntersectionPoint</span></p>
+<p class="rvps29"><span class="rvts56">Output Struct:</span></p>
+<p class="rvps29"><span class="rvts54">&nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; returnDataStruct.AdditionalPathLength</span></p>
+<p class="rvps29"><span class="rvts56">Source Code:</span></p>
+<p class="rvps21"><span class="rvts98">intersectionPoint = inputDataStruct.RayIntersectionPoint;</span></p>
+<p class="rvps21"><span class="rvts99">% For now just return 0. but shall be corrected</span></p>
+<p class="rvps21"><span class="rvts98">additionalPathLength = 0*intersectionPoint(1,:);</span></p>
+<p class="rvps21"><span class="rvts98">returnDataStruct.AdditionalPathLength = additionalPathLength;</span></p>
+<p class="rvps29"><span class="rvts56">Description</span><span class="rvts52">:</span></p>
+<p class="rvps33"><span class="rvts54">This is to be used if there is any additional path associated with the surface but not computed from the normal geometric path length computation.</span></p>
+<p class="rvps29"><span class="rvts56"><br/></span></p>
+<p class="rvps29"><span class="rvts97">Step 3:</span><span class="rvts103"> &nbsp;Add </span><span class="rvts105">'Toroidal'</span><span class="rvts103"> &nbsp;in to list of supported surface of the MatLightTracer toolbox</span></p>
+<p class="rvps29"><span class="rvts54">Once the function Toroidal.m has been successfully implemented and tested, then the final stage of integrating the surface type in to the MatLightTracer toolbox is to add the type in to the supported list. This can be done by modifying the function </span><span class="rvts98">GetSupportedSurfaceTypes(index)&nbsp;</span><span class="rvts54"> from (</span><span class="rvts52">'...\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module'</span><span class="rvts54">) as follows:</span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps2"><span class="rvts102">function</span><span class="rvts98"> [ fullNames,displayNames ] = GetSupportedSurfaceTypes(index)</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp;</span><span class="rvts99">%GETSUPPORTEDSURFACES Returns the currently supported surfaces as cell array</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp;</span><span class="rvts102">if</span><span class="rvts98"> nargin &lt; 1</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp;index = 0;</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp;</span><span class="rvts102">end</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp;displayNames = {</span><span class="rvts100">'Standard'</span><span class="rvts98">,</span><span class="rvts100">'Ideal Lens'</span><span class="rvts98">,</span><span class="rvts100">'Example Surface'</span><span class="rvts98">,</span><span class="rvts100">'Kostenbauder'</span><span class="rvts98">,</span><span class="rvts102">...</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts100">'Dummy'</span><span class="rvts98">,</span><span class="rvts100">'Even Asphere'</span><span class="rvts98">,</span><span class="rvts100">'ExtendedEvenAsphere'</span><span class="rvts98">,</span><span class="rvts107">'Toroidal'</span><span class="rvts98">};</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp;fullNames = {</span><span class="rvts100">'Standard'</span><span class="rvts98">,</span><span class="rvts100">'IdealLens'</span><span class="rvts98">,</span><span class="rvts100">'ExampleSurface'</span><span class="rvts98">,</span><span class="rvts100">'Kostenbauder'</span><span class="rvts98">,</span><span class="rvts100">'Dummy'</span><span class="rvts98">,</span><span class="rvts102">...</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts100">'EvenAsphere'</span><span class="rvts98">,</span><span class="rvts100">'ExtendedEvenAsphere'</span><span class="rvts98">,</span><span class="rvts100">'Toroidal'</span><span class="rvts98">};</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp;</span><span class="rvts102">if</span><span class="rvts98"> index</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp;displayNames = displayNames{index};</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp; &nbsp; &nbsp;fullNames = fullNames{index};</span></p>
+<p class="rvps2"><span class="rvts98"> &nbsp; &nbsp;</span><span class="rvts102">end</span></p>
+<p class="rvps2"><span class="rvts102">end</span></p>
+<p class="rvps2"><span class="rvts102"><br/></span></p>
+<p class="rvps2"><span class="rvts102"><br/></span></p>
+<p class="rvps2"><span class="rvts97">Results After New Surface Type Addition</span></p>
+<p class="rvps2"><span class="rvts102"><br/></span></p>
+<p class="rvps2"><span class="rvts54">Then when the MatLightTracer is restarted the list of supported elements shown as popup menu in the optical element list panel should be updated and the new surface type would appear in the list.</span></p>
+<p class="rvps2"><span class="rvts54"><br/></span></p>
+<p class="rvps3"><img alt="" style="padding : 1px;" src="lib/NewItem188.png"/></p>
+<p class="rvps2"><span class="rvts54"><br/></span></p>
+<p class="rvps2"><span class="rvts54">And when the Toroidal surface is selected then the corresponding optical element parameter editor panel should show all properties of the new surface type including those stated as its unique parameters as shown below.</span></p>
+<p class="rvps2"><span class="rvts54"><br/></span></p>
+<p class="rvps2"><span class="rvts54"><br/></span></p>
+<p class="rvps3"><img alt="" style="padding : 1px;" src="lib/NewItem189.png"/></p>
+<p class="rvps3"><span class="rvts54"><br/></span></p>
+<p class="rvps2"><span class="rvts54">Finally here is an example of optical system containing the new surface type (cylindrical lens). All other features of the MatLightTracer toolbox works exactly in the same way for the new surface type as well.</span></p>
+<p class="rvps2"><span class="rvts54"><br/></span></p>
+<p class="rvps3"><img width="723" height="425" alt="" style="padding : 1px;" src="lib/NewItem190.png"/></p>
+<p class="rvps2"><span class="rvts54"><br/></span></p>
+<p class="rvps2"><span class="rvts54"><br/></span></p>
+<p class="rvps2"><span class="rvts102"><br/></span></p>
+<p></p>
+<p class="rvps6"><span class="rvts20">Created with the Personal Edition of HelpNDoc: </span><a class="rvts21" href="http://www.helpndoc.com/create-epub-ebooks">Full-featured EBook editor</a></p>
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; &lt;2016&gt; by &lt;Norman G. Worku (normangirma2012@gmail.com), Optical System Design Research Group, FSU, Jena&gt;. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

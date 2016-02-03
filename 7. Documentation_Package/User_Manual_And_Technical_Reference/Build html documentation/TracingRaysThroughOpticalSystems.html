@@ -1,0 +1,143 @@
+﻿<html>
+	
+<head>
+	<title>Tracing Rays Through Optical Systems</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.3.1.364">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "MatLightTracer Version 1.0 Reference.html?" + sTopicUrl;
+			}
+			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+			{
+				top.FrameTOC.SelectTocItem("TracingRaysThroughOpticalSystems");
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Tracing Rays Through Optical Systems</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="UserManual1.html">User Manual</a> &rsaquo;&rsaquo; <a href="UsingMatLightTracerFromMatlabCom.html">Using MatLightTracer From Matlab Command </a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="UsingMatLightTracerFromMatlabCom.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="CreatingInitialRaysForOpticalSys.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="AccessingRayTracingResults.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps29"><span class="rvts40">Tracing Multiple Rays</span></p>
+<p class="rvps29"><span class="rvts30">To trace rays through optical systems, the following steps can be followed:</span></p>
+<p class="rvps29"><span class="rvts56">Step 1:</span><span class="rvts54"> &nbsp;Define your optical system using the GUI of the toolbox and save the system to .mat file. See the first part of the user manual on how to use the GUI to build an optical system. If you have already your optical system saved as *.mat or *.zmx file then you can skip this step.</span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts56">Step 2:</span><span class="rvts54"> Load the optical system in to the Matlab command window by using the full file name (See section "Loading an Optical System"). </span></p>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts51">newOpticalSystem = OpticalSystem(&lt;The Optical System Full Path&gt;)</span></p>
+<p class="rvps29"><span class="rvts51"><br/></span></p>
+<p class="rvps29"><span class="rvts56">Step 3:</span><span class="rvts54"> Define initial ray bundles &nbsp;(See section "Creating Initial Rays for Optical Systems"). &nbsp;In short the initial ray bundles can be created by three ways:</span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps33"><span class="rvts54">1. By defining the all parameters (positions, directions and wavelengths) of your initial rays and putting &nbsp;them in ScalarRayBundle struct.</span></p>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts52">initialRayBundle = ScalarRayBundle( rayPositions,rayDirections,rayWavelengths);</span></p>
+<p class="rvps33"><span class="rvts54">2. By using the field index, wavelength index and the number of pupil &nbsp;points for a given optical system. </span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; </span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts52"> initialRayBundle = getInitialRayBundle(optSystem,wavelengthIndices, fieldIndices, nRay1,nRay2,pupilSamplingType);</span></p>
+<p class="rvps33"><span class="rvts54">3. By using other functions to generate some specific rays for an optical system. </span></p>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts52">chiefRay = getChiefRay(optSystem,fieldIndex,wavelengthIndex);</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; </span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts52"> mariginalRay = getMariginalRay(optSystem,fieldIndex,wavelengthIndex);</span></p>
+<p class="rvps29"><span class="rvts52"><br/></span></p>
+<p class="rvps29"><span class="rvts56">Step 4:</span><span class="rvts54"> Specify the parameters to be returned by the ray tracing routine by using </span><span class="rvts52">RayTraceOption</span><span class="rvts54"> Struct. As the user is not interested in everything which comes out from the ray tracer, the ray tracer function accepts an option struct which has flags about what to compute and what not to during the ray tracer. The ray trace option struct has the following fields:</span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: circle;">
+<li class="rvps29"><span class="rvts54">Consider Polarization : </span><span class="rvts52">False</span><span class="rvts54"> by default.</span></li>
+<li class="rvps29"><span class="rvts54">Consider Surface Aperture : </span><span class="rvts52">True</span><span class="rvts54"> by default.</span></li>
+<li class="rvps29"><span class="rvts54">Record Intermediate Results : </span><span class="rvts52">False</span><span class="rvts54"> by default.</span></li>
+<li class="rvps29"><span class="rvts54">Compute Geometrical Path Length : </span><span class="rvts52">True</span><span class="rvts54"> by default.</span></li>
+<li class="rvps29"><span class="rvts54">Compute Optical Path Length : </span><span class="rvts52">False</span><span class="rvts54"> by default.</span></li>
+<li class="rvps29"><span class="rvts54">Compute Group Path Length : </span><span class="rvts52">False</span><span class="rvts54"> by default.</span></li>
+<li class="rvps29"><span class="rvts54">Compute Refractive Index : </span><span class="rvts52">True</span><span class="rvts54"> by default.</span></li>
+<li class="rvps29"><span class="rvts54">Compute Refractive Index First Derivative : </span><span class="rvts52">False</span><span class="rvts54"> by default.</span></li>
+<li class="rvps29"><span class="rvts54">Compute Refractive Index Second Derivative : </span><span class="rvts52">False</span><span class="rvts54"> by default.</span></li>
+<li class="rvps29"><span class="rvts54">Compute Group Index : </span><span class="rvts52">False</span><span class="rvts54"> by default.</span></li>
+</ul></ul>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts52">[ options ] = RayTraceOptionStruct(ConsiderPolarization,ConsiderSurfaceAperture,RecordIntermediateResults,ComputeGeometricalPathLength, ComputeOpticalPathLength,ComputeGroupPathLength,ComputeRefractiveIndex,ComputeRefractiveIndexFirstDerivative,ComputeRefractiveIndexSecondDerivative, ComputeGroupIndex);</span></p>
+<p class="rvps29"><span class="rvts52"><br/></span></p>
+<p class="rvps29"><span class="rvts54"> </span><span class="rvts56">Step 5:</span><span class="rvts54"> Use a ray tracing function to trace your rays through an optical system. The toolbox has two functions to trace rays depending on the input parameters required</span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: decimal;"><ol style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: decimal;">
+<li class="rvps29"><span class="rvts56">The main ray tracing routine </span></li>
+</ol></ol>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts54">This function requires the optical system, initial ray bundle and an option struct for ray tracing. It returns a ray tracing result as struct which can be directly used to access different ray trace results or can be used as an input to ray trace result accessing functions which extract certain part of the result and return in a certain format. (See accessing the ray tracing result section). </span></p>
+<p class="rvps33"><span class="rvts52">rayTracerResultReshaped = rayTracer(optSystem, objectRayBundle,rayTraceOptionStruct,endSurface,nRayPupil,nField,nWav)</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; </span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts52"> </span><span class="rvts55">% rayTracer: main function of polarized ray tracer from object surface to the</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% endSurface (inclusive)</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% The function is vectorized so it can work on multiple sets of</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% inputs once at the same time. That is array of ray objects.</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% Inputs</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% &nbsp; optSystem: data type "OpticalSystem"</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% &nbsp; ObjectRay: data type "Ray" or array of Ray object</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% &nbsp; startSurf,endSurf: Indices of start and end surface. ObjectRay is</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% &nbsp; assumed to be given just after the start surface and it will be traced</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% &nbsp; till end surface (inclusive)</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% &nbsp; rayTraceOptionStruct: struct with options indicating what to</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% &nbsp; compute and consider during ray trace. (See RayTraceOptionStruct()</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% &nbsp; function for more details)</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% Output:</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% &nbsp; rayTracerResult: (array if all surface results are recorded) of "RayTraceResult" or can be</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% &nbsp; matrix of RayTraceResult objects if the input is array of Ray</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% &nbsp; object. Size : nSurface X nTotalRay</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp;</span><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% &nbsp; Note: The intersection points and lengths are all in lens unit.</span></p>
+<p class="rvps29"><span class="rvts55"><br/></span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: decimal;"><ol style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: decimal;">
+<li class="rvps29"><span class="rvts56"> The multiple ray tracing routine</span></li>
+</ol></ol>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts54">This is another ray tracing optioin provided in the MatLightTracer toolbox. The function directly accepts the field indices, and wavelength indices and the number of rays instead of initial ray bundle. It returns the pupil meshgrid as Nx X Ny X 2 matrix of pupil sampling points used for ray tracing and the indices of pupil sampling points which lay outside the system aperture. &nbsp;</span></p>
+<p class="rvps29"><span class="rvts54"> </span><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts52">[multipleRayTracerResult,pupilMeshGrid,outsidePupilIndices ] = &nbsp;multipleRayTracer(optSystem,wavelengthIndices,fieldIndices,</span><span class="rvts58">...</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;nPupilPoints1,nPupilPoints2,pupSamplingType,rayTraceOptionStruct,endSurface) </span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% Trace bundle of rays through an optical system based on the pupil</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% sampling specified. Multiple rays can be defined with wavelengthIndices (1XnWav),</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% fieldIndices (1XnField) and the total number of ray will be nRay*nWav*nField</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% That is all rays from each field point with each of wavelegths will be</span></p>
+<p class="rvps29"><span class="rvts52"> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts55">% traced. And the result will be 4 dimensional matrix (nNonDummySurface X nRay X nField X nWav).</span></p>
+<p></p>
+<p class="rvps6"><span class="rvts20">Created with the Personal Edition of HelpNDoc: </span><a class="rvts21" href="http://www.helpndoc.com/feature-tour/create-ebooks-for-amazon-kindle">Write eBooks for the Kindle</a></p>
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; &lt;2016&gt; by &lt;Norman G. Worku (normangirma2012@gmail.com), Optical System Design Research Group, FSU, Jena&gt;. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

@@ -1,9 +1,0 @@
-function [ output_args ] = inputComponentParameters( paramName, paramType, paramValue)
-%INPUTCOMPONENTPARAMETERS display input window for differetn paramters of components
-% display the corresponding window to input boolean, choice and
-% SQS data type parameter and make the cell editable for char type
-% paramType :  'Boolean','SQS','char','numeric',{'choise 1','choise 2'}
-
-
-end
-

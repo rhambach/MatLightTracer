@@ -55,16 +55,18 @@ function plotTransverseRayAberration(optSystem,surfIndex,wavelengthIndices,...
     
     nSurfaceWithOutDummy = size(sagittalRayTracerResult,1);
     
-    nRayTotalSagittal = sagittalRayTracerResult(end).TotalNumberOfPupilPoints;
-    nRayTotalTangential = tangentialRayTracerResult(end).TotalNumberOfPupilPoints;
-    nWav = sagittalRayTracerResult(end).TotalNumberOfWavelengths;
-    nField = sagittalRayTracerResult(end).TotalNumberOfFieldPoints;
+    nRayTotalSagittal = sagittalRayTracerResult(end).FixedParameters.TotalNumberOfPupilPoints;
+    nRayTotalTangential = tangentialRayTracerResult(end).FixedParameters.TotalNumberOfPupilPoints;
+    nWav = sagittalRayTracerResult(end).FixedParameters.TotalNumberOfWavelengths;
+    nField = sagittalRayTracerResult(end).FixedParameters.TotalNumberOfFieldPoints;
     
     % trace the cheif ray with either primary wavelength (for multiple
     % wavelength analysis)or the specified wavelength (for single wavelegnth).
     if nWav > 1
         % Use the primary wavelength for the cheif ray
-        wavelengthIndices = optSystem.PrimaryWavelengthIndex;
+        cheifRayWavelengthIndex = optSystem.PrimaryWavelengthIndex;
+    else
+        cheifRayWavelengthIndex = wavelengthIndices;
     end
     
     % cheifRayTraceResult: nSurf X nField as each field point has different
@@ -73,12 +75,12 @@ function plotTransverseRayAberration(optSystem,surfIndex,wavelengthIndices,...
     rayTraceOptionStruct.ConsiderSurfaceAperture = 0;
     rayTraceOptionStruct.RecordIntermediateResults = 0;
     
-    chiefRayTraceResult = traceChiefRay(optSystem,fieldIndices,wavelengthIndices,rayTraceOptionStruct);
+    chiefRayTraceResult = traceChiefRay(optSystem,fieldIndices,cheifRayWavelengthIndex,rayTraceOptionStruct);
     
     % All raytracing are done with out recording intermediate results so the
     % index of last surface will be 2
     rayTraceResultIndexOfLastSurface = 2;
-    fieldPointXY = getSystemFieldPoints(optSystem,fieldIndices);
+    fieldPointXY = (getSystemFieldPoints(optSystem,fieldIndices));
     wavLen = getSystemWavelengths(optSystem,wavelengthIndices);
     
     % Use different color for diffrent wavelengths and different field points.

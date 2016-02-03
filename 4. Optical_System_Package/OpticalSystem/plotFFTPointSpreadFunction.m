@@ -43,13 +43,6 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
             fieldPointXY = getSystemFieldPoints(optSystem,fieldIndices);
     end
     
-    %     wavLen = getSystemWavelengths(wavelengthIndices);
-    %     fieldPointXY = getSystemFieldPoints(fieldIndices);
-    
-    % Read apodization parameters of the optical system
-    apodType = optSystem.ApodizationType;
-    apodParam = optSystem.ApodizationParameters;
-    
     % Compute the wavefront surface no axes handle is given to supress the
     % plot. NB. The X,Y and OPDAtExitPupil will be 4D matrix of dim
     % [l,m,nField,nWav]
@@ -61,13 +54,7 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
         zerCoeff);
     nField = size(OPDAtExitPupilMulti1,3);
     nWav = size(OPDAtExitPupilMulti1,4);
-    
-    % % compute pupil apodization no axes handle is given to supress the
-    % % plot
-    % gridSizenew = size(OPDAtExitPupilMulti,1);
-    % [ X,Y,pupilApodization ] =  optSystem.plotPupilApodization(apodType,apodParam,gridSizenew);
-    
-    
+
     if dispPlot
         % Clear all childs of plotPanelHandle
         set(get(plotPanelHandle,'Children'),'Visible','off');
@@ -154,7 +141,7 @@ function [ XMulti,YMulti,normalizedIntensityMulti,peakIntensityMulti,SrehlRatioM
             propagationDistance = -getExitPupilLocation(optSystem)*getLensUnitFactor(optSystem);
             outputWindowSize = 2*spotPlotRadius*getLensUnitFactor(optSystem);
             addSphericalCorrection = 1; % since field is defined on exit pupil sphere
-            [ finalHarmonicField ] = ScalarFraunhoferPropagator( initialHarmonicField,...
+            [ finalHarmonicField ] = FraunhoferPropagator( initialHarmonicField,...
                 propagationDistance,outputWindowSize,addSphericalCorrection );
             efds = computeEx(finalHarmonicField);
             npxs = size(efds,1);

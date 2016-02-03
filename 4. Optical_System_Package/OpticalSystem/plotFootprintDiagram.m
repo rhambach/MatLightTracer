@@ -72,9 +72,9 @@ function plotFootprintDiagram(optSystem,surfIndex,wavelengthIndices,...
     % different field points.
     %     entrancePupilRadius = (getEntrancePupilDiameter(optSystem))/2;
     nSurfaceResultRecorded = size(polarizedRayTracerResult,1);
-    nRay = polarizedRayTracerResult.TotalNumberOfPupilPoints;
-    nField = polarizedRayTracerResult.TotalNumberOfFieldPoints;
-    nWav = polarizedRayTracerResult.TotalNumberOfWavelengths;
+    nRay = polarizedRayTracerResult(1).FixedParameters.TotalNumberOfPupilPoints;
+    nField = polarizedRayTracerResult(1).FixedParameters.TotalNumberOfFieldPoints;
+    nWav = polarizedRayTracerResult(1).FixedParameters.TotalNumberOfWavelengths;
     SurfaceCoordinateTM = currentSurface.SurfaceCoordinateTM;
     
     surfIndexWithOutDummy = surfIndex-dummySurfacesBeforeCurrentSurface;

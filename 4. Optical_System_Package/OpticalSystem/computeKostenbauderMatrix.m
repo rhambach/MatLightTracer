@@ -49,7 +49,7 @@ function [ finalKostenbauderMatrix, interfaceKostenbauderMatrices,mediumKostenba
     % Just take the first ray if more than one rays are input
     pilotRay = pilotRay(1);
     
-    % trace the pilot ray    
+    % trace the pilot ray
     rayTraceOptionStruct = RayTraceOptionStruct();
     rayTraceOptionStruct.ConsiderSurfAperture = 1;
     rayTraceOptionStruct.ConsiderPolarization = 0;
@@ -83,7 +83,7 @@ function [ finalKostenbauderMatrix, interfaceKostenbauderMatrices,mediumKostenba
     tempK = eye(4);
     [ NonDummySurfaceArray,nNonDummySurface,NonDummySurfaceIndices,...
         surfaceArray,nSurface ] = getNonDummySurfaceArray( optSystem );
-  
+    
     startNonDummyIndex = find(NonDummySurfaceIndices>=startSurf);
     startNonDummyIndex = startNonDummyIndex(1);
     endNonDummyIndex = find(NonDummySurfaceIndices<=endSurf);
@@ -98,8 +98,24 @@ function [ finalKostenbauderMatrix, interfaceKostenbauderMatrices,mediumKostenba
             interfaceKostenbauderMatrices(:,:,surfaceIndex) = eye(4);
         else
             surfaceParameters = NonDummySurfaceArray(surfaceIndex).UniqueParameters;
-            switch NonDummySurfaceArray(surfaceIndex).Type
-                case 'Standard'
+            switch lower(GetSupportedSurfaceTypes(NonDummySurfaceArray(surfaceIndex).Type))
+                case lower('IdealLens')
+                    focalLength = surfaceParameters.FocalLength*lensUnit;
+                    interfaceKostenbauderMatrices(:,:,surfaceIndex) =...
+                        [1,0,0,0;...
+                        -1/focalLength,1,0,0;...
+                        0,0,1,0;...
+                        0,0,0,1];
+                case lower('Kostenbauder')
+                    % NB: The ABCD parameters in kostenbuder surface are given in
+                    % lens unit so should be changed back to SI unit for further
+                    % computation
+                    interfaceKostenbauderMatrices(:,:,surfaceIndex) =...
+                        [surfaceParameters.A,surfaceParameters.B*lensUnit,0,surfaceParameters.E*lensUnit;...
+                        surfaceParameters.C/lensUnit,surfaceParameters.D,0,surfaceParameters.F;...
+                        surfaceParameters.G/lensUnit,surfaceParameters.H,1,surfaceParameters.I;...
+                        0,0,0,1];
+                otherwise % case lower('Standard')
                     radius = getRadiusOfCurvature(NonDummySurfaceArray(surfaceIndex))*lensUnit;
                     diffOrder = getDiffractionOrder(NonDummySurfaceArray(surfaceIndex));
                     %     diffOrder = -1;
@@ -112,23 +128,7 @@ function [ finalKostenbauderMatrix, interfaceKostenbauderMatrices,mediumKostenba
                         ang1(surfaceIndex),ang2(surfaceIndex),...
                         n(surfaceIndex-1),n(surfaceIndex),...
                         dndl(surfaceIndex-1),dndl(surfaceIndex),f0,reflection,radius,diffOrder );
-                case 'IdealLens'
-                    focalLength = surfaceParameters.FocalLength*lensUnit;
-                    interfaceKostenbauderMatrices(:,:,surfaceIndex) =...
-                        [1,0,0,0;...
-                        -1/focalLength,1,0,0;...
-                        0,0,1,0;...
-                        0,0,0,1];
-                case 'Kostenbauder'
-                    % NB: The ABCD parameters in kostenbuder surface are given in
-                    % lens unit so should be changed back to SI unit for further
-                    % computation
-                    interfaceKostenbauderMatrices(:,:,surfaceIndex) =...
-                        [surfaceParameters.A,surfaceParameters.B*lensUnit,0,surfaceParameters.E*lensUnit;...
-                        surfaceParameters.C/lensUnit,surfaceParameters.D,0,surfaceParameters.F;...
-                        surfaceParameters.G/lensUnit,surfaceParameters.H,1,surfaceParameters.I;...
-                        0,0,0,1];
-                otherwise
+                    
             end
             
         end

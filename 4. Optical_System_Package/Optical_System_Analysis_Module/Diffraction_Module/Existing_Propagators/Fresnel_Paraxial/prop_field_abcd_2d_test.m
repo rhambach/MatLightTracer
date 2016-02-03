@@ -197,7 +197,7 @@ if iplo > 0
 %% End of Old code
 
 %% EnhancedColorPlot
-   [ph,ah] = EnhancedColorPlot( {xsm,ysm,int} );
+   [ph,ah] = EnhancedPColor( {xsm,ysm,int} );
 %% End of EnhancedColorPlot
 
    set( gcf, 'Units' , 'Normalized');
@@ -218,7 +218,7 @@ figure
 %% End of Old code
 
 %% EnhancedColorPlot
-[ph,ah] = EnhancedColorPlot( {xsm,ysm,(int-intideal)} );
+[ph,ah] = EnhancedPColor( {xsm,ysm,(int-intideal)} );
 %% End of EnhancedColorPlot
 
 set( gcf, 'Units' , 'Normalized');

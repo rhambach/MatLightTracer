@@ -26,7 +26,7 @@ function [ returnDataStruct] = PlaneWaveProfile(returnFlag,spatialProfileParamet
     %   inputDataStruct:
     %       inputDataStruct.xMesh
     %       inputDataStruct.yMesh
-    %       inputDataStruct.LateralPosition
+%     %       inputDataStruct.LateralPosition
     %   returnDataStruct:
     %       returnDataStruct.SpatialProfileMatrix,
     
@@ -102,9 +102,9 @@ function [ returnDataStruct] = PlaneWaveProfile(returnFlag,spatialProfileParamet
         case 3 % Return the spatial profile
             x = inputDataStruct.xMesh;
             y = inputDataStruct.yMesh;
-            % lateral offset
-            cx = inputDataStruct.LateralPosition(1);
-            cy = inputDataStruct.LateralPosition(2);
+%             % lateral offset
+%             cx = inputDataStruct.LateralPosition(1);
+%             cy = inputDataStruct.LateralPosition(2);
             % The plane wave profile
             Uxy = ones(size(x));
             returnDataStruct.SpatialProfileMatrix = Uxy;% (sizeX X sizeY) Matrix of normalized amplitude

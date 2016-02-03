@@ -65,7 +65,8 @@ function [NewOpticalSystem] =  OpticalSystem(fullFilePath)
             elseif strcmpi(ext,'.zmx')
                 NewOpticalSystem = importZemaxFile (fullFilePath);
             else
-                
+                disp('Error:The file does not exist');
+                NewOpticalSystem = OpticalSystem;
             end
         else
             disp('Error:The file does not exist');

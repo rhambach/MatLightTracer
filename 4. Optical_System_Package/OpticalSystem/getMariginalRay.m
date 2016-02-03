@@ -112,8 +112,14 @@ function [ mariginalRay ] = getMariginalRay(optSystem,fieldIndices,...
             end
     end
     initialPositionInM = initialPosition*getLensUnitFactor(optSystem);
+    
+    % Repeat wavelegths for each field point and vice versa
+    wavLenInM = cell2mat(arrayfun(@(x) x*ones(1,nField),wavLenInM,'UniformOutput',false));
+    initialPositionInM = repmat(initialPositionInM,[1,nWav]);
+    initialDirection = repmat(initialDirection,[1,nWav]);
+
     % The mariginalRay parameters will be parameters for outer most rays,
     % --> inner most rays in case of multiple pupil rays
-    mariginalRay = ScalarRayBundle(initialPositionInM,initialDirection,wavLenInM);
+    mariginalRay = ScalarRayBundle(initialPositionInM,initialDirection,wavLenInM,1,nField,nWav);
 end
 

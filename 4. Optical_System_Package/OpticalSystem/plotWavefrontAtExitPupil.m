@@ -63,7 +63,7 @@ function [ XMulti,YMulti,OPDAtExitPupilMulti,PupilWeightMatrixMulti,RMSMulti,WPV
     
     nSurf = size(polarizedRayTracerResult,1);
     % Effective number of traced rays
-    nRay = polarizedRayTracerResult(end).TotalNumberOfPupilPoints;
+    nRay = polarizedRayTracerResult(end).FixedParameters.TotalNumberOfPupilPoints;
     
     % nGrid = max(pupilGridIndices(1,:));
     nGrid = size(pupilMeshGrid,2);

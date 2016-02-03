@@ -16,9 +16,8 @@ function [ complexFFTofE,deltaInFrequency ] = computeFFT2( complexEin,deltaInSpa
         complexFFTofE = NaN;
         deltaInFrequency = NaN;
         return;
-    else
-        inputDimSize = (size(complexEin))';
     end
+    inputDimSize = (size(complexEin))';
     
     if nargin < 2
         % Default input field size = 1 so the spacing will be
@@ -27,5 +26,7 @@ function [ complexFFTofE,deltaInFrequency ] = computeFFT2( complexEin,deltaInSpa
     sizeInSpatial = deltaInSpatial.*inputDimSize;
     complexFFTofE = fftshift(fft2(fftshift(complexEin)))*prod(deltaInSpatial)*(1/(2*pi));
     deltaInFrequency =  2*pi./(sizeInSpatial);
+%     % Correction according to Manuel and Herbert
+%     deltaInFrequency = deltaInFrequency.*(inputDimSize-1)./inputDimSize;
 end
 

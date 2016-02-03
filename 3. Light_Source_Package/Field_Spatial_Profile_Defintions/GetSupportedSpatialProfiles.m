@@ -1,8 +1,8 @@
 function [ fullNames,dispNames ] = getSupportedSpatialProfiles(index)
     %GETSUPPORTEDSPATIALPROFILES Summary of this function goes here
     %   Detailed explanation goes here
-    fullNames = {'PlaneWaveProfile','GaussianWaveProfile'};
-    dispNames = {'Plane Wave Profile','Gaussian Wave Profile'};
+    fullNames = {'PlaneWaveProfile','GaussianWaveProfile','GridGaussianWaveProfile'};
+    dispNames = {'Plane Wave Profile','Gaussian Wave Profile','Grid Gaussian Wave Profile'};
     
     if nargin == 0
         

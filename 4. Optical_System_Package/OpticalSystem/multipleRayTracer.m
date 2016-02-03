@@ -73,12 +73,12 @@ function [multipleRayTracerResult,pupilMeshGrid,outsidePupilIndices ] = ...
     
     %===============RAYTRACE For Bundle of Ray========================
     rayTraceResult = rayTracer(optSystem,initialRayBundle,rayTraceOptionStruct,...
-        endSurface,nRayPupil,nField,nWav);
+        endSurface);
     multipleRayTracerResult = rayTraceResult;
     pupilCoordinates = pupilSamplingPoints;
     timeElapsed =  toc;
     considerPolarization = rayTraceOptionStruct.ConsiderPolarization;
     disp(['Ray Bundle Trace Completed. Polarized  = ',num2str(considerPolarization), ...
         ', Total Number  = ', num2str(nRayPupil*nField*nWav), ', Time Elapsed = ', ...
-        num2str(timeElapsed)]);
+        num2str(timeElapsed),' Sec.']);
 end

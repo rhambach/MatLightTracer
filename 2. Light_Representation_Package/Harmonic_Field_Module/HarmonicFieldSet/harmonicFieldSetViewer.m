@@ -69,6 +69,12 @@ function mainFigHandle = harmonicFieldSetViewer( variableInputArgument,fontSize,
     uimenu(menuFieldManipulation,'Label','Fourier Transform (x->k)','Callback',{@menuFFT_Callback,figureHandle},...
         'Separator','on');
     uimenu(menuFieldManipulation,'Label','Inverse Fourier Transform (k->x)','Callback',{@menuIFFT_Callback,figureHandle});
+    uimenu(menuFieldManipulation,'Label','Fraunhofer Propagator','Callback',{@menuFraunhoferPropagator_Callback,figureHandle},...
+        'Separator','on');
+    uimenu(menuFieldManipulation,'Label','SPW Propagator','Callback',{@menuSPWPropagator_Callback,figureHandle},...
+        'Separator','on');
+    uimenu(menuFieldManipulation,'Label','SPW Propagator Axial','Callback',{@menuSPWPropagatorAxial_Callback,figureHandle},...
+        'Separator','on');
     
     
     figureHandle.panelSetting = uipanel( ...
@@ -391,6 +397,75 @@ function menuIFFT_Callback(~,~,figureHandle)
     harmonicFieldSetViewer( modifiedHarmonicFieldSet,fontSize,fontName );
 end
 
+function menuFraunhoferPropagator_Callback(~,~,figureHandle)
+    fontName = figureHandle.FontName;
+    fontSize = figureHandle.FontSize;
+    harmonicFieldSet = extractCurrrentHarmonicFieldSet(figureHandle);
+    
+    prompt = {'Enter propagation distance (mm):','Enter output window size (mm):'};
+    dlg_title = 'Input';
+    num_lines = 1;
+    defaultans = {'10','0.1'};
+    answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
+    if isempty(answer)
+        return;
+    end
+    propagationDistance = str2num(answer{1})*10^-3;
+    outputWindowSize = str2num(answer{2})*10^-3;
+    addSphericalCorrection = 1;
+    [ modifiedHarmonicFieldSet ] = FraunhoferPropagator( harmonicFieldSet,propagationDistance,outputWindowSize,addSphericalCorrection );
+    % Open a new harmonuic field viewer window
+    
+    harmonicFieldSetViewer( modifiedHarmonicFieldSet,fontSize,fontName );
+end
+function menuSPWPropagator_Callback(~,~,figureHandle)
+    fontName = figureHandle.FontName;
+    fontSize = figureHandle.FontSize;
+    harmonicFieldSet = extractCurrrentHarmonicFieldSet(figureHandle);
+    
+    prompt = {'Enter propagation distance (mm):'};
+    dlg_title = 'Input';
+    num_lines = 1;
+    defaultans = {'10'};
+    answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
+    if isempty(answer)
+        return;
+    end
+    propagationDistance = str2num(answer{1})*10^-3;
+    [ modifiedHarmonicFieldSet ] = SPWPropagator( harmonicFieldSet,propagationDistance );
+    % Open a new harmonuic field viewer window
+    
+    harmonicFieldSetViewer( modifiedHarmonicFieldSet,fontSize,fontName );
+end
+
+function menuSPWPropagatorAxial_Callback(~,~,figureHandle)
+    fontName = figureHandle.FontName;
+    fontSize = figureHandle.FontSize;
+    harmonicFieldSet = extractCurrrentHarmonicFieldSet(figureHandle);
+    
+    prompt = {'From (mm):','To (mm):','Steps :','Field Index :'};
+    dlg_title = 'Input axial propagation parameters';
+    num_lines = 1;
+    defaultans = {'10','20','100','1'};
+    answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
+    if isempty(answer)
+        return;
+    end
+    propagationFrom = str2num(answer{1})*10^-3;
+    propagationTo = str2num(answer{2})*10^-3;
+    N = str2num(answer{3});
+    fieldIndex = str2num(answer{4});
+    propagationDistance = linspace(propagationFrom,propagationTo,N);
+    for kk = 1:N
+    [ harmonicFieldArray(kk) ] = SPWPropagator( harmonicFieldSet,propagationDistance(kk),fieldIndex );
+    end
+    % Open a new harmonuic field viewer window
+    [ modifiedHarmonicFieldSet ] = ConvertHFArrayToHFSet( harmonicFieldArray );
+    harmonicFieldSetViewer( modifiedHarmonicFieldSet,fontSize,fontName );
+    % Show the YZ cross section of intensity
+    
+end
+
 
 function buttonGroupFieldComponent_SelectionChangedFcn(~,~,figureHandle)
     updateHarmonicFieldSetViewer(figureHandle)
@@ -421,14 +496,23 @@ function updateHarmonicFieldSetViewer(figureHandle)
     showEllipseEccentricity = get(figureHandle.rbtnEllipseEccentricity,'Value');
     
     selectedFieldIndex = get(figureHandle.popCurrentFieldIndex,'Value');
+    nField = harmonicFieldSet.NumberOfHarmonicFields;
+    if selectedFieldIndex > nField
+        selectedFieldIndex = nField;
+        set(figureHandle.popCurrentFieldIndex,'String',num2cell([1:nField]));
+        set(figureHandle.popCurrentFieldIndex,'Value',nField);
+    end
     showPolarizationEllipse = get(figureHandle.chkShowPolarizationEllipse,'Value');
     selectedPlane = get(figureHandle.popPlane,'Value');
+    % Set the wavelength
+    wavlength = harmonicFieldSet.Wavelength(selectedFieldIndex);
+    set(figureHandle.txtCurrentWavelength,'String',num2str(wavlength));
     
     % Plot the required quantity
     allExIn3D = squeeze(harmonicFieldSet.ComplexAmplitude(:,:,1,selectedFieldIndex));
     allEyIn3D = squeeze(harmonicFieldSet.ComplexAmplitude(:,:,2,selectedFieldIndex));
-    Ex = allExIn3D(:,:,selectedFieldIndex);
-    Ey = allEyIn3D(:,:,selectedFieldIndex);
+    Ex = allExIn3D;
+    Ey = allEyIn3D;
     Nx = size(allExIn3D,2);
     Ny = size(allExIn3D,1);
     
@@ -437,14 +521,7 @@ function updateHarmonicFieldSetViewer(figureHandle)
     centerXY = harmonicFieldSet.Center(:,selectedFieldIndex);
     [xlin,ylin] = generateSamplingGridVectors(samplingPoints ,samplingDistance, centerXY);
     [xMesh,yMesh] = meshgrid(xlin,ylin);
-    
-    nField = harmonicFieldSet.NumberOfHarmonicFields;
-    if selectedFieldIndex > nField
-        selectedFieldIndex = nField;
-        set(figureHandle.popCurrentFieldIndex,'Value',nField);
-    end
-    
-    
+
     if showEx
         complexAmplitude = Ex;
         fieldComponent = 'Ex';
@@ -508,14 +585,18 @@ function updateHarmonicFieldSetViewer(figureHandle)
     
     sectionPlotAxesHandle = figureHandle.axesLinePlot;
     sectionTitle = 'Cross sectional view';
-    sectionXlabel = 'Position (m)';
+    if harmonicFieldSet.Domain == 1 % Spatial
+        sectionXlabel = 'Position (m)';
+    else
+        sectionXlabel = 'Spatial Frequency (1/m)';
+    end
     sectionYlable = [valueDisplayedName,' ,  ',fieldComponent];
     interpolationMethod = 'linear';%'spline';
     lineColor = 'w';
     lineWidth = 1.0;
     
     
-    pause(0.00001); % Sometimes with out this pause the pcolor will not be correctly plotted. I dont know why
+    pause(0.00000001); % Sometimes with out this pause the pcolor will not be correctly plotted. I dont know why
     cla(colorPlotAxes,'reset');
     cla(sectionPlotAxesHandle,'reset');
     input_args = {colorPlotAxes,xMesh,yMesh,requestedValue};
@@ -524,8 +605,14 @@ function updateHarmonicFieldSetViewer(figureHandle)
     axis(colorPlotAxes,'equal');
     
     title(colorPlotAxes,[valueDisplayedName, ' , Component : ',fieldComponent])
-    xlabel(colorPlotAxes,'X Axis (m)') % x-axis label
-    ylabel(colorPlotAxes,'Y Axis (m)') % y-axis label
+    if harmonicFieldSet.Domain == 1 % Spatial
+        xlabel(colorPlotAxes,'X Axis (m)') % x-axis label
+        ylabel(colorPlotAxes,'Y Axis (m)') % y-axis label
+    else
+        xlabel(colorPlotAxes,'X Axis (1/m)') % x-axis label
+        ylabel(colorPlotAxes,'Y Axis (1/m)') % y-axis label
+    end
+    
     
     c = colorbar(colorPlotAxes);
     c.Label.String = [valueDisplayedName,' ,  ',fieldComponent];
@@ -573,6 +660,6 @@ function harmonicFieldSet = extractCurrrentHarmonicFieldSet(figureHandle)
         % To view the harmonic field source being built using harmonic field
         % source editor window, one can pass harmonicFieldSet = 'CurrentHarmonicFieldSource'
         harmonicFieldSource = getappdata(0,'HarmonicFieldSource');
-        harmonicFieldSet = (getHarmonicFieldSet(harmonicFieldSource));
+        harmonicFieldSet = (getHFSourceHarmonicFieldSet(harmonicFieldSource));
     end
 end

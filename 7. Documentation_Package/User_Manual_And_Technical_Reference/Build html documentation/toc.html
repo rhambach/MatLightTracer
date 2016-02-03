@@ -1,0 +1,800 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<title>MatLightTracer Version 1.0 Reference- Table of Contents</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.3.1.364">
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/silver-theme/jquery-ui-1.8.12.custom.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/dynatree/chm/ui.dynatree.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="css/toc.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#tabs .ui-widget-header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.8.17.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/jquery.dynatree.min.js"></script>
+	<script type="text/javascript" src="js/hndjsse.js"></script>
+	<script type="text/javascript">
+	
+		window.bSearchDataLoaded = false;
+		var sHelpIdToActivate = '';
+	
+		$(document).ready(function()
+		{
+			var sAnchorName = '';
+			try { sAnchorName = top.location.href.substring(top.location.href.lastIndexOf("#") + 1, top.location.href.length); }
+			catch(err) { sAnchorName = ''; }
+			var nSelectedTab = 0;
+			if (sAnchorName == '_index') nSelectedTab = 1
+			else if (sAnchorName == '_search') nSelectedTab = 2;			
+			$("#tabs").tabs({
+				selected: nSelectedTab,
+				select: function(event, ui) { HideKwPopup(); }
+			});
+			
+			// Toc
+			if ($("#tab-toc").length) {
+				$("#tab-toc").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onActivate: function(node){
+						if ($("#tab-keywords").length && $("#tab-keywords").dynatree && $("#tab-keywords").dynatree("getTree") && $("#tab-keywords").dynatree("getTree").activateKey)
+							$("#tab-keywords").dynatree("getTree").activateKey(null);
+						if(node.data.href && node.data.href != '#'){
+							window.open(node.data.href, node.data.target);
+						}
+					}
+				});
+				// Expand all nodes if required
+				$("#tab-toc").dynatree("getRoot").visit(function(node){
+						node.expand(true);
+					});
+				// Select the active help id
+				if (sHelpIdToActivate != '') $("#tab-toc").dynatree("getTree").activateKey(sHelpIdToActivate);
+			}
+			
+			// Keywords
+			
+			if ($("#tab-keywords").length) {
+				$("#tab-keywords").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onClick: function(node, event){
+						HideKwPopup();
+						if (node.data && node.data.click)
+						{
+							var aRefList = null;
+							eval('aRefList=' + node.data.click);
+							if (ShowKwPopup(node.li, aRefList))
+							{
+								if ($("#tab-toc") && $("#tab-toc").dynatree && $("#tab-toc").dynatree("getTree") && $("#tab-toc").dynatree("getTree").activateKey)
+									$("#tab-toc").dynatree("getTree").activateKey(null);
+								if(node.data.href && node.data.href != '#'){
+									window.open(node.data.href, node.data.target);
+								}
+							}
+						}
+					}
+				});
+				// Expand all nodes if required
+				$("#tab-keywords").dynatree("getRoot").visit(function(node){
+						node.expand(true);
+					});
+				}
+			
+			// Load search data
+			(function() {
+				var se = document.createElement('script'); se.type = 'text/javascript'; se.async = true;
+				se.src = 'js/hndsd.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(se, s);
+			})();
+		});
+		
+		$('body').click(function() {
+			HideKwPopup();
+		});
+		
+		function SelectTocItem(sHelpId)
+		{
+			if ($("#tab-toc").length && $("#tab-toc").dynatree && $("#tab-toc").dynatree("getTree") && $("#tab-toc").dynatree("getTree").getNodeByKey) {
+				$("#tab-toc").dynatree("getTree").getNodeByKey(sHelpId).activateSilently();
+			}
+			else {
+				sHelpIdToActivate = sHelpId;
+			}
+		}
+		
+		function HideKwPopup()
+		{
+			if($("#popupMenu")) $("#popupMenu").remove();
+		}
+		
+		function ShowKwPopup(oSender, aLinks)
+		{
+			HideKwPopup();
+			if (!aLinks || !aLinks.length || aLinks.length == 0) return false
+			else if (aLinks.length == 1) return true
+			else
+			{
+				var oParentDiv = document.createElement("DIV");
+				oParentDiv.id = "popupMenu";
+				var oLink = null;
+				// Close button
+				oLink = document.createElement("SPAN");
+				oLink.className = "close-button";
+				oLink.innerHTML = "X";
+				oLink.href = "#";
+				oLink.onclick = HideKwPopup;
+				oParentDiv.appendChild(oLink);
+				// Items
+				for (var nCnt=0; nCnt<aLinks.length; nCnt++)
+				{
+					oLink = document.createElement("A");
+					oLink.innerHTML = aLinks[nCnt][0];
+					oLink.href = aLinks[nCnt][1];
+					oLink.target = "FrameMain";
+					oLink.onclick = HideKwPopup;
+					oParentDiv.appendChild(oLink);
+				}
+				document.body.appendChild(oParentDiv);
+				var pos = $(oSender).offset(); 
+				var height = $(oSender).height();
+				$(oParentDiv).css({
+					"left": (pos.left+20) + "px",
+					"top": (pos.top + height + 5) + "px"
+				});
+				$(oParentDiv).show();
+				return false;
+			}
+		}
+		
+		function PerformSearch()
+		{
+			if (!window.bSearchDataLoaded) {
+				$("#search_results").html("Search engine data hasn't been fully loaded yet or an error occurred while loading it. This usually happens when documentation is browsed locally.");
+				return;
+			}
+			sValue = $("#search_value").val();
+			$("#search_results").html('Searching...');
+			var oSearchEngine = new HndJsSe;
+			oSearchEngine.ParseInput(sValue);			
+			oSearchEngine.PerformSearch();
+			if (!oSearchEngine.aResults || !oSearchEngine.aResults.length)
+			{
+				$("#search_results").html('No results found.');
+			}
+			else
+			{
+				$("#search_results").html('<div id="search_results_content"></div>');
+				var oUl = $("#search_results_content").append("<ul id='lr'></ul>").find("ul");
+				for (var nCnt = 0; nCnt < oSearchEngine.aResults.length; nCnt++)
+				{
+					if (oSearchEngine.aResults[nCnt][0] < aTl.length)
+					{
+						oUl.append("<li><a href='" + aTl[oSearchEngine.aResults[nCnt][0]][0] + "?search=" + escape(sValue) + "' target='FrameMain'>" + unescape(aTl[oSearchEngine.aResults[nCnt][0]][1]) + "</a></li>");
+					}
+				}
+				// Tree
+				$("#search_results_content").dynatree({
+					clickFolderMode: 1,
+					debugLevel: 0,
+					imagePath: 'css/dynatree/chm/',
+					onActivate: function(node){
+						if ($("#search_results_content") && $("#search_results_content").dynatree && $("#search_results_content").dynatree("getTree") && $("#search_results_content").dynatree("getTree").activateKey)
+							$("#search_results_content").dynatree("getTree").activateKey(null);
+						if(node.data.href && node.data.href != '#'){
+							window.open(node.data.href, node.data.target);
+						}
+					}
+				});
+			}
+		}
+	</script>
+</head>
+
+<body>
+
+	<div id="tabs">
+		<ul>
+			<li><a href="#tab-toc">Contents</a></li>
+			<li><a href="#tab-keywords">Index</a></li>
+			<li><a href="#tab-search">Search</a></li>
+			</ul>
+		<div id="tab-toc">
+			<ul id="toc" class="">
+
+				<li class="" id="CoverPage" data="icon: '10.png'">
+							<a
+							href="CoverPage.html"
+							target="FrameMain">
+								Cover Page</a>
+
+				</li><li class="" id="Objective" data="icon: '10.png'">
+							<a
+							href="Objective.html"
+							target="FrameMain">
+								Objective</a>
+
+				</li><li class="folder" id="UserManual1" data="">
+							<a
+							href="UserManual1.html"
+							target="FrameMain">
+								User Manual</a>
+
+				<ul><li class="" id="DownloadingtheMatLightTracerTool" data="icon: '10.png'">
+							<a
+							href="DownloadingtheMatLightTracerTool.html"
+							target="FrameMain">
+								Downloading the MatLightTracer Toolbox</a>
+
+				</li><li class="" id="GeneralToolboxFolderStructure" data="icon: '10.png'">
+							<a
+							href="GeneralToolboxFolderStructure.html"
+							target="FrameMain">
+								General Toolbox Folder Structure</a>
+
+				</li><li class="" id="StartingtheToolbox" data="icon: '10.png'">
+							<a
+							href="StartingtheToolbox.html"
+							target="FrameMain">
+								Starting the Toolbox</a>
+
+				</li><li class="" id="ConventionsandDefinitions" data="icon: '10.png'">
+							<a
+							href="ConventionsandDefinitions.html"
+							target="FrameMain">
+								Conventions and Definitions</a>
+
+				</li><li class="folder" id="UsingMatLightTracerGUI" data="">
+							<a
+							href="UsingMatLightTracerGUI.html"
+							target="FrameMain">
+								Using MatLightTracer GUI</a>
+
+				<ul><li class="folder" id="ParentWindow" data="">
+							<a
+							href="ParentWindow.html"
+							target="FrameMain">
+								Parent Window</a>
+
+				<ul><li class="" id="TitleBar" data="icon: '10.png'">
+							<a
+							href="TitleBar.html"
+							target="FrameMain">
+								Title Bar</a>
+
+				</li><li class="" id="MenuBar" data="icon: '10.png'">
+							<a
+							href="MenuBar.html"
+							target="FrameMain">
+								Menu Bar</a>
+
+				</li><li class="" id="SurfaceComponentListPanel" data="icon: '10.png'">
+							<a
+							href="SurfaceComponentListPanel.html"
+							target="FrameMain">
+								Surface/Component List Panel</a>
+
+				</li><li class="" id="SurfaceComponentParameterPanel" data="icon: '10.png'">
+							<a
+							href="SurfaceComponentParameterPanel.html"
+							target="FrameMain">
+								Surface/Component Parameter Panel</a>
+
+				</li><li class="" id="SystemQuickLayoutPanel" data="icon: '10.png'">
+							<a
+							href="SystemQuickLayoutPanel.html"
+							target="FrameMain">
+								System Quick Layout Panel</a>
+
+				</li><li class="" id="StatusBar" data="icon: '10.png'">
+							<a
+							href="StatusBar.html"
+							target="FrameMain">
+								Status Bar</a>
+
+				</li></ul></li><li class="" id="ChildrenWindows" data="icon: '0.png'">
+							<a
+							href="ChildrenWindows.html"
+							target="FrameMain">
+								Children Windows</a>
+
+				</li><li class="" id="SystemConfigurationWindow" data="icon: '10.png'">
+							<a
+							href="SystemConfigurationWindow.html"
+							target="FrameMain">
+								System Configuration Window</a>
+
+				</li><li class="" id="SettingupaNewOpticalSystem" data="icon: '10.png'">
+							<a
+							href="SettingupaNewOpticalSystem.html"
+							target="FrameMain">
+								Setting up a New Optical System</a>
+
+				</li><li class="" id="OpeningOpticalSystemsfromFile" data="icon: '10.png'">
+							<a
+							href="OpeningOpticalSystemsfromFile.html"
+							target="FrameMain">
+								Opening Optical Systems from File</a>
+
+				</li><li class="folder" id="SystemLayout" data="">
+							<a
+							href="SystemLayout.html"
+							target="FrameMain">
+								System Layout</a>
+
+				<ul><li class="" id="2DSystemLayoutWindow" data="icon: '10.png'">
+							<a
+							href="2DSystemLayoutWindow.html"
+							target="FrameMain">
+								2D System Layout Window</a>
+
+				</li><li class="" id="3DSystemLayoutWindow" data="icon: '10.png'">
+							<a
+							href="3DSystemLayoutWindow.html"
+							target="FrameMain">
+								3D System Layout Window</a>
+
+				</li></ul></li><li class="folder" id="OpticalSystemAnalysis1" data="">
+							<a
+							href="OpticalSystemAnalysis1.html"
+							target="FrameMain">
+								Optical System Analysis</a>
+
+				<ul><li class="" id="ScalarRayTrace" data="icon: '10.png'">
+							<a
+							href="ScalarRayTrace.html"
+							target="FrameMain">
+								Scalar Ray Trace</a>
+
+				</li><li class="" id="ParaxialAnalysis" data="icon: '10.png'">
+							<a
+							href="ParaxialAnalysis.html"
+							target="FrameMain">
+								Paraxial Analysis</a>
+
+				</li><li class="" id="TransverseRayAberration" data="icon: '10.png'">
+							<a
+							href="TransverseRayAberration.html"
+							target="FrameMain">
+								Transverse Ray Aberration</a>
+
+				</li><li class="" id="LongitudinalAberration" data="icon: '10.png'">
+							<a
+							href="LongitudinalAberration.html"
+							target="FrameMain">
+								Longitudinal Aberration</a>
+
+				</li><li class="" id="FootprintDiagram" data="icon: '10.png'">
+							<a
+							href="FootprintDiagram.html"
+							target="FrameMain">
+								Footprint  Diagram</a>
+
+				</li><li class="folder" id="HybridDiffraction" data="">
+							<a
+							href="HybridDiffraction.html"
+							target="FrameMain">
+								Hybrid Diffraction</a>
+
+				<ul><li class="" id="WavefrontExitPupil" data="icon: '10.png'">
+							<a
+							href="WavefrontExitPupil.html"
+							target="FrameMain">
+								Wavefront @ Exit Pupil</a>
+
+				</li><li class="" id="FFTPSF" data="icon: '10.png'">
+							<a
+							href="FFTPSF.html"
+							target="FrameMain">
+								FFT PSF</a>
+
+				</li><li class="" id="PupilApodization" data="icon: '10.png'">
+							<a
+							href="PupilApodization.html"
+							target="FrameMain">
+								Pupil Apodization</a>
+
+				</li></ul></li><li class="folder" id="Polarization" data="">
+							<a
+							href="Polarization.html"
+							target="FrameMain">
+								Polarization</a>
+
+				<ul><li class="" id="PolarizationEllipseMap" data="icon: '10.png'">
+							<a
+							href="PolarizationEllipseMap.html"
+							target="FrameMain">
+								Polarization Ellipse Map</a>
+
+				</li><li class="" id="PolarizationRayTrace" data="icon: '10.png'">
+							<a
+							href="PolarizationRayTrace.html"
+							target="FrameMain">
+								Polarization Ray Trace</a>
+
+				</li><li class="folder" id="PolarizationAberration" data="">
+							<a
+							href="PolarizationAberration.html"
+							target="FrameMain">
+								Polarization Aberration:</a>
+
+				<ul><li class="" id="AmplitudeTransmissionMap" data="icon: '10.png'">
+							<a
+							href="AmplitudeTransmissionMap.html"
+							target="FrameMain">
+								Amplitude Transmission Map</a>
+
+				</li><li class="" id="PhaseMap" data="icon: '10.png'">
+							<a
+							href="PhaseMap.html"
+							target="FrameMain">
+								Phase Map</a>
+
+				</li><li class="" id="WavefrontDiattenuationMap" data="icon: '10.png'">
+							<a
+							href="WavefrontDiattenuationMap.html"
+							target="FrameMain">
+								Wavefront Diattenuation Map</a>
+
+				</li><li class="" id="WavefrontRetardationMap" data="icon: '10.png'">
+							<a
+							href="WavefrontRetardationMap.html"
+							target="FrameMain">
+								Wavefront Retardation Map</a>
+
+				</li></ul></li></ul></li><li class="" id="PulseAnalysis" data="icon: '10.png'">
+							<a
+							href="PulseAnalysis.html"
+							target="FrameMain">
+								Pulse Analysis</a>
+
+				</li></ul></li><li class="folder" id="Coating1" data="">
+							<a
+							href="Coating1.html"
+							target="FrameMain">
+								Coating</a>
+
+				<ul><li class="" id="NewCoatingCatalogue" data="icon: '10.png'">
+							<a
+							href="NewCoatingCatalogue.html"
+							target="FrameMain">
+								New Coating Catalogue</a>
+
+				</li><li class="" id="CoatingDataEditor" data="icon: '10.png'">
+							<a
+							href="CoatingDataEditor.html"
+							target="FrameMain">
+								Coating Data Editor</a>
+
+				</li><li class="folder" id="CoatingAnalysis1" data="">
+							<a
+							href="CoatingAnalysis1.html"
+							target="FrameMain">
+								Coating Analysis</a>
+
+				<ul><li class="" id="RefractiveIndexProfile" data="icon: '10.png'">
+							<a
+							href="RefractiveIndexProfile.html"
+							target="FrameMain">
+								Refractive Index Profile</a>
+
+				</li><li class="" id="CoatingPropertyVersusIncidenceAn" data="icon: '10.png'">
+							<a
+							href="CoatingPropertyVersusIncidenceAn.html"
+							target="FrameMain">
+								Coating Property Versus Incidence Angle</a>
+
+				</li><li class="" id="CoatingPropertiesvsWavelength" data="icon: '10.png'">
+							<a
+							href="CoatingPropertiesvsWavelength.html"
+							target="FrameMain">
+								Coating Properties vs Wavelength</a>
+
+				</li></ul></li></ul></li><li class="folder" id="Glass" data="">
+							<a
+							href="Glass.html"
+							target="FrameMain">
+								Glass</a>
+
+				<ul><li class="" id="GlassDataEditor" data="icon: '10.png'">
+							<a
+							href="GlassDataEditor.html"
+							target="FrameMain">
+								Glass Data Editor</a>
+
+				</li><li class="" id="NewGlassCatalogue" data="icon: '10.png'">
+							<a
+							href="NewGlassCatalogue.html"
+							target="FrameMain">
+								New Glass Catalogue</a>
+
+				</li></ul></li><li class="folder" id="Help" data="">
+							<a
+							href="Help.html"
+							target="FrameMain">
+								Help</a>
+
+				<ul><li class="" id="About" data="icon: '10.png'">
+							<a
+							href="About.html"
+							target="FrameMain">
+								About</a>
+
+				</li><li class="" id="UserManual" data="icon: '10.png'">
+							<a
+							href="UserManual.html"
+							target="FrameMain">
+								User Manual</a>
+
+				</li><li class="" id="ProgrammingandAlgorithmsReferenc" data="icon: '10.png'">
+							<a
+							href="ProgrammingandAlgorithmsReferenc.html"
+							target="FrameMain">
+								Programming and Algorithms Reference</a>
+
+				</li><li class="" id="SourceCodeViewer" data="icon: '10.png'">
+							<a
+							href="SourceCodeViewer.html"
+							target="FrameMain">
+								Source Code Viewer</a>
+
+				</li></ul></li></ul></li><li class="folder" id="UsingMatLightTracerFromMatlabCom" data="">
+							<a
+							href="UsingMatLightTracerFromMatlabCom.html"
+							target="FrameMain">
+								Using MatLightTracer From Matlab Command </a>
+
+				<ul><li class="" id="LoadinganOpticalSystem" data="icon: '10.png'">
+							<a
+							href="LoadinganOpticalSystem.html"
+							target="FrameMain">
+								Loading an Optical System</a>
+
+				</li><li class="" id="CreatingInitialRaysForOpticalSys" data="icon: '10.png'">
+							<a
+							href="CreatingInitialRaysForOpticalSys.html"
+							target="FrameMain">
+								Creating Initial Rays For Optical Systems</a>
+
+				</li><li class="" id="TracingRaysThroughOpticalSystems" data="icon: '10.png'">
+							<a
+							href="TracingRaysThroughOpticalSystems.html"
+							target="FrameMain">
+								Tracing Rays Through Optical Systems</a>
+
+				</li><li class="" id="AccessingRayTracingResults" data="icon: '10.png'">
+							<a
+							href="AccessingRayTracingResults.html"
+							target="FrameMain">
+								Accessing Ray Tracing Results</a>
+
+				</li></ul></li></ul></li><li class="folder" id="ProgrammingandAlgorithmsReferen1" data="">
+							<a
+							href="ProgrammingandAlgorithmsReferen1.html"
+							target="FrameMain">
+								Programming and Algorithms Reference</a>
+
+				<ul><li class="" id="ProgrammingApproach" data="icon: '10.png'">
+							<a
+							href="ProgrammingApproach.html"
+							target="FrameMain">
+								Programming Approach</a>
+
+				</li><li class="folder" id="ToolboxStructuresandClasses" data="">
+							<a
+							href="ToolboxStructuresandClasses.html"
+							target="FrameMain">
+								Toolbox Structures and Classes</a>
+
+				<ul><li class="folder" id="GUIRelatedClass" data="">
+							<a
+							href="GUIRelatedClass.html"
+							target="FrameMain">
+								GUI Related Class</a>
+
+				<ul><li class="" id="AODParentWindowClass" data="">
+							<a
+							href="AODParentWindowClass.html"
+							target="FrameMain">
+								AODParentWindow: Class</a>
+
+				</li><li class="" id="AODChildWindowClass" data="">
+							<a
+							href="AODChildWindowClass.html"
+							target="FrameMain">
+								AODChildWindow: Class</a>
+
+				</li></ul></li><li class="" id="OpticalSystemStruct" data="">
+							<a
+							href="OpticalSystemStruct.html"
+							target="FrameMain">
+								OpticalSystem: Struct</a>
+
+				</li><li class="" id="SurfaceStruct" data="">
+							<a
+							href="SurfaceStruct.html"
+							target="FrameMain">
+								Surface: Struct</a>
+
+				</li><li class="" id="GlassStruct" data="">
+							<a
+							href="GlassStruct.html"
+							target="FrameMain">
+								Glass: Struct</a>
+
+				</li><li class="" id="CoatingStruct" data="">
+							<a
+							href="CoatingStruct.html"
+							target="FrameMain">
+								Coating: Struct</a>
+
+				</li></ul></li><li class="folder" id="ScalarRayTracingModule" data="">
+							<a
+							href="ScalarRayTracingModule.html"
+							target="FrameMain">
+								Scalar Ray Tracing Module</a>
+
+				<ul><li class="" id="CoordinateTransformations" data="">
+							<a
+							href="CoordinateTransformations.html"
+							target="FrameMain">
+								Coordinate Transformations</a>
+
+				</li><li class="" id="IntersectionPointandSurfaceNorma" data="">
+							<a
+							href="IntersectionPointandSurfaceNorma.html"
+							target="FrameMain">
+								Intersection Point and Surface Normal Computation</a>
+
+				</li><li class="" id="RefractionorReflection" data="">
+							<a
+							href="RefractionorReflection.html"
+							target="FrameMain">
+								Refraction (or Reflection)</a>
+
+				</li><li class="" id="IncidenceAngle" data="">
+							<a
+							href="IncidenceAngle.html"
+							target="FrameMain">
+								Incidence Angle</a>
+
+				</li></ul></li><li class="folder" id="ParaxialandMeridionalRayTracingM" data="">
+							<a
+							href="ParaxialandMeridionalRayTracingM.html"
+							target="FrameMain">
+								Paraxial and Meridional Ray Tracing Module</a>
+
+				<ul><li class="" id="ParaxialRayTracingModule" data="">
+							<a
+							href="ParaxialRayTracingModule.html"
+							target="FrameMain">
+								Paraxial Ray Tracing Module</a>
+
+				</li><li class="" id="MeridionalRayTracingModule" data="">
+							<a
+							href="MeridionalRayTracingModule.html"
+							target="FrameMain">
+								Meridional Ray Tracing Module</a>
+
+				</li></ul></li><li class="folder" id="PolarizationRayTracingModule" data="">
+							<a
+							href="PolarizationRayTracingModule.html"
+							target="FrameMain">
+								Polarization Ray Tracing Module</a>
+
+				<ul><li class="" id="JonesMatrixtoPolarizationRayTrac" data="">
+							<a
+							href="JonesMatrixtoPolarizationRayTrac.html"
+							target="FrameMain">
+								Jones Matrix to Polarization Ray Tracing Matrix</a>
+
+				</li><li class="" id="PolarizationRayTracingthroughInt" data="">
+							<a
+							href="PolarizationRayTracingthroughInt.html"
+							target="FrameMain">
+								Polarization Ray Tracing through Interfaces</a>
+
+				</li><li class="" id="PolarizationPropertiesofOpticalS" data="">
+							<a
+							href="PolarizationPropertiesofOpticalS.html"
+							target="FrameMain">
+								Polarization Properties of Optical System</a>
+
+				</li></ul></li><li class="folder" id="ExamplesofExtendingtheToolbox" data="">
+							<a
+							href="ExamplesofExtendingtheToolbox.html"
+							target="FrameMain">
+								Examples of Extending the Toolbox</a>
+
+				<ul><li class="" id="Method1Aspartofthetoolbox" data="">
+							<a
+							href="Method1Aspartofthetoolbox.html"
+							target="FrameMain">
+								Method 1: As part of the toolbox</a>
+
+				</li><li class="" id="Method2Asseparatetoolusingtheexi" data="">
+							<a
+							href="Method2Asseparatetoolusingtheexi.html"
+							target="FrameMain">
+								Method 2: As separate tool using the existing toolbox</a>
+
+				</li><li class="" id="AddNewSurfaceTypes" data="">
+							<a
+							href="AddNewSurfaceTypes.html"
+							target="FrameMain">
+								Add New Surface Types</a>
+
+				</li><li class="folder" id="TransverseRayAberrationDiagram" data="">
+							<a
+							href="TransverseRayAberrationDiagram.html"
+							target="FrameMain">
+								Transverse Ray Aberration Diagram</a>
+
+				<ul><li class="" id="Procedures" data="">
+							<a
+							href="Procedures.html"
+							target="FrameMain">
+								Procedures</a>
+
+				</li><li class="" id="Results" data="">
+							<a
+							href="Results.html"
+							target="FrameMain">
+								Results</a>
+
+				</li></ul></li><li class="folder" id="LongitudinalRayAberrationDiagram" data="">
+							<a
+							href="LongitudinalRayAberrationDiagram.html"
+							target="FrameMain">
+								Longitudinal Ray Aberration Diagram</a>
+
+				<ul><li class="" id="Procedures1" data="">
+							<a
+							href="Procedures1.html"
+							target="FrameMain">
+								Procedures</a>
+
+				</li><li class="" id="Results1" data="">
+							<a
+							href="Results1.html"
+							target="FrameMain">
+								Results</a>
+
+				</li></ul></li></ul></li></ul></li></ul>
+		</div>
+		
+		<div id="tab-keywords">
+			<ul id="keywords">
+
+				</ul>
+		</div>
+		
+		<div id="tab-search">
+			<form onsubmit="PerformSearch(); return false;">
+				<label for="search_value">Search:</label>
+				<input id="search_value" name="search_value"></input>
+				<input type="submit" value="Search"/>
+			</form>
+			<div id="search_results"></div>
+		</div>
+		
+		</div>
+    
+</body>
+
+</html>
+

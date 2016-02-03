@@ -279,7 +279,7 @@ function newGlass = Glass(glassName,glassCatalogueFileList,glassType,glassParame
         end
     else
         selectedCatalogueFullName = glassCatalogueFileList{catalogueIndex};
-        glassIndex = addObjectToObjectCatalogue('Glass', newGlass,selectedCatalogueFullName,'ask');
+%         glassIndex = addObjectToObjectCatalogue('Glass', newGlass,selectedCatalogueFullName,'ask');
     end
     newGlass.SavedIndex = glassIndex;
     

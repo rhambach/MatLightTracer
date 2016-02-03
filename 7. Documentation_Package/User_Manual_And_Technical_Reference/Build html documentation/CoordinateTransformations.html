@@ -1,0 +1,82 @@
+﻿<html>
+	
+<head>
+	<title>Coordinate Transformations</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.3.1.364">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "MatLightTracer Version 1.0 Reference.html?" + sTopicUrl;
+			}
+			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+			{
+				top.FrameTOC.SelectTocItem("CoordinateTransformations");
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Coordinate Transformations</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="ProgrammingandAlgorithmsReferen1.html">Programming and Algorithms Reference</a> &rsaquo;&rsaquo; <a href="ScalarRayTracingModule.html">Scalar Ray Tracing Module</a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="ScalarRayTracingModule.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="ScalarRayTracingModule.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="IntersectionPointandSurfaceNorma.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps34"><span class="rvts71">Coordinate Transformations</span></p>
+<p class="rvps7"><span class="rvts45">As described in the documentation for Surface class, each surface defines its own local coordinate system. The coordinate transformation matrix for transforming the global coordinate to the local one is given as a 4x4 matrix for each surface. And as it can be seen from the ray tracing flow chart, (see the documentation section for OpticalSystem struct), ray tracing through a surface requires coordinate transformations between the local and global coordinate systems. Those transformations can be simply done by multiplying with the rotation matrix and adding/subtracting the decenter vector. Both rotation matrix and decenter vectors are included in the coordinate transformation matrix of the surface.</span></p>
+<p class="rvps7"><span class="rvts45"><br/></span></p>
+<p class="rvps7"><span class="rvts44">Coordinate Convention</span></p>
+<p class="rvps7"><span class="rvts45">In this toolbox the global coordinate is fixed to the base of the first surface of the optical system (that is the surface next to object plane). &nbsp;This enables the infinity thickness after the object plane which is used in the case of defining a collimated bundle of rays. So the coordinate transformation matrices of each surface are computed using this global coordinate and their respective tilt and decenter parameters.</span></p>
+<p class="rvps7"><span class="rvts45"><br/></span></p>
+<p class="rvps7"><span class="rvts45"><br/></span></p>
+<p class="rvps7"><span class="rvts45"><br/></span></p>
+<p class="rvps7"><span class="rvts45"><br/></span></p>
+<p></p>
+<p class="rvps6"><span class="rvts20">Created with the Personal Edition of HelpNDoc: </span><a class="rvts21" href="http://www.helpndoc.com/feature-tour">Easily create EPub books</a></p>
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; &lt;2016&gt; by &lt;Norman G. Worku (normangirma2012@gmail.com), Optical System Design Research Group, FSU, Jena&gt;. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

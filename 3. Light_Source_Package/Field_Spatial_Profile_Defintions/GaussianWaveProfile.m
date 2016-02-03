@@ -27,7 +27,7 @@ function [ returnDataStruct] = GaussianWaveProfile(returnFlag,spatialProfilePara
     %   inputDataStruct:
     %       inputDataStruct.xMesh
     %       inputDataStruct.yMesh
-    %       inputDataStruct.LateralPosition
+    %     %       inputDataStruct.LateralPosition
     %   returnDataStruct:
     %       returnDataStruct.SpatialProfileMatrix,
     
@@ -149,13 +149,16 @@ function [ returnDataStruct] = GaussianWaveProfile(returnFlag,spatialProfilePara
             
             x = inputDataStruct.xMesh;
             y = inputDataStruct.yMesh;
-            % lateral offset
-            cx = inputDataStruct.LateralPosition(1);
-            cy = inputDataStruct.LateralPosition(2);
+            %             % lateral offset
+            %             cx = inputDataStruct.LateralPosition(1);
+            %             cy = inputDataStruct.LateralPosition(2);
             % Compute the Gaussian profile
             Uxy_Fundamental = ...
-                (exp(-((x-cx).^2)/(wz_x^2)).*exp(1i*(-(k*z_x/2) - k*(((x-cx).^2)/(2*R_x)) + 0.5*atan(z_x/zR_x)))).*...
-                exp(-((y-cy).^2)/(wz_y^2)).*exp(1i*(-(k*z_y/2) - k*(((y-cy).^2)/(2*R_y)) + 0.5*atan(z_y/zR_y)));
+                (exp(-((x).^2)/(wz_x^2)).*exp(1i*(-(k*z_x/2) - k*(((x).^2)/(2*R_x)) + 0.5*atan(z_x/zR_x)))).*...
+                exp(-((y).^2)/(wz_y^2)).*exp(1i*(-(k*z_y/2) - k*(((y).^2)/(2*R_y)) + 0.5*atan(z_y/zR_y)));
+            %             Uxy_Fundamental = ...
+            %                 (exp(-((x-cx).^2)/(wz_x^2)).*exp(1i*(-(k*z_x/2) - k*(((x-cx).^2)/(2*R_x)) + 0.5*atan(z_x/zR_x)))).*...
+            %                 exp(-((y-cy).^2)/(wz_y^2)).*exp(1i*(-(k*z_y/2) - k*(((y-cy).^2)/(2*R_y)) + 0.5*atan(z_y/zR_y)));
             switch (type)
                 case 1 %lower('FundamentalGaussianMode')
                     Uxy = Uxy_Fundamental;
@@ -170,9 +173,10 @@ function [ returnDataStruct] = GaussianWaveProfile(returnFlag,spatialProfilePara
                     %                     disp('Currently LaguerreGaussianMode is not supported.');
                     %                     Uxy = NaN;
                     %                     return;
-                    Uxy = U_xy_Fundamental.*exp(1i*(p*atan((x-cx)./(y-cy))+(2*p+l)*atan(z_x/zR_x))).*...
-                        Laguerre(p,l,(2*((x-cx).^2+(y-cy).^2)/wz_x.^2));
-                    
+                    %                     Uxy = U_xy_Fundamental.*exp(1i*(p*atan((x-cx)./(y-cy))+(2*p+l)*atan(z_x/zR_x))).*...
+                    %                         Laguerre(p,l,(2*((x-cx).^2+(y-cy).^2)/wz_x.^2));
+                    Uxy = U_xy_Fundamental.*exp(1i*(p*atan((x)./(y))+(2*p+l)*atan(z_x/zR_x))).*...
+                        Laguerre(p,l,(2*((x).^2+(y).^2)/wz_x.^2));
             end
             returnDataStruct.SpatialProfileMatrix = Uxy;  % (sizeX X sizeY) Matrix of normalized amplitude
     end

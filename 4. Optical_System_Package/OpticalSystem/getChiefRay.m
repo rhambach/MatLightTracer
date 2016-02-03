@@ -40,21 +40,6 @@ function [ chiefRay ] = getChiefRay( optSystem,fieldIndices,wavelengthIndices )
     nField = size(fieldPointXYInSI,2);
     nWav  = size(wavLenInM,2);
     
-    % check if all field and wavelength is given or a single field or
-    % wavelength is to be used
-    if nWav == 1
-        % Single wavelength is used for all fields
-        wavLenInM = repmat(wavLenInM,[1,nField]);
-    elseif nField == 1
-        % single field is used with all waveleghts
-        fieldPointXYInSI = repmat(fieldPointXYInSI,[1,nWav]);
-    elseif nWav==nField
-        % All field and wavelengths are given
-    else
-        % invalid input
-        disp('Error: The value of nField and nWav should be equal if both are differnt from 1.');
-        return;
-    end
     firstSurface = getSurfaceArray(optSystem,1);
     if abs(firstSurface.Thickness) > 10^10 % object at infinity
         IsObjectAtInfinity = 1;
@@ -105,8 +90,14 @@ function [ chiefRay ] = getChiefRay( optSystem,fieldIndices,wavelengthIndices )
                 -radFieldToEnP.*initialDirection(2,:);...
                 repmat(-objThick,[1,nField])];
     end
-    
     initialPositionInM = initialPosition*getLensUnitFactor(optSystem);
-    chiefRay = ScalarRayBundle(initialPositionInM,initialDirection,wavLenInM);
+    
+    % Repeat wavelegths for each field point and vice versa
+    wavLenInM = cell2mat(arrayfun(@(x) x*ones(1,nField),wavLenInM,'UniformOutput',false));
+    initialPositionInM = repmat(initialPositionInM,[1,nWav]);
+    initialDirection = repmat(initialDirection,[1,nWav]);
+    
+    
+    chiefRay = ScalarRayBundle(initialPositionInM,initialDirection,wavLenInM,1,nField,nWav);
 end
 

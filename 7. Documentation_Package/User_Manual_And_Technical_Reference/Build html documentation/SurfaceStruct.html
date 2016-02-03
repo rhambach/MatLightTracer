@@ -1,0 +1,202 @@
+﻿<html>
+	
+<head>
+	<title>Surface: Struct</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.3.1.364">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "MatLightTracer Version 1.0 Reference.html?" + sTopicUrl;
+			}
+			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+			{
+				top.FrameTOC.SelectTocItem("SurfaceStruct");
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Surface: Struct</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="ProgrammingandAlgorithmsReferen1.html">Programming and Algorithms Reference</a> &rsaquo;&rsaquo; <a href="ToolboxStructuresandClasses.html">Toolbox Structures and Classes</a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="ToolboxStructuresandClasses.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="OpticalSystemStruct.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="GlassStruct.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps34"><span class="rvts40">Surface Struct</span></p>
+<p class="rvps7"><span class="rvts30">This class is used to define the optical surface object, which contains all informations related with the optical surfaces defined.</span></p>
+<p class="rvps7"><span class="rvts30"><br/></span></p>
+<p class="rvps7"><span class="rvts30">Number of Properties: XX</span></p>
+<p class="rvps7"><span class="rvts30">Number of Methods: XX</span></p>
+<p class="rvps7"><span class="rvts30"><br/></span></p>
+<p class="rvps7"><span class="rvts30">Most of the properties defined in the surface class are used for optical system analysis in the toolbox.</span></p>
+<p class="rvps7"><span class="rvts30"><br/></span></p>
+<p class="rvps7"><span class="rvts37">Important Methods (Functions)</span></p>
+<p class="rvps7"><span class="rvts37">1. Surface Coordinate Transformation Matrix Computation </span></p>
+<p class="rvps7"><span class="rvts35">Syntax:</span></p>
+<p class="rvps29"><span class="rvts59">[surfaceCoordinateTM,nextReferenceCoordinateTM] = TiltAndDecenter &nbsp; &nbsp; (surf,refCoordinateTM,prevSurfCoordinateTM,prevThickness)</span></p>
+<p class="rvps29"><span class="rvts59"> &nbsp; &nbsp;</span></p>
+<p class="rvps29"><span class="rvts64">This function updates the coordinate transformation matrix of the surface from previous reference axis and surface tilt and decenter parameters.</span></p>
+<p class="rvps29"><span class="rvts64"><br/></span></p>
+<p class="rvps27"><span class="rvts44">Tilt and Decenter</span></p>
+<p class="rvps27"><span class="rvts45">Tilting and decentering of optical surfaces results in non-rotationally symmetric systems which are used in many modern optical systems. Some of those systems include fold mirrors, periscopes, scanning systems and prisms. Modeling of tilt and decenter requires careful treatment of the local coordinate system of the surface and the global coordinate of the system. In the ray trace toolbox three coordinate systems were used to define the surface tilt and decenter of optical systems.</span></p>
+<ul style="text-indent: 0px; margin-left: 72px; list-style-position: outside; list-style-type: disc;">
+<li class="rvps35" style="margin-left: 0px; text-indent: 0px"><span class="rvts44">Global Coordinate:</span><span class="rvts45"> It is the main coordinate systems based on which all other coordinate systems are defined. It is assumed to be fixed to the first surface of the optical system. Using the first surface as global coordinate system instead of the object plane avoids problem arising when object at infinity is used. </span></li>
+</ul>
+<p class="rvps36"><span class="rvts45">In addition to the global coordinate, two coordinate systems are established for each surface of the optical system. They are defined using the fixed global coordinate system as reference.</span></p>
+<ul style="text-indent: 0px; margin-left: 72px; list-style-position: outside; list-style-type: disc;">
+<li class="rvps35" style="margin-left: 0px; text-indent: 0px"><span class="rvts44">Local Coordinate of Surface:</span><span class="rvts45"> It is coordinate system of each surface. Its origin is the vertex point of the surface and the unit vectors defining the three axes are determined by the orientation of the surface with respect to the global coordinate system.</span></li>
+<li class="rvps35" style="margin-left: 0px; text-indent: 0px"><span class="rvts44">Reference Coordinate after Surface:</span><span class="rvts45"> It is a coordinate system which acts as reference for the tilt and decenter operation of the surface following current surface in the optical system. This allows the user to set tilt and decenter parameters with respect to previous surface instead of the global coordinate, which is more complex. </span></li>
+</ul>
+<p class="rvps27"><span class="rvts45">Tilt and decenter can be applied to any surface with respect to the reference coordinate and so no special surface is required for coordinate break. And three tilt modes are used to determine how the reference coordinate system should be computed after the tilted/decentered surface. These tilt modes are:</span></p>
+<ul style="text-indent: 0px; margin-left: 72px; list-style-position: outside; list-style-type: disc;">
+<li class="rvps35" style="margin-left: 0px; text-indent: 0px"><span class="rvts44">DAR (Decenter and Return):</span><span class="rvts45"> The new reference coordinate after the tilted/decentered surface will return back to that before the surface. &nbsp;The tilt and decenter (X and Y but not Z) operation will be reversed and the coordinate becomes that before the tilt and decentered operation is done but moved forward in z direction by decenter-Z.</span></li>
+<li class="rvps35" style="margin-left: 0px; text-indent: 0px"><span class="rvts44">NAX (New Axis</span><span class="rvts45">): The axis of tilted/decentered surface will be the new axis for all surfaces that follow the decentered surface. &nbsp;That is the reference axis will be the current surface local coordinate axis.</span></li>
+<li class="rvps35" style="margin-left: 0px; text-indent: 0px"><span class="rvts44">BEN (Bended Surface):</span><span class="rvts45"> The new axis after the decentered surface will be determined by the law of reflection. This can only be applied for mirrors and the new coordinate starts at the surface vertex but the axes are determined by the law of reflection. The new axes will still be right handed coordinate system with changed sign of the z-axis. &nbsp;</span></li>
+</ul>
+<p class="rvps27"><span class="rvts45">Surface tilts are defined by specifying Euler angles of rotation Tx, Ty and Tz, about the three axes of the reference coordinate system for each surface. All the angles are directly given by the user as surface parameters. &nbsp;The sign of the tilt angles follows a mathematical convention that it is positive for counter-clockwise rotation and negative for clockwise rotation. In an Euler angle system, each of the three tilt operations takes place in the tilted coordinate system of the preceding tilt. Thus, tilting is non-commutative and undoing tilts requires operations in the reverse order.</span></p>
+<p class="rvps27"><span class="rvts45">Surface decenter values indicate the location of surface vertex with respect to the surface reference coordinate. The x and y decenters values with respect to the origin of the reference coordinate system is entered by the user as surface parameter. And the surface thickness is taken as the decenter in the z-direction. </span></p>
+<p class="rvps27"><span class="rvts45">For mathematical purpose, the surface local and reference coordinate systems are represented by 4x4 matrices called the coordinate transformation matrices. A coordinate transformation matrix defines the rotation matrix and decenter vector of a given coordinate system with respect to the global coordinate system.</span></p>
+<p class="rvps27"><span class="rvts45">This simplifies the conversion of local/reference to global coordinates system and vice versa for each surface in the optical system. The coordinate transformation matrix M is given as:</span></p>
+<p class="rvps37"><img alt="" style="padding : 1px;" src="lib/NeuesElement36.png"/></p>
+<p class="rvps27"><span class="rvts45">The 3x3 matrix in the upper left side of the transformation matrix corresponds to the total rotation matrix and the last column represents the total decenter vector of the surface local coordinate with respect to the global coordinate. The last row is not necessary but is added just to simplify matrix operations. </span></p>
+<p class="rvps27"><span class="rvts45">As mentioned above the tilt and decenter operations are not commutative, the order shall be specified by the user. Once the tilt and decenter data of each surface in the optical system is specified, the coordinate transformation matrices for each surface local and reference coordinate systems can be computed.</span></p>
+<p class="rvps27"><span class="rvts45">In the following discussion the L and R will be used for the coordinate transformation matrix of the surface local and reference coordinate with respect to the global coordinate respectively. And LR will be used for the transformation matrix of surface local coordinate with respect to the reference coordinate.</span></p>
+<p class="rvps27"><span class="rvts45">For object surface the surface local and reference coordinate are made the same and the corresponding coordinate transformation matrix to global coordinate will be:</span></p>
+<p class="rvps27"><img alt="" style="padding : 1px;" src="lib/NeuesElement35.png"/></p>
+<p class="rvps27"><span class="rvts45">where T1 is the first thickness after object surface. </span></p>
+<p class="rvps27"><span class="rvts45">As the global coordinate is fixed to the first surface next to the object, the z decenter value will be negative of the thickness.</span></p>
+<p class="rvps27"><span class="rvts45">As the tilt and decenter data of the next surface are given with respect to the previous reference coordinate system, the local to reference coordinate transformation matrix of the surface can be computed from the tilt and decenter data sequentially using the operations given in the following table. The algorithm starts with the local to reference transformation matrix for object surface, which is an identity matrix </span><img alt="" style="padding : 1px;" src="lib/NeuesElement34.png"/><span class="rvts45">, as both coordinate systems are identical for the object surface. &nbsp;</span></p>
+<div class="rvps40"><table width="643" border="1" cellpadding="4" cellspacing="-1" style="border-width: 0px; border-collapse: collapse;">
+<tr valign="top">
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 199px;"><p class="rvps24"><span class="rvts44">Tilt/Decenter</span></p>
+</td>
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 416px;"><p class="rvps24"><span class="rvts44">Operation on the Transformation Matrix</span></p>
+</td>
+</tr>
+<tr valign="top">
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 199px;"><p class="rvps7"><span class="rvts45">Dx</span></p>
+</td>
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 416px;"><p class="rvps7"><img alt="" style="padding : 1px;" src="lib/NeuesElement28.png"/></p>
+</td>
+</tr>
+<tr valign="top">
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 199px;"><p class="rvps7"><span class="rvts45">Dy</span></p>
+</td>
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 416px;"><p class="rvps7"><img alt="" style="padding : 1px;" src="lib/NeuesElement29.png"/></p>
+</td>
+</tr>
+<tr valign="top">
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 199px;"><p class="rvps7"><span class="rvts45">Dz</span></p>
+</td>
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 416px;"><p class="rvps7"><img alt="" style="padding : 1px;" src="lib/NeuesElement30.png"/></p>
+</td>
+</tr>
+<tr valign="top">
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 199px;"><p class="rvps7"><span class="rvts45">Tx</span></p>
+</td>
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 416px;"><p class="rvps7"><img alt="" style="padding : 1px;" src="lib/NeuesElement31.png"/></p>
+</td>
+</tr>
+<tr valign="top">
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 199px;"><p class="rvps7"><span class="rvts45">Ty</span></p>
+</td>
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 416px;"><p class="rvps7"><img alt="" style="padding : 1px;" src="lib/NeuesElement32.png"/></p>
+</td>
+</tr>
+<tr valign="top">
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 199px;"><p class="rvps7"><span class="rvts45">Tz</span></p>
+</td>
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 416px;"><p class="rvps38"><img alt="" style="padding : 1px;" src="lib/NeuesElement33.png"/></p>
+</td>
+</tr>
+</table>
+</div>
+<p class="rvps29"><span class="rvts45"> &nbsp; &nbsp;</span></p>
+<p class="rvps24"><span class="rvts65"><br/></span></p>
+<p class="rvps27"><span class="rvts45">Once the surface local to reference coordinate system transformation matrix is determined, the surface local to global coordinate transformation matrix of the surface can then be computed by:</span></p>
+<p class="rvps27"><img alt="" style="padding : 1px;" src="lib/NeuesElement27.png"/></p>
+<p class="rvps27"><span class="rvts45">To continue with the next surface, the new reference coordinate system </span><img alt="" style="padding : 1px;" src="lib/NeuesElement26.png"/><span class="rvts45"> has to be determined based on the tilt mode of the current surface.</span></p>
+<p class="rvps27"><span class="rvts45">The following table summarizes the operations required to get </span><img alt="" style="padding : 1px;" src="lib/NeuesElement25.png"/><span class="rvts45">, the transformation matrix for the next reference coordinate, depending on the surface tilt mode.</span></p>
+<div class="rvps40"><table width="631" border="1" cellpadding="4" cellspacing="-1" style="border-width: 0px; border-collapse: collapse;">
+<tr valign="top">
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 83px;"><p class="rvps24"><span class="rvts44">Tilt Mode</span></p>
+</td>
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 520px;"><p class="rvps24"><img alt="" style="padding : 1px;" src="lib/NeuesElement19.png"/></p>
+</td>
+</tr>
+<tr valign="top">
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 83px;"><p class="rvps7"><span class="rvts45">Decenter and Return (DAR)</span></p>
+</td>
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 520px;"><p class="rvps7"><span class="rvts45">Make the next reference coordinate the same as the previous reference coordinate but translated in z by the thickness.</span></p>
+<p class="rvps7"><img alt="" style="padding : 1px;" src="lib/NeuesElement20.png"/></p>
+</td>
+</tr>
+<tr valign="top">
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 83px;"><p class="rvps7"><span class="rvts45">New Axis (NAX)</span></p>
+</td>
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 520px;"><p class="rvps7"><span class="rvts45">Make the next reference coordinate the same as the current surface local coordinate. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><img alt="" style="padding : 1px;" src="lib/NeuesElement21.png"/></p>
+</td>
+</tr>
+<tr valign="top">
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 83px;"><p class="rvps7"><span class="rvts45">Bend (BEN)</span></p>
+</td>
+<td valign="top" style="border-width : 1px; border-color: #000000; border-style: solid; width: 520px;"><p class="rvps7"><span class="rvts45">Compute the next reference coordinate </span><img alt="" style="padding : 1px;" src="lib/NeuesElement24.png"/><span class="rvts45"> from the current surface local coordinate </span><img alt="" style="padding : 1px;" src="lib/NeuesElement23.png"/><span class="rvts45">by following the following two Steps:</span></p>
+<ol style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: decimal;">
+<li class="rvps39" style="text-indent: 0px"><span class="rvts45"> Apply Tx and Ty for the second time to get the new axis (bended axis)</span></li>
+<li class="rvps39" style="text-indent: 0px"><span class="rvts45">Compute and apply new Tz so that a meridional ray will remain a meridional ray in the surfaces following the BEN surface [3].)</span></li>
+</ol>
+<p class="rvps38"><img alt="" style="padding : 1px;" src="lib/NeuesElement22.png"/></p>
+</td>
+</tr>
+</table>
+</div>
+<p class="rvps24"><span class="rvts66"><br/></span></p>
+<p></p>
+<p class="rvps6"><span class="rvts20">Created with the Personal Edition of HelpNDoc: </span><a class="rvts21" href="http://www.helpndoc.com/feature-tour/create-ebooks-for-amazon-kindle">Full-featured Kindle eBooks generator</a></p>
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; &lt;2016&gt; by &lt;Norman G. Worku (normangirma2012@gmail.com), Optical System Design Research Group, FSU, Jena&gt;. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

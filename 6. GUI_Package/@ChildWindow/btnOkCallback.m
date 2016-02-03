@@ -442,7 +442,7 @@ function btnOkCallback(childWindow,parentWindow)
             rayTracerResult = rayTracer(optSystem,newRay,rayTraceOptionStruct);
             
             % Display results based on the type of raytrace
-            nSurf = getNumberOfSurfaces(optSystem);
+            nSurf = getNumberOfNonDummySurfaces(optSystem);
             [ lensUnitFactor,lensUnitText ] = getLensUnitFactor(optSystem);
             [ wavUnitFactor, wavUnitText] = getWavelengthUnitFactor(optSystem);
             %             stopIndex = getStopSurfaceIndex(optSystem);
@@ -1280,7 +1280,7 @@ function btnOkCallback(childWindow,parentWindow)
         
         % get the Polarization profile parameters from the corresponding
         % Polarization profile function
-        [ polarizationParameterFields, polarizationParameterFormats,polarizationParameterStruct ] = getPolarizationProfileParameters( (polarizationType) );
+        [ polarizationParameterFields, polarizationParameterFormats,polarizationParameterStruct ] = getHFSourcePolarizationProfileParameters( (polarizationType) );
         
         % Calculate the size of panelSpatialParameters based on the number of
         % parameters

@@ -7,7 +7,8 @@ function [ arrayOfRayBundles ] = getAllSurfaceRayBundles( allSurfaceRayTraceResu
     %   (rayPupilIndex,rayFieldIndex,rayWavIndex) : Indices specifying a given
     %   ray bundle
     % Output:
-    %   arrayOfRayBundles: is (1 X nSurface) array of RayBundles
+    %   arrayOfRayBundles: is (1 X nSurface) array of RayBundles. All the
+    %   ray parameters are in meter (SI unit)
     
     if nargin < 1
         disp(['Error: The function  getAllSurfaceExitAngle requires ',...
@@ -53,10 +54,12 @@ function [ arrayOfRayBundles ] = getAllSurfaceRayBundles( allSurfaceRayTraceResu
     exitRayDirection = reshape((exitRayDirection),3,nSurf,[]);
     wavelength = reshape((wavelength),1,nSurf,[]);
     
+    lensUnitfactor = allSurfaceRayTraceResult(1).FixedParameters.LensUnitFactor;
+    wavelengthUnitfactor = allSurfaceRayTraceResult(1).FixedParameters.WavelengthUnitFactor;
     for kk = 1:nSurf
-        arrayOfRayBundles(kk).Position = surfaceIntersection(:,kk,:);
+        arrayOfRayBundles(kk).Position = surfaceIntersection(:,kk,:)*lensUnitfactor;
         arrayOfRayBundles(kk).Direction = exitRayDirection(:,kk,:);
-        arrayOfRayBundles(kk).Wavelength = wavelength(:,kk,:);
+        arrayOfRayBundles(kk).Wavelength = wavelength(:,kk,:)*wavelengthUnitfactor;
     end
 end
 

@@ -1,0 +1,86 @@
+﻿<html>
+	
+<head>
+	<title>Loading an Optical System</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.3.1.364">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "MatLightTracer Version 1.0 Reference.html?" + sTopicUrl;
+			}
+			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+			{
+				top.FrameTOC.SelectTocItem("LoadinganOpticalSystem");
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Loading an Optical System</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="UserManual1.html">User Manual</a> &rsaquo;&rsaquo; <a href="UsingMatLightTracerFromMatlabCom.html">Using MatLightTracer From Matlab Command </a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="UsingMatLightTracerFromMatlabCom.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="UsingMatLightTracerFromMatlabCom.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="CreatingInitialRaysForOpticalSys.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<h1 class="rvps28"><span class="rvts0"><span class="rvts23">Loading an Optical System</span></span></h1>
+<p class="rvps7"><span class="rvts30">Performing any analysis of an optical system in the command window starts with loading a previously saved optical system in to current work space. To load a previously saved optical systems, the following function can be used</span></p>
+<p class="rvps30"><span class="rvts51">newOpticalSystem = OpticalSystem(&lt;The Optical System Full Path&gt;)</span></p>
+<p class="rvps7"><span class="rvts30">The function accepts the &nbsp;full file path of the optical system to be loaded. The toolbox can load optical system from two kinds of files </span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: circle;">
+<li class="rvps7"><span class="rvts30">MatLightTracer File (*.mat file) created by the toolbox</span></li>
+<li class="rvps7"><span class="rvts30">Zemax File (*.zmx file) created by zemax (version 13 or latest)</span></li>
+</ul></ul>
+<p class="rvps7"><span class="rvts30">Therefore if the user specifies the full path of a file in one of the above format, then the optical system will be loaded to the variable </span><span class="rvts51">newOpticalSystem. </span></p>
+<p class="rvps7"><span class="rvts30"> The </span><span class="rvts51">newOpticalSystem</span><span class="rvts30"> is a data structure (object) which can be used to access the optical system parameters and passed to other functions (such as optical system analysis function) as input argument. </span></p>
+<p class="rvps7"><span class="rvts35">Example</span><span class="rvts30">:</span></p>
+<p class="rvps29"><span class="rvts52">doubleGaussFullFileName = </span><span class="rvts53">'D:\MatLightTracer_GitHub\Sample_Optical_Systems\Double Gauss 28 degree field.mat'</span><span class="rvts52">;</span></p>
+<p class="rvps29"><span class="rvts52">optSystem = OpticalSystem(doubleGaussFullFileName);</span></p>
+<p></p>
+<p class="rvps6"><span class="rvts20">Created with the Personal Edition of HelpNDoc: </span><a class="rvts21" href="http://www.helpndoc.com">Easy EPub and documentation editor</a></p>
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; &lt;2016&gt; by &lt;Norman G. Worku (normangirma2012@gmail.com), Optical System Design Research Group, FSU, Jena&gt;. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

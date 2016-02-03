@@ -35,7 +35,8 @@ function newHarmonicFieldSource = HarmonicFieldSource(...
         smoothEdgeSizeSpecification = [1]'; % 'Relative'
     end
     if nargin < 9
-        smoothEdgeSizeValue = [0.1,0.1]'; % for relative dimenssioning
+        %smoothEdgeSizeValue = [0.1,0.1]'; % for relative dimenssioning
+        smoothEdgeSizeValue = [0.1]; % for relative dimenssioning
     end
     if nargin < 10
         zeroBoarderSizeSpecification = 1; % Relative to the actual field size 
@@ -54,21 +55,21 @@ function newHarmonicFieldSource = HarmonicFieldSource(...
     end
     if nargin < 15
         spatialProfileTypeString = getSupportedSpatialProfiles(spatialProfileType);
-        [~,~,spatialProfileParameter] = getSpatialProfileParameters(spatialProfileTypeString);
+        [~,~,spatialProfileParameter] = getHFSourceSpatialProfileParameters(spatialProfileTypeString);
     end
     if nargin < 16
         spectralProfileType = 1; %'GaussianPowerSpectrum'
     end
     if nargin < 17
         spectralProfileTypeString = getSupportedSpectralProfiles(spectralProfileType);
-        [~,~,spectralProfileParameter] = getSpectralProfileParameters(spectralProfileTypeString);
+        [~,~,spectralProfileParameter] = getHFSourceSpectralProfileParameters(spectralProfileTypeString);
     end
     if nargin < 18
         polarizationProfileType = 1; %'LinearPolarization'
     end
     if nargin < 19
         polarizationProfileTypeString = getSupportedPolarizationProfiles(polarizationProfileType);
-        [~,~,polarizationProfileParameter] = getPolarizationProfileParameters(polarizationProfileTypeString);
+        [~,~,polarizationProfileParameter] = getHFSourcePolarizationProfileParameters(polarizationProfileTypeString);
     end
    if nargin < 20
         mediumName = 'Vaccum';

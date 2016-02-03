@@ -14,9 +14,8 @@ function [ complexIFFTofE,deltaInSpatial ] = computeIFFT2( complexEin,deltaInFre
         complexIFFTofE = NaN;
         deltaInSpatial = NaN;
         return;
-    else
-        inputDimSize = (size(complexEin))';
     end
+    inputDimSize = (size(complexEin))';
     
     if nargin < 2
         % Default input field size = 1 so the spacing will be
@@ -25,5 +24,8 @@ function [ complexIFFTofE,deltaInSpatial ] = computeIFFT2( complexEin,deltaInFre
     sizeInFrequency = deltaInFrequency.*inputDimSize;
     complexIFFTofE = ifftshift(ifft2(ifftshift(complexEin)))*(numel(complexEin)* prod(deltaInFrequency))*(1/(2*pi));
     deltaInSpatial =  2*pi./(sizeInFrequency);
+    
+%     % Correction according to Manuel and Herbert
+%     deltaInSpatial = deltaInSpatial.*(inputDimSize-1)./inputDimSize;
 end
 

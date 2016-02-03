@@ -46,4 +46,3 @@ function [ updatedOpticalSystem ] = updateOpticalSystem( opticalSystem )
         updatedOpticalSystem.IsUpdatedSurfaceArray = 1;
     end
 end
-

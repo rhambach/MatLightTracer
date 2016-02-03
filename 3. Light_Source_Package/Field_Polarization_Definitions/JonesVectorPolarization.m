@@ -20,6 +20,7 @@ function [ returnDataStruct] = JonesVectorPolarization(returnFlag,polarizationPa
     %   inputDataStruct:
     %       inputDataStruct.xMesh
     %       inputDataStruct.yMesh
+    %       inputDataStruct.BeamCenter 
     %   returnDataStruct:
     %       returnDataStruct.JonesVector
     %       returnDataStruct.PolarizationDistributionType

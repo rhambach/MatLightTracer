@@ -106,10 +106,10 @@ function [ returnDataStruct] = JonesMatrix(returnFlag,coatingParameters,inputDat
                 return;
             end
             
-            ampTs = coatingParameters.AmplitudeTs;
-            ampTp = coatingParameters.AmplitudeTp;
-            ampRs = coatingParameters.AmplitudeRs;
-            ampRp = coatingParameters.AmplitudeRp;
+            ampTs = coatingParameters.AmplitudeTs*ones(1,nRay);
+            ampTp = coatingParameters.AmplitudeTp*ones(1,nRay);
+            ampRs = coatingParameters.AmplitudeRs*ones(1,nRay);
+            ampRp = coatingParameters.AmplitudeRp*ones(1,nRay);
             
             ns = indexBefore;
             nc = indexAfter;

@@ -1,0 +1,167 @@
+﻿<html>
+	
+<head>
+	<title>Intersection Point and Surface Normal Computation</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.3.1.364">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "MatLightTracer Version 1.0 Reference.html?" + sTopicUrl;
+			}
+			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+			{
+				top.FrameTOC.SelectTocItem("IntersectionPointandSurfaceNorma");
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Intersection Point and Surface Normal Computation</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="ProgrammingandAlgorithmsReferen1.html">Programming and Algorithms Reference</a> &rsaquo;&rsaquo; <a href="ScalarRayTracingModule.html">Scalar Ray Tracing Module</a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="ScalarRayTracingModule.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="CoordinateTransformations.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="RefractionorReflection.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps34"><span class="rvts71">Intersection Point and Surface Normal Computation</span></p>
+<p class="rvps7"><span class="rvts45">Once all initial ray data are converted to local coordinates of the current surface, then the next step is to compute the intersection point of the rays with the surface and the corresponding surface normal at the intersection point. This can be done by analytical formulas for simple standard conic surfaces but require numerical calculation for general case. In this section we will discuss both methods as described in [</span><span class="rvts74">G.H.Spencer and M.V.R.K Murty 1962, &nbsp;</span><span class="rvts73">General Ray-Tracing Procedure</span><span class="rvts72">] </span></p>
+<p class="rvps7"><span class="rvts72"><br/></span></p>
+<p class="rvps34"><span class="rvts45">The method for computing intersection points and surface normals involves three basic steps. To keep the analytical formulas handy, only &nbsp;spherical and conic surfaces are used in the analytical case. The numerical method is suitable for any surface given its implicit definition F(X,Y,Z) with the corresponding derivatives.</span></p>
+<p class="rvps34"><span class="rvts45"><br/></span></p>
+<p class="rvps34"><span class="rvts44">Step 1: Calculation of the Path Length</span></p>
+<p class="rvps7"><span class="rvts45">After the coordinate system is transferred into the local coordinate, it is convenient to determine first the intersection of the ray with the z = 0 &nbsp;plane. </span></p>
+<p class="rvps41"><span class="rvts45">At first, s</span><span class="rvts75">0</span><span class="rvts45"> is calculated by using:</span></p>
+<p class="rvps41"><img alt="" style="padding : 1px;" src="lib/NeuesElement65.png"/></p>
+<p class="rvps41"><span class="rvts45">Then, the intersection point with the Z = 0 plane could be calculated as:</span></p>
+<p class="rvps41"><img alt="" style="padding : 1px;" src="lib/NeuesElement64.png"/></p>
+<p class="rvps41"><img alt="" style="padding : 1px;" src="lib/NeuesElement63.png"/></p>
+<p class="rvps41"><img alt="" style="padding : 1px;" src="lib/NeuesElement62.png"/></p>
+<p class="rvps41"><span class="rvts45">Thus, the parameter p of the distance along the ray measured from (X</span><span class="rvts75">0</span><span class="rvts45">, Y</span><span class="rvts75">0</span><span class="rvts45">, Z</span><span class="rvts75">0</span><span class="rvts45">) &nbsp;is now replaced by s</span><span class="rvts75">0</span><span class="rvts45"> and s</span><span class="rvts75">f </span><span class="rvts45">.</span></p>
+<p class="rvps41"><img alt="" style="padding : 1px;" src="lib/NeuesElement61.png"/></p>
+<p class="rvps41"><span class="rvts45">s</span><span class="rvts75">f &nbsp;</span><span class="rvts45">is measured from the point (X</span><span class="rvts75">1</span><span class="rvts45">, Y</span><span class="rvts75">1</span><span class="rvts45">, 0) &nbsp; to the intersection point on the surface.</span></p>
+<p class="rvps41"><span class="rvts45">When the surface is a plane, &nbsp;</span><span class="rvts76">s</span><span class="rvts77">f</span><span class="rvts45"> = 0; thus p = &nbsp;</span><span class="rvts76">s</span><span class="rvts77">0</span><span class="rvts45"> .</span></p>
+<p class="rvps41"><span class="rvts45">But when the surface is not a plane and the additional path should be computed using the following methods :</span></p>
+<p class="rvps41"><span class="rvts44">Spherical surface: Analytic Formula</span></p>
+<p class="rvps41"><span class="rvts45">The implicit surface equation for spherical surface is given by </span></p>
+<p class="rvps41"><img alt="" style="padding : 1px;" src="lib/NeuesElement60.png"/></p>
+<p class="rvps41"><span class="rvts45">with</span></p>
+<p class="rvps41"><span class="rvts45"> </span><img alt="" style="padding : 1px;" src="lib/NeuesElement57.png"/><span class="rvts45">.</span></p>
+<p class="rvps43"><span class="rvts45">Let the coordinates of P, the intersection point, be (X, Y, Z) &nbsp;and the length of the segment from (X</span><span class="rvts75">1</span><span class="rvts45">, Y</span><span class="rvts75">1</span><span class="rvts45">, 0) &nbsp;to (X, Y, Z) &nbsp;is </span><span class="rvts76">s</span><span class="rvts77">f</span><span class="rvts45"> &nbsp;= </span><img alt="" style="padding : 1px;" src="lib/NeuesElement56.png"/><span class="rvts45"> &nbsp;(the additional path), we have</span></p>
+<p class="rvps43"><img alt="" style="padding : 1px;" src="lib/NeuesElement55.png"/></p>
+<p class="rvps43"><img alt="" style="padding : 1px;" src="lib/NeuesElement54.png"/></p>
+<p class="rvps43"><img alt="" style="padding : 1px;" src="lib/NeuesElement53.png"/></p>
+<p class="rvps43"><span class="rvts45">The result for the additional path is given by (See the original publication for detailed derivation)</span></p>
+<p class="rvps42"><img alt="" style="padding : 1px;" src="lib/NeuesElement43.png"/></p>
+<p class="rvps42"><span class="rvts45">where</span></p>
+<p class="rvps42"><span class="rvts45"> </span><img alt="" style="padding : 1px;" src="lib/NeuesElement47.png"/></p>
+<p class="rvps42"><img alt="" style="padding : 1px;" src="lib/NeuesElement46.png"/></p>
+<p class="rvps43"><span class="rvts45">No loss of significant figures when the form is used numerically.</span></p>
+<p class="rvps43"><span class="rvts45">In this form, the value of </span><img alt="" style="padding : 1px;" src="lib/NeuesElement42.png"/><span class="rvts45"> can be substituted to give </span><img alt="" style="padding : 1px;" src="lib/NeuesElement41.png"/><span class="rvts45">, the intersection point of the incidence; this completes the transfer process.</span></p>
+<p class="rvps43"><span class="rvts44">Conic section: Analytic Formula</span></p>
+<p class="rvps41"><span class="rvts45">For simple &nbsp;conic sections the implicit surface equation for spherical surface is given by </span></p>
+<p class="rvps41"><img alt="" style="padding : 1px;" src="lib/NeuesElement60.png"/></p>
+<p class="rvps41"><span class="rvts45">with</span></p>
+<p class="rvps41"><img alt="" style="padding : 1px;" src="lib/NeuesElement39.png"/></p>
+<p class="rvps43"><span class="rvts45">The result for the additional path is given by (See the original publication for detailed derivation)</span></p>
+<p class="rvps43"><img alt="" style="padding : 1px;" src="lib/NeuesElement38.png"/></p>
+<p class="rvps43"><span class="rvts44">General Surface: Numerical Method</span></p>
+<p class="rvps43"><span class="rvts45">Instead of direct analytical computation, the additional path </span><span class="rvts76">s</span><span class="rvts77">f &nbsp;</span><span class="rvts45">can be computed numerically using Newton Rampson iteration method. Using the subscript j to denote the iteration number, we write</span></p>
+<p class="rvps43"><img alt="" style="padding : 1px;" src="lib/NewItem183.png"/></p>
+<p class="rvps43"><span class="rvts45">where</span></p>
+<p class="rvps43"><img alt="" style="padding : 1px;" src="lib/NewItem184.png"/></p>
+<p class="rvps43"><span class="rvts45">and </span></p>
+<p class="rvps43"><img alt="" style="padding : 1px;" src="lib/NewItem185.png"/></p>
+<p class="rvps43"><span class="rvts45">The process may be started from the first approximation </span></p>
+<p class="rvps43"><span class="rvts45">s</span><span class="rvts75">1</span><span class="rvts45"> = 0 </span></p>
+<p class="rvps43"><span class="rvts45">and is terminated with the value s</span><span class="rvts75">f</span><span class="rvts45"> for which</span></p>
+<p class="rvps43"><img alt="" style="padding : 1px;" src="lib/NewItem186.png"/><span class="rvts45"> </span></p>
+<p class="rvps43"><span class="rvts45">for a given tolerance e.</span></p>
+<p class="rvps43"><span class="rvts78">The above iterations usually converges fast, but if the derivative for F(X,Y,Z) becomes zero then it will not converge. Such cases are rare in practice usually occur for grazing incidence. In such cases the iteration will just oscillate and at some point will diverge to infinity. Therefore we have set the maximum iteration number set to catch such cases. In addition to that, if the ray intersects the surface in more than one point then the iteration could converge to wrong value. But such cases are rare in practice.</span></p>
+<p class="rvps43"><span class="rvts78"><br/></span></p>
+<p class="rvps34"><span class="rvts44">Step 2: Computation &nbsp;of the Intersection Point</span></p>
+<p class="rvps29"><span class="rvts45">After the path length is computed, the intersection points can be easily calculated using the following formulas</span></p>
+<p class="rvps29"><span class="rvts45"><br/></span></p>
+<p class="rvps29"><img alt="" style="padding : 1px;" src="lib/NeuesElement71.png"/></p>
+<p class="rvps29"><img alt="" style="padding : 1px;" src="lib/NeuesElement70.png"/></p>
+<p class="rvps29"><img alt="" style="padding : 1px;" src="lib/NeuesElement69.png"/></p>
+<p class="rvps29"><span class="rvts45"><br/></span></p>
+<p class="rvps29"><span class="rvts45">Here</span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: circle;">
+<li class="rvps29"><span class="rvts45">The path length of the ray &nbsp;</span><img alt="" style="padding : 1px;" src="lib/NeuesElement68.png"/></li>
+<li class="rvps29"><span class="rvts45">The start point &nbsp;</span><img alt="" style="padding : 1px;" src="lib/NeuesElement67.png"/></li>
+<li class="rvps29"><span class="rvts45">The direction unit vector </span><img alt="" style="padding : 1px;" src="lib/NeuesElement66.png"/></li>
+</ul></ul>
+<p class="rvps43"><span class="rvts44"><br/></span></p>
+<p class="rvps34"><span class="rvts44">Step 3: Surface Normal Computation</span></p>
+<p class="rvps45"><span class="rvts45">Before calculating the refraction, the</span><span class="rvts44"> normal vector at the surface</span><span class="rvts45"> should be calculated according to the type of the surface, the curvature of the surface, the shape of the surface, and the position of the intersection point.</span></p>
+<p class="rvps46"><span class="rvts44">Spherical Surface: &nbsp;Analytic Formula</span></p>
+<p class="rvps29"><span class="rvts45">The normal vector of spherical surface:</span></p>
+<p class="rvps29"><img alt="" style="padding : 1px;" src="lib/NeuesElement81.png"/></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: circle;">
+<li class="rvps45"><img alt="" style="padding : 1px;" src="lib/NeuesElement80.png"/><span class="rvts45"> is the radius of this spherical surface, which means we could use </span></li>
+<li class="rvps45"><img alt="" style="padding : 1px;" src="lib/NeuesElement79.png"/><span class="rvts45"> the radius curvature instead of </span><img alt="" style="padding : 1px;" src="lib/NeuesElement78.png"/><span class="rvts45"> in this function.</span></li>
+</ul></ul>
+<p class="rvps46"><span class="rvts44">Conic Surface: &nbsp;Analytic Formula</span></p>
+<p class="rvps29"><span class="rvts45">For a conic section given by: </span></p>
+<p class="rvps29"><img alt="" style="padding : 1px;" src="lib/NeuesElement77.png"/></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside; list-style-type: disc;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside; list-style-type: circle;">
+<li class="rvps29"><span class="rvts45">c is the curvature</span></li>
+<li class="rvps45"><img alt="" style="padding : 1px;" src="lib/NeuesElement76.png"/><span class="rvts45"> is the parameter which defines the shape of the surface.</span></li>
+</ul></ul>
+<p class="rvps45"><span class="rvts45">The normal vector becomes:</span></p>
+<p class="rvps44"><img alt="" style="padding : 1px;" src="lib/NeuesElement75.png"/></p>
+<p class="rvps43"><span class="rvts44">General Surface: Numerical Method</span></p>
+<p class="rvps43"><span class="rvts45">The surface normal of a general surface defined implicitly by F(X,Y,Z) is given as the partial derivative in each direction</span></p>
+<p class="rvps43"><img alt="" style="padding : 1px;" src="lib/NewItem187.png"/></p>
+<p class="rvps43"><span class="rvts45">Actually the surface normal is computed as part of the numerical iteration during the intersection point computation in the 1st step.</span></p>
+<p class="rvps43"><span class="rvts45"><br/></span></p>
+<p class="rvps29"><span class="rvts45"><br/></span></p>
+<p class="rvps29"><span class="rvts45"><br/></span></p>
+<p></p>
+<p class="rvps6"><span class="rvts20">Created with the Personal Edition of HelpNDoc: </span><a class="rvts21" href="http://www.helpndoc.com">Full-featured Documentation generator</a></p>
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; &lt;2016&gt; by &lt;Norman G. Worku (normangirma2012@gmail.com), Optical System Design Research Group, FSU, Jena&gt;. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

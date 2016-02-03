@@ -20,6 +20,7 @@ function [ returnDataStruct] = LinearPolarization(returnFlag,polarizationParamet
     %   inputDataStruct:
     %       inputDataStruct.xMesh
     %       inputDataStruct.yMesh
+    %       inputDataStruct.BeamCenter 
     %   returnDataStruct:
     %       returnDataStruct.JonesVector
     %       returnDataStruct.PolarizationDistributionType

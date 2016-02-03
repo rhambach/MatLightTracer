@@ -20,6 +20,7 @@ function [ returnDataStruct] = AzimuthalPolarization(returnFlag,polarizationPara
     %   inputDataStruct:
     %       inputDataStruct.xMesh
     %       inputDataStruct.yMesh
+    %       inputDataStruct.BeamCenter 
     %   returnDataStruct:
     %       returnDataStruct.JonesVector
     %       returnDataStruct.PolarizationDistributionType
@@ -82,8 +83,10 @@ function [ returnDataStruct] = AzimuthalPolarization(returnFlag,polarizationPara
             originAngleInRad = originAngle*pi/180;
             x = inputDataStruct.xMesh;
             y = inputDataStruct.yMesh;
+            Cx = inputDataStruct.BeamCenter(1);
+            Cy = inputDataStruct.BeamCenter(2);
             
-            allPolAngle = atan(y./x);
+            allPolAngle = atan((y-Cy)./(x-Cx));
             allPolAngle(isnan(allPolAngle)) = originAngleInRad;
             
             jonesVector = cat(3,cos(allPolAngle-pi/2),sin(allPolAngle-pi/2));

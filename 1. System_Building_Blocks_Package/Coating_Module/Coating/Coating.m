@@ -64,8 +64,8 @@ function newCoating = Coating(coatingName,coatingCatalogueFileList,coatingType,c
             newCoating.Type = 'NullCoating';
             [~,~,defaultCoatingparameters] = getCoatingUniqueParameters( 'NullCoating' );
             newCoating.UniqueParameters = defaultCoatingparameters;
-            newCoating.ClassName = 'Coating';
             newCoating.SavedIndex = 0;
+            newCoating.ClassName = 'Coating';
             return;
         end
         if nargin < 2 || strcmpi(coatingCatalogueFileList{1},'All')

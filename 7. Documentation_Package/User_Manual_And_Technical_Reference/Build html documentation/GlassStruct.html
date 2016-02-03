@@ -1,0 +1,99 @@
+﻿<html>
+	
+<head>
+	<title>Glass: Struct</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.3.1.364">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "MatLightTracer Version 1.0 Reference.html?" + sTopicUrl;
+			}
+			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+			{
+				top.FrameTOC.SelectTocItem("GlassStruct");
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Glass: Struct</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="ProgrammingandAlgorithmsReferen1.html">Programming and Algorithms Reference</a> &rsaquo;&rsaquo; <a href="ToolboxStructuresandClasses.html">Toolbox Structures and Classes</a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="ToolboxStructuresandClasses.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="SurfaceStruct.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="CoatingStruct.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps34"><span class="rvts40">Glass Struct</span></p>
+<p class="rvps7"><span class="rvts30">This struct is used to define the glass object, which contains all informations related with the glass defined.</span></p>
+<p class="rvps7"><span class="rvts30"><br/></span></p>
+<p class="rvps7"><span class="rvts30">Number of Properties: XX</span></p>
+<p class="rvps7"><span class="rvts30">Number of Methods: XX</span></p>
+<p class="rvps7"><span class="rvts30"><br/></span></p>
+<p class="rvps7"><span class="rvts30">All of the properties defined in the glass class are used for optical system analysis in the toolbox.</span></p>
+<p class="rvps7"><span class="rvts30"><br/></span></p>
+<p class="rvps7"><span class="rvts37">Important Methods (Functions)</span></p>
+<p class="rvps7"><span class="rvts37">1. Abbe Number Computation</span></p>
+<p class="rvps7"><span class="rvts35">Syntax:</span></p>
+<p class="rvps29"><span class="rvts59">[abbeNumber] = getAbbeNumber(Glass,wavLenF,wavLenD,wavLenC)</span></p>
+<p class="rvps29"><span class="rvts68"><br/></span></p>
+<p class="rvps29"><span class="rvts64">This function returns Abbe number of glass which is computed from the refractive indices of the glass at three different wavelengths using the formula:</span></p>
+<p class="rvps29"><span class="rvts68"><br/></span></p>
+<p class="rvps29"><span class="rvts64">abbeNumber = (nd-1)/(nf-nc)</span></p>
+<p class="rvps29"><span class="rvts67"><br/></span></p>
+<p class="rvps7"><span class="rvts37">2. Refractive Index Computation</span></p>
+<p class="rvps7"><span class="rvts35">Syntax:</span></p>
+<p class="rvps29"><span class="rvts59">[n] = getRefractiveIndex(Glass,wavLen)</span></p>
+<p class="rvps29"><span class="rvts64"><br/></span></p>
+<p class="rvps29"><span class="rvts64">This function returns the refractive index of the glass at any given wavelength using Sellmeir equation.</span></p>
+<p class="rvps29"><span class="rvts64"><br/></span></p>
+<p class="rvps29"><img alt="" style="padding : 1px;" src="lib/NeuesElement37.png"/></p>
+<p class="rvps29"><span class="rvts69"><br/></span></p>
+<p class="rvps29"><span class="rvts69">Note 1:</span><span class="rvts64"> Both functions are vectorized i.e. giving a vector of wavelengths results in a vector of refractive indices or Abbe numbers.</span></p>
+<p></p>
+<p class="rvps6"><span class="rvts20">Created with the Personal Edition of HelpNDoc: </span><a class="rvts21" href="http://www.helpndoc.com/create-epub-ebooks">Produce electronic books easily</a></p>
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; &lt;2016&gt; by &lt;Norman G. Worku (normangirma2012@gmail.com), Optical System Design Research Group, FSU, Jena&gt;. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

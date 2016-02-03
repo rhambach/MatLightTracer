@@ -20,6 +20,7 @@ function [ returnDataStruct] = CircularPolarization(returnFlag,polarizationParam
     %   inputDataStruct:
     %       inputDataStruct.xMesh
     %       inputDataStruct.yMesh
+    %       inputDataStruct.BeamCenter 
     %   returnDataStruct:
     %       returnDataStruct.JonesVector
     %       returnDataStruct.PolarizationDistributionType

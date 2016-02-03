@@ -23,23 +23,25 @@ function [Ez,xlin,ylin] = computeEz(harmonicFieldSet,selectedFieldIndex)
     nFields = harmonicFieldSetIn2ndDomain.NumberOfHarmonicFields;
     deltaIn2ndDomain = harmonicFieldSetIn2ndDomain.SamplingDistance;
     wavelength = harmonicFieldSetIn2ndDomain.Wavelength;
-    Ez = zeros(ny,nx,nFields);
+    
     samplingDistanceNew = zeros(2,nFields);
     if selectedFieldIndex
+        Ez = zeros(ny,nx,1);
         [Kx,Ky] = meshgrid(kxlin(:,:,selectedFieldIndex),kylin(:,:,selectedFieldIndex));
         Kz = sqrt((2*pi/wavelength(selectedFieldIndex)).^2 - Kx.^2 - Ky.^2);
-        complexEin = (Kx.*ExInk(:,:,selectedFieldIndex) + Ky.*EyInk(:,:,selectedFieldIndex))./Kz;
-        [ EinIn1stDomain,deltaIn1stDomain ] = computeIFFT2( complexEin,deltaIn2ndDomain(:,selectedFieldIndex) );
+        complexEzInK = (Kx.*ExInk(:,:,selectedFieldIndex) + Ky.*EyInk(:,:,selectedFieldIndex))./Kz;
+        [ EinIn1stDomain,deltaIn1stDomain ] = computeIFFT2( complexEzInK,deltaIn2ndDomain(:,selectedFieldIndex) );
         Ez(:,:) = -EinIn1stDomain;
         samplingDistanceNew = deltaIn1stDomain;
         [xlin,ylin] = generateSamplingGridVectors(samplingPoints ,samplingDistanceNew, centerXY(:,selectedFieldIndex));
     else
+        Ez = zeros(ny,nx,nFields);
         % Do it for all fields in the set
         for ff = 1:nFields
             [Kx,Ky] = meshgrid(kxlin(:,:,ff),kylin(:,:,ff));
             Kz = sqrt((2*pi/wavelength(ff)).^2 - Kx.^2 - Ky.^2);
-            complexEin = (Kx.*ExInk(:,:,ff) + Ky.*EyInk(:,:,ff))./Kz;
-            [ EinIn1stDomain,deltaIn1stDomain ] = computeIFFT2( complexEin,deltaIn2ndDomain(:,ff) );
+            complexEzInK = (Kx.*ExInk(:,:,ff) + Ky.*EyInk(:,:,ff))./Kz;
+            [ EinIn1stDomain,deltaIn1stDomain ] = computeIFFT2( complexEzInK,deltaIn2ndDomain(:,ff) );
             Ez(:,:,ff) = -EinIn1stDomain;
             samplingDistanceNew(:,ff) = deltaIn1stDomain;
         end

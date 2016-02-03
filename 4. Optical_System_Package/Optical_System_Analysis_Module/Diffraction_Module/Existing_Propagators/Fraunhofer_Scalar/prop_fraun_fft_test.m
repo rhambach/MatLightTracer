@@ -8,7 +8,7 @@ clear ;
 % close all hidden; 
 %
 % npx  = 256 ;   npy = 256 ;             % Punktzahl = number of points
-npx  = 256 ;   npy = 256;
+npx  = 256 ;   npy = 16/1;
 wl  = 0.000328;                        % Wellenlänge in mm
 m = 10 ;                                % Exponent Startprofil Supergauss
 wox = 1 ;  woy = 1 ;                   % Start-Taillenradius
@@ -66,8 +66,9 @@ int = int./max(max(int));
 % %% end of old code
 
 %% EnhancedColorPlot
+figure;
 ax = axes;
-[ph,ah] = EnhancedColorPlot( {ax,xbm,ybm,int'} );
+[ph,ah] = EnhancedPColor( {ax,xbm,ybm,int'} );
 %% End of EnhancedColorPlot
 
 shading(gca,'interp');

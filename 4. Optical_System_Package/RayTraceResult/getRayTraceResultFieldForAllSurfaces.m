@@ -16,7 +16,7 @@ function [ rayTraceResultFieldForAllSurfaces ] = getRayTraceResultFieldForAllSur
     %                            specifying the ray (group of rays) for which
     %                            we want extract the ray trace result field.
     % Output:
-    %   rayTraceResultFieldForAllSurfaces:
+    %   rayTraceResultFieldForAllSurfaces: Dim1 X Dim2 X nSurf X nPupilPoints X nField X nWav
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
     %   Advisor: Prof. Herbert Gross
@@ -34,9 +34,11 @@ function [ rayTraceResultFieldForAllSurfaces ] = getRayTraceResultFieldForAllSur
     
     
     nSurfaceTotal = length(allSurfaceRayTraceResult);
-    nPupilPointsTotal = (allSurfaceRayTraceResult.TotalNumberOfPupilPoints);
-    nFieldTotal = (allSurfaceRayTraceResult.TotalNumberOfFieldPoints);
-    nWavelengthTotal = (allSurfaceRayTraceResult.TotalNumberOfWavelengths);
+    
+    nPupilPointsTotal = (allSurfaceRayTraceResult(1).FixedParameters.TotalNumberOfPupilPoints);
+    nFieldTotal = (allSurfaceRayTraceResult(1).FixedParameters.TotalNumberOfFieldPoints);
+    nWavelengthTotal = (allSurfaceRayTraceResult(1).FixedParameters.TotalNumberOfWavelengths);
+    
     
     % Get the result field for all fields
     rayTraceResultForAllRays = [allSurfaceRayTraceResult.(requestedResultFieldName)];

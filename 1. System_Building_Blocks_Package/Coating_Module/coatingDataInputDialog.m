@@ -923,8 +923,8 @@ function mainFigHandle = coatingDataInputDialog(coatingCatalogueListFullNames,fo
         currentCoating.Name = coatingName;
         currentCoating.Type = coatingType;
         currentCoating.UniqueParameters = coatingParameters;
-        currentCoating.ClassName = 'Coating';
         currentCoating.SavedIndex = savedIndex;
+        currentCoating.ClassName = 'Coating';
     end
     
     %% ---------------------------------------------------------------------------

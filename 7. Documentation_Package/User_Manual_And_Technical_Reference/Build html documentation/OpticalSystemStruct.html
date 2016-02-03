@@ -1,0 +1,103 @@
+﻿<html>
+	
+<head>
+	<title>OpticalSystem: Struct</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.3.1.364">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "MatLightTracer Version 1.0 Reference.html?" + sTopicUrl;
+			}
+			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+			{
+				top.FrameTOC.SelectTocItem("OpticalSystemStruct");
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">OpticalSystem: Struct</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="ProgrammingandAlgorithmsReferen1.html">Programming and Algorithms Reference</a> &rsaquo;&rsaquo; <a href="ToolboxStructuresandClasses.html">Toolbox Structures and Classes</a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="ToolboxStructuresandClasses.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="AODChildWindowClass.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="SurfaceStruct.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps23"><span class="rvts40">OpticalSystem Struct</span></p>
+<p class="rvps7"><span class="rvts30">This class is used to define the optical system object which contains all informations related with the optical system defined.</span></p>
+<p class="rvps7"><span class="rvts30"><br/></span></p>
+<p class="rvps7"><span class="rvts30">Number of Properties: XX</span></p>
+<p class="rvps7"><span class="rvts30">Number of Methods: XX</span></p>
+<p class="rvps7"><span class="rvts30"><br/></span></p>
+<p class="rvps7"><span class="rvts30">Most of the properties defined in the optical system class are used for optical system analysis in the toolbox.</span></p>
+<p class="rvps7"><span class="rvts30"><br/></span></p>
+<p class="rvps7"><span class="rvts37">Important Methods (Functions)</span></p>
+<p class="rvps7"><span class="rvts37">1. Main Ray Tracing Function</span></p>
+<p class="rvps7"><span class="rvts35">Syntax:</span></p>
+<p class="rvps7"><span class="rvts61">Function Call:</span></p>
+<p class="rvps7"><span class="rvts59">rayTracerResult = rayTracer(optSystem,objectRay,rayTraceOption)</span></p>
+<p class="rvps7"><span class="rvts59"><br/></span></p>
+<p class="rvps7"><span class="rvts30">It is the main ray tracing function which is basis for most analysis features of the toolbox. The function is used to trace Ray objects from object surface to image surface and return all the necessary results of the ray trace.</span></p>
+<p class="rvps7"><span class="rvts35">Basic Flow Chart:</span></p>
+<p class="rvps7"><img alt="" style="padding : 1px;" src="lib/NeuesElement18.jpg"/></p>
+<p class="rvps7"><span class="rvts35"><br/></span></p>
+<p class="rvps7"><span class="rvts35">Note: </span><span class="rvts30">To simplify tracing multiple rays, an other function called "</span><span class="rvts59">multipleRayTracer</span><span class="rvts30">" is defined which does not require the user to construct the initial ray objects explicitly. See the description for "</span><span class="rvts59">multipleRayTracer</span><span class="rvts30">".</span></p>
+<p class="rvps7"><span class="rvts30"><br/></span></p>
+<p class="rvps7"><span class="rvts37">2. Multiple Ray Tracing Function</span></p>
+<p class="rvps7"><span class="rvts35">Syntax:</span></p>
+<p class="rvps7"><span class="rvts61">Function Call:</span></p>
+<p class="rvps7"><span class="rvts59">[multipleRayTracerResult,pupilCoordinates,pupilGridIndices] = multipleRayTracer(optSystem,wavLen,</span><span class="rvts63">...</span></p>
+<p class="rvps7"><span class="rvts59"> &nbsp; &nbsp; &nbsp; &nbsp;fieldPointXY,nRay,PupSamplingType,JonesVec,considerSurfAperture)</span></p>
+<p class="rvps7"><span class="rvts62"><br/></span></p>
+<p class="rvps7"><span class="rvts37">3. Other Function</span></p>
+<p class="rvps7"><span class="rvts64">The name of all functions corresponds to their purpose. And all functions are well documented inside with comments whenever necessary. So it is possible to understand the code.</span></p>
+<p class="rvps7"><span class="rvts60"><br/></span></p>
+<p class="rvps7"><span class="rvts60"><br/></span></p>
+<p></p>
+<p class="rvps6"><span class="rvts20">Created with the Personal Edition of HelpNDoc: </span><a class="rvts21" href="http://www.helpndoc.com/feature-tour/create-ebooks-for-amazon-kindle">Full-featured Kindle eBooks generator</a></p>
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; &lt;2016&gt; by &lt;Norman G. Worku (normangirma2012@gmail.com), Optical System Design Research Group, FSU, Jena&gt;. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

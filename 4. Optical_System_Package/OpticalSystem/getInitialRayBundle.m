@@ -44,8 +44,8 @@ function [ initialRayBundle, pupilSamplingPoints,pupilMeshGrid,outsidePupilIndic
     end
 
     
-    wavLenInM = getSystemWavelengths( optSystem,wavelengthIndices);
-    fieldPointXYInLensUnit = getSystemFieldPoints( optSystem,fieldIndices);
+    wavLen = getSystemWavelengths( optSystem,wavelengthIndices,0);
+    fieldPointXY = getSystemFieldPoints( optSystem,fieldIndices,0);
     
     if abs(optSystem.SurfaceArray(1).Thickness) > 10^10 % object at infinity
         objectIsAtInfinity = 1;
@@ -60,8 +60,8 @@ function [ initialRayBundle, pupilSamplingPoints,pupilMeshGrid,outsidePupilIndic
     pupilSampling = pupilSamplingType;
     
     fieldType = optSystem.FieldType;
-    nField = size(fieldPointXYInLensUnit,2);
-    nWav  = size(wavLenInM,2);
+    nField = size(fieldPointXY,2);
+    nWav  = size(wavLen,2);
     % Global reference is the 1st surface of the lens
     [ pupilSamplingPoints,pupilMeshGrid,outsidePupilIndices  ] = ...
         computePupilSamplingPoints(nPupilPoints1,nPupilPoints2,pupilSampling,...
@@ -81,7 +81,7 @@ function [ initialRayBundle, pupilSamplingPoints,pupilMeshGrid,outsidePupilIndic
                 disp('Error: Object Height can not be used for objects at infinity');
                 return;
             else
-                fieldPoint = [fieldPointXYInLensUnit; repmat(-objThick,[1,nField])];
+                fieldPoint = [fieldPointXY; repmat(-objThick,[1,nField])];
                 [ initialRayBundleDirections ] = computeInitialRayBundleDirections...
                     (fieldPoint,pupilSamplingPoints);
                 % repeat each row in fieldPoint nRay times
@@ -93,7 +93,7 @@ function [ initialRayBundle, pupilSamplingPoints,pupilMeshGrid,outsidePupilIndic
             % The angle given indicates the direction of the cheif ray
             % the field point is angle in degree
             % Feild points are given by angles
-            fieldPoint = fieldPointXYInLensUnit;
+            fieldPoint = fieldPointXY;
             angX = fieldPoint(1,:)*pi/180;
             angY = fieldPoint(2,:)*pi/180;
             
@@ -143,14 +143,18 @@ function [ initialRayBundle, pupilSamplingPoints,pupilMeshGrid,outsidePupilIndic
     initialRayBundleDirections = repmat(initialRayBundleDirections,[1,nWav]);
     
     % Initialize initial ray bundle using constructor.
-    % Convert the position and wavelength from lens unit/wave unit to meter for ray object
-    pos = initialRayBundlePositions*getLensUnitFactor(optSystem);
+    pos = initialRayBundlePositions;
     dir = initialRayBundleDirections;
-    wav = arrayfun(@(x) repmat(x,[1,nRayTotal*nField]),wavLenInM,'UniformOutput',false);
+    wav = arrayfun(@(x) repmat(x,[1,nRayTotal*nField]),wavLen*getWavelengthUnitFactor(optSystem),'UniformOutput',false);
     wav = [wav{:}];
     
+    % Convert the position and wavelength from lens unit/wave unit to meter for ray object
+    wavLenInM = wavLen*getWavelengthUnitFactor(optSystem);
+    posInM = pos*getLensUnitFactor(optSystem);
+    
     % construct array of Ray objects
-    scalarRayBundle = ScalarRayBundle(pos,dir,wav);
+    scalarRayBundle = ScalarRayBundle(posInM,dir,wavLenInM,nRayTotal,nField,nWav);
+    
     initialRayBundle = scalarRayBundle;
 end
 

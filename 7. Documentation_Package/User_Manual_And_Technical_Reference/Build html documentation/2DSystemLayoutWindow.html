@@ -1,0 +1,124 @@
+﻿<html>
+	
+<head>
+	<title>2D System Layout Window</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.3.1.364">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "MatLightTracer Version 1.0 Reference.html?" + sTopicUrl;
+			}
+			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+			{
+				top.FrameTOC.SelectTocItem("2DSystemLayoutWindow");
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">2D System Layout Window</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="UserManual1.html">User Manual</a> &rsaquo;&rsaquo; <a href="UsingMatLightTracerGUI.html">Using MatLightTracer GUI</a> &rsaquo;&rsaquo; <a href="SystemLayout.html">System Layout</a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="SystemLayout.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="SystemLayout.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="3DSystemLayoutWindow.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps2"><span class="rvts40">2D System Layout Window</span></p>
+<p class="rvps2"><span class="rvts40"><br/></span></p>
+<p class="rvps3"><img alt="" style="padding : 1px;" src="lib/NewItem99.png"/><img alt="" style="padding : 1px;" src="lib/NewItem132.png"/></p>
+<p class="rvps2"><span class="rvts35">Purpose:</span></p>
+<p class="rvps2"><span class="rvts30">Display 2D layout diagram of the optical system. It shows the y-z cross section of the system.</span></p>
+<p class="rvps2"><span class="rvts30"><br/></span></p>
+<p class="rvps2"><span class="rvts35">Setting:</span></p>
+<p class="rvps2"><span class="rvts35"><br/></span></p>
+<div class="rvps3"><table width="75%" border="1" cellpadding="1" cellspacing="2" style="border-color: #000000; border-style: solid; margin: 0px auto;">
+<tr valign="top">
+<td style="border-color: #000000; border-style: solid; width: 143px;"><p class="rvps3"><span class="rvts35">Settings</span></p>
+</td>
+<td style="border-color: #000000; border-style: solid; width: 236px;"><p class="rvps3"><span class="rvts35">Description</span></p>
+</td>
+<td style="border-color: #000000; border-style: solid; width: 148px;"><p class="rvps3"><span class="rvts35">Remarks</span></p>
+</td>
+</tr>
+<tr valign="top">
+<td style="border-color: #000000; border-style: solid; width: 143px;"><p class="rvps2"><span class="rvts30">Field Index</span></p>
+</td>
+<td style="border-color: #000000; border-style: solid; width: 236px;"><p class="rvps2"><span class="rvts30">Index of the field value &nbsp;for the rays to be displayed in the layout.</span></p>
+</td>
+<td style="border-color: #000000; border-style: solid; width: 148px;"><p class="rvps19"><span class="rvts38">All fields can be used at the same time.</span></p>
+</td>
+</tr>
+<tr valign="top">
+<td style="border-color: #000000; border-style: solid; width: 143px;"><p class="rvps2"><span class="rvts30">Wavelength Index</span></p>
+</td>
+<td style="border-color: #000000; border-style: solid; width: 236px;"><p class="rvps2"><span class="rvts30">Index of the wavelength value &nbsp;for the rays to be displayed in the layout.</span></p>
+</td>
+<td style="border-color: #000000; border-style: solid; width: 148px;"><p class="rvps19"><span class="rvts38">All wavelengths can be used at the same time.</span></p>
+</td>
+</tr>
+<tr valign="top">
+<td style="border-color: #000000; border-style: solid; width: 143px;"><p class="rvps2"><span class="rvts30">Number of Rays</span></p>
+</td>
+<td style="border-color: #000000; border-style: solid; width: 236px;"><p class="rvps2"><span class="rvts30">The number of rays to be traced per each field point and each wavelength.</span></p>
+</td>
+<td style="border-color: #000000; border-style: solid; width: 148px;"><p class="rvps19"><span class="rvts38">Number less than 3 is not recommended.</span></p>
+</td>
+</tr>
+<tr valign="top">
+<td style="border-color: #000000; border-style: solid; width: 143px;"><p class="rvps2"><span class="rvts30">Chief and Marginal Ray</span></p>
+</td>
+<td style="border-color: #000000; border-style: solid; width: 236px;"><p class="rvps2"><span class="rvts30">Limits the number of rays to just 3 corresponding to the two marginal rays and a chief ray.</span></p>
+</td>
+<td style="border-color: #000000; border-style: solid; width: 148px;"><p class="rvps19"><span class="rvts38"><br/></span></p>
+</td>
+</tr>
+</table>
+</div>
+<p></p>
+<p class="rvps6"><span class="rvts20">Created with the Personal Edition of HelpNDoc: </span><a class="rvts21" href="http://www.helpndoc.com/help-authoring-tool">Free help authoring tool</a></p>
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; &lt;2016&gt; by &lt;Norman G. Worku (normangirma2012@gmail.com), Optical System Design Research Group, FSU, Jena&gt;. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

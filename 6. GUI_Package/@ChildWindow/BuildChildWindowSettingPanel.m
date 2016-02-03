@@ -2758,7 +2758,7 @@ function BuildChildWindowSettingPanel(childWindow,parentWindow)
         
         [ polarizationParameterNames,polarizationParameterFormats,...
             polarizationParameters,polarizationParameterDisplayNames ] = ...
-            getPolarizationProfileParameters( polarizationProfileType );
+            getHFSourcePolarizationProfileParameters( polarizationProfileType );
         
         
         nPar = length(polarizationParameterNames);
@@ -2847,7 +2847,7 @@ function BuildChildWindowSettingPanel(childWindow,parentWindow)
         %     polarizationProfileTypeList = get(figureHandle.Object.popPolarizationProfile,'String');
         %     polarizationProfileType = polarizationProfileTypeList{get(figureHandle.Object.popPolarizationProfile,'Value')};
         %
-        [ polarizationParameterFields, polarizationParameterFormats,~ ] = getPolarizationProfileParameters( polarizationProfileType);
+        [ polarizationParameterFields, polarizationParameterFormats,~ ] = getHFSourcePolarizationProfileParameters( polarizationProfileType);
         
         paramName = polarizationParameterFields{editedRow};
         paramFormat = polarizationParameterFormats{editedRow};
@@ -2919,7 +2919,7 @@ function BuildChildWindowSettingPanel(childWindow,parentWindow)
             %         polarizationProfileTypeList = get(figureHandle.Object.popPolarizationProfile,'String');
             %         polarizationProfileType = polarizationProfileTypeList{get(figureHandle.Object.popPolarizationProfile,'Value')};
             
-            [ polarizationParameterFields, polarizationParameterFormats,~ ] = getPolarizationProfileParameters( polarizationProfileType);
+            [ polarizationParameterFields, polarizationParameterFormats,~ ] = getHFSourcePolarizationProfileParameters( polarizationProfileType);
             paramName = polarizationParameterFields{selectedRow};
             paramFormat = polarizationParameterFormats{selectedRow};
             if iscell(paramFormat)

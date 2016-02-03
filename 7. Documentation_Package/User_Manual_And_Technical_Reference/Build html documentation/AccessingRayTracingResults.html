@@ -1,0 +1,96 @@
+﻿<html>
+	
+<head>
+	<title>Accessing Ray Tracing Results</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="HelpNDoc Personal Edition 4.3.1.364">
+	
+	<link type="text/css" rel="stylesheet" media="all" href="css/reset.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/base.css" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<!--[if lte IE 8]>
+		<link type="text/css" rel="stylesheet" media="all" href="css/ielte8.css" />
+	<![endif]-->
+	<style type="text/css">
+		#topic_header
+		{
+			background-color: #EFEFEF;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hnd.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			if (top.frames.length == 0)
+			{
+				var sTopicUrl = top.location.href.substring(top.location.href.lastIndexOf("/") + 1, top.location.href.length);
+				top.location.href = "MatLightTracer Version 1.0 Reference.html?" + sTopicUrl;
+			}
+			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
+			{
+				top.FrameTOC.SelectTocItem("AccessingRayTracingResults");
+			}
+		});
+	</script>
+	
+	</head>
+
+<body>
+
+<div id="topic_header">
+			<div id="topic_header_content">
+				<h1 id="topic_header_text">Accessing Ray Tracing Results</h1>
+				
+				<div id="topic_breadcrumb">
+					<a href="UserManual1.html">User Manual</a> &rsaquo;&rsaquo; <a href="UsingMatLightTracerFromMatlabCom.html">Using MatLightTracer From Matlab Command </a> &rsaquo;&rsaquo; </div>
+				</div>
+			<div id="topic_header_nav">
+				<a href="UsingMatLightTracerFromMatlabCom.html"><img src="img/arrow_up.png" alt="Parent"/></a>
+				
+				<a href="TracingRaysThroughOpticalSystems.html"><img src="img/arrow_left.png" alt="Previous"/></a>
+				
+				<a href="ProgrammingandAlgorithmsReferen1.html"><img src="img/arrow_right.png" alt="Next"/></a>
+				
+				</div>
+			<div class="clear"></div>
+		</div>
+	<div id="topic_content">
+		
+<p></p>
+<p class="rvps29"><span class="rvts40">Accessing Ray Tracing Results</span></p>
+<p class="rvps29"><span class="rvts30">Once the ray tracing is performed, the results can be accessed from the ray trace result struct returned by the ray tracing routines. As all the initial rays are traced simultaneously to make use of the matrix processing capability of Matlab, the ray trace result structure have results corresponding to all rays traced in a matrix. &nbsp;So the structure is basically similar to that of the scalar ray bundle </span></p>
+<p class="rvps29"><span class="rvts30"><br/></span></p>
+<p class="rvps29"><span class="rvts35">Example: </span></p>
+<p class="rvps29"><span class="rvts54">The RayTraceResult.RayExitPosition struct is arranged in the following manner</span></p>
+<p class="rvps29"><img alt="" style="padding : 1px;" src="lib/NewItem182.png"/><img alt="" style="padding : 1px;" src="lib/NewItem181.png"/></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts54">Like in the ScalarRayBundle, the RayTraceResult structure has a field called </span><span class="rvts52">FixedParameters</span><span class="rvts54"> which is used to hold information about the total number of field points, wavelengths and pupil points used to create the rays in the RayBundle structure traced. The struct has the following fields</span></p>
+<p class="rvps33"><span class="rvts52">FixedParameters.TotalNumberOfPupilPoints : </span><span class="rvts54">The number of pupil points</span></p>
+<p class="rvps33"><span class="rvts52">FixedParameters.TotalNumberOfFieldPoints : </span><span class="rvts54">The number of field points</span></p>
+<p class="rvps33"><span class="rvts52">FixedParameters.TotalNumberOfWavelengths : </span><span class="rvts54">The number of wavelengths</span></p>
+<p class="rvps29"><span class="rvts59"> &nbsp; &nbsp; </span><span class="rvts52">FixedParameters</span><span class="rvts54">.</span><span class="rvts52">LensUnitFactor</span><span class="rvts54"> : The unit factor used for current system</span></p>
+<p class="rvps29"><span class="rvts54"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span class="rvts52">FixedParameters</span><span class="rvts54">.</span><span class="rvts52">WavelengthUnitFactor</span><span class="rvts54"> : The wavelength unit factor for the system</span></p>
+<p class="rvps29"><span class="rvts54">And the </span><span class="rvts52">FixedParameters</span><span class="rvts54"> can be used in extracting the ray trace result parameters of a ray specified by its field index, wavelength index and pupil index. </span></p>
+<p class="rvps29"><span class="rvts54"><br/></span></p>
+<p class="rvps29"><span class="rvts30">In order to further simplify accessing of ray trace results, the toolbox provides special set of functions which are dedicated in extracting certain ray trace results from the ray trace result struct. &nbsp;Those functions can be found in the folder (</span><span class="rvts51">"...\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult"</span><span class="rvts30">). All functions follow certain similar form shown by the following example functions.</span></p>
+<p class="rvps29"><span class="rvts30"><br/></span></p>
+<p class="rvps29"><span class="rvts35">Example 1:</span><span class="rvts30"> Ray Exit Directions</span></p>
+<p class="rvps33"><span class="rvts52">[ exitRayDirections ] = getAllSurfaceExitRayDirection( allSurfaceRayTraceResult, rayPupilIndices, rayFieldIndices, rayWavelengthIndices)</span></p>
+<p class="rvps33"><span class="rvts52">: Returns a 3XnSurface matrix of the exit ray directions for all surfaces in the raytraceresult struct.</span></p>
+<p class="rvps29"><span class="rvts35">Example 2:</span><span class="rvts30"> Ray failure flags</span></p>
+<p class="rvps33"><span class="rvts52">[ noIntersectionPoints ] = getAllSurfaceNoIntersectionPoint( allSurfaceRayTraceResult, rayPupilIndices, rayFieldIndices, rayWavelengthIndices)</span></p>
+<p class="rvps33"><span class="rvts52">: Returns a 1XnSurface vector indicating flag for no intersection point for the specific ray with all surfaces.</span></p>
+<p></p>
+<p class="rvps6"><span class="rvts20">Created with the Personal Edition of HelpNDoc: </span><a class="rvts21" href="http://www.helpndoc.com/feature-tour/iphone-website-generation">iPhone web sites made easy</a></p>
+</div>
+	
+	<div id="topic_footer">
+
+			<div id="topic_footer_content">
+				Copyright &copy; &lt;2016&gt; by &lt;Norman G. Worku (normangirma2012@gmail.com), Optical System Design Research Group, FSU, Jena&gt;. All Rights Reserved.</div>
+		</div>
+	</body>
+	
+</html>
+

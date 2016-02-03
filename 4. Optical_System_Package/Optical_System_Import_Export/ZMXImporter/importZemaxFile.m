@@ -489,10 +489,7 @@ function opticalSystemObject = importZemaxFile (zmxFullFileName,...
         mySystem.ComponentArray(kk).Parameters.SurfaceArray = mySystem.SurfaceArray(kk);
     end
     
-    
-    mySystem.ElementToSurfaceMap = num2cell(1:mySystem.NumberOfSurfaces);
-    mySystem.SurfaceToElementMap = num2cell(1:mySystem.NumberOfSurfaces);
-    opticalSystemObject = mySystem;
+   opticalSystemObject = updateOpticalSystem( mySystem );
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%

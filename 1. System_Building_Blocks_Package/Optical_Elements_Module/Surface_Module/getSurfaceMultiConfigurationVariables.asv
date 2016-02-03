@@ -1,0 +1,14 @@
+function [ multiConfigurationVariables ] = ...
+        getSurfaceMultiConfigurationVariables( surface )
+    %GETSURFACEAPERTUREMULTICONFIGURATIONVARIABLES Summary of this function goes here
+    %   Detailed explanation goes here
+    uniqueParameters = getApertureUniqueParameters(surface);
+    multiConfigurationVariables = [{'Decenter', 'Rotation','DrawAbsolute',...
+        'OuterShape','AdditionalEdge','AdditionalEdgeType'},uniqueParameters]; = uniqueParameters;
+
+    'Thickness','Glass','Coating','Radius','Conic','ExtraData','Aperture',...
+       'Grating','TiltDecenterOrder','Tilt','Decenter','TiltMode',...
+       'StopSurfaceIndex','IsHidden','IsIgnored'}];
+
+end
+

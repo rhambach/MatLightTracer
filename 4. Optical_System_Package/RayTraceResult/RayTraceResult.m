@@ -1,4 +1,4 @@
-function traceResult = RayTraceResult(nRayPupil,nField,nWav,...
+function traceResult = RayTraceResult(fixedParametersStruct,...
         RayIntersectionPoint,ExitRayPosition,SurfaceNormal,...
         IncidentRayDirection,ExitRayDirection,Wavelength,...
         NoIntersectionPoint,OutOfAperture,TotalInternalReflection,GeometricalPathLength,AdditionalPathLength,OpticalPathLength,...
@@ -6,10 +6,16 @@ function traceResult = RayTraceResult(nRayPupil,nField,nWav,...
         RefractiveIndex,RefractiveIndexFirstDerivative,RefractiveIndexSecondDerivative,...
         GroupRefractiveIndex,CoatingJonesMatrix,CoatingPMatrix,CoatingQMatrix,TotalPMatrix,TotalQMatrix)
     % Assume all inputs are valid and of equal size
+    % NB. Fixed parameters are those which are common for all ray trace
+    % result structs for a given system after a given ray trace. It includes
+    % FixedParameters.TotalNumberOfPupilPoints
+    % FixedParameters.TotalNumberOfFieldPoints
+    % FixedParameters.TotalNumberOfWavelengths
+    % FixedParameters.LensUnitFactor
+    % FixedParameters.WavelengthUnitFactor
+    
     if nargin == 0
-        traceResult.TotalNumberOfPupilPoints = NaN;
-        traceResult.TotalNumberOfFieldPoints = NaN;
-        traceResult.TotalNumberOfWavelengths = NaN;
+        traceResult.FixedParameters = struct();
         
         traceResult.RayIntersectionPoint = [0;0;0]*NaN;
         traceResult.ExitRayPosition = [0;0;0]*NaN;
@@ -44,9 +50,8 @@ function traceResult = RayTraceResult(nRayPupil,nField,nWav,...
         traceResult.TotalInternalReflection = 0*NaN;
         traceResult.ClassName = 'RayTraceResult';
     else
-        traceResult.TotalNumberOfPupilPoints = nRayPupil;
-        traceResult.TotalNumberOfFieldPoints = nField;
-        traceResult.TotalNumberOfWavelengths = nWav;
+        traceResult.FixedParameters = fixedParametersStruct;
+        
         % reshape each result to [nRayPupil,nField,nWav]
         traceResult.RayIntersectionPoint = (RayIntersectionPoint);
         traceResult.ExitRayPosition = (ExitRayPosition) ;
@@ -75,7 +80,7 @@ function traceResult = RayTraceResult(nRayPupil,nField,nWav,...
         
         traceResult.GroupRefractiveIndex  = (GroupRefractiveIndex) ;
         
-        if nargin > 23
+        if nargin > 21
             traceResult.CoatingJonesMatrix  = (CoatingJonesMatrix) ;
             traceResult.CoatingPMatrix  = (CoatingPMatrix) ;
             traceResult.CoatingQMatrix  = (CoatingQMatrix) ;

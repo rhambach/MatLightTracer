@@ -15,20 +15,19 @@ function [ modifiedHarmonicFieldSet ] = computeFieldFFT( harmonicFieldSet,scale 
     
     modifiedHarmonicFieldSet = harmonicFieldSet;
     nHarmonicFields = (harmonicFieldSet.NumberOfHarmonicFields);
+    deltaIn1stDomain = harmonicFieldSet.SamplingDistance(:,1);
     for kk = 1:nHarmonicFields
         oldComplexAmplitude = harmonicFieldSet.ComplexAmplitude(:,:,:,kk);
-        deltaIn1stDomain = harmonicFieldSet.SamplingDistance(:,kk);
-
         [ ExIn2ndDomain,deltaIn2ndDomain ] = computeFFT2( oldComplexAmplitude(:,:,1),deltaIn1stDomain);
         [ EyIn2ndDomain ] = computeFFT2( oldComplexAmplitude(:,:,2),deltaIn1stDomain);
         
         newComplexAmplitude = cat(3,permute(ExIn2ndDomain,[1,2,4,3]),permute(EyIn2ndDomain,[1,2,4,3]));
-        modifiedHarmonicFieldSet.ComplexAmplitude = newComplexAmplitude;
-        modifiedHarmonicFieldSet.SamplingDistance = deltaIn2ndDomain; % in Spatial frequency domain
-        if modifiedHarmonicFieldSet.Domain == 1
-            modifiedHarmonicFieldSet.Domain = 2; % Spatial frequency domain
+        modifiedHarmonicFieldSet.ComplexAmplitude(:,:,:,kk) = newComplexAmplitude;
+        modifiedHarmonicFieldSet.SamplingDistance(:,kk) = deltaIn2ndDomain; % in Spatial frequency domain
+        if modifiedHarmonicFieldSet.Domain(kk) == 1
+            modifiedHarmonicFieldSet.Domain(kk) = 2; % Spatial frequency domain
         else
-            modifiedHarmonicFieldSet.Domain = 1; % Spatial domain
+            modifiedHarmonicFieldSet.Domain(kk) = 1; % Spatial domain
         end
     end
 end

@@ -45,13 +45,19 @@ function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
     [polarizedRayTracerResult,pupilMeshGrid,outsidePupilIndices] = multipleRayTracer(optSystem,wavelengthIndices,...
         fieldIndices,sampleGridSize,sampleGridSize,PupSamplingType,rayTraceOptionStruct,endSurface);%
     
-    nRay = polarizedRayTracerResult.TotalNumberOfPupilPoints;
-    nField = polarizedRayTracerResult.TotalNumberOfFieldPoints;
-    nWav = polarizedRayTracerResult.TotalNumberOfWavelengths;
+    nRay = polarizedRayTracerResult(1).FixedParameters.TotalNumberOfPupilPoints;
+    nField = polarizedRayTracerResult(1).FixedParameters.TotalNumberOfFieldPoints;
+    nWav = polarizedRayTracerResult(1).FixedParameters.TotalNumberOfWavelengths;
     
     % Take the ray trace result at surface 1 and last surface : surfIndex
     rayTracerResultFirstSurf = polarizedRayTracerResult(1);
-    rayTracerResultLastSurf = polarizedRayTracerResult(2);
+    if length(polarizedRayTracerResult) > 1
+        rayTracerResultLastSurf = polarizedRayTracerResult(2);
+    else
+        rayTracerResultLastSurf = polarizedRayTracerResult(1);
+    end
+        
+    
     
     % Spatial Distribution of Polarization Ellipse in a given surface
     
@@ -61,6 +67,7 @@ function drawn = plotPupilPolarizationEllipseMap(optSystem,surfIndex,...
     inputDataStruct = struct;
     inputDataStruct.xMesh = pupilMeshGrid(:,:,1);
     inputDataStruct.yMesh = pupilMeshGrid(:,:,2);
+    inputDataStruct.BeamCenter = [0,0];
     [ returnDataStruct ] = polarizationDefinitionHandle(returnFlag,polarizationProfileParameters,inputDataStruct);
     jonesVector = returnDataStruct.JonesVector;
     polDistributionType = returnDataStruct.PolarizationDistributionType;

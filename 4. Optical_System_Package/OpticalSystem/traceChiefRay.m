@@ -23,10 +23,8 @@ function [ chiefRayTraceResult,chiefRay ] = traceChiefRay( optSystem,fieldIndice
     
     chiefRay = getChiefRay(optSystem,fieldIndices,wavelengthIndices);
     endSurface = getNumberOfSurfaces(optSystem);
-    nRayPupil = 1;
-    nField = length(fieldIndices);
-    nWav = length(wavelengthIndices);
+    
     chiefRayTraceResult = rayTracer(optSystem,chiefRay,rayTraceOptionStruct,...
-        endSurface,nRayPupil,nField,nWav);
+        endSurface);
 end
 

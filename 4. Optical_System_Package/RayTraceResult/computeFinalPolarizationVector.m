@@ -15,7 +15,7 @@ function [ finalPolarizationVector ] = computeFinalPolarizationVector(...
     
     % Compute the field including all effects
     % 1. Complex amplitude coefficients due to interface + coating
-    nRay = rayTraceResultFinal.TotalNumberOfPupilPoints;
+    nRay = rayTraceResultFinal(1).FixedParameters.TotalNumberOfPupilPoints;
     polarizationVector1 = squeeze(multiplySliced3DMatrices(totalPMatrixs,reshape(initialPolarizationVector,[3,1,nRay])));
     % 2. Effect of OPL
     k0 = 2*pi./wavLenInM;
