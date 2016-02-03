@@ -36,90 +36,12 @@ function [ mariginalRay ] = getMariginalRay(optSystem,fieldIndices,...
         nPupilRays = 1;
     end
     
-    % Repeat wavLenInM and the scaled values of fieldPointXYInSI, nPupilRay times to
-    % enable multiple mariginal rays in the range from zero to max field
-    % point.
-    nField = length(fieldIndices);
-    nWav  = length(wavelengthIndices);
-    
-    fieldPointXYInSI = getSystemFieldPoints(optSystem,fieldIndices);
-    wavLenInM = getSystemWavelengths(optSystem,wavelengthIndices);
-    
-    
-    firstSurf = getSurfaceArray(optSystem,1);
-    if abs(firstSurf.Thickness) > 10^10 % object at infinity
-        objectIsAtInfinity = 1;
-        objThick = 0;
-    else
-        objectIsAtInfinity = 0;
-        objThick  = firstSurf.Thickness;
-    end
-    
     pupilSamplingPoint = [pupilRadius*sin(angleFromYinRad);pupilRadius*cos(angleFromYinRad);pupilZLocation];
-    
     % Repeat for nPupilRays
-    pupilSamplingPoint = (pupilSamplingPoint*repmat(linspace(1,1/nPupilRays,nPupilRays),[1,nField]));
-    objThick = objThick*ones(1,nPupilRays*nField);
+    pupilSamplingPoints = pupilSamplingPoint*(linspace(1,1/nPupilRays,nPupilRays));
     
-    fieldPointXYInSI = repmat(fieldPointXYInSI,[1,nPupilRays]);
-    
-    switch (optSystem.FieldType)
-        case 1 %('ObjectHeight')
-            fieldPointXYInLensUnit = fieldPointXYInSI/getLensUnitFactor(optSystem);
-            % Global reference is the 1st surface of the lens
-            fieldPoint = [fieldPointXYInLensUnit; -objThick];
-            if abs(firstSurf.Thickness) > 10^10
-                % Invalid specification
-                disp('Error: Object Height can not be used for objects at infinity');
-                return;
-            else
-                initialDirection = pupilSamplingPoint - fieldPoint;
-                initialDirection = initialDirection./repmat(sqrt(sum(initialDirection.^2)),[3,1]);
-                initialPosition = fieldPoint;
-            end
-        case 2 %('Angle')
-            fieldPoint = fieldPointXYInSI;
-            % The angle given indicates the direction of the cheif ray
-            % Feild points are given by angles
-            angX = fieldPoint(1,:)*pi/180;
-            angY = fieldPoint(2,:)*pi/180;
-            
-            %convert field angle to ray direction as in Zemax
-            dz = sqrt(1./((tan (angX)).^2+(tan (angY)).^2+1));
-            dx = dz.*tan (angX);
-            dy = dz.*tan (angY);
-            cheifRayDirection = [dx;dy;dz];
-            % Field point to the center of entrance pupil
-            radFieldToEnP = (objThick + pupilZLocation)./cheifRayDirection(3,:);
-            % Initial position of cheif ray
-            cheifRayPosition = ...
-                [-radFieldToEnP.*cheifRayDirection(1,:);...
-                -radFieldToEnP.*cheifRayDirection(2,:);...
-                -objThick];
-            
-            if objectIsAtInfinity
-                % collimated ray
-                initialDirection = cheifRayDirection;
-                % mariginal ray is just shifted ray of the cheif ray.
-                initialPosition(1:2,:) = cheifRayPosition(1:2,:) + pupilSamplingPoint(1:2,:);
-                initialPosition(3,:) = -objThick;
-            else
-                % Initial position of cheif ray = that of mariginal ray
-                initialPosition = cheifRayPosition;
-                % Now compute the direction of the mariginal rays
-                initialDirection = pupilSamplingPoint - initialPosition;
-                initialDirection = initialDirection./repmat(sqrt(sum(initialDirection.^2)),[3,1]);
-            end
-    end
-    initialPositionInM = initialPosition*getLensUnitFactor(optSystem);
-    
-    % Repeat wavelegths for each field point and vice versa
-    wavLenInM = cell2mat(arrayfun(@(x) x*ones(1,nField),wavLenInM,'UniformOutput',false));
-    initialPositionInM = repmat(initialPositionInM,[1,nWav]);
-    initialDirection = repmat(initialDirection,[1,nWav]);
-
-    % The mariginalRay parameters will be parameters for outer most rays,
-    % --> inner most rays in case of multiple pupil rays
-    mariginalRay = ScalarRayBundle(initialPositionInM,initialDirection,wavLenInM,1,nField,nWav);
+    [ initialRayBundle ] = getInitialRayBundleGivenPupilPoints( optSystem, wavelengthIndices,...
+        fieldIndices, pupilSamplingPoints);
+    mariginalRay = initialRayBundle;
 end
 
