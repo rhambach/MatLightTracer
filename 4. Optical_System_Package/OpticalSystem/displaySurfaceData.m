@@ -1,7 +1,10 @@
  function displaySurfaceData(optSystem,dispStandard,dispAperture,...
          dispCoating,dispAspheric,dispTiltDecenter)
-     % Displays the surface properties of an optical system 
+     % Displays the surface properties of an optical system
      % Inputs: Flags indicating which data to display
+
+     error('Implementation out-of-date');    % FIXME: should be adapted to new optSystem structure
+
      if nargin == 1
          dispStandard = 1;
          dispAperture = 1;

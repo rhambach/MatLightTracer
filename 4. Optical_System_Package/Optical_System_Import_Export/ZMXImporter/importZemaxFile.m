@@ -290,7 +290,7 @@ function opticalSystemObject = importZemaxFile (zmxFullFileName,...
                             'so it is considered as object NA.']);
                     end
                     mySystem.SystemApertureType = 2;
-                    mySystem.SystemApertureValue = vlaue;
+                    mySystem.SystemApertureValue = value;
                 end
                 
             case 'PICB'
@@ -1050,9 +1050,6 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                 ao = str2num(char(currentLineArray(12,:)));
                 
                 if strcmpi(name,'MIRROR')
-                    aodObject = Glass('MIRROR');
-                    surfaceObjectArray(surfaceCounter).Glass = aodObject;
-                    
                     % Just take the glass of the non dummy surface before the mirror
                     % but with the new name "MIRROR"
                     for pp = surfaceCounter-1:-1:1
@@ -1316,6 +1313,12 @@ function [surfaceObjectArray,nonDummySurfaceIndices,nextZmxCommand] = readSurfac
                     surfaceObjectArray(surfaceCounter).UniqueParameters = suraceParameters;    
                 else
                 end
+            case 'VPAR'
+                % specify variable for optimization
+                if dispWarnings
+                    disp(['Surf ',num2str(surfaceCounter),' Warning: '...
+                        ' Optimization variables are ignored.' ]);
+                end
             case 'PPAR'
                 % Unknown keyword
                 if dispWarnings
@@ -1356,7 +1359,7 @@ function isSurfCommand = isSurfaceCommand(zmxSurfCommand)
         'OBDC','OBSC','SPID','SQAP','SQOB','UDAD','USAP','USOB','COAT',...
         'COMM', 'CONI','VCON','PKUP','CURV','SCOL','SLAB','STOP','SURF',...
         'TYPE','GLAS','DIAM','DISZ','CHZH', 'EDGE','MAZH','OPDZ' ,'PZUP' ,...
-        'TCOC','TCOM' ,'TOLE','TPUP','VDSZ','SCBD','PARM','PPAR','XDAT',...
+        'TCOC','TCOM' ,'TOLE','TPUP','VDSZ','SCBD','PARM','VPAR','PPAR','XDAT',...
         'FIMP','LANG',};
     isSurfCommand = ismember(upper(zmxSurfCommand),surfaceCommands);
 end

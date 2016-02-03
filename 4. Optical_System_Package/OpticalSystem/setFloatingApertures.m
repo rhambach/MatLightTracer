@@ -1,8 +1,8 @@
 function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
     % setFloatingApertures: Computes and sets the apertures values of
-    % floating apertures of each surface by tracing cheif ray + top and bottom
-    % mariginal rays of each field and each wavelength and taking the maximum
-    % radial interesection of the rays with the surfaces.
+    % floating apertures of each surface by tracing chief ray + top and bottom
+    % marginal rays of each field and each wavelength and taking the maximum
+    % radial intersection of the rays with the surfaces.
     
     updatedOpticalSystem = currentOpticalSystem;
     
@@ -31,7 +31,7 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
     angleFromYinRad3 = pi/2;
     angleFromYinRad4 = 3*pi/2;
     
-    % Ignore current apertures in the computation of flaoting
+    % Ignore current apertures in the computation of floating
     rayTraceOptionStruct = RayTraceOptionStruct( );
     rayTraceOptionStruct.ConsiderSurfaceAperture = 0;
     rayTraceOptionStruct.RecordIntermediateResults = 1;
@@ -63,9 +63,11 @@ function updatedOpticalSystem = setFloatingApertures( currentOpticalSystem )
             % If the mariginal rays fail to intersect, then trace N other
             % rays in the tangential plane and take the farthest one
             % intersecting the surface
-            if (isnan(topMariginalIntersection)|isnan(bottomMariginalIntersection)|...
-                    isnan(rightMariginalIntersection)|isnan(leftMariginalIntersection)) & ...
-                    (nMarginalRayUsed == 1)
+            
+            % FIXME: logical array in if clause, use all or any
+            if (nMarginalRayUsed == 1) & (isnan(topMariginalIntersection)|isnan(bottomMariginalIntersection)|...
+                    isnan(rightMariginalIntersection)|isnan(leftMariginalIntersection)) 
+                    
                 N = 100;
                 topMariginalRayTraceResult = traceMariginalRay(updatedOpticalSystem,...
                     fieldPointIndices,wavLenIndices,angleFromYinRad1,rayTraceOptionStruct,N);
