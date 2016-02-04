@@ -158,7 +158,7 @@ function [ returnDataStruct] = ExtendedParameterTestSurface(returnFlag,surfacePa
             X = inputDataStruct.X;
             Y = inputDataStruct.Y;
             
-            normalizationRadius = surfaceParameters.NormalizationRadius;   
+            normalizationRadius = surfaceParameters.NormalizationRadius;
             polyCoeff = surfaceParameters.PolynomialCoefficients;
             zernCoeff = surfaceParameters.ZernikeCoefficients;
             
@@ -256,7 +256,7 @@ function [ returnDataStruct] = ExtendedParameterTestSurface(returnFlag,surfacePa
             normalizationRadius = surfaceParameters.NormalizationRadius;
             polyCoeff = surfaceParameters.PolynomialCoefficients;
             zernCoeff = surfaceParameters.ZernikeCoefficients;
-
+            
             % Compute its the derivative F'(X,Y,Z)
             [Fx,Fy,Fz] = computeExtendedParameterTestSurfacePartialDerivates(curv,conic,...
                 polyCoeff,zernCoeff,normalizationRadius,X,Y);
@@ -282,58 +282,13 @@ end
 function surfaceSag = computeExtendedParameterTestSurfaceSurfaceSag(surfaceRadius,surfaceConic,...
         polyCoeff,zernCoeff,normalizationRadius,X,Y)
     
-    r = sqrt(X.^2+Y.^2);
-    Nx = size(r,1);
-    Ny = size(r,2);
-    p = r/normalizationRadius; % Normalized radius for xy points given
-    c = 1/surfaceRadius;
-    k = surfaceConic;
-    
-    % Evaluate the polynomial sum first
-    polyCoeff = polyCoeff(:); % Make sure it is a column vector
-    nTerms = length(polyCoeff);
-    if nTerms
-        m = 2*[1:nTerms]'; % it is a column vector
-        A = repmat(p,[1,1,nTerms]);
-        B = repmat(permute(m,[3,2,1]),[Nx,Ny,1]);
-        C = repmat(permute(polyCoeff,[3,2,1]),[Nx,Ny,1]);
-        polySum = squeeze(sum(C.*A.^B,3));
-    else
-        polySum = 0;
-    end
-    z = (c.*r.^2)./(1+sqrt(1-(1+k).*c.^2.*r.^2)) + polySum ;
-    
-    % sameXIndices = floor(size(r,1)/2);
-    % % Make the sawtooth groove every 2nd points
-    % z(2:2:end) = z(2:2:end) + gratingHeight;
-    surfaceSag = z;
+    % Here the definition of surface sag shall be implemented
+    surfaceSag = X;
 end
 
 function [Fx,Fy,Fz] = computeExtendedParameterTestSurfacePartialDerivates(curv,conic,polyCoeff,zernCoeff,normalizationRadius,X,Y)
-    Nx = size(X,1);
-    Ny = size(X,2);
-    % Normalize the coordinates
-    Xn = X/normalizationRadius;
-    Yn = Y/normalizationRadius;
-    rn = sqrt(Xn.^2+Yn.^2);
-    % Evaluate the polynomial sum first
-    zernCoeff = zernCoeff(:); % Make sure it is a column vector
-    nTerms = length(zernCoeff);
-    if nTerms
-        m = 2*[1:nTerms]'; % it is a column vector
-        A = repmat(rn,[1,1,nTerms]);
-        AX = repmat(Xn,[1,1,nTerms]);
-        AY = repmat(Yn,[1,1,nTerms]);
-        B = repmat(permute(m,[3,2,1]),[Nx,Ny,1]);
-        C = repmat(permute(zernCoeff.*m,[3,2,1]),[Nx,Ny,1]);
-        polyDervXSum = squeeze(sum(C.*(A.^(B-2)).*AX,3));
-        polyDervYSum = squeeze(sum(C.*(A.^(B-2)).*AY,3));
-    else
-        polyDervXSum = 0;
-        polyDervYSum = 0;
-    end
-    E = (curv)./(sqrt(1-(conic+1)*curv^2*(X.^2+Y.^2)));
-    Fx = -X.*E - polyDervXSum ;
-    Fy = -Y.*E - polyDervYSum ;
-    Fz = ones(1,length(E));
+    % Here the definition of F'(X,Y,Z) shall be implemented
+    Fx = X ;
+    Fy = Y;
+    Fz = ones(1,length(Fy));
 end
