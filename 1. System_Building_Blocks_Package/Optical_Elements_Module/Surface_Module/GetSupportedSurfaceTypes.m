@@ -4,9 +4,9 @@ function [ fullNames,displayNames ] = GetSupportedSurfaceTypes(index)
         index = 0;
     end
     displayNames = {'Standard','Ideal Lens','Example Surface','Kostenbauder',...
-        'Dummy','Even Asphere','ExtendedEvenAsphere','Toroidal'};
+        'Dummy','Even Asphere','Extended Parameter Test Surface','Toroidal'};
     fullNames = {'Standard','IdealLens','ExampleSurface','Kostenbauder','Dummy',...
-        'EvenAsphere','ExtendedEvenAsphere','Toroidal'};
+        'EvenAsphere','ExtendedParameterTestSurface','Toroidal'};
     if index
         displayNames = displayNames{index};
         fullNames = fullNames{index};

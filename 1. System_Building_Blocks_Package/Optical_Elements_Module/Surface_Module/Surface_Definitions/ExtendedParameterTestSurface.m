@@ -1,6 +1,6 @@
-function [ returnDataStruct] = ExtendedEvenAsphere(returnFlag,surfaceParameters,inputDataStruct)
-    %STANDARD ExtendedEvenAsphere surface definition
-    % surfaceParameters = values of {'NumberOfTerms','NormalizationRadius'}
+function [ returnDataStruct] = ExtendedParameterTestSurface(returnFlag,surfaceParameters,inputDataStruct)
+    %STANDARD ExtendedParameterTestSurface surface definition
+    % surfaceParameters = values of {'NormalizationRadius','PolynomialCoefficients','ZernikeCoefficients'}
     % inputDataStruct : Struct of all additional inputs (not included in the surface parameters)
     % required for computing the return. (Vary depending on the returnFlag)
     % returnFlag : An integer indicating what is requested. Depending on it the
@@ -98,14 +98,14 @@ function [ returnDataStruct] = ExtendedEvenAsphere(returnFlag,surfaceParameters,
     
     %% Default input vaalues
     if nargin == 0
-        disp('Error: The function ExtendedEvenAsphere() needs atleat the return type.');
+        disp('Error: The function ExtendedParameterTestSurface() needs atleat the return type.');
         returnDataStruct = struct;
         return;
     elseif nargin == 1 || nargin == 2
         if returnFlag == 1 || returnFlag == 2 || returnFlag == 3 || returnFlag == 4
             inputDataStruct = struct();
         else
-            disp('Error: Missing input argument for ExtendedEvenAsphere().');
+            disp('Error: Missing input argument for ExtendedParameterTestSurface().');
             returnDataStruct = struct();
             return;
         end
@@ -116,12 +116,12 @@ function [ returnDataStruct] = ExtendedEvenAsphere(returnFlag,surfaceParameters,
     end
     switch returnFlag
         case 1 % About the surface
-            surfName = {'ExtendedEvenAsphere','STND'}; % display name
+            surfName = {'ExtendedParameterTestSurface','EXTD'}; % display name
             % look for image description in the current folder and return
             % full address
             [pathstr,name,ext] = fileparts(mfilename('fullpath'));
             imageFullFileName = {[pathstr,'\Surface.jpg']};  % Image file name
-            description = {['ExtendedEvenAsphere: Used to define standard conical surfaces.']};  % Text description
+            description = {['ExtendedParameterTestSurface: Used to define extended parameter test surface.']};  % Text description
             
             returnDataStruct = struct();
             returnDataStruct.Name = surfName;
@@ -144,6 +144,8 @@ function [ returnDataStruct] = ExtendedEvenAsphere(returnFlag,surfaceParameters,
             returnDataStruct.UniqueParametersStructFieldTypes = uniqueParametersStructFieldTypes;
             returnDataStruct.DefaultUniqueParametersStruct = defaultUniqueParametersStruct;
         case 3 % Surface specific 'Extra Data' table
+            % This case is no longer used as the extra data are implemented
+            % as part of the uniqueparameters.
             uniqueExtraDataName = {'Polynomial Coefficients'};
             defaultUniqueExtraData = [0];
             
@@ -153,13 +155,18 @@ function [ returnDataStruct] = ExtendedEvenAsphere(returnFlag,surfaceParameters,
         case 4 % Surface sag at given xyGridPoints Z = F(X,Y)
             surfaceRadius = inputDataStruct.Radius;
             surfaceConic = inputDataStruct.Conic;
-            normalizationRadius = surfaceParameters.NormalizationRadius;
-            
-            extraData = inputDataStruct.ExtraData;
             X = inputDataStruct.X;
             Y = inputDataStruct.Y;
-            mainSag = computeExtendedEvenAsphereSurfaceSag(surfaceRadius,surfaceConic,...
-                extraData,normalizationRadius,X,Y);
+            
+            normalizationRadius = surfaceParameters.NormalizationRadius;   
+            polyCoeff = surfaceParameters.PolynomialCoefficients;
+            zernCoeff = surfaceParameters.ZernikeCoefficients;
+            
+            % Compute the sag at the moment the function is not defined
+            % correctly
+            
+            mainSag = computeExtendedParameterTestSurfaceSurfaceSag(surfaceRadius,surfaceConic,...
+                polyCoeff,zernCoeff,normalizationRadius,X,Y);
             
             returnDataStruct = struct();
             returnDataStruct.MainSag = mainSag;
@@ -219,24 +226,25 @@ function [ returnDataStruct] = ExtendedEvenAsphere(returnFlag,surfaceParameters,
         case 7 % F(X,Y,Z)
             surfaceRadius = inputDataStruct.Radius;
             surfaceConic = inputDataStruct.Conic;
-            normalizationRadius = surfaceParameters.NormalizationRadius;
-            extraData = surfaceParameters.PolynomialCoefficients;
-            extraData2 = surfaceParameters.ZernikeCoefficients;
             
             X = inputDataStruct.RayIntersectionPoint(1,:);
             Y = inputDataStruct.RayIntersectionPoint(2,:);
             Z = inputDataStruct.RayIntersectionPoint(3,:);
             
-            mainSag = computeExtendedEvenAsphereSurfaceSag(surfaceRadius,surfaceConic,...
-                extraData,normalizationRadius,X,Y);
+            normalizationRadius = surfaceParameters.NormalizationRadius;
+            polyCoeff = surfaceParameters.PolynomialCoefficients;
+            zernCoeff = surfaceParameters.ZernikeCoefficients;
+            
+            
+            
+            mainSag = computeExtendedParameterTestSurfaceSurfaceSag(surfaceRadius,surfaceConic,...
+                polyCoeff,zernCoeff,normalizationRadius,X,Y);
             Fxyz = Z - (mainSag(1));
             returnDataStruct.Fxyz = Fxyz;
         case 8 % F'(X,Y,Z) and surface normal
             curv = (1/inputDataStruct.Radius);
             conic = inputDataStruct.Conic;
-            normalizationRadius = surfaceParameters.NormalizationRadius;
             
-            extraData = inputDataStruct.ExtraData;
             X = inputDataStruct.RayIntersectionPoint(1,:);
             Y = inputDataStruct.RayIntersectionPoint(2,:);
             Z = inputDataStruct.RayIntersectionPoint(3,:);
@@ -245,9 +253,13 @@ function [ returnDataStruct] = ExtendedEvenAsphere(returnFlag,surfaceParameters,
             l = inputDataStruct.RayDirection(2,:);
             m = inputDataStruct.RayDirection(3,:);
             
+            normalizationRadius = surfaceParameters.NormalizationRadius;
+            polyCoeff = surfaceParameters.PolynomialCoefficients;
+            zernCoeff = surfaceParameters.ZernikeCoefficients;
+
             % Compute its the derivative F'(X,Y,Z)
-            [Fx,Fy,Fz] = computeExtendedEvenAspherePartialDerivates(curv,conic,...
-                extraData,normalizationRadius,X,Y);
+            [Fx,Fy,Fz] = computeExtendedParameterTestSurfacePartialDerivates(curv,conic,...
+                polyCoeff,zernCoeff,normalizationRadius,X,Y);
             Fderivative = Fx.*k + Fy.*l + Fz.*m;
             
             surfNormal = [Fx;Fy;Fz];
@@ -267,8 +279,8 @@ function [ returnDataStruct] = ExtendedEvenAsphere(returnFlag,surfaceParameters,
     end
 end
 
-function surfaceSag = computeExtendedEvenAsphereSurfaceSag(surfaceRadius,surfaceConic,...
-        extraData,normalizationRadius,X,Y)
+function surfaceSag = computeExtendedParameterTestSurfaceSurfaceSag(surfaceRadius,surfaceConic,...
+        polyCoeff,zernCoeff,normalizationRadius,X,Y)
     
     r = sqrt(X.^2+Y.^2);
     Nx = size(r,1);
@@ -278,13 +290,13 @@ function surfaceSag = computeExtendedEvenAsphereSurfaceSag(surfaceRadius,surface
     k = surfaceConic;
     
     % Evaluate the polynomial sum first
-    extraData = extraData(:); % Make sure it is a column vector
-    nTerms = length(extraData);
+    polyCoeff = polyCoeff(:); % Make sure it is a column vector
+    nTerms = length(polyCoeff);
     if nTerms
         m = 2*[1:nTerms]'; % it is a column vector
         A = repmat(p,[1,1,nTerms]);
         B = repmat(permute(m,[3,2,1]),[Nx,Ny,1]);
-        C = repmat(permute(extraData,[3,2,1]),[Nx,Ny,1]);
+        C = repmat(permute(polyCoeff,[3,2,1]),[Nx,Ny,1]);
         polySum = squeeze(sum(C.*A.^B,3));
     else
         polySum = 0;
@@ -297,7 +309,7 @@ function surfaceSag = computeExtendedEvenAsphereSurfaceSag(surfaceRadius,surface
     surfaceSag = z;
 end
 
-function [Fx,Fy,Fz] = computeExtendedEvenAspherePartialDerivates(curv,conic,extraData,normalizationRadius,X,Y)
+function [Fx,Fy,Fz] = computeExtendedParameterTestSurfacePartialDerivates(curv,conic,polyCoeff,zernCoeff,normalizationRadius,X,Y)
     Nx = size(X,1);
     Ny = size(X,2);
     % Normalize the coordinates
@@ -305,15 +317,15 @@ function [Fx,Fy,Fz] = computeExtendedEvenAspherePartialDerivates(curv,conic,extr
     Yn = Y/normalizationRadius;
     rn = sqrt(Xn.^2+Yn.^2);
     % Evaluate the polynomial sum first
-    extraData = extraData(:); % Make sure it is a column vector
-    nTerms = length(extraData);
+    zernCoeff = zernCoeff(:); % Make sure it is a column vector
+    nTerms = length(zernCoeff);
     if nTerms
         m = 2*[1:nTerms]'; % it is a column vector
         A = repmat(rn,[1,1,nTerms]);
         AX = repmat(Xn,[1,1,nTerms]);
         AY = repmat(Yn,[1,1,nTerms]);
         B = repmat(permute(m,[3,2,1]),[Nx,Ny,1]);
-        C = repmat(permute(extraData.*m,[3,2,1]),[Nx,Ny,1]);
+        C = repmat(permute(zernCoeff.*m,[3,2,1]),[Nx,Ny,1]);
         polyDervXSum = squeeze(sum(C.*(A.^(B-2)).*AX,3));
         polyDervYSum = squeeze(sum(C.*(A.^(B-2)).*AY,3));
     else
