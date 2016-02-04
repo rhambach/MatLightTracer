@@ -1,11 +1,18 @@
-function [ updatedOpticalSystem ] = updateOpticalSystem( opticalSystem )
+function [ updatedOpticalSystem ] = updateOpticalSystem( opticalSystem, unconditionalUpdate )
     %UPDATEOPTICALSYSTEM If the user chnges some parameters of optical
     %system, this function updates the floating aperture sizes and surface
     %array coordinate transformation matrices of the system.
     
+    if nargin < 1
+        opticalSystem = OpticalSystem;
+    end
+    if nargin < 2
+        unconditionalUpdate = 0;
+    end
+    
     % Update surface array and coordinate trasnformation matrices for each
     % surface
-    if isfield(opticalSystem,'IsUpdatedSurfaceArray') && ...
+    if ~unconditionalUpdate && isfield(opticalSystem,'IsUpdatedSurfaceArray') && ...
             opticalSystem.IsUpdatedSurfaceArray
         updatedOpticalSystem = opticalSystem;
     else

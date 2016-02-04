@@ -56,13 +56,15 @@ function [ paramNames,paramDisplayNames,paramTypes,paramValues,paramValuesDisp] 
                     paramTypes{5+kk,1} = uniqueParamFormats{kk};
                     paramValues{5+kk,1} = uniqueParametersStruct.(uniqueParamNames{kk});
                     
-                    switch lower(class(paramValues{5+kk,1}))
+                    switch lower(paramTypes{5+kk,1})
                         case lower('logical')
                             if paramValues{5+kk,1}
                                 paramValuesDisp{5+kk,1}  = '1';
                             else
                                 paramValuesDisp{5+kk,1} = '0';
                             end
+                        case lower('numericVector')
+                            paramValuesDisp{5+kk,1} = ['Vector[',num2str(size(paramValues{5+kk,1},1)),']'];
                         otherwise
                             paramValuesDisp{5+kk,1}  = paramValues{5+kk,1};
                     end
@@ -223,6 +225,8 @@ function [ paramNames,paramDisplayNames,paramTypes,paramValues,paramValuesDisp] 
                                 else
                                     paramValuesDisp{1,1} = '0';
                                 end
+                            case lower('numericVector')    
+                                paramValuesDisp{1,1} = paramValues{1,1};
                             otherwise
                                 paramValuesDisp{1,1}  = paramValues{1,1};
                         end

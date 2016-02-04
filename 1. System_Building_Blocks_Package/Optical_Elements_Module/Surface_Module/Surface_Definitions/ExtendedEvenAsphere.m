@@ -130,12 +130,14 @@ function [ returnDataStruct] = ExtendedEvenAsphere(returnFlag,surfaceParameters,
             returnDataStruct.ImageFullFileName = imageFullFileName;
             returnDataStruct.Description =  description;
         case 2 % Surface specific 'UniqueSurfaceParameters'
-            uniqueParametersStructFieldNames = {'NormalizationRadius'};
-            uniqueParametersStructFieldDisplayNames = {'Normalization Radius'};
-            uniqueParametersStructFieldTypes = {'numeric'};
+            uniqueParametersStructFieldNames = {'NormalizationRadius','PolynomialCoefficients','ZernikeCoefficients'};
+            uniqueParametersStructFieldDisplayNames = {'Normalization Radius','Polynomial Coefficients','Zernike Coefficients'};
+            uniqueParametersStructFieldTypes = {'numeric','numericVector','numericVector'};
             defaultUniqueParametersStruct = struct();
             defaultUniqueParametersStruct.NormalizationRadius = 1;
-
+            defaultUniqueParametersStruct.PolynomialCoefficients = [0];
+            defaultUniqueParametersStruct.ZernikeCoefficients = [0];
+            
             returnDataStruct = struct();
             returnDataStruct.UniqueParametersStructFieldNames = uniqueParametersStructFieldNames;
             returnDataStruct.UniqueParametersStructFieldDisplayNames = uniqueParametersStructFieldDisplayNames;
@@ -218,7 +220,9 @@ function [ returnDataStruct] = ExtendedEvenAsphere(returnFlag,surfaceParameters,
             surfaceRadius = inputDataStruct.Radius;
             surfaceConic = inputDataStruct.Conic;
             normalizationRadius = surfaceParameters.NormalizationRadius;
-            extraData = inputDataStruct.ExtraData;
+            extraData = surfaceParameters.PolynomialCoefficients;
+            extraData2 = surfaceParameters.ZernikeCoefficients;
+            
             X = inputDataStruct.RayIntersectionPoint(1,:);
             Y = inputDataStruct.RayIntersectionPoint(2,:);
             Z = inputDataStruct.RayIntersectionPoint(3,:);

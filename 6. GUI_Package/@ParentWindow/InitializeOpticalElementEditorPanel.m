@@ -534,6 +534,7 @@ function InitializeOpticalElementEditorPanel( parentWindow )
     
     
     % Give all tables initial data
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateSystemConfigurationWindow( parentWindow );
     updateQuickLayoutPanel(parentWindow,1);
@@ -583,6 +584,7 @@ function btnRemoveElement_Callback(~,~,parentWindow)
     else
         % Mark the delete box again
     end
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
 end
 function popStopElementIndex_Callback(hObject, eventdata,parentWindow)
@@ -600,6 +602,7 @@ function popStopElementIndex_Callback(hObject, eventdata,parentWindow)
         aodHandles.OpticalSystem(currentConfig).OpticalElementArray{prevStopIndex}.StopSurfaceIndex = 0;
         aodHandles.OpticalSystem(currentConfig).OpticalElementArray{newStopIndex}.StopSurfaceIndex = 1;
     end
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , newStopIndex);
     updateQuickLayoutPanel(parentWindow,newStopIndex);
@@ -652,7 +655,7 @@ function tblOpticalElementList_CellSelectionCallback(~, eventdata,parentWindow)
         columnEditable1 = [false,true,true,true];
         set(aodHandles.tblOpticalElementList,'ColumnEditable', columnEditable1);
     end
-    
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     % Show the surface parameters in the surface detail window
     parentWindow.ParentHandles = aodHandles;
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -830,6 +833,7 @@ function tblOpticalElementList_CellEditCallback(hObject, eventdata,parentWindow)
     elseif selectedCol== 3 % surface comment changed
         aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedRow}.Comment = eventdata.NewData;
     end
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex);
@@ -902,13 +906,24 @@ function tblSurfaceBasicParameters_CellSelectionCallback(~, eventdata,parentWind
             end
         elseif strcmpi('numeric',myType) || strcmpi('char',myType)||...
                 strcmpi('Glass',myType) || strcmpi('Coating',myType)
+        elseif strcmpi('numericVector',myType)
+            tempNumericVector = selectedSurface.UniqueParameters.(myName);
+            tempNumericVectorVariableFlag = 0*tempNumericVector;
+            % Open the numericVector data editor window.            
+            waitfor(numericVectorDataInputGUI(tempNumericVector,tempNumericVectorVariableFlag,myName));
             
+            tempNumericVectorNew = getappdata(0,'tempNumericVector');
+            tempNumericVectorVariableFlagNew = getappdata(0,'tempNumericVectorVariableFlag');
+            
+            selectedSurface.UniqueParameters.(myName) = tempNumericVectorNew;
         else
             disp(['Error: Unknown parameter type: ',myType]);
             return;
         end
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
+    
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -991,6 +1006,7 @@ function tblSurfaceApertureParameters_CellSelectionCallback(~, eventdata,parentW
         end
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1109,6 +1125,7 @@ function popSurfaceApertureType_Callback(hObject, eventdata,parentWindow)
     
     selectedSurface.Aperture = newAperture;
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1123,6 +1140,7 @@ function popSurfaceApertureOuterShape_Callback(hObject, eventdata,parentWindow)
     selectedSurface =  aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex};
     selectedSurface.Aperture.OuterShape = get(hObject,'value');
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1140,6 +1158,7 @@ function txtSurfaceApertureAdditionalEdge_Callback(hObject, eventdata,parentWind
     selectedSurface.Aperture.AdditionalEdge =  enteredValue;
     
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1153,6 +1172,7 @@ function popSurfaceApertureAdditionalEdgeType_Callback(hObject, eventdata,parent
     
     selectedSurface.Aperture.AdditionalEdgeType =  get(hObject,'value');
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1172,6 +1192,7 @@ function popSurfaceApertureDrawAbsolute_Callback(hObject, eventdata,parentWindow
     end
     
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1242,6 +1263,7 @@ function tblSurfaceTiltDecenterParameters_CellSelectionCallback(~, eventdata,par
         end
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1254,6 +1276,7 @@ function popSurfaceTiltDecenterOrder_Callback(hObject, eventdata,parentWindow)
     selectedSurface =  aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex};
     selectedSurface.TiltDecenterOrder = get(hObject,'value');
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1266,6 +1289,7 @@ function popSurfaceTiltMode_Callback(hObject, eventdata,parentWindow)
     selectedSurface =  aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex};
     selectedSurface.TiltMode = get(hObject,'value');
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1327,6 +1351,7 @@ function tblSurfaceGratingParameters_CellSelectionCallback(~, eventdata,parentWi
         end
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1367,6 +1392,7 @@ function popGratingType_Callback(hObject, eventdata,parentWindow)
     
     selectedSurface.Grating = newGrating;
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1384,6 +1410,7 @@ function popGratingDiffractionOrderSign_Callback(hObject, eventdata,parentWindow
         selectedSurface.Grating.DiffractionOrder = -diffOrder;
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1401,6 +1428,7 @@ function popGratingDiffractionOrder_Callback(hObject, eventdata,parentWindow)
         selectedSurface.Grating.DiffractionOrder = -diffOrder;
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1426,6 +1454,7 @@ function popNumberOfExtraParameters_Callback(hObject, eventdata,parentWindow)
     
     selectedSurface.ExtraData = extraDataNew;
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1544,6 +1573,7 @@ function tblSurfaceBasicParameters_CellEditCallback(~, eventdata,parentWindow)
     else
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
     updateOpticalElementEditorPanel( parentWindow,selectedElementIndex );
@@ -1651,6 +1681,7 @@ function tblSurfaceApertureParameters_CellEditCallback(~, eventdata,parentWindow
         
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex);
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1717,6 +1748,7 @@ function tblSurfaceTiltDecenterParameters_CellEditCallback(~, eventdata,parentWi
     else
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1785,6 +1817,7 @@ function tblSurfaceGratingParameters_CellEditCallback(~, eventdata,parentWindow)
         end
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1798,6 +1831,7 @@ function tblSurfaceExtraParameters_CellEditCallback(~, eventdata,parentWindow)
     extraDataNew = cell2mat(get(aodHandles.tblSurfaceExtraParameters,'Data'));
     selectedSurface.ExtraData = extraDataNew;
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -1897,6 +1931,7 @@ function tblComponentBasicParameters_CellSelectionCallback(~, eventdata,parentWi
         end
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedComponent;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex);
@@ -1964,6 +1999,7 @@ function tblComponentTiltDecenterParameters_CellSelectionCallback(~, eventdata,p
         end
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedComponent;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex);
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -2051,6 +2087,7 @@ function tblComponentBasicParameters_CellEditCallback(~, eventdata,parentWindow)
     %     aodHandles.OpticalSystem.ComponentArray(selectedElementIndex) = selectedComponent;
     %selectedComponent =  aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex};
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedComponent;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
     updateOpticalElementEditorPanel( parentWindow,selectedElementIndex );
@@ -2114,6 +2151,7 @@ function tblComponentTiltDecenterParameters_CellEditCallback(~, eventdata,parent
     else
     end
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedComponent;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex);
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -2128,6 +2166,7 @@ function popComponentTiltDecenterOrder_Callback(hObject, eventdata,parentWindow)
     selectedComponent =  aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex};
     selectedComponent.FirstTiltDecenterOrder = get(hObject,'value');
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedSurface;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -2140,6 +2179,7 @@ function popComponentTiltMode_Callback(hObject, eventdata,parentWindow)
     selectedComponent =  aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex};
     selectedComponent.ComponentTiltMode = get(hObject,'value');
     aodHandles.OpticalSystem(currentConfig).OpticalElementArray{selectedElementIndex} = selectedComponent;
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow , selectedElementIndex)
     updateQuickLayoutPanel(parentWindow,selectedElementIndex);
@@ -2161,6 +2201,8 @@ function InsertNewElement(parentWindow,surfaceTypeDisp,surfaceType,insertPositio
         'Value',getStopElementIndex(aodHandles.OpticalSystem(currentConfig).OpticalElementArray));
     % If possible add here a code to select the first cell of newly added row
     % automatically
+    
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow,insertPosition );
     updateQuickLayoutPanel(parentWindow,insertPosition);
@@ -2191,6 +2233,8 @@ function RemoveElement(parentWindow,removePosition)
         canRemoveElement = 0;
         aodHandles.CanRemoveElement = canRemoveElement;
     end
+    
+    [ aodHandles.OpticalSystem(currentConfig) ] = updateOpticalSystem( aodHandles.OpticalSystem(currentConfig),1 );
     parentWindow.ParentHandles = aodHandles;
     updateOpticalElementEditorPanel( parentWindow,removePosition );
     updateQuickLayoutPanel(parentWindow,removePosition);
