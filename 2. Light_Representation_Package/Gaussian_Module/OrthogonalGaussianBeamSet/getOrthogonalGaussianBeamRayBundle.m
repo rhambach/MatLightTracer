@@ -46,5 +46,9 @@ function [ gaussianBeamRayBundle ] = getOrthogonalGaussianBeamRayBundle( orthogo
     gaussianBeamRayBundle.Wavelength(:,3:5:5*nGaussian) = waistRayInY.Wavelength;
     gaussianBeamRayBundle.Wavelength(:,4:5:5*nGaussian) = divergenceRayInX.Wavelength;
     gaussianBeamRayBundle.Wavelength(:,5:5:5*nGaussian) = divergenceRayInY.Wavelength;
+    
+    gaussianBeamRayBundle.FixedParameters.TotalNumberOfPupilPoints = 5*nGaussian;
+    gaussianBeamRayBundle.FixedParameters.TotalNumberOfFieldPoints = 1;
+    gaussianBeamRayBundle.FixedParameters.TotalNumberOfWavelengths = 1;
 end
 
