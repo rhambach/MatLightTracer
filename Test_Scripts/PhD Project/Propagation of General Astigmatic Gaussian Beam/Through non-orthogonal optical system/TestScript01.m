@@ -13,21 +13,21 @@
 
 % Output calculation window
 Nx = 3*250; Ny = 3*250;
-windowSizeX = 15*10^-3; windowSizeY = 15*10^-3;
+windowSizeX = 10*10^-3; windowSizeY = 10*10^-3;
 % The non orthogonal optical system
 optSystem = OpticalSystem('D:\MatLightTracer_GitHub\Sample_Optical_Systems\RotatedCylindericalMirror.mat');
 
 % Initial orthogonal gaussian beam
 centralRayPosition = [0,0,0]';
 centralRayDirection =  [0,0,1]';
-centralRayWavelength =  0.7*10^-6;
-waistRadiusInX = (1/sqrt(2))*2*10^-3; % 
-waistRadiusInY = (1/sqrt(2))*1*10^-3; %
+centralRayWavelength =  1*10^-6;
+waistRadiusInX = (1/2)*2*10^-3; % 
+waistRadiusInY = (1/2)*1*10^-3; %
 distanceFromWaistInX = 0*10^-3;
 distanceFromWaistInY = 0*10^-3;
 
 
-initialGaussianBeamSet = OrthogonalGaussianBeamSet(centralRayPosition,...
+initialGaussianBeamSet = GaussianBeamSet(centralRayPosition,...
     centralRayDirection,centralRayWavelength,waistRadiusInX,...
     waistRadiusInY,distanceFromWaistInX,distanceFromWaistInY);
 
@@ -40,9 +40,10 @@ for kk = 1:length(propagationDistanceAfterMirror)
     [ updatedOpticalSystem ] = updateOpticalSystem( optSystem );
     
     % Trace the gaussian beam using complex ray tracing
-    outputGeneralAstignmaticBeam = gaussianBeamTracer(updatedOpticalSystem,initialGaussianBeamSet);
+    outputGenerallyAstigmaticGaussianBeamSet = gaussianBeamTracer(updatedOpticalSystem,initialGaussianBeamSet);
     % Convert the GeneralAstignmaticBeam to harmonic field
-    arrayOfHarmonicFields(kk) = ConvertGenerallyAstigmaticGaussianBeamToHarmonicField(outputGeneralAstignmaticBeam,Nx,Ny,windowSizeX,windowSizeY);
+    arrayOfHarmonicFields(kk) = convertGenerallyAstigmaticGaussianBeamToHarmonicField(outputGenerallyAstigmaticGaussianBeamSet,Nx,Ny,windowSizeX,windowSizeY);
+    %arrayOfHarmonicFields(kk) = convertGaussianBeamSetToHarmonicFieldSet(outputGaussianBeamSet,Nx,Ny,windowSizeX,windowSizeY);
 % % View the harmonic field
 % harmonicFieldSetViewer(arrayOfHarmonicFields(kk));
 end

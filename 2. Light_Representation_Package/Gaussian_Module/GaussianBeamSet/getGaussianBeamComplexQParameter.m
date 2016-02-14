@@ -1,6 +1,6 @@
-function [ radiusOfCurvatureInX,radiusOfCurvatureInY ] = getOrthogonalGaussianBeamRadiusOfCurvature( orthogonalGaussianBeamSet )
-    %GETRADIUSOFCURVATURE Returns the radius of curvature of the beam at
-    % z = DistanceFromWaist
+function [ qx,qy ] = getGaussianBeamComplexQParameter( gaussianBeamSet )
+    %getGaussianBeamComplexQParameter Returns the complex q parameter which completely
+    % specifies the gaussian beam
     % The code is also vectorized. Multiple inputs and outputs are possible.
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -17,10 +17,12 @@ function [ radiusOfCurvatureInX,radiusOfCurvatureInY ] = getOrthogonalGaussianBe
     
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    [ rayleighRangeInX,rayleighRangeInY ] = getOrthogonalGaussianBeamRayleighRange(orthogonalGaussianBeamSet);
-    radiusOfCurvatureInX = [orthogonalGaussianBeamSet.DistanceFromWaistInX] + ...
-        (rayleighRangeInX.^2)./[orthogonalGaussianBeamSet.DistanceFromWaistInX];
-    radiusOfCurvatureInY = [orthogonalGaussianBeamSet.DistanceFromWaistInY] + ...
-        (rayleighRangeInY.^2)./[orthogonalGaussianBeamSet.DistanceFromWaistInY];
+    [ spotRadiusInX,spotRadiusInY ] = getSpotRadius(gaussianBeamSet);
+    [ radiusOfCurvatureInX,radiusOfCurvatureInY ] = getRadiusOfCurvature(gaussianBeamSet);
+    
+    qx = 1./((1./radiusOfCurvatureInX)-...
+        1i*([gaussianBeamSet.CentralRayWavelength]./(pi*(spotRadiusInX).^2)));
+    qy = 1./((1./radiusOfCurvatureInY)-...
+        1i*([gaussianBeamSet.CentralRayWavelength]./(pi*(spotRadiusInY).^2)));
 end
 

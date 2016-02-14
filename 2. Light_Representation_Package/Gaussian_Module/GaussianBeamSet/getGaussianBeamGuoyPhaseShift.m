@@ -1,5 +1,6 @@
-function [ rayleighRangeInX,rayleighRangeInY ] = getOrthogonalGaussianBeamRayleighRange( orthogonalGaussianBeamSet )
-    %GETRAYLEIGHRANGE Returns the rayleigh range in local x and y directions
+function [ phaseShiftInX,phaseShiftInY ] = getGaussianBeamGuoyPhaseShift( gaussianBeamSet )
+    %getGaussianBeamGuoyPhaseShift Returns the phase shift relative to plane wave at beam center
+    % at z = DistanceFromWaist
     % The code is also vectorized. Multiple inputs and outputs are possible.
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -16,9 +17,8 @@ function [ rayleighRangeInX,rayleighRangeInY ] = getOrthogonalGaussianBeamRaylei
     
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    rayleighRangeInX = (pi*(orthogonalGaussianBeamSet.WaistRadiusInX).^2)./...
-        (orthogonalGaussianBeamSet.CentralRayWavelength);
-    rayleighRangeInY = (pi*(orthogonalGaussianBeamSet.WaistRadiusInY).^2)./...
-        (orthogonalGaussianBeamSet.CentralRayWavelength);
+    [ rayleighRangeInX,rayleighRangeInY ] = getOrthogonalGaussianBeamRayleighRange(gaussianBeamSet);
+    phaseShiftInX = atan([gaussianBeamSet.DistanceFromWaistInX]./rayleighRangeInX);
+    phaseShiftInY = atan([gaussianBeamSet.DistanceFromWaistInY]./rayleighRangeInY);
 end
 

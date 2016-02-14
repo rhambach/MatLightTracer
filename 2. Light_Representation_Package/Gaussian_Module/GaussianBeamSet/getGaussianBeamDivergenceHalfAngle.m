@@ -1,5 +1,6 @@
-function [ divergenceHalfAngleInX,divergenceHalfAngleInY ] = getOrthogonalGaussianBeamDivergenceHalfAngle( orthogonalGaussianBeamSet )
-    %GETDIVERGENCEHALFANGLE Returns the divergence half angle of the beam as
+function [ divergenceHalfAngleInX,divergenceHalfAngleInY ] = getGaussianBeamDivergenceHalfAngle(...
+        gaussianBeamSet )
+    %getGaussianBeamDivergenceHalfAngle Returns the divergence half angle of the beam as
     % the beam propagates along Z.
     % The code is also vectorized. Multiple inputs and outputs are possible.
     
@@ -17,9 +18,9 @@ function [ divergenceHalfAngleInX,divergenceHalfAngleInY ] = getOrthogonalGaussi
     
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    divergenceHalfAngleInX = (orthogonalGaussianBeamSet.CentralRayWavelength)./...
-        (pi*(orthogonalGaussianBeamSet.WaistRadiusInX));
-    divergenceHalfAngleInY = (orthogonalGaussianBeamSet.CentralRayWavelength)./...
-        (pi*(orthogonalGaussianBeamSet.WaistRadiusInY));
+    divergenceHalfAngleInX = (gaussianBeamSet.CentralRayWavelength)./...
+        (pi*(gaussianBeamSet.WaistRadiusInX));
+    divergenceHalfAngleInY = (gaussianBeamSet.CentralRayWavelength)./...
+        (pi*(gaussianBeamSet.WaistRadiusInY));
 end
 

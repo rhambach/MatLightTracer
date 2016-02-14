@@ -1,6 +1,5 @@
-function [ qx,qy ] = getOrthogonalGaussianBeamComplexQParameter( orthogonalGaussianBeamSet )
-    %GETCOMPLEXQPARAMETER Returns the complex q parameter which completely
-    % specifies the gaussian beam
+function [ spotRadiusInX,spotRadiusInY ] = getGaussianBeamSpotRadius( gaussianBeamSet )
+    %getGaussianBeamSpotRadius Returns the spot radius of the beam at z = DistanceFromWaist
     % The code is also vectorized. Multiple inputs and outputs are possible.
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -17,12 +16,10 @@ function [ qx,qy ] = getOrthogonalGaussianBeamComplexQParameter( orthogonalGauss
     
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    [ spotRadiusInX,spotRadiusInY ] = getSpotRadius(orthogonalGaussianBeamSet);
-    [ radiusOfCurvatureInX,radiusOfCurvatureInY ] = getRadiusOfCurvature(orthogonalGaussianBeamSet);
-    
-    qx = 1./((1./radiusOfCurvatureInX)-...
-        1i*([orthogonalGaussianBeamSet.CentralRayWavelength]./(pi*(spotRadiusInX).^2)));
-    qy = 1./((1./radiusOfCurvatureInY)-...
-        1i*([orthogonalGaussianBeamSet.CentralRayWavelength]./(pi*(spotRadiusInY).^2)));
+    [ rayleighRangeInX,rayleighRangeInY ] = getOrthogonalGaussianBeamRayleighRange(gaussianBeamSet);
+    spotRadiusInX = (gaussianBeamSet.WaistRadiusInX).*...
+        sqrt(1+(gaussianBeamSet.DistanceFromWaistInX./rayleighRangeInX).^2);
+    spotRadiusInY = (gaussianBeamSet.WaistRadiusInY).*...
+        sqrt(1+(gaussianBeamSet.DistanceFromWaistInY./rayleighRangeInY).^2);
 end
 

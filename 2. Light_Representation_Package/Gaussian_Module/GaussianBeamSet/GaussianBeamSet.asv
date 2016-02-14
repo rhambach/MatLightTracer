@@ -1,4 +1,4 @@
-function newOrthogonalGaussianBeamSet = OrthogonalGaussianBeamSet(centralRayPosition,...
+function newGaussianBeamSet = GaussianBeamSet(centralRayPosition,...
         centralRayDirection,centralRayWavelength,waistRadiusInX,...
         waistRadiusInY,distanceFromWaistInX,distanceFromWaistInY,...
         peakAmplitude,localXDirection,localYDirection,nGaussian)
@@ -158,18 +158,18 @@ function newOrthogonalGaussianBeamSet = OrthogonalGaussianBeamSet(centralRayPosi
         localYDirection = localYDirection(:,1:nLocalYDirection);
     end
     
-    newOrthogonalGaussianBeamSet.CentralRayPosition = centralRayPosition;
-    newOrthogonalGaussianBeamSet.CentralRayDirection = centralRayDirection;
-    newOrthogonalGaussianBeamSet.CentralRayWavelength = centralRayWavelength;
-    newOrthogonalGaussianBeamSet.WaistRadiusInX = waistRadiusInX;
-    newOrthogonalGaussianBeamSet.WaistRadiusInY = waistRadiusInY;
-    newOrthogonalGaussianBeamSet.DistanceFromWaistInX = distanceFromWaistInX;
-    newOrthogonalGaussianBeamSet.DistanceFromWaistInY = distanceFromWaistInY;
-    newOrthogonalGaussianBeamSet.PeakAmplitude = peakAmplitude;
-    newOrthogonalGaussianBeamSet.LocalXDirection = localXDirection;
-    newOrthogonalGaussianBeamSet.LocalYDirection = localYDirection;
-    newOrthogonalGaussianBeamSet.nGaussian = nGaussian;
+    newGaussianBeamSet.CentralRayPosition = centralRayPosition;
+    newGaussianBeamSet.CentralRayDirection = centralRayDirection;
+    newGaussianBeamSet.CentralRayWavelength = centralRayWavelength;
+    newGaussianBeamSet.WaistRadiusInX = waistRadiusInX;
+    newGaussianBeamSet.WaistRadiusInY = waistRadiusInY;
+    newGaussianBeamSet.DistanceFromWaistInX = distanceFromWaistInX;
+    newGaussianBeamSet.DistanceFromWaistInY = distanceFromWaistInY;
+    newGaussianBeamSet.PeakAmplitude = peakAmplitude;
+    newGaussianBeamSet.LocalXDirection = localXDirection;
+    newGaussianBeamSet.LocalYDirection = localYDirection;
+    newGaussianBeamSet.nGaussian = nGaussian;
     
-    newOrthogonalGaussianBeamSet.ClassName = 'ScalarGaussianBeamSet';
+    newGaussianBeamSet.ClassName = 'ScalarGaussianBeamSet';
 end
 

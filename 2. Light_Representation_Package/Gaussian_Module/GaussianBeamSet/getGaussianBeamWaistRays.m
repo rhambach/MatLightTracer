@@ -1,5 +1,5 @@
-function [ waistRayInX,waistRayInY ] = getOrthogonalGaussianBeamWaistRays( orthogonalGaussianBeamSet )
-    %GETWAISTRAYS Gives the waist rays used to trace the given gaussian beam
+function [ waistRayInX,waistRayInY ] = getGaussianBeamWaistRays( gaussianBeamSet )
+    %getGaussianBeamWaistRays Gives the waist rays used to trace the given gaussian beam
     % The code is also vectorized. Multiple inputs and outputs are possible.
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -16,9 +16,9 @@ function [ waistRayInX,waistRayInY ] = getOrthogonalGaussianBeamWaistRays( ortho
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     
-    centralRayDirection = orthogonalGaussianBeamSet.CentralRayDirection;
-    centralRayPosition = orthogonalGaussianBeamSet.CentralRayPosition;
-    centralRayWavelength = orthogonalGaussianBeamSet.CentralRayWavelength;
+    centralRayDirection = gaussianBeamSet.CentralRayDirection;
+    centralRayPosition = gaussianBeamSet.CentralRayPosition;
+    centralRayWavelength = gaussianBeamSet.CentralRayWavelength;
     
     
     waistRayInXDirection  = centralRayDirection;
@@ -29,9 +29,9 @@ function [ waistRayInX,waistRayInY ] = getOrthogonalGaussianBeamWaistRays( ortho
     
     % Compute waist ray intersection with the reference plane where the gaussian beam set is defined
     waistRayInXPosition = centralRayPosition + ...
-        (ones(3,1)*orthogonalGaussianBeamSet.WaistRadiusInX).*orthogonalGaussianBeamSet.LocalXDirection;
+        (ones(3,1)*gaussianBeamSet.WaistRadiusInX).*gaussianBeamSet.LocalXDirection;
     waistRayInYPosition =  centralRayPosition + ...
-        (ones(3,1)*orthogonalGaussianBeamSet.WaistRadiusInY).*orthogonalGaussianBeamSet.LocalYDirection;
+        (ones(3,1)*gaussianBeamSet.WaistRadiusInY).*gaussianBeamSet.LocalYDirection;
     
     waistRayInX = ScalarRayBundle();
     waistRayInX.Position = waistRayInXPosition;

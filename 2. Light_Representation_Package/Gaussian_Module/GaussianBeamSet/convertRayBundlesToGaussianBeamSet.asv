@@ -1,5 +1,5 @@
-function [ orthogonalGaussianBeamSet ] = convertRayBundlesToOrthogonalGaussianBeamSet( gaussianBeamRayBundle )
-    %CONVERTRAYBUNDLESTOGAUSSIANBEAMSET Gives the gaussian beam from the five rays
+function [ gaussianBeamSet ] = convertRayBundlesToGaussianBeamSet( gaussianBeamRayBundle )
+    %convertRayBundlesToGaussianBeamSet Gives the gaussian beam from the five rays
     % used to represent the beams. In the input ray bundle, the ray properties
     % shall be put in agiven order corresonging for each gaussian beam.
     % They are put in the following order
@@ -21,6 +21,7 @@ function [ orthogonalGaussianBeamSet ] = convertRayBundlesToOrthogonalGaussianBe
     % Nov 07,2014   Worku, Norman G.     Original Version
 
      
+    
     centralRayDirection = gaussianBeamRayBundle.Direction(:,1:5:end);
     centralRayPosition = gaussianBeamRayBundle.Position(:,1:5:end);
     centralRayWavelength = gaussianBeamRayBundle.Wavelength(:,1:5:end);
@@ -85,7 +86,7 @@ function [ orthogonalGaussianBeamSet ] = convertRayBundlesToOrthogonalGaussianBe
     
     peakAmplitude = 1;
     
-    orthogonalGaussianBeamSet = ScalarGaussianBeamSet(centralRayPosition,...
+    gaussianBeamSet = ScalarGaussianBeamSet(centralRayPosition,...
         centralRayDirection,centralRayWavelength,waistRadiusInX,...
         waistRadiusInY,distanceFromWaistInX,distanceFromWaistInY,...
         peakAmplitude,localXDirection,localYDirection,nGaussian);

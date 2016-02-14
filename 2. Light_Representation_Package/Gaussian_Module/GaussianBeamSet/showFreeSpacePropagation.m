@@ -122,7 +122,7 @@ function [ plotted ] = showFreeSpacePropagation( gaussianBeam,startZ,endZ,...
         zx = gaussianBeam.DistanceFromWaistInX;
         zy = gaussianBeam.DistanceFromWaistInY;
         [ wx,wy ] = getSpotRadius(gaussianBeam);
-        [ Rx,Ry ] = getOrthogonalGaussianBeamRadiusOfCurvature(gaussianBeam);
+        [ Rx,Ry ] = getGaussianBeamRadiusOfCurvature(gaussianBeam);
         [ guoyPhaseX,guoyPhaseY ] = getGuoyPhaseShift(gaussianBeam);
         
         maxR = max([wx,wy]);

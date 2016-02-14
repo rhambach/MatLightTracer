@@ -1,5 +1,5 @@
-function [ gaussianBeamRayBundle ] = getOrthogonalGaussianBeamRayBundle( orthogonalGaussianBeamSet )
-    %getOrthogonalGaussianBeamRayBundle Gives the five rays used to represent the gaussian beam
+function [ gaussianBeamRayBundle ] = getGaussianBeamRayBundle( gaussianBeamSet )
+    %getGaussianBeamRayBundle Gives the five rays used to represent the gaussian beam
     % In the resulting ray bundle, the ray properties are put in agiven order
     % corresonging for each gaussian beam. They are put in the following order
     % central + waist x + waist y + div x + div y ray properties. That is
@@ -21,11 +21,11 @@ function [ gaussianBeamRayBundle ] = getOrthogonalGaussianBeamRayBundle( orthogo
     
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    [ waistRayInX,waistRayInY ] = getOrthogonalGaussianBeamWaistRays( orthogonalGaussianBeamSet );
-    [ divergenceRayInX,divergenceRayInY  ] = getOrthogonalGaussianBeamDivergenceRays( orthogonalGaussianBeamSet );
-    centralRay = getOrthogonalGaussianBeamCentralRays( orthogonalGaussianBeamSet );
+    [ waistRayInX,waistRayInY ] = getGaussianBeamWaistRays( gaussianBeamSet );
+    [ divergenceRayInX,divergenceRayInY  ] = getGaussianBeamDivergenceRays( gaussianBeamSet );
+    centralRay = getGaussianBeamCentralRays( gaussianBeamSet );
     
-    nGaussian = orthogonalGaussianBeamSet.nGaussian;
+    nGaussian = gaussianBeamSet.nGaussian;
     gaussianBeamRayBundle = ScalarRayBundle;
     
     gaussianBeamRayBundle.Position(:,1:5:5*nGaussian) = centralRay.Position;

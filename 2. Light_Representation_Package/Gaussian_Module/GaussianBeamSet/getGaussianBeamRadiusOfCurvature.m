@@ -1,6 +1,6 @@
-function [ phaseShiftInX,phaseShiftInY ] = getOrthogonalGaussianBeamGuoyPhaseShift( orthogonalGaussianBeamSet )
-    %GETPHASESHIFT Returns the phase shift relative to plane wave at beam center
-    % at z = DistanceFromWaist
+function [ radiusOfCurvatureInX,radiusOfCurvatureInY ] = getGaussianBeamRadiusOfCurvature( gaussianBeamSet )
+    %getGaussianBeamRadiusOfCurvature Returns the radius of curvature of the beam at
+    % z = DistanceFromWaist
     % The code is also vectorized. Multiple inputs and outputs are possible.
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -17,8 +17,10 @@ function [ phaseShiftInX,phaseShiftInY ] = getOrthogonalGaussianBeamGuoyPhaseShi
     
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    [ rayleighRangeInX,rayleighRangeInY ] = getOrthogonalGaussianBeamRayleighRange(orthogonalGaussianBeamSet);
-    phaseShiftInX = atan([orthogonalGaussianBeamSet.DistanceFromWaistInX]./rayleighRangeInX);
-    phaseShiftInY = atan([orthogonalGaussianBeamSet.DistanceFromWaistInY]./rayleighRangeInY);
+    [ rayleighRangeInX,rayleighRangeInY ] = getOrthogonalGaussianBeamRayleighRange(gaussianBeamSet);
+    radiusOfCurvatureInX = [gaussianBeamSet.DistanceFromWaistInX] + ...
+        (rayleighRangeInX.^2)./[gaussianBeamSet.DistanceFromWaistInX];
+    radiusOfCurvatureInY = [gaussianBeamSet.DistanceFromWaistInY] + ...
+        (rayleighRangeInY.^2)./[gaussianBeamSet.DistanceFromWaistInY];
 end
 

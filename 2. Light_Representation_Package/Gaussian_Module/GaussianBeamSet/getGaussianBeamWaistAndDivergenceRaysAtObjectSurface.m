@@ -1,6 +1,6 @@
-function [ waistAndDivergenceRaysAtObjectSurface ] = getOrthogonalGaussianBeamWaistAndDivergenceRaysAtObjectSurface...
-        ( orthogonalGaussianBeamSet,objectThickness )
-    %getOrthogonalGaussianBeamWaistAndDivergenceRays returns the 5 rays used to trace the gaussian beam
+function [ waistAndDivergenceRaysAtObjectSurface ] = getGaussianBeamWaistAndDivergenceRaysAtObjectSurface...
+        ( gaussianBeamSet,objectThickness )
+    %getGaussianBeamWaistAndDivergenceRaysAtObjectSurface returns the 5 rays used to trace the gaussian beam
     %  waist x , waist y, divergence x, divergence y
     % The rays positions are traced back to the first surface and all positions
     % are in meter to make suitable for raytrace function
@@ -20,17 +20,17 @@ function [ waistAndDivergenceRaysAtObjectSurface ] = getOrthogonalGaussianBeamWa
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     % Get the rays at surface 2 (first surface after object)
-    [waistRayXAtSurface2,waistRayYAtSurface2] = getOrthogonalGaussianBeamWaistRays(orthogonalGaussianBeamSet);
-    [divergenceRayXAtSurface2,divergenceRayYAtSurface2] = getOrthogonalGaussianBeamDivergenceRays(orthogonalGaussianBeamSet);
+    [waistRayXAtSurface2,waistRayYAtSurface2] = getOrthogonalGaussianBeamWaistRays(gaussianBeamSet);
+    [divergenceRayXAtSurface2,divergenceRayYAtSurface2] = getOrthogonalGaussianBeamDivergenceRays(gaussianBeamSet);
     
     % Compute their positions in the object plane (z = 0)
     waistRayXAtSurface1 = waistRayXAtSurface2;
     waistRayYAtSurface1 = waistRayYAtSurface2;
     divergenceRayXAtSurface1 = divergenceRayXAtSurface2;
     divergenceRayYAtSurface1 = divergenceRayYAtSurface2;
-    centralRayPosition = [orthogonalGaussianBeamSet.CentralRayPosition];
-    centralRayDirection = [orthogonalGaussianBeamSet.CentralRayDirection];
-    centralRayWavelength = [orthogonalGaussianBeamSet.CentralRayWavelength];
+    centralRayPosition = [gaussianBeamSet.CentralRayPosition];
+    centralRayDirection = [gaussianBeamSet.CentralRayDirection];
+    centralRayWavelength = [gaussianBeamSet.CentralRayWavelength];
     
     centralRay = ScalarRayBundle();
     centralRay.Position = centralRayPosition;
@@ -51,9 +51,9 @@ function [ waistAndDivergenceRaysAtObjectSurface ] = getOrthogonalGaussianBeamWa
     
     % Convert to cell array for assigning to multimple rays at the same time
     waistRayXAtSurface1Position = mat2cell(([waistRayXAtSurface2.Position] + ...
-        repmat(distToObjectForWaistRayInX,3,1).*centralRayDirection),[3],[ones(1,length(orthogonalGaussianBeamSet))]);
+        repmat(distToObjectForWaistRayInX,3,1).*centralRayDirection),[3],[ones(1,length(gaussianBeamSet))]);
     waistRayYAtSurface1Position = mat2cell(([waistRayYAtSurface2.Position] + ...
-        repmat(distToObjectForWaistRayInY,3,1).*centralRayDirection),[3],[ones(1,length(orthogonalGaussianBeamSet))]);
+        repmat(distToObjectForWaistRayInY,3,1).*centralRayDirection),[3],[ones(1,length(gaussianBeamSet))]);
     [waistRayXAtSurface1.Position] = waistRayXAtSurface1Position{:};
     [waistRayYAtSurface1.Position] = waistRayYAtSurface1Position{:};
     % Divergence rays
@@ -68,9 +68,9 @@ function [ waistAndDivergenceRaysAtObjectSurface ] = getOrthogonalGaussianBeamWa
         divergenceRayYAtSurface2Direction(3,:);
     
     divergenceRayXAtSurface1Position = mat2cell(([divergenceRayXAtSurface2.Position] + ...
-        repmat(distToObjectForDivergenceRayInX,3,1).*divergenceRayInXDirection),[3],[ones(1,length(orthogonalGaussianBeamSet))]);
+        repmat(distToObjectForDivergenceRayInX,3,1).*divergenceRayInXDirection),[3],[ones(1,length(gaussianBeamSet))]);
     divergenceRayYAtSurface1Position = mat2cell(([divergenceRayYAtSurface2.Position] + ...
-        repmat(distToObjectForDivergenceRayInY,3,1).*divergenceRayInYDirection),[3],[ones(1,length(orthogonalGaussianBeamSet))]);
+        repmat(distToObjectForDivergenceRayInY,3,1).*divergenceRayInYDirection),[3],[ones(1,length(gaussianBeamSet))]);
     [divergenceRayXAtSurface1.Position] = divergenceRayXAtSurface1Position{:};
     [divergenceRayYAtSurface1.Position] = divergenceRayYAtSurface1Position{:};
     

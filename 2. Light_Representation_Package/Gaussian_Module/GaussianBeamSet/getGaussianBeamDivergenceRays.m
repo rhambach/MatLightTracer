@@ -1,5 +1,5 @@
-function [ divergenceRayInX,divergenceRayInY  ] = getOrthogonalGaussianBeamDivergenceRays( orthogonalGaussianBeamSet )
-    %GETDIVERGENCERAYS Gives the divergence rays used to trace the given gaussian beam
+function [ divergenceRayInX,divergenceRayInY  ] = getGaussianBeamDivergenceRays( gaussianBeamSet )
+    %getGaussianBeamDivergenceRays Gives the divergence rays used to trace the given gaussian beam
     % The code is also vectorized. Multiple inputs and outputs are possible.
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -16,9 +16,9 @@ function [ divergenceRayInX,divergenceRayInY  ] = getOrthogonalGaussianBeamDiver
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     % Copy all ray data from central ray and then change the positions to shift
-    centralRayDirection = orthogonalGaussianBeamSet.CentralRayDirection;
-    centralRayPosition = orthogonalGaussianBeamSet.CentralRayPosition;
-    centralRayWavelength = orthogonalGaussianBeamSet.CentralRayWavelength;
+    centralRayDirection = gaussianBeamSet.CentralRayDirection;
+    centralRayPosition = gaussianBeamSet.CentralRayPosition;
+    centralRayWavelength = gaussianBeamSet.CentralRayWavelength;
     
     divergenceRayInXPosition  = centralRayPosition;
     divergenceRayInXWavelength  = centralRayWavelength;
@@ -26,14 +26,14 @@ function [ divergenceRayInX,divergenceRayInY  ] = getOrthogonalGaussianBeamDiver
     divergenceRayInYPosition  = centralRayPosition;
     divergenceRayInYWavelength  = centralRayWavelength;
     
-    [ divergenceHalfAngleInX,divergenceHalfAngleInY ] = getOrthogonalGaussianBeamDivergenceHalfAngle(orthogonalGaussianBeamSet);
+    [ divergenceHalfAngleInX,divergenceHalfAngleInY ] = getGaussianBeamDivergenceHalfAngle(gaussianBeamSet);
     
     divergenceRayInXDirection = ...
         (ones(3,1)*cos(divergenceHalfAngleInX)).*(centralRayDirection) + ...
-        (ones(3,1)*sin(divergenceHalfAngleInX)).*(orthogonalGaussianBeamSet.LocalXDirection);
+        (ones(3,1)*sin(divergenceHalfAngleInX)).*(gaussianBeamSet.LocalXDirection);
     divergenceRayInYDirection = ...
         (ones(3,1)*cos(divergenceHalfAngleInY)).*(centralRayDirection) + ...
-        (ones(3,1)*sin(divergenceHalfAngleInY)).*(orthogonalGaussianBeamSet.LocalYDirection);
+        (ones(3,1)*sin(divergenceHalfAngleInY)).*(gaussianBeamSet.LocalYDirection);
     
     divergenceRayInX = ScalarRayBundle();
     divergenceRayInX.Position = divergenceRayInXPosition;

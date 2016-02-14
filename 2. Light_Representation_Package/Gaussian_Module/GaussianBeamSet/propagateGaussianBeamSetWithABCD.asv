@@ -1,7 +1,7 @@
-function [ gaussianBeamOut] = propagateOrthogonalGaussianBeamSetWithABCD( orthogonalGaussianBeamSet, ...
+function [ gaussianBeamOut] = propagateGaussianBeamSetWithABCD( gaussianBeamSet, ...
         ABCDInX, ABCDInY,finalCentralRayPosition,finalCentralRayDirection,...
         finalCentralRayWavelength,finalXDirection,finalYDirection )
-    %propagateGaussianBeamSetWithABCD Propagate gaussian beam with ABCD matrices
+    %propagateGaussianBeamSetWithABCD. Propagate gaussian beam with ABCD matrices
     % The code is also vectorized. Multiple inputs and outputs are possible.
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -18,7 +18,7 @@ function [ gaussianBeamOut] = propagateOrthogonalGaussianBeamSetWithABCD( orthog
     
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    [ qxIn,qyIn ] = getComplexQParameter(orthogonalGaussianBeamSet);
+    [ qxIn,qyIn ] = getComplexQParameter(gaussianBeamSet);
     Ax = ABCDInX(1,1,:);
     Bx = ABCDInX(1,2,:);
     Cx = ABCDInX(2,1,:);

@@ -1,0 +1,26 @@
+function [ propagatedRayBundle ] = FreeSpacePropagator_ScalarRayBundle(...
+        inputScalarRayBundle,propagationDistance )
+    %FreeSpacePropagator_ScalarRayBundle Used to compute free space
+    %propagation of scalar ray bundles using real ray tracing method.
+    
+    if nargin < 1
+        inputScalarRayBundle = NaN;
+    end
+    if nargin < 2
+        propagationDistance = 0;
+    end
+    
+    if isScalarRayBundle(inputScalarRayBundle)
+        % Do nothing
+    else
+        disp(['Error: Invalid input to FreeSpacePropagator_ScalarRayBundle.',...
+            'The first argument should be scalar ray bundle.']);
+    end
+
+    tempRayBundle = inputScalarRayBundle;
+    tempRayBundle.Position = tempRayBundle.Position + ...
+        propagationDistance*tempRayBundle.Direction;
+    
+    propagatedRayBundle =  tempRayBundle;  
+end
+

@@ -1,11 +1,11 @@
-function [ centralRay ] = getOrthogonalGaussianBeamCentralRays( orthogonalGaussianBeamSet )
-    %getGaussianBeamCentralRays Gives the central rays used to trace the 
-    % given gaussian beam
+function [ rayleighLengthInX,rayleighLengthInY ] = getGaussianBeamRayleighLength( gaussianBeamSet )
+    %getGaussianBeamRayleighLength Returns the rayleigh range in local x and y directions
     % The code is also vectorized. Multiple inputs and outputs are possible.
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
     %   Advisor: Prof. Herbert Gross
+    %   Part of the RAYTRACE_TOOLBOX
     %	Optical System Design and Simulation Research Group
     %   Institute of Applied Physics
     %   Friedrich-Schiller-University of Jena
@@ -16,10 +16,9 @@ function [ centralRay ] = getOrthogonalGaussianBeamCentralRays( orthogonalGaussi
     
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    % Copy all ray data from central ray and then change the positions to shift
-    centralRay = ScalarRayBundle();
-    centralRay.Direction = orthogonalGaussianBeamSet.CentralRayDirection;
-    centralRay.Position = orthogonalGaussianBeamSet.CentralRayPosition;
-    centralRay.Wavelength = orthogonalGaussianBeamSet.CentralRayWavelength;
+    rayleighLengthInX = (pi*(gaussianBeamSet.WaistRadiusInX).^2)./...
+        (gaussianBeamSet.CentralRayWavelength);
+    rayleighLengthInY = (pi*(gaussianBeamSet.WaistRadiusInY).^2)./...
+        (gaussianBeamSet.CentralRayWavelength);
 end
 

@@ -1,0 +1,7 @@
+function [ complexRay1, ] = getComplexRayBundle( input_args )
+    %GETCOMPLEXRAYPARAMETERS Summary of this function goes here
+    %   Detailed explanation goes here
+    
+    
+end
+

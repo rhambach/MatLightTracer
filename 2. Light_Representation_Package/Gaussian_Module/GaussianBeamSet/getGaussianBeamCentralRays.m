@@ -1,11 +1,11 @@
-function [ spotRadiusInX,spotRadiusInY ] = getOrthogonalGaussianBeamSpotRadius( orthogonalGaussianBeamSet )
-    %GETSPOTRADIUS Returns the spot radius of the beam at z = DistanceFromWaist
+function [ centralRay ] = getGaussianBeamCentralRays( gaussianBeamSet )
+    %getGaussianBeamCentralRays Gives the central rays used to trace the 
+    % given gaussian beam
     % The code is also vectorized. Multiple inputs and outputs are possible.
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
     %   Advisor: Prof. Herbert Gross
-    %   Part of the RAYTRACE_TOOLBOX
     %	Optical System Design and Simulation Research Group
     %   Institute of Applied Physics
     %   Friedrich-Schiller-University of Jena
@@ -16,10 +16,10 @@ function [ spotRadiusInX,spotRadiusInY ] = getOrthogonalGaussianBeamSpotRadius( 
     
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    [ rayleighRangeInX,rayleighRangeInY ] = getOrthogonalGaussianBeamRayleighRange(orthogonalGaussianBeamSet);
-    spotRadiusInX = (orthogonalGaussianBeamSet.WaistRadiusInX).*...
-        sqrt(1+(orthogonalGaussianBeamSet.DistanceFromWaistInX./rayleighRangeInX).^2);
-    spotRadiusInY = (orthogonalGaussianBeamSet.WaistRadiusInY).*...
-        sqrt(1+(orthogonalGaussianBeamSet.DistanceFromWaistInY./rayleighRangeInY).^2);
+    % Copy all ray data from central ray and then change the positions to shift
+    centralRay = ScalarRayBundle();
+    centralRay.Direction = gaussianBeamSet.CentralRayDirection;
+    centralRay.Position = gaussianBeamSet.CentralRayPosition;
+    centralRay.Wavelength = gaussianBeamSet.CentralRayWavelength;
 end
 

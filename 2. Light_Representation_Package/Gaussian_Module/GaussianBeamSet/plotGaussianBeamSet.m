@@ -1,5 +1,5 @@
-function [ plotted ] = plotOrthogonalGaussianBeamSet( orthogonalGaussianBeamSet,plotType,nPoints1,nPoints2,axesHandle )
-    %PLOTGAUSSIANBEAM plots the amplitude, phase and intensity of a given
+function [ plotted ] = GaussianBeamSet.m( gaussianBeamSet,plotType,nPoints1,nPoints2,axesHandle )
+    %GaussianBeamSet.m plots the amplitude, phase and intensity of a given
     %gaussian beam or superposition of gaussian beam arrays
     % plotType = 1(Amplitude),2(Intensity),3(Phase)
     % medium: for computation of mediumImpedence: Intrinsic impedence of the
@@ -32,20 +32,20 @@ function [ plotted ] = plotOrthogonalGaussianBeamSet( orthogonalGaussianBeamSet,
     
     mediumImpedence = 376.7;
     % Compute the plotting range (3*standard deviation covers area > 99%)
-    E0 = orthogonalGaussianBeamSet.PeakAmplitude;
-    w0x = orthogonalGaussianBeamSet.WaistRadiusInX;
-    w0y = orthogonalGaussianBeamSet.WaistRadiusInY;
-    zx = orthogonalGaussianBeamSet.DistanceFromWaistInX;
-    zy = orthogonalGaussianBeamSet.DistanceFromWaistInY;
-    wavLen = orthogonalGaussianBeamSet.CentralRayWavelength;
+    E0 = gaussianBeamSet.PeakAmplitude;
+    w0x = gaussianBeamSet.WaistRadiusInX;
+    w0y = gaussianBeamSet.WaistRadiusInY;
+    zx = gaussianBeamSet.DistanceFromWaistInX;
+    zy = gaussianBeamSet.DistanceFromWaistInY;
+    wavLen = gaussianBeamSet.CentralRayWavelength;
     
-    centerPositions = orthogonalGaussianBeamSet.CentralRayPosition;
+    centerPositions = gaussianBeamSet.CentralRayPosition;
     c0x = centerPositions(1,:);
     c0y = centerPositions(2,:);
     
-    [ wx,wy ] = getOrthogonalGaussianBeamSpotRadius(orthogonalGaussianBeamSet);
-    [ Rx,Ry ] = getOrthogonalGaussianBeamRadiusOfCurvature(orthogonalGaussianBeamSet);
-    [ guoyPhaseX,guoyPhaseY ] = getOrthogonalGaussianBeamGuoyPhaseShift(orthogonalGaussianBeamSet);
+    [ wx,wy ] = getGaussianBeamSpotRadius(gaussianBeamSet);
+    [ Rx,Ry ] = getGaussianBeamRadiusOfCurvature(gaussianBeamSet);
+    [ guoyPhaseX,guoyPhaseY ] = getGaussianBeamGuoyPhaseShift(gaussianBeamSet);
     
     xMax = 3*wx/sqrt(2);
     yMax = 3*wy/sqrt(2);

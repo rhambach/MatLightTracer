@@ -1,5 +1,5 @@
-function [ totalAmp,individualAmp,X,Y ] = computeTotalOrthogonalGaussianAmplitude( orthogonalGaussianBeamSet,xlin,ylin )
-    %computeTotalGaussianAmplitude Summary of this function goes here
+function [ totalAmp,individualAmp,X,Y ] = computeTotalGaussianBeamAmplitude( gaussianBeamSet,xlin,ylin )
+    %computeTotalGaussianBeamAmplitude Summary of this function goes here
     %   Detailed explanation goes here
     
     % Repeat the center, width and amplitude in the 3rd dimension  number of
@@ -10,15 +10,15 @@ function [ totalAmp,individualAmp,X,Y ] = computeTotalOrthogonalGaussianAmplitud
     ny = length(ylin);
     [X,Y] = meshgrid(xlin,ylin);
     N = nx*ny;
-    nGauss = orthogonalGaussianBeamSet.nGaussian;
+    nGauss = gaussianBeamSet.nGaussian;
     
-    gaussAmps = repmat(orthogonalGaussianBeamSet.PeakAmplitude(:,1),[1,1,N]);
+    gaussAmps = repmat(gaussianBeamSet.PeakAmplitude(:,1),[1,1,N]);
     
-    gaussCentersX = repmat(orthogonalGaussianBeamSet.CentralRayPosition(:,1),[1,1,N]);
-    gaussCentersY = repmat(orthogonalGaussianBeamSet.CentralRayPosition(:,2),[1,1,N]);
+    gaussCentersX = repmat(gaussianBeamSet.CentralRayPosition(:,1),[1,1,N]);
+    gaussCentersY = repmat(gaussianBeamSet.CentralRayPosition(:,2),[1,1,N]);
     
-    gauss1eWaistRadiusX = repmat(orthogonalGaussianBeamSet.WaistRadiusInX,[1,1,N]);
-    gauss1eWaistRadiusY = repmat(orthogonalGaussianBeamSet.WaistRadiusInY,[1,1,N]);
+    gauss1eWaistRadiusX = repmat(gaussianBeamSet.WaistRadiusInX,[1,1,N]);
+    gauss1eWaistRadiusY = repmat(gaussianBeamSet.WaistRadiusInY,[1,1,N]);
 
     % Assume orthogonal gaussians
     angleInRad = zeros(nGauss,1,N);

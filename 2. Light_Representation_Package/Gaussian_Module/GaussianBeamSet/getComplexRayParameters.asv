@@ -1,10 +1,8 @@
-function [ generallyAstigmaticGaussianBeamSet ] = ...
-        convertOrthogonalToGenerallyAstigmaticGaussianBeamSet...
-        ( gaussianBeamSet )
-    %convertOrthogonalToGenerallyAstigmaticGaussianBeamSet Returns the
-    %generally astigmatic gaussian beam set described by the complex ray
-    %parameters.
-    % The code is also vectorized. Multiple inputs and outputs are possible.
+function [ complexRayPosition,complexRayDirection ] = getComplexRayParameters(...
+        gaussianBeamSet,complexRayIndex )
+    %getComplexRayParameters Returns the parameters of complex rays
+    % representing the gaussian beam which could be used for computing the
+    % complex electric field for the beam.
     
     % <<<<<<<<<<<<<<<<<<<<<<<<< Author Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>
     %   Written By: Worku, Norman Girma
