@@ -1,4 +1,4 @@
-function [ outputGeneralAstigmaticGaussianBeamSet ] = gaussianBeamTracer( optSystem,initialGaussianBeamSet,startSurface,endsurface)
+function [ outputGaussianBeamSet ] = gaussianBeamTracer( optSystem,initialGaussianBeamSet,startSurface,endsurface)
     %GAUSSIANBEAMTRACER Traces gaussian beam from startSurface to endsurface
     % and returns the output gaussian beam array at endSurface (which is genrally astigmatic).
     % initialGaussianBeamArray = array of ScalarGaussianBeam objects
@@ -22,14 +22,14 @@ function [ outputGeneralAstigmaticGaussianBeamSet ] = gaussianBeamTracer( optSys
     
     if nargin < 1
         disp('Error: The function gaussianBeamTracer needs atleast the optical system object.');
-        outputGeneralAstigmaticGaussianBeamSet = NaN;
+        outputGaussianBeamSet = NaN;
         return
     end
     if nargin < 2
         % defaults gaussian: waist size of 1 lens units and
         % surface 1 to waist distance of zero; Field index = 1; wavlength index
         % = 1;
-
+        
         % Take the central ray as chief ray from 1st field point and primary
         % wavelength
         fieldIndex = 1;
@@ -43,8 +43,8 @@ function [ outputGeneralAstigmaticGaussianBeamSet ] = gaussianBeamTracer( optSys
         waistRadiusInY = 0.5*lensUnitFactor;
         distanceFromWaistInX = 0*lensUnitFactor;
         distanceFromWaistInY = 0*lensUnitFactor;
-
-        initialGaussianBeamSet = OrthogonalGaussianBeamSet(centralRayPosition,...
+        
+        initialGaussianBeamSet = GaussianBeamSet(centralRayPosition,...
             centralRayDirection,centralRayWavelength,waistRadiusInX,...
             waistRadiusInY,distanceFromWaistInX,distanceFromWaistInY);
     end
@@ -69,18 +69,18 @@ function [ outputGeneralAstigmaticGaussianBeamSet ] = gaussianBeamTracer( optSys
     end
     
     % Get all rays representing the gaussian beams
-    [ gaussianBeamRayBundle ] = getOrthogonalGaussianBeamRayBundle( initialGaussianBeamSet );
+    [ gaussianBeamRayBundle ] = getGaussianBeamRayBundle( initialGaussianBeamSet );
     
     % Trace all rays through the optical system
     rayTraceOptionStruct = RayTraceOptionStruct();
     rayTraceOptionStruct.RecordRayTraceResults = 0;
     rayTracerResult = rayTracer(optSystem, gaussianBeamRayBundle,rayTraceOptionStruct);
-
+    
     % Get the final ray bundle in SI unit
     finalGaussianBeamRayBundle = getAllSurfaceRayBundles(rayTracerResult(2));
     % The units
     
     % Reconstruct the generally astigmatic gaussian beams from the rayBundles
-    [ outputGeneralAstigmaticGaussianBeamSet ] = convertRayBundlesToGenerallyAstigmaticGaussianBeamSet( finalGaussianBeamRayBundle);    
+    [ outputGaussianBeamSet ] = convertRayBundlesToGenerallyAstigmaticGaussianBeamSet( finalGaussianBeamRayBundle);
 end
 

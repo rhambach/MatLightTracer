@@ -1,5 +1,6 @@
 function [ localRayPosition,localRayDirection ] = transform3DRayDataTo2DCoordinate( ...
-        baseRayDirection,baseRayPoint,secondaryRayDirection,secondaryRayPoint, refrencePoint,localXDirection,localYDirection)
+        baseRayDirection,baseRayPoint,secondaryRayDirection,secondaryRayPoint,...
+        refrencePoint,localXDirection,localYDirection)
     %TRANSFORM3DRAYDATATO2DCOORDINATE COnverts the 3d ray data to 2d local
     %coordinate formed by the base ray and plane perpendicular to base ray
     %  baseRayDirection,baseRayPoint,secondaryRayDirection,secondaryRayPoint:
