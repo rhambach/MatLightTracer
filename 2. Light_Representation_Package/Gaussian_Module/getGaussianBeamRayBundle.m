@@ -21,10 +21,26 @@ function [ gaussianBeamRayBundle ] = getGaussianBeamRayBundle( gaussianBeamSet )
     
     
     % <<<<<<<<<<<<<<<<<<<<< Main Code Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    [ waistRayInX,waistRayInY ] = getGaussianBeamWaistRays( gaussianBeamSet );
-    [ divergenceRayInX,divergenceRayInY  ] = getGaussianBeamDivergenceRays( gaussianBeamSet );
-    centralRay = getGaussianBeamCentralRays( gaussianBeamSet );
     
+    if isGaussianBeamSet(gaussianBeamSet)
+        [ waistRayInX,waistRayInY ] = getGaussianBeamWaistRays( gaussianBeamSet );
+        [ divergenceRayInX,divergenceRayInY  ] = getGaussianBeamDivergenceRays( gaussianBeamSet );
+        centralRay = getGaussianBeamCentralRays( gaussianBeamSet );
+    elseif isGenerallyAstigmaticGaussianBeamSet(gaussianBeamSet)
+        complexRay1Position = newGaussianBeamSet.ComplexRay1Position;
+        complexRay1Direction = newGaussianBeamSet.ComplexRay1Direction;
+        complexRay2Position = newGaussianBeamSet.ComplexRay2Position;
+        complexRay2Direction = newGaussianBeamSet.ComplexRay2Direction;
+        centralRayPosition = newGaussianBeamSet.CentralRayPosition;
+        centralRayDirection = newGaussianBeamSet.CentralRayDirection;
+        wavelength = newGaussianBeamSet.Wavelength;
+        
+        waistRayInX = ScalarRayBundle( imag(complexRay1Position),imag(complexRay1Direction),wavelength);
+        waistRayInY = ScalarRayBundle( imag(complexRay2Position),imag(complexRay2Direction),wavelength);
+        divergenceRayInX = ScalarRayBundle( real(complexRay1Position),real(complexRay1Direction),wavelength);
+        divergenceRayInY = ScalarRayBundle( real(complexRay2Position),real(complexRay2Direction),wavelength);
+        centralRay = ScalarRayBundle( centralRayPosition,centralRayDirection,wavelength);
+    end
     nGaussian = gaussianBeamSet.nGaussian;
     gaussianBeamRayBundle = ScalarRayBundle;
     
