@@ -57,9 +57,9 @@ function [ arrayOfRayBundles ] = getAllSurfaceRayBundles( allSurfaceRayTraceResu
     lensUnitfactor = allSurfaceRayTraceResult(1).FixedParameters.LensUnitFactor;
     wavelengthUnitfactor = allSurfaceRayTraceResult(1).FixedParameters.WavelengthUnitFactor;
     for kk = 1:nSurf
-        arrayOfRayBundles(kk).Position = surfaceIntersection(:,kk,:)*lensUnitfactor;
-        arrayOfRayBundles(kk).Direction = exitRayDirection(:,kk,:);
-        arrayOfRayBundles(kk).Wavelength = wavelength(:,kk,:)*wavelengthUnitfactor;
+        arrayOfRayBundles(kk).Position = squeeze(surfaceIntersection(:,kk,:))*lensUnitfactor;
+        arrayOfRayBundles(kk).Direction = squeeze(exitRayDirection(:,kk,:));
+        arrayOfRayBundles(kk).Wavelength = (squeeze(wavelength(:,kk,:)))'*wavelengthUnitfactor;
     end
 end
 
