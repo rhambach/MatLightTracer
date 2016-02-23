@@ -34,13 +34,13 @@
 %       locsum = slocdir(‘c:\work’);
 %       locsum = slocDir('C:\work', 'workspace_SLOC.txt');
 %       locsum = slocDir('C:\work', 'workspace_SLOC.txt', false);
-%
+%       slocDir(pwd, 'TotalLineAndFunctionCounterResult.txt',false);
 %
 %   David Roberts
 %   MITRE Corporation/CAAASD 2009
 %   Revision: 1.0 Date: 2009/04/15 
 
-function locSum = slocDir(varargin)
+function [locSum,nFunSum] = slocDir(varargin)
 
 
     global subDirectoryCellArr
@@ -70,21 +70,22 @@ function locSum = slocDir(varargin)
         end        
     end
 
-    locSum = slocSubDir(directoryStr);
+    [locSum,nFunSum] = slocSubDir(directoryStr);
     
-    outputLocStats(directoryStr, locSum);
+    outputLocStats(directoryStr, locSum, nFunSum);
     
     % fill subDirectoryCellArr with all paths of subdirectories    
     currCellIndex = walkIn(directoryStr, currCellIndex);
     
     % search subdirectories and count LOC of mfiles
     for ii = 1:currCellIndex
-        loc     = slocSubDir(subDirectoryCellArr{ii});   
+        [loc,nFun]     = slocSubDir(subDirectoryCellArr{ii});   
         locSum  = loc + locSum;
+        nFunSum = nFun + nFunSum;
     end
     
     % output total LOC for all mfile contained in directoryStr and its subfolders
-    outputLocStats(directoryStr, locSum);
+    outputLocStats(directoryStr, locSum, nFunSum);
 end
 
 
@@ -113,10 +114,10 @@ function currCellIndex = walkIn(root, currCellIndex)
 end
 
 
-function loc = slocSubDir(directoryStr)
+function [loc,nFun] = slocSubDir(directoryStr)
 
     loc     = 0;            
-    
+    nFun = 0;
     if directoryStr(end) ~= filesep
         directoryStr(end+1) = filesep;
     end
@@ -126,21 +127,22 @@ function loc = slocSubDir(directoryStr)
         pathname    = [directoryStr mfiles(ii).name];
         locFile     = sloc(pathname);
         loc         = loc + locFile;
-        
-        outputLocStats(pathname, locFile);
+        nFun = nFun + 1;
+        outputLocStats(pathname, locFile,1);
     end    
 end
 
-function outputLocStats(pathname, locSum)
+function outputLocStats(pathname, locSum, nFunSum)
     global fid
     global fileOutput
     global commandLineOutput
 
     if fileOutput
-        fprintf(fid,'%s,%d \n',pathname, locSum);
+%         fprintf(fid,'%s,%d \n',pathname, locSum);
+        fprintf(fid,'LOC %d nFun %d : %s \n', locSum, nFunSum, pathname); 
     end    
     if commandLineOutput
-        disp(sprintf('%s : %d LOC',pathname, locSum));        
-    end
+        disp(sprintf('LOC %d nFun %d : %s \n', locSum, nFunSum, pathname)); 
+    end    
 end
 

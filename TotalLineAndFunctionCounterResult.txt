@@ -1,0 +1,1006 @@
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\MLTStartup.m 
+LOC 146 nFun 1 : D:\MatLightTracer_GitHub\SelectMultiConfigurationVariable.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\TestSurfaceColoring.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\tempTestScripts.m 
+LOC 188 nFun 4 : D:\MatLightTracer_GitHub 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\GetSupportedSurfaceApertureOuterShapes.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\GetSupportedSurfaceApertureTypes.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\GetSurfaceApertureAdditionalEdgeType.m 
+LOC 17 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\IsInsideTheDrawnAperture.m 
+LOC 54 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture\Aperture.m 
+LOC 80 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture\IsInsideTheAdditionalEdge.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture\IsInsideTheMainAperture.m 
+LOC 69 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture\IsInsideTheOuterAperture.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture\getApertureUniqueParameters.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture\getMaximumApertureRadius.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture\getMinimumApertureRadius.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture\getOuterAperture.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture\getSurfaceApertureMultiConfigurationVariables.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture\isAperture.m 
+LOC 44 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture\plotAperture.m 
+LOC 52 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture_Definitions\CircularAperture.m 
+LOC 52 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture_Definitions\CircularObstruction.m 
+LOC 52 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture_Definitions\EllipticalAperture.m 
+LOC 50 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture_Definitions\FloatingCircularAperture.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Aperture_Module\Aperture_Definitions\RectangularAperture.m 
+LOC 350 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Copy_of_coatingDataInputDialog.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\GetSupportedCoatingTypes.m 
+LOC 375 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\coatingDataInputDialog.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\convertRelativeToActualThickness.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\createEmptyCoating.m 
+LOC 105 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\Coating.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\computeCoatingJonesMatrix.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\getCoatingUniqueParameters.m 
+LOC 34 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\getReflectionCoefficients.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\getRefractiveIndexThicknessTable.m 
+LOC 34 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\getTransmissionCoefficients.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\isCoating.m 
+LOC 46 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\plotCoatingDiattenuationVsAngle.m 
+LOC 45 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\plotCoatingDiattenuationVsWavelength.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\plotCoatingReflectionVsAngle.m 
+LOC 34 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\plotCoatingReflectionVsWavelength.m 
+LOC 50 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\plotCoatingRefractiveIndexProfile.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\plotCoatingRetardanceVsAngle.m 
+LOC 52 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\plotCoatingRetardanceVsWavelength.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\plotCoatingTransmissionVsAngle.m 
+LOC 34 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\Coating\plotCoatingTransmissionVsWavelength.m 
+LOC 71 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\CoatingDefintions\BareGlass.m 
+LOC 78 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\CoatingDefintions\JonesMatrix.m 
+LOC 88 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\CoatingDefintions\MultilayerCoating.m 
+LOC 72 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\CoatingDefintions\None.m 
+LOC 72 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Coating_Module\CoatingDefintions\NullCoating.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\GetSupportedGlassTypes.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\createEmptyGlass.m 
+LOC 528 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\glassDataInputDialog.m 
+LOC 217 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Glass\Glass.m 
+LOC 27 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Glass\getAbbeNumber.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Glass\getGlassMultiConfigurationVariables.m 
+LOC 29 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Glass\getGlassUniqueParameters.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Glass\getGroupRefractiveIndex.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Glass\getRefractiveIndex.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Glass\isGlass.m 
+LOC 50 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\GlassDefinitions\IdealDispersive.m 
+LOC 45 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\GlassDefinitions\IdealNonDispersive.m 
+LOC 255 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\GlassDefinitions\ZemaxFormula.m 
+LOC 93 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Glass_Analysis\plotAbbeDiagram.m 
+LOC 47 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Import_Glass\Schott_Excel_Importer\importXLSSchottGlassCatalogue.m 
+LOC 52 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Import_Glass\Zemax_AGF_Importer\Copy_of_createMatAGFCatalogue.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Import_Glass\Zemax_AGF_Importer\addGlassToGlassCatalogue.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Import_Glass\Zemax_AGF_Importer\computeAbbeNumber.m 
+LOC 118 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Import_Glass\Zemax_AGF_Importer\computeRefractiveIndex.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Import_Glass\Zemax_AGF_Importer\createNewGlassCatalogue.m 
+LOC 47 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Import_Glass\Zemax_AGF_Importer\extractGlassFromCatalogue.m 
+LOC 123 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Import_Glass\Zemax_AGF_Importer\importAGFGlassCatalogue.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Glass_Module\Import_Glass\Zemax_AGF_Importer\isValidGlassCatalogue.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Grating_Module\GetSupportedGratingTypes.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Grating_Module\Grating\Grating.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Grating_Module\Grating\getGratingMultiConfigurationVariables.m 
+LOC 29 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Grating_Module\Grating\getGratingUniqueParameters.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Grating_Module\Grating\getLocalGratingParameter.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Grating_Module\Grating\isGrating.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Grating_Module\Grating_Defintions\ConcentricCylinderGrating.m 
+LOC 50 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Grating_Module\Grating_Defintions\ParallelPlaneGrating.m 
+LOC 74 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Material_Catalogue_Module\addObjectToObjectCatalogue.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Material_Catalogue_Module\clearObjectCatalogue.m 
+LOC 64 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Material_Catalogue_Module\createNewObjectCatalogue.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Material_Catalogue_Module\extractObjectFromObjectCatalogue.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Material_Catalogue_Module\getAllFiles.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Material_Catalogue_Module\getAllObjectCatalogues.m 
+LOC 42 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Material_Catalogue_Module\getAnObjectCatalogue.m 
+LOC 60 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Material_Catalogue_Module\isValidObjectCatalogue.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Material_Catalogue_Module\mergeTwoObjectCatalogues.m 
+LOC 30 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Material_Catalogue_Module\objectDataInputDialog.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Material_Catalogue_Module\removeObjectFromObjectCatalogue.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\getOpticalElementMultiConfigurationVariables.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\GetSupportedComponentTypes.m 
+LOC 725 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\componentParametersInputDialog.m 
+LOC 548 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\surfaceArrayInputDialog.m 
+LOC 45 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component\Component.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component\getComponentAboutInfo.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component\getComponentMultiConfigurationVariables.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component\getComponentNonDummySurfaceArray.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component\getComponentNumberOfNonDummySurfaces.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component\getComponentNumberOfSurfaces.m 
+LOC 142 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component\getComponentParameters.m 
+LOC 39 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component\getComponentSurfaceArray.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component\getParameterFormat.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component\isComponent.m 
+LOC 84 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component_Definitions\Grating1D.m 
+LOC 61 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component_Definitions\IMAGE.m 
+LOC 61 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component_Definitions\OBJECT.m 
+LOC 391 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component_Definitions\Prism.m 
+LOC 59 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Component_Module\Component_Definitions\SequenceOfSurfaces.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\GetSupportedSurfaceTypes.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\GetSupportedTiltDecenterOrder.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\GetSupportedTiltModes.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\SurfaceNameConverter.m 
+LOC 39 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\getSurfaceUniqueParameters.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\isSurface.m 
+LOC 110 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\surfaceParametersInputDialog.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\updateSurfaceCoordinateTransformationMatrices.m 
+LOC 40 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\Surface.m 
+LOC 23 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\TiltAndDecenter.m 
+LOC 189 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\drawSurface.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\getDiffractionOrder.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\getDrawnAperture.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\getGratingPeriodicity.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\getGridType.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\getParameterType.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\getRadiusOfCurvature.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\getSurfaceAboutInfo.m 
+LOC 30 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\getSurfaceMultiConfigurationVariables.m 
+LOC 298 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\getSurfaceParameters.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\getSurfacePosition.m 
+LOC 22 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\getSurfaceSag.m 
+LOC 27 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\getSurfaceUniqueParameters.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\isExtraDataEnabledSurface.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\isGratingEnabledSurface.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\isSurface.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\traceParaxialRaysToThisSurface.m 
+LOC 112 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface\traceRealRaysToThisSurface.m 
+LOC 68 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface_Definitions\Dummy.m 
+LOC 169 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface_Definitions\EvenAsphere.m 
+LOC 110 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface_Definitions\ExampleSurface.m 
+LOC 144 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface_Definitions\ExtendedParameterTestSurface.m 
+LOC 124 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface_Definitions\IdealLens.m 
+LOC 104 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface_Definitions\ImageSurface.m 
+LOC 166 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface_Definitions\Kostenbauder.m 
+LOC 105 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface_Definitions\ObjectSurface.m 
+LOC 136 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface_Definitions\Standard.m 
+LOC 184 nFun 1 : D:\MatLightTracer_GitHub\1. System_Building_Blocks_Package\Optical_Elements_Module\Surface_Module\Surface_Definitions\Toroidal.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\FreeSpacePropagator_GaussianBeamSet.m 
+LOC 39 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\getGaussianBeamRayBundle.m 
+LOC 114 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\GaussianBeamSet.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\computeTotalGaussianBeamAmplitude.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\convertGaussianBeamSetToHarmonicFieldSet.m 
+LOC 33 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\convertRayBundlesToGaussianBeamSet.m 
+LOC 23 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\convertRayBundlesToGenerallyAstigmaticGaussianBeamSet.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\convertSimpleToGenerallyAstigmaticGaussianBeamSet.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\fromQParametersToGaussianBeamSet.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\getComplexRayParameters.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\getGaussianBeamCentralRays.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\getGaussianBeamComplexQParameter.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\getGaussianBeamDivergenceHalfAngle.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\getGaussianBeamDivergenceRays.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\getGaussianBeamGuoyPhaseShift.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\getGaussianBeamRadiusOfCurvature.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\getGaussianBeamRayleighLength.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\getGaussianBeamSpotRadius.m 
+LOC 37 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\getGaussianBeamWaistAndDivergenceRaysAtObjectSurface.m 
+LOC 18 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\getGaussianBeamWaistRays.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\isGaussianBeamSet.m 
+LOC 63 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\plotGaussianBeamSet.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\propagateGaussianBeamSetWithABCD.m 
+LOC 86 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianBeamSet\showFreeSpacePropagation.m 
+LOC 51 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\GaussianPulsedBeam.m 
+LOC 82 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\YYYYshowFreeSpacePropagation.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\addPulseFrontTilt.m 
+LOC 64 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\convertToGeneralPulse.m 
+LOC 48 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\convertToGeneralPulsedBeam.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\fromQInverseMatrixToGaussianPulsedBeam.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\getComplexQInverseMatrix.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\getGlobalSpatialWidth.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\getGlobalTemporalWidth.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\getLocalSpatialWidth.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\getLocalTemporalWidth.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\getPulseFrontTilt.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\isGaussianPulsedBeam.m 
+LOC 41 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\plotGaussianPulsedBeam.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GaussianPulsedBeam\propagateUsingKostenbauder.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GenerallyAstigmaticGaussianBeamSet\GenerallyAstigmaticGaussianBeamSet.m 
+LOC 61 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GenerallyAstigmaticGaussianBeamSet\convertGenerallyAstigmaticGaussianBeamToHarmonicField.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Gaussian_Module\GenerallyAstigmaticGaussianBeamSet\isGenerallyAstigmaticGaussianBeamSet.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\GeneralPulse\GeneralPulse.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\GeneralPulse\addSpatialChirp.m 
+LOC 30 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\GeneralPulse\convertToTemporalDomain.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\GeneralPulse\getFrequencySamplingInterval.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\GeneralPulse\getFrequencyWindow.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\GeneralPulse\isGeneralPulse.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\GeneralPulse\plotYversusFrequency.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\GeneralPulse\plotYversusTime.m 
+LOC 23 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\ConvertHFArrayToHFSet.m 
+LOC 119 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\HarmonicFieldSet.m 
+LOC 31 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\XXHarmonicFieldSet2.m 
+LOC 45 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\XXHarmonicFieldSet_As_Object.m 
+LOC 32 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\XXaddSphericalPhase2.m 
+LOC 27 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\addSphericalPhase.m 
+LOC 24 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\computeEx.m 
+LOC 24 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\computeEy.m 
+LOC 41 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\computeEz.m 
+LOC 26 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\computeFieldFFT.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\computeFieldIFFT.m 
+LOC 49 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\convertToRayMatrix.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\getFrequencyVector.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\getHighEnergyCrossSections.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\getReferenceFieldIndex.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\getReferencePointIndices.m 
+LOC 311 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\harmonicFieldSetViewer.m 
+LOC 65 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\interpolateField.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\isHarmonicFieldSet.m 
+LOC 36 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\polarizationEllipseParametersIn3D.m 
+LOC 37 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\FreeSpacePropagators\FraunhoferPropagator.m 
+LOC 36 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Harmonic_Field_Module\HarmonicFieldSet\FreeSpacePropagators\SPWPropagator.m 
+LOC 18 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Ray_Module\ScalarRayBundle\FreeSpacePropagator_ScalarRayBundle.m 
+LOC 58 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Ray_Module\ScalarRayBundle\ScalarRayBundle.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Ray_Module\ScalarRayBundle\convertRayArrayToRayBundle.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Ray_Module\ScalarRayBundle\getNumberOfRays.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\2. Light_Representation_Package\Ray_Module\ScalarRayBundle\isScalarRayBundle.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\EmbedInToFrame.m 
+LOC 870 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\LightSourceDefinitionDialog.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\TestLightSourceDefinition.m 
+LOC 23 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\getEdgeSmootheningFunction.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\getSupportedDirectionSpecifications.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\getSupportedFieldBoarderShapes.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\getSupportedFieldSizeSpecifications.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\getSupportedSmoothEdgeSizeSpecifications.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\getSupportedZeroBoarderSizeSpecifications.m 
+LOC 47 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Polarization_Definitions\AzimuthalPolarization.m 
+LOC 45 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Polarization_Definitions\CircularPolarization.m 
+LOC 57 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Polarization_Definitions\JonesVectorPolarization.m 
+LOC 40 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Polarization_Definitions\LinearPolarization.m 
+LOC 47 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Polarization_Definitions\RadialPolarization.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Polarization_Definitions\getSupportedPolarizationProfiles.m 
+LOC 52 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Power_Spectrum_Defintions\GaussianPowerSpectrum.m 
+LOC 42 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Power_Spectrum_Defintions\HomogenousPowerSpectrum.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Power_Spectrum_Defintions\PROGRESS_GeneralPowerSpectrum.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Power_Spectrum_Defintions\SingleWavelengthPowerSpectrum.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Power_Spectrum_Defintions\getSupportedSpectralProfiles.m 
+LOC 95 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Spatial_Profile_Defintions\GaussianWaveProfile.m 
+LOC 123 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Spatial_Profile_Defintions\GridGaussianWaveProfile.m 
+LOC 51 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Spatial_Profile_Defintions\PlaneWaveProfile.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\Field_Spatial_Profile_Defintions\getSupportedSpatialProfiles.m 
+LOC 23 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\GaussianBeamDecomposition\TestGaussianDecomposition.m 
+LOC 70 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\GaussianBeamDecomposition\decomposeHarmonicFieldSourceToGaussianBeams.m 
+LOC 86 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\HarmonicFieldSource.m 
+LOC 24 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourceHarmonicFieldSet.m 
+LOC 29 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourceNumberOfSamplingPoints.m 
+LOC 24 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourcePolarizationProfile.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourcePolarizationProfileParameters.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourcePowerSpectrumProfile.m 
+LOC 33 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourcePrincipalDirection.m 
+LOC 30 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourceSamplingDistance.m 
+LOC 50 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourceSpatialProfile.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourceSpatialProfileParameters.m 
+LOC 60 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourceSpatialShapeAndSize.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourceSpectralProfileParameters.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourceTotalNumberOfSamplingPoints.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourceZeroBoarderAbsoluteSize.m 
+LOC 29 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\getHFSourceZeroBoarderPixels.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\3. Light_Source_Package\HarmonicFieldSource\isHarmonicFieldSource.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Enumeration_Module\SystemApertureTypes.m 
+LOC 113 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\GeometricalOpticsPropagator.m 
+LOC 54 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\OpticalSystem.m 
+LOC 42 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\RayTraceOptionStruct.m 
+LOC 116 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\compute3DRayPulseVector.m 
+LOC 79 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computeComplexSpectralAmplitudeAtExitPupil.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computeDispersion.m 
+LOC 31 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computeInitialGaussianBeamArray.m 
+LOC 89 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computeKostenbauderMatrix.m 
+LOC 65 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computeKostenbauderMatrixNumerically.m 
+LOC 46 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computePathLengths.m 
+LOC 86 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computePhaseFront.m 
+LOC 89 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computePulseFront.m 
+LOC 52 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computeRayParametersFromNormalizedCoordiantes.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computeRayPathMatrix.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computeRayPathMatrix2.m 
+LOC 84 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computeRayPulseVector.m 
+LOC 99 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\computeWavefrontAtExitPupil.m 
+LOC 150 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\displaySurfaceData.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\displaySystemConfiguration.m 
+LOC 39 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\gaussianBeamTracer.m 
+LOC 162 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\gaussianBeamTracerTester.m 
+LOC 56 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\gaussianBeamTracerTester2.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getAngularMagnification.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getBackFocalLength.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getChiefRay.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getEffectiveFocalLength.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getEntrancePupilDiameter.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getEntrancePupilLocation.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getExitPupilDiameter.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getExitPupilLocation.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getFieldPointUnitFactor.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getImageNA.m 
+LOC 30 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getInitialRayBundle.m 
+LOC 72 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getInitialRayBundleGivenPupilPoints.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getLensUnitFactor.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getMariginalRay.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getMaximumWavelength.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getMinimumWavelength.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getNonDummySurfaceArray.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getNonDummySurfaceIndices.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getNumberOfComponents.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getNumberOfFieldPoints.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getNumberOfNonDummySurfaces.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getNumberOfSurfaces.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getNumberOfWavelengths.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getObjectNA.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getOpticalSystemMultiConfigurationVariables.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getParaxialImageLocation.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getPrimaryWavelength.m 
+LOC 17 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getStopComponentIndex.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getStopElementIndex.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getStopSurfaceIndex.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getSupportedApodizationTypes.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getSupportedFieldNormalization.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getSupportedFieldTypes.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getSupportedLensUnits.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getSupportedSystemApertureTypes.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getSupportedSystemDefinitionTypes.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getSupportedWavelengthUnits.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getSurfaceArray.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getSystemFieldPoints.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getSystemWavelengths.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getTotalTrack.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\getWavelengthUnitFactor.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\isOpticalSystem.m 
+LOC 44 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\multipleRayTracer.m 
+LOC 74 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\paraxialRayTracer.m 
+LOC 87 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\performParaxialAnalysis.m 
+LOC 40 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotAmplitudeTransmissionMap.m 
+LOC 48 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotAngularDispersionVsWavelength.m 
+LOC 112 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotFFTPointSpreadFunction.m 
+LOC 55 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotFootprintDiagram.m 
+LOC 49 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotGDDVsWavelength.m 
+LOC 41 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotOpticalPathLengthVersusWavelength.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotPathLengthVersusWavelength.m 
+LOC 50 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotPhaseAndPulseFrontEvolution.m 
+LOC 57 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotPhaseFrontAndPulseFront.m 
+LOC 40 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotPhaseMap.m 
+LOC 31 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotPupilApodization.m 
+LOC 88 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotPupilPolarizationEllipseMap.m 
+LOC 49 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotSpatialChirpVsWavelength.m 
+LOC 73 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotSystemLayout.m 
+LOC 93 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotTransverseRayAberration.m 
+LOC 169 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotWavefrontAtExitPupil.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotWavefrontDiattenuationMap.m 
+LOC 36 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\plotWavefrontRetardanceMap.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\propagateGaussianPulsedBeam.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\propagateGeneralPulse.m 
+LOC 271 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\rayTracer.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\saveToMATFile.m 
+LOC 83 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\setFloatingApertures.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\synchronizeSurfaceAndComponentArray.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\traceChiefRay.m 
+LOC 27 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\traceMariginalRay.m 
+LOC 42 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\OpticalSystem\updateOpticalSystem.m 
+LOC 66 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\ABCD.m 
+LOC 32 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\boundary_condition_2d.m 
+LOC 30 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\curv_radius.m 
+LOC 29 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\curv_radius_1d.m 
+LOC 46 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\czt_2d.m 
+LOC 51 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\czt_2d_myVersion.m 
+LOC 46 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\czt_2d_originalVectorized.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\field_2D_aniso.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\grid_new.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\matrix_plot.m 
+LOC 17 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\supergauss_amp.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\thresh_diam_1d.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\Debye_Vectorial_Far_Field\prop_farfield_vect.m 
+LOC 74 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\Debye_Vectorial_Far_Field\prop_farfield_vect_test.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\Fraunhofer_Scalar\prop_fraun_fft.m 
+LOC 30 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\Fraunhofer_Scalar\prop_fraun_fft_test.m 
+LOC 263 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\Fresnel_Paraxial\prop_field_abcd_2d.m 
+LOC 111 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\Fresnel_Paraxial\prop_field_abcd_2d_test.m 
+LOC 63 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\Split_Z_Beam_Propagation\prop_bpm_2d.m 
+LOC 74 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\Split_Z_Beam_Propagation\prop_bpm_2d_test.m 
+LOC 98 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\Zernike_Expansion\zern_fun_irreg.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\Zernike_Expansion\zernike_fit_irreg.m 
+LOC 27 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Diffraction_Module\Existing_Propagators\Zernike_Expansion\zernike_fit_irreg_test.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Meridional_Optics_Module\QUTrace.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Meridional_Optics_Module\convertPDToQUParameter.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Meridional_Optics_Module\convertQUToPDParameter.m 
+LOC 17 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Meridional_Optics_Module\traceMeridionalRay.m 
+LOC 26 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Paraxial_Optics_Module\computeBackFocalLength.m 
+LOC 26 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Paraxial_Optics_Module\computeEffectiveFocalLength.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Paraxial_Optics_Module\computeEntrancePupilDiameter.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Paraxial_Optics_Module\computeEntrancePupilLocation.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Paraxial_Optics_Module\computeExitPupilLocation.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Paraxial_Optics_Module\computeImageNA.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Paraxial_Optics_Module\computeObjectNA.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Paraxial_Optics_Module\computeParaxialAngularMagnification.m 
+LOC 30 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Paraxial_Optics_Module\computeParaxialImageLocation.m 
+LOC 55 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Paraxial_Optics_Module\computeSystemStopIndex.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Paraxial_Optics_Module\yniTrace.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\computeAccumulatedPhase.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\computeDiattenuation.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\computeEllipseParameters.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\computeExitRayAngle.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\computeIntensity.m 
+LOC 52 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\computeMultilayerFresnelsCoefficients.m 
+LOC 49 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\computeMultilayerTransfermatrix.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\computePhaseDifference.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\computePhasePropagationFactors.m 
+LOC 47 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\computeProperRetardance.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\convertAmplitudeToPowerCoefficients.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\convertJVToPolVector.m 
+LOC 26 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\convertJonesMatrixToPolarizationMatrix.m 
+LOC 17 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\convertJonesVectorToPolarizationEllipse.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\convertJonesVectorToPolarizationVectorNew.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\convertSPToXYZPolarization.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Polarization_Ray_Tracing_Module\normalizeJonesVector.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Pulse_Analysis_Module\computeQInverseMatrixInSIFromScaledQMatrix.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Pulse_Analysis_Module\computeScaledQMatrixFromQInverseMatrixInSI.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Pulse_Analysis_Module\computeTotalFocalFieldUsingFFT.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Pulse_Analysis_Module\convertScaledQInverseMatrixToSI.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Pulse_Analysis_Module\scaleKostenbuaderMatrix.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Pulse_Analysis_Module\scaleQInverseMatrix.m 
+LOC 44 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Pulse_Analysis_Module\Kostenbauder Matrices\computeInterfaceKostenbauderMatrix.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Pulse_Analysis_Module\Kostenbauder Matrices\computeMediumKostenbauderMatrix.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\GetSupportedPupilSamplingTypes.m 
+LOC 52 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\XXcomputeNewRayDirection.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\XXcomputeReflectedRayDirection.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\XXcomputeRefractedRayDirection.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\XXglobalToLocalCoordinate.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\XXglobalToLocalDirection.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\XXglobalToLocalPosition.m 
+LOC 18 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\XXlocalToGlobalCoordinate.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\XXlocalToGlobalDirection.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\XXlocalToGlobalPosition.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\computeGeneralRefractionReflection.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\computeIncidenceAngle.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\computeInitialRayBundleDirections.m 
+LOC 29 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\computeInitialRayBundlePositions.m 
+LOC 30 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\computePupilApodization.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\computePupilCoordinates.m 
+LOC 142 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\computePupilSamplingPoints.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\globalToLocalCoordinate.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\globalToLocalDirection.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\globalToLocalPosition.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\localToGlobalCoordinate.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\localToGlobalDirection.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\localToGlobalPosition.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\Scalar_Ray_Tracing_Module\transform3DRayDataTo2DCoordinate.m 
+LOC 213 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\System_Layout_Module\XXCopy_of_drawSurfaceArray.m 
+LOC 279 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\System_Layout_Module\drawSurfaceArray.m 
+LOC 567 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Analysis_Module\System_Layout_Module\wavelengthToRGBConverter.m 
+LOC 874 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\Optical_System_Import_Export\ZMXImporter\importZemaxFile.m 
+LOC 62 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\RayTraceResult.m 
+LOC 27 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\computeFinalHarmonicField.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\computeFinalPolarizationVector.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\computeRayPupilIntersection.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceCoatingJonesMatrix.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceCoatingPMatrix.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceCoatingQMatrix.m 
+LOC 26 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceExitAngle.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceExitRayDirection.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceExitRayPosition.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceGeometricalPathLength.m 
+LOC 44 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceGroupPathLength.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceGroupRefractiveIndex.m 
+LOC 26 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceIncidenceAngle.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceIncidentRayDirection.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceNoIntersectionPoint.m 
+LOC 48 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceOpticalPathLength.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceOutOfAperture.m 
+LOC 37 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceRayBundles.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceRayIntersectionPoint.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceRefractiveIndex.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceRefractiveIndexFirstDerivative.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceRefractiveIndexSecondDerivative.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceSurfaceNormal.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceTotalGeometricalPathLength.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceTotalGroupPathLength.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceTotalInternalReflection.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceTotalOpticalPathLength.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceTotalPMatrix.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getAllSurfaceTotalQMatrix.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getClassName.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getIntensity.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\getRayTraceResultFieldForAllSurfaces.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\4. Optical_System_Package\RayTraceResult\isRayTraceResult.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\generateSamplingGridVectors.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\uniformSampling1D.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Fourier_Transforms\computeFFT2.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Fourier_Transforms\computeIFFT2.m 
+LOC 29 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\Hermite.m 
+LOC 0 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\Laguerre.m 
+LOC 23 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\XXplot_ellipse.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\changeCoordinate.m 
+LOC 30 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\compute3dCross.m 
+LOC 30 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\compute3dDot.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\computeAngleBetweenVectors.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\computeCoordinateTransformationMatrix.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\computeLinePlaneIntersection.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\computeNormOfMatrix.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\computeWavefrontRMS.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\directionSP.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\extractNoneUnityDiagonal.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\multiplySliced3DMatrices.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\normalize2DMatrix.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\plotCircle.m 
+LOC 81 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\plotEllipse.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\5. Maths_Package\Other_Mathematical_Functions\poldec.m 
+LOC 946 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ChildWindow\BuildChildWindowSettingPanel.m 
+LOC 55 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ChildWindow\ChildWindow.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ChildWindow\XXcloseChild.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ChildWindow\XXselectMainTab.m 
+LOC 749 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ChildWindow\btnOkCallback.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ChildWindow\hideChild.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ChildWindow\showChild.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\AddToOpenedWindowsList.m 
+LOC 314 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\InitializeMenuAndToolbarItems.m 
+LOC 1469 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\InitializeOpticalElementEditorPanel.m 
+LOC 68 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\InitializePanels.m 
+LOC 274 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\InitializeSystemConfigurationPanel.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\InitializeToolbarPanel.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\InitializeWelcomePanel.m 
+LOC 31 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\ParentWindow.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\RemoveFromOpenedWindowsList.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\addChild.m 
+LOC 69 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\addCoatingCatalogue.m 
+LOC 73 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\addGlassCatalogue.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\closeAllChildWindows.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\closeAllWindows.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\closeChild.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\closeParent.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\findChild.m 
+LOC 41 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\getCurrentOpticalSystem.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\hideChild.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\hideParent.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\openFromMATFile.m 
+LOC 26 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\openFromZemaxFile.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\openNewOpticalSystem.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\openSavedOpticalSystem.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\resetParentParameters.m 
+LOC 66 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\resetSystemConfigurationPanel.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\saveMySystem.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\saveMySystemAs.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\showChild.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\updateComponentDetail.m 
+LOC 44 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\updateMulticonfigurationMenu.m 
+LOC 75 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\updateOpticalElementDetail.m 
+LOC 79 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\updateOpticalElementEditorPanel.m 
+LOC 85 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\updateQuickLayoutPanel.m 
+LOC 63 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\updateSurfaceDetail.m 
+LOC 107 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\updateSystemConfigurationWindow.m 
+LOC 132 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\@ParentWindow\validateOpticalSystem.m 
+LOC 227 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\GeneralObjectInputGUI\ObjectInputDialog.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\GeneralObjectInputGUI\getObjectDisplayTable.m 
+LOC 33 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\GeneralObjectInputGUI\getObjectTypeValueDisplay.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\GeneralObjectInputGUI\@MyHandle\MyHandle.m 
+LOC 72 nFun 1 : D:\MatLightTracer_GitHub\6. GUI_Package\SimpleDialogBoxes\numericVectorDataInputGUI.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\7. Documentation_Package\aboutWindow.m 
+LOC 62 nFun 1 : D:\MatLightTracer_GitHub\Database_Files\Zemax_Data\Glass_Data\XXXimportAgfGlassCatalogue.m 
+LOC 142 nFun 1 : D:\MatLightTracer_GitHub\Enhanced_Matlab_Features\EnhancedPColor.m 
+LOC 43 nFun 1 : D:\MatLightTracer_GitHub\Enhanced_Matlab_Features\computeLinearColorGradient.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\Enhanced_Matlab_Features\computeSurfaceColor.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\Enhanced_Matlab_Features\@ObjectHandle\ObjectHandle.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Structures.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_plotDelanoDiagram.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_plotSpotDiagram.m 
+LOC 58 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\GaussianPulse.m 
+LOC 82 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\YYYYshowFreeSpacePropagation.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\addPulseFrontTilt.m 
+LOC 48 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\convertToGeneralPulse.m 
+LOC 48 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\convertToGeneralPulse2.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\fromQInverseMatrixToGaussianPulse.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\getComplexQInverseMatrix.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\getGlobalSpatialWidth.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\getGlobalTemporalWidth.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\getLocalSpatialWidth.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\getLocalTemporalWidth.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\getPulseFrontTilt.m 
+LOC 45 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\plotGaussianPulse.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_@GaussianPulse\propagateUsingKostenbauder.m 
+LOC 18 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_AutomaticSamplng\AutomaticSamplingOfComplexField.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Command_Window_Functions\optsys.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Field_Tracing\Prog_computeCZIFFT.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Field_Tracing\Prog_computeIFFT.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Field_Tracing\TestFunctions.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Field_Tracing\circ.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Field_Tracing\computeAmplitude.m 
+LOC 31 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Field_Tracing\computeCZFFT.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Field_Tracing\computeFFT.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Field_Tracing\computeIntensity.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Field_Tracing\computePhase.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Field_Tracing\fraunhoferDiffraction.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Field_Tracing\jinc.m 
+LOC 23 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Field_Tracing\testGaussian1D.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition1D\Case1_EvenlySpacedIdenticalGaussians.m 
+LOC 50 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition1D\Gauss1D.m 
+LOC 22 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition1D\Rect1D.m 
+LOC 97 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition1D\TestGaussianDecompOf1DSignal.m 
+LOC 59 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition1D\XXCase2_GeneralGaussians.m 
+LOC 92 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition1D\XXTestGaussianDecompOf1DSignal.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition1D\computeGaussAmplitude1D.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition1D\computeRectAmplitude1D.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition1D\isGauss1D.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition1D\plotGauss1D.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition1D\plotRect1D.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition1D\testscript.m 
+LOC 93 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition2D\Gauss2D.m 
+LOC 24 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition2D\Rect2D.m 
+LOC 109 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition2D\TestGaussianDecompOf2DSignal.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition2D\XXCase1_EvenlySpacedIdenticalGaussians.m 
+LOC 59 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition2D\XXCase2_GeneralGaussians.m 
+LOC 92 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition2D\XXTestGaussianDecompOf1DSignal.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition2D\XXtestscript.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition2D\computeGaussAmplitude2D.m 
+LOC 22 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition2D\computeRectAmplitude2D.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition2D\isGauss2D.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition2D\plotGauss2D.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_GaussianDecomposition2D\plotRect2D.m 
+LOC 47 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXgetOptimizableVector.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXsetOptimizableVector.m 
+LOC 139 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\getOptimizableVector.m 
+LOC 123 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\setOptimizableVector.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\tryFminSearch.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\MeritFunction\MeritFunction.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\MeritFunction\XXgetOptimizableObject.m 
+LOC 26 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\MeritFunction\getGradientVector.m 
+LOC 32 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\MeritFunction\getMeritFunctionUniqueParameters.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\MeritFunction\getMeritFunctionValue.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\MeritFunction\isMeritFunction.m 
+LOC 37 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\MeritFunctionDefinitions\RootMeanSquareError.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationAlgorithms\GetAllOptimizationAlgorithms.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationAlgorithms\GlobalOptimizationAlgorithms\GetGlobalOptimizationAlgorithms.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationAlgorithms\LocalOptimizationAlgorithms\GetLocalOptimizationAlgorithms.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationAlgorithms\LocalOptimizationAlgorithms\NonLinearOptimizer.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationAlgorithms\LocalOptimizationAlgorithms\XXNonLinearOptimizer.m 
+LOC 26 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationAlgorithms\LocalOptimizationAlgorithms\XXsteepestDescentOptimizer.m 
+LOC 36 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationAlgorithms\LocalOptimizationAlgorithms\newtonGaussOptimizer.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationAlgorithms\LocalOptimizationAlgorithms\steepestDescentOptimizer.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationOperand\OptimizationOperand.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationOperand\XXgetOperandValue.m 
+LOC 31 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationOperand\computeOperandValue.m 
+LOC 23 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationOperand\getJacobianMatrix.m 
+LOC 49 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationOperand\GaussianDecompositionOperands\GBAG.m 
+LOC 40 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationOperand\GaussianDecompositionOperands\GBAG1.m 
+LOC 49 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\OptimizationOperand\GaussianDecompositionOperands\GBAG2.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunction\XXMeritFunction.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunction\XXgetGradientVector.m 
+LOC 27 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunction\XXgetMeritFunctionUniqueParameters.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunction\XXgetMeritFunctionValue.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunction\XXgetOperandValue.m 
+LOC 24 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunction\XXgetOptimizableObject.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunction\XXisMeritFunction.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunctionDefinitions\XXEmptyMeritFunction.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunctionDefinitions\XXGetAllMeritFunctions.m 
+LOC 51 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunctionDefinitions\GaussianDecompositionMeritFunctions\XXGaussianDecomposition1DRMSE.m 
+LOC 54 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunctionDefinitions\GaussianDecompositionMeritFunctions\XXGaussianDecompositionFFT1DRMSE.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunctionDefinitions\GaussianDecompositionMeritFunctions\XXGetGaussianDecompositionMeritFunctions.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\PROGRESS_Optimization\XXMeritFunctionDefinitions\OpticalSystemMeritFunctions\XXGetOpticalSystemMeritFunctions.m 
+LOC 105 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Checked_IdealSSTF.m 
+LOC 72 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Checked_TestGratingPair4F.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Checked_TestIAPPulseCompressorStrecher.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Checked_TestNumericalKMatrixComputation.m 
+LOC 150 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Checked_TestPFTAnalysisOfSSTF.m 
+LOC 93 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Checked_TestPrismPairCompressor.m 
+LOC 23 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Checked_TestPulseFrontOfSinglet.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\FFT_Example.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Partially_Checked_HybridPulsePropagation_Singlet.m 
+LOC 24 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Progress_HybridPulsePropagation_Singlet.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Progress_TestHybridPulsePropagation.m 
+LOC 26 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Progress_TestSpatialChirpAddition.m 
+LOC 18 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Progress_Test_GeOP_HybridPulsePropagation.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\Progress_Test_HybridPulsePropagation_Achromate25mm.m 
+LOC 142 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\TestScript1.m 
+LOC 133 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\TestScript2.m 
+LOC 32 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\TestScript3.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\compute2DBrewsterPrism.m 
+LOC 48 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\oldToNewComponentConverter.m 
+LOC 42 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\MasterThesis\testPulseInTimeDomain.m 
+LOC 27 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\ResearchLabwork\Bundle_Oriented_Diffraction.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\ResearchLabwork\Bundle_Oriented_Polarization_Ray_Trace.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\ResearchLabwork\Bundle_Oriented_Scalar_Ray_Trace.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\ResearchLabwork\Coating_Analysis.m 
+LOC 42 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\ResearchLabwork\Single_Polarization_Ray_Trace.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\ResearchLabwork\System_Data_Display.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\ResearchLabwork\System_Diattenuation_Map.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\PROGRESS_Files\XXTest_Scripts\ResearchLabwork\TestVectorizedCodeSingleLens.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\Sample_Test_Scripts\ComputingRayPathMatrixUsingTheToolbox.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\Sample_Test_Scripts\TracingRaysUsingTheToolbox.m 
+LOC 17 nFun 1 : D:\MatLightTracer_GitHub\Test_Scripts\PhD Project\Propagation of General Astigmatic Gaussian Beam\Interference\Interfernce_of_gaussian_beams.m 
+LOC 36 nFun 1 : D:\MatLightTracer_GitHub\Test_Scripts\PhD Project\Propagation of General Astigmatic Gaussian Beam\Phase evolution in free space\Amplitude_and_Phase_evolution_in_free_space.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\Test_Scripts\PhD Project\Propagation of General Astigmatic Gaussian Beam\Through non-orthogonal optical system\TestScript01.m 
+LOC 56 nFun 1 : D:\MatLightTracer_GitHub\Toolbox_Extensions\plotLongitudinalAberration.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\Toolbox_Extensions\testLongitudinalAberration.m 
+LOC 26 nFun 1 : D:\MatLightTracer_GitHub\Unclassified_Tools_Module\Effect_Of_Tic_Toc_In_Speeds.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\Unclassified_Tools_Module\ImportantCodeSegments.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\Unclassified_Tools_Module\TestRayTracePerformance.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\Unclassified_Tools_Module\testSomeFunctions.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\Unclassified_Tools_Module\updateCoatingCatalogueFiles.m 
+LOC 76 nFun 1 : D:\MatLightTracer_GitHub\Unclassified_Tools_Module\updateGlassCatalogueFiles.m 
+LOC 119 nFun 1 : D:\MatLightTracer_GitHub\Unclassified_Tools_Module\updateOpticalSystemFiles.m 
+LOC 41 nFun 1 : D:\MatLightTracer_GitHub\Unclassified_Tools_Module\SourceCodeLineCounter\sloc.m 
+LOC 71 nFun 1 : D:\MatLightTracer_GitHub\Unclassified_Tools_Module\SourceCodeLineCounter\slocDir.m 
+LOC 33 nFun 1 : D:\MatLightTracer_GitHub\Unclassified_Tools_Module\User_Input_Validation\isValidGeneralInput.m 
+LOC 72 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Copy_of_BareGlass.m 
+LOC 78 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Copy_of_JonesMatrix.m 
+LOC 89 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Copy_of_MultilayerCoating.m 
+LOC 73 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Copy_of_None.m 
+LOC 74 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Copy_of_NullCoating.m 
+LOC 34 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\PROGRESS_EvenAspherical.m 
+LOC 34 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\PROGRESS_OddAspherical.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XCopy_of_getPolarizationEllipseParameters_Before_with_fied_calc.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XX.m 
+LOC 95 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXAperture_As_Object.m 
+LOC 52 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCircularAperture1.m 
+LOC 52 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCircularObstruction1.m 
+LOC 86 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCoating_As_Object.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXComponent1.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXComponentNameConverter.m 
+LOC 295 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXComponentOLD.m 
+LOC 74 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXComponent_As_Object.m 
+LOC 98 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_RayTraceResult_Before_with_fied_calc.m 
+LOC 79 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_Surface.m 
+LOC 58 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_addObjectToAODObjectCatalogue.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_clearAODObjectCatalogue.m 
+LOC 343 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_coatingDataInputDialog.m 
+LOC 60 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_computeInitialRayArray.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_computeRayPathMatrix.m 
+LOC 49 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_createNewAODObjectCatalogue.m 
+LOC 31 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_extractObjectFromAODObjectCatalogue.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_getAllAODObjectCatalogues.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_getIntensity__Before_with_fied_calc.m 
+LOC 479 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_glassDataInputDialog.m 
+LOC 49 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_isValidAODObjectCatalogue.m 
+LOC 29 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_mergeTwoAODObjectCatalogues.m 
+LOC 78 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_multipleRayTracer.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_objectDataInputDialog.m 
+LOC 300 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_rayTracer_Saving_Intermediate_fields.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXCopy_of_removeObjectFromAODObjectCatalogue.m 
+LOC 52 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXEllipticalAperture1.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXExamplePowerSpectrum.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXExampleSpatialProfile.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXFlatTopWaveProfile.m 
+LOC 50 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXFloatingCircularAperture1.m 
+LOC 65 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXGaussianPulsedBeam_As_Object.m 
+LOC 24 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXGeneralPulse_As_Object.m 
+LOC 192 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXGlass_As_Object.m 
+LOC 93 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXGrating1D2.m 
+LOC 259 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXHarmonicFieldSource_As_Object.m 
+LOC 72 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXIMAGE2.m 
+LOC 453 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXInitializeComponentEditorPanel.m 
+LOC 1089 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXInitializeComponentEditorPanelOLD.m 
+LOC 26 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXInitializeOpenedWindowsPanel.m 
+LOC 39 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXInitializePanels.m 
+LOC 393 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXInitializeSurfaceEditorPanel.m 
+LOC 237 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXInitializeSystemConfigurationPanel.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXIsComponentBased.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXIsSurfaceBased.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXNoAperture.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXNoAperture1.m 
+LOC 72 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXOBJECT2.m 
+LOC 87 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXOpticalSystem_As_Object.m 
+LOC 241 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXPrism2.m 
+LOC 60 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXRayTraceResult.m 
+LOC 99 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXRayTraceResult_As_Object.m 
+LOC 80 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXRayTraceResult_old.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXRectangularAperture1.m 
+LOC 111 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXScalarOrthogonalGaussianBeam_As_Object.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXScalarRay_As_Object.m 
+LOC 78 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXSequenceOfSurfaces2.m 
+LOC 71 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXSurface_As_Object.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXUntitled.m 
+LOC 169 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXXCopy_2_of_ObjectInputDialog.m 
+LOC 170 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXXCopy_3_of_ObjectInputDialog.m 
+LOC 189 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXXCopy_4_of_ObjectInputDialog.m 
+LOC 175 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXXCopy_of_ObjectInputDialog.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXXdrawLens.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXXgetAllParameters.m 
+LOC 289 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXXgetCurrentOpticalSystem.m 
+LOC 58 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXXgetSurfaceParametersTableAll.m 
+LOC 42 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXXresetComponentEditorPanel.m 
+LOC 31 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXXresetSurfaceEditorPanel.m 
+LOC 275 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcoatingDataInputDialog.m 
+LOC 258 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcoatingDataInputDialogNew.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomplexAmplitudeIn3D.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeBackFocalLength.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeCoatingJonesMatrix.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeCoatingPMatrix.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeComplexQMatrix.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeEffectiveFocalLength.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeEllipseLineIntersection.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeEntrancePupilLocation.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeExitPupilLocation.m 
+LOC 47 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeFieldInFocalRegionUsingFFTInHybridApproach.m 
+LOC 44 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeInterfaceKostenbauderMatrix1.m 
+LOC 48 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeIntersectionPoint.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeLinePlaneIntersection.m 
+LOC 19 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeMediumKostenbauderMatrix1.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeNewPolarizationVector.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeParaxialAngularMagnification.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeParaxialImageLocation.m 
+LOC 60 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputePathLength.m 
+LOC 101 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputePupilSamplingPoints.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeRayParametersFromFieldIndex.m 
+LOC 29 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeRayPulseReferenceCoordinates.m 
+LOC 22 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeSurfaceCoordinateTM.m 
+LOC 40 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeSurfaceNormal.m 
+LOC 43 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeSystemRayPulseMatrix.m 
+LOC 74 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeSystemRayPulseMatrix1.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeSystemStopIndex.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcomputeTemporalFieldSpectrumIn3D.m 
+LOC 37 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXconvertToComponentBased.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXconvertToSurfaceBased.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXcreateEmptyObject.m 
+LOC 66 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXderiv.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXdisplayOpticalSystemDetail.m 
+LOC 164 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXdrawLens.m 
+LOC 22 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXdrawMirror.m 
+LOC 197 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXdrawSurface.m 
+LOC 212 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXdrawSurfaceArray.m 
+LOC 93 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXfromComponentEditorToSurfaceEditor.m 
+LOC 128 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXfromComponentEditorToSurfaceEditorOLD.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetClearAperture.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetComponentFigureFileName.m 
+LOC 33 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetComponentParametersTable.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetDefaultUniqueParameters.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetExitParaxialRay.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetExitRayDirection.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetExitRayPosition.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetIntersectionPointAndSurfaceNormal.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetOtherStandardDataFields.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetPathLength.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetPolarizationEllipseParameters.m 
+LOC 70 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetReflectionCoefficients.m 
+LOC 22 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetRefractiveIndexThicknessTable.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetStopElementIndex.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetSurfaceParameter.m 
+LOC 75 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetTransmissionCoefficients.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXgetUniqueParameters.m 
+LOC 104 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXmultipleRayTracer1.m 
+LOC 140 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXplot2DLayout.m 
+LOC 195 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXplot3DLayout.m 
+LOC 177 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXplotSystemLayout1.m 
+LOC 319 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXrayTracer.m 
+LOC 284 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXrayTracerOLD.m 
+LOC 86 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXray_pulse_matrix.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXresetComponentEditorPanelOLD.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXresetOpenedWindowsMenu.m 
+LOC 33 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXresetSQSEditorPanel.m 
+LOC 33 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXresetSSEditorPanel.m 
+LOC 33 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXresetSurfaceEditorPanel.m 
+LOC 18 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXselectMainTab.m 
+LOC 47 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXsetFloatingApertures.m 
+LOC 23 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXsetOuterAperture.m 
+LOC 17 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXsetSQSStandardDataTableColumnNames.m 
+LOC 17 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXsetSSStandardDataTableColumnNames.m 
+LOC 17 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXsetStandardDataTableColumnNames.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXsmoothboarderfunction.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXtemporalChirpedPulse.m 
+LOC 40 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXtestSelectLine.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXtraceRealRaysToThisSurface.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXtransform2DRayDataTo3DCoordinate.m 
+LOC 81 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXtrial.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXtypeOfSystemDefinition.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXuntitled2.m 
+LOC 29 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXupdateComponentFromSurfaceArray.m 
+LOC 122 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXupdateSurfaceArray.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXupdateSurfaceFromComponentArray.m 
+LOC 72 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXvalidateOpticalSystem.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\compute.m 
+LOC 239 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\inputdlgSample.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\plot3dobjects.m 
+LOC 79 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\xxcomputeRayPulseVector.m 
+LOC 55 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Ray1.m 
+LOC 103 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXDefineAllChildWindowsSettingPanelComponents.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXInitializeMainWindow.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXInitializeToolbarItems.m 
+LOC 88 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXNewMainWindow.m 
+LOC 284 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXOpticalSystemConfiguration_build.m 
+LOC 33 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXRayTraceResult1.m 
+LOC 40 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXSingle_Polarization_Ray_Trace1.m 
+LOC 32 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXaddCoatingToCoatingCatalogue.m 
+LOC 24 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXaddGlassToGlassCatalogue.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXaddToOpenedWindowsList.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXclearCoatingCatalogue.m 
+LOC 0 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcmdOpenCoatingCatalogue_Callback.m 
+LOC 27 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcoatingDefinition_build.m 
+LOC 136 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcoatingDiattenuationVsAngle.m 
+LOC 138 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcoatingDiattenuationVsWavelength.m 
+LOC 82 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcoatingPermitivityProfile.m 
+LOC 136 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcoatingReflectionVsAngle.m 
+LOC 138 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcoatingReflectionVsWavelength.m 
+LOC 82 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcoatingRefractiveIndexProfile.m 
+LOC 136 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcoatingRetardanceVsAngle.m 
+LOC 138 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcoatingRetardanceVsWavelength.m 
+LOC 136 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcoatingTransmissionVsAngle.m 
+LOC 138 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcoatingTransmissionVsWavelength.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcomputeGlassRefractiveIndex.m 
+LOC 22 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcreateNewCoatingCatalogue.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXcreateNewGlassCatalogue.m 
+LOC 18 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXextractCoatingFromCoatingCatalogue.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXgetAllCoatingCatalogues.m 
+LOC 17 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXgetAllFiles.m 
+LOC 13 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXgetCoatingFromCatalogue.m 
+LOC 253 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXimportZemaxFile.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXisValidCoatingCatalogue.m 
+LOC 22 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXmergeTwoCoatingCatalogues.m 
+LOC 118 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXpolarizationEllipseMap.m 
+LOC 160 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXpolarizedRayTracer.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXremoveCoatingFromCoatingCatalogue.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXremoveFromOpenedWindowsList.m 
+LOC 115 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXspotDiagram.m 
+LOC 85 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXsystem2DLayoutDiagram.m 
+LOC 98 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXsystem3DLayoutDiagram.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXtestVectorizedCodes.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\XXvalidateOpticalSystem.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\computeCheifRayXX.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\computeEntrancePupilDiameterXX.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\computeParaxialEntrancePupilXX.m 
+LOC 8 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\computeParaxialExitPupilXX.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\computeParaxialMariginalRayXX.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\computeParaxialTransverseMagnificationXX.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\computeSystemStopXX.m 
+LOC 65 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\draw2DLensXX.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\draw2DSurfaceXX.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\draw_conic1XX.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\draw_conicXX.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\draw_sph1XX.m 
+LOC 20 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\draw_sphXX.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\getExitPupilLocationAndDiameterXX.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\getImageFNoXX.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\getIntensity1.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\getMeridionalRayTracePointsXX.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\getObjectFNoXX.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\getParaxialMagnificationXX.m 
+LOC 4 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\getPolarizationEllipseParameters1.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\getWorkingFNoXX.m 
+LOC 27 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\globalToLocalCoordinateXX.m 
+LOC 34 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\localToGlobalCoordinateXX.m 
+LOC 57 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\multipleRayTracer1.m 
+LOC 66 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\plot2DLayoutXX.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\plot3DLayout1XX.m 
+LOC 35 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\plot3DLayoutXX.m 
+LOC 15 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\solveParaxialImageLocationXX.m 
+LOC 161 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\system2DLayoutDiagramXX.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\system_layout1XX.m 
+LOC 25 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\system_layoutXX.m 
+LOC 28 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\tiltAndDecenterScriptXX.m 
+LOC 227 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\tracePolarizedRay1.m 
+LOC 43 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\trySimple2DPlotXX.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\About\XXAbout.m 
+LOC 100 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Coating_Definition\XXcoatingDefinition.m 
+LOC 86 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Glass_Definition\XXglassDefinition.m 
+LOC 86 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Main_Window\XXAOE_MainWindow.m 
+LOC 17 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Main_Window\XXcloseAllWindows.m 
+LOC 3 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Main_Window\XXopenFromZemaxFile.m 
+LOC 12 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Main_Window\XXopenNewOpticalSystem.m 
+LOC 177 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Main_Window\XXopenSavedOpticalSystem.m 
+LOC 23 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Main_Window\XXsaveMySystem.m 
+LOC 14 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Main_Window\XXsaveMySystemAs.m 
+LOC 204 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Main_Window\XXsaveTheOpticalSystem.m 
+LOC 209 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Multiple_Ray_Data_Entry\XXMultipleRayDataEntry.m 
+LOC 16 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Ray_Trace_Result\XXRayTraceResultText.m 
+LOC 257 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Single_Ray_Data_Entry\XXSingleRayDataEntry.m 
+LOC 30 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Surface_Data_Entry\XXInitializeSurfaceEditor.m 
+LOC 381 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\Surface_Data_Entry\XXSurfaceEditor.m 
+LOC 100 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\System_Configuration\XXInitializeOpticalSystemConfiguration.m 
+LOC 331 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\System_Configuration\XXOpticalSystemConfiguration.m 
+LOC 64 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Graphical_User_Interfaces_Module_V3.0\TiltDecenterOrder\XXtiltDecenterOrder.m 
+LOC 29 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\New_GUI_Main\XXAODMainWindow.m 
+LOC 10 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\New_GUI_Main\XXcloseAllWindows.m 
+LOC 122 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Polarization_Abberation\XXamplitudeTransmissionMap.m 
+LOC 122 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Polarization_Abberation\XXphaseMap.m 
+LOC 122 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Polarization_Abberation\XXwavefrontDiattenuationMap.m 
+LOC 122 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\Archive\Polarization_Abberation\XXwavefrontRetardanceMap.m 
+LOC 5 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\SurfaceStruct\XXSurfaceStruct.m 
+LOC 6 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\SurfaceStruct\XXgetRadiusOfCurvatureStruct.m 
+LOC 18 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XX@GeneralPulsedBeam\GeneralPulsedBeam.m 
+LOC 21 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XX@GeneralPulsedBeam\plotYversusTimeXX.m 
+LOC 86 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XX@PlaneWave\PlaneWave.m 
+LOC 38 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XX@PlaneWave\getInitialRayArray.m 
+LOC 74 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXHarmonicField\HarmonicField2.m 
+LOC 84 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXHarmonicField\HarmonicField_As_Object.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXHarmonicField\computeEx2.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXHarmonicField\computeEy2.m 
+LOC 9 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXHarmonicField\computeEz2.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXHarmonicField\isHarmonicField.m 
+LOC 92 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXMatlab_M_Script_Generator\generateNewScript.m 
+LOC 73 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXPSurface\XXPSurface.m 
+LOC 22 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXPSurface\XXTiltAndDecenter.m 
+LOC 2 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXPSurface\XXgetGratingPeriodicity.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXPSurface\XXgetSurfaceNormal.m 
+LOC 1 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXPSurface\XXgetSurfaceSag.m 
+LOC 40 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXPhase_Profiles\SphericalPhaseProfile.m 
+LOC 36 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXPolarizedRay\PolarizedRay.m 
+LOC 53 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXPolarizedRay\PolarizedRay_As_Object.m 
+LOC 11 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXPolarizedRay\isPolarizedRay.m 
+LOC 85 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXRay\XXRay.m 
+LOC 7 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\XXXXX@ChildWindowTypeB\ChildWindowTypeB.m 
+LOC 45 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\system_2D_layout_v3.0\XXdraw2DLens.m 
+LOC 17 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\system_2D_layout_v3.0\XXdraw2DMirror.m 
+LOC 55 nFun 1 : D:\MatLightTracer_GitHub\XXFiles\system_2D_layout_v3.0\XXdraw2DSurface.m 
+LOC 54329 nFun 1004 : D:\MatLightTracer_GitHub 
