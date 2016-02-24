@@ -2,8 +2,8 @@
 function mainFigHandle = MLTStartup()
     % Main function comment
     % Writen by norman girma
+    % Year : 2014
     warning ('off','all');
-    
     % get current path and change current directory to this folder. Assumed
     % that the startUp function will be in the toolbox folder where all other
     % folders exist.
